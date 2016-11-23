@@ -25,7 +25,7 @@ using SharpDX;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace YasuoSharpV2
 {
     public class TargetSpell

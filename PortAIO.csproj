@@ -2701,6 +2701,18 @@
     <Compile Include="Core\Champion Ports\Yasuo\GosuMechanicsYasuo\SpellDatabase.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\GosuMechanicsYasuo\Utils.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\GosuMechanicsYasuo\Yasuo.cs" />
+    <Compile Include="Core\Champion Ports\Yasuo\GosuMechanicsYasuo_ Rebirth\Program.cs" />
+    <Compile Include="Core\Champion Ports\Yasuo\GosuMechanicsYasuo_ Rebirth\RebirthYasuo\Collision.cs" />
+    <Compile Include="Core\Champion Ports\Yasuo\GosuMechanicsYasuo_ Rebirth\RebirthYasuo\Config.cs" />
+    <Compile Include="Core\Champion Ports\Yasuo\GosuMechanicsYasuo_ Rebirth\RebirthYasuo\EvadeSpellData.cs" />
+    <Compile Include="Core\Champion Ports\Yasuo\GosuMechanicsYasuo_ Rebirth\RebirthYasuo\EvadeSpellDatabase.cs" />
+    <Compile Include="Core\Champion Ports\Yasuo\GosuMechanicsYasuo_ Rebirth\RebirthYasuo\Geometry.cs" />
+    <Compile Include="Core\Champion Ports\Yasuo\GosuMechanicsYasuo_ Rebirth\RebirthYasuo\Skillshot.cs" />
+    <Compile Include="Core\Champion Ports\Yasuo\GosuMechanicsYasuo_ Rebirth\RebirthYasuo\SkillshotDetector.cs" />
+    <Compile Include="Core\Champion Ports\Yasuo\GosuMechanicsYasuo_ Rebirth\RebirthYasuo\SpellData.cs" />
+    <Compile Include="Core\Champion Ports\Yasuo\GosuMechanicsYasuo_ Rebirth\RebirthYasuo\SpellDatabase.cs" />
+    <Compile Include="Core\Champion Ports\Yasuo\GosuMechanicsYasuo_ Rebirth\RebirthYasuo\Utils.cs" />
+    <Compile Include="Core\Champion Ports\Yasuo\GosuMechanicsYasuo_ Rebirth\Yasuo.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\M1D 0R F33D Yasuo\Yasuo.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\MasterOfWind\Modes.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\MasterOfWind\Program.cs" />
@@ -2847,7 +2859,6 @@
     <Compile Include="Core\Champion Ports\Yasuo\YasuoSharpv2\Evade\SpellDatabase.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\YasuoSharpv2\Evade\Utils.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\YasuoSharpv2\Program.cs" />
-    <Compile Include="Core\Champion Ports\Yasuo\YasuoSharpv2\SmoothMouse.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\YasuoSharpv2\SummonerItems.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\YasuoSharpv2\TargetedSpellManager.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\YasuoSharpv2\Targeted\TargetSpell.cs" />

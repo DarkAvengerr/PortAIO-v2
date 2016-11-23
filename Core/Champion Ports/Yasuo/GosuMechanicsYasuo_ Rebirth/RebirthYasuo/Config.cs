@@ -17,7 +17,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace YasuoSharpV2
+ namespace FloraGosYasuo
 {
     internal static class Config
     {

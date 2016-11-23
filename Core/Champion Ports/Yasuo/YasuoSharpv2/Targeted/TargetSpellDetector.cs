@@ -26,14 +26,14 @@ using LeagueSharp.Common;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace YasuoSharpV2
 {
     public class TargetSpellDetector
     {
         internal static bool InitComplete;
 
-        public static int DetectionRange = 2000;
+        public static int DetectionRange = 5000;
 
         public static SpellList<TargetSpell> ActiveTargeted = new SpellList<TargetSpell>();
 
@@ -88,19 +88,6 @@ using EloBuddy;
         {
             try
             {
-                //MissileEffect=Cassiopeia_Base_E_TwinFang_mis.troy
-                if (sender.Position.Distance(ObjectManager.Player.Position) > DetectionRange)
-                    return; // only detect spells in range
-
-                if (!sender.IsValid<AIHeroClient>())
-                    return; // only hero
-
-                if (!args.Target.IsValid<Obj_AI_Base>())
-                    return; // only targeted
-
-                if (args.SData.Name.ToLower().Contains("summoner") || args.SData.Name.ToLower().Contains("recall"))
-                    return; // ignore summoners TODO: add summoners to database
-
                 // TODO: add menu check
                 //Cassiopeia_Base_E_TwinFang_tar.troy
                 //Cassiopeia_Base_E_TwinFang_mis.troy
@@ -112,11 +99,12 @@ using EloBuddy;
                      Console.WriteLine("{0}={1}", name, value);
                 }*/
 
-                var caster = (AIHeroClient)sender;
-                var target = (Obj_AI_Base)args.Target;
+                var caster = sender as AIHeroClient;
+                var target = args.Target as Obj_AI_Base;
+                if (caster == null || target == null)
+                    return;
+
                 var data = TargetSpellDatabase.GetByName(args.SData.Name);
-
-
                 if (Orbwalking.IsAutoAttack(args.SData.Name))
                 {
                     data = new TargetSpellData(
@@ -129,6 +117,7 @@ using EloBuddy;
                         caster.AttackDelay,
                         caster.BasicAttack.MissileSpeed); // TODO: check melee
                 }
+                return;
 
                 /*if (data == null)
                 {

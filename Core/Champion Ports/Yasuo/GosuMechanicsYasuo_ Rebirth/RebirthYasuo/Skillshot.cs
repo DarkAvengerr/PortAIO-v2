@@ -28,7 +28,7 @@ using SharpDX;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace YasuoSharpV2
+ namespace FloraGosYasuo
 {
     public enum SkillShotType
     {
@@ -71,7 +71,7 @@ using LeagueSharp.Common;
             Distance = distance;
             ComingFrom = comingFrom;
             Valid = (point.X != 0) && (point.Y != 0);
-            Point = point + Config.GridSize*(ComingFrom - point).Normalized();
+            Point = point + Config.GridSize * (ComingFrom - point).Normalized();
             Time = time;
         }
     }
@@ -97,8 +97,8 @@ using LeagueSharp.Common;
         public Vector2 Start;
         public int StartTick;
 
-        private bool _cachedValue;
-        private int _cachedValueTick;
+        //private bool _cachedValue;
+        //private int _cachedValueTick;
         private Vector2 _collisionEnd;
         private int _lastCollisionCalc;
 
@@ -133,7 +133,7 @@ using LeagueSharp.Common;
                     break;
                 case SkillShotType.SkillshotCone:
                     Sector = new Geometry.Sector(
-                        start, CollisionEnd - start, spellData.Radius*(float) Math.PI/180, spellData.Range);
+                        start, CollisionEnd - start, spellData.Radius * (float)Math.PI / 180, spellData.Range);
                     break;
                 case SkillShotType.SkillshotRing:
                     Ring = new Geometry.Ring(CollisionEnd, spellData.Radius, spellData.RingRadius);
@@ -160,8 +160,8 @@ using LeagueSharp.Common;
                 if (IsGlobal)
                 {
                     return GlobalGetMissilePosition(0) +
-                           Direction*SpellData.MissileSpeed*
-                           (0.5f + SpellData.Radius*2/ObjectManager.Player.MoveSpeed);
+                           Direction * SpellData.MissileSpeed *
+                           (0.5f + SpellData.Radius * 2 / ObjectManager.Player.MoveSpeed);
                 }
 
                 return End;
@@ -195,7 +195,7 @@ using LeagueSharp.Common;
 
             return Environment.TickCount <=
                    StartTick + SpellData.Delay + SpellData.ExtraDuration +
-                   1000*(Start.Distance(End)/SpellData.MissileSpeed);
+                   1000 * (Start.Distance(End) / SpellData.MissileSpeed);
         }
 
         //public bool Evade()
@@ -302,8 +302,8 @@ using LeagueSharp.Common;
         public Vector2 GlobalGetMissilePosition(int time)
         {
             var t = Math.Max(0, Environment.TickCount + time - StartTick - SpellData.Delay);
-            t = (int) Math.Max(0, Math.Min(End.Distance(Start), t*SpellData.MissileSpeed/1000));
-            return Start + Direction*t;
+            t = (int)Math.Max(0, Math.Min(End.Distance(Start), t * SpellData.MissileSpeed / 1000));
+            return Start + Direction * t;
         }
 
         /// <summary>
@@ -319,35 +319,35 @@ using LeagueSharp.Common;
             //Missile with acceleration = 0.
             if (SpellData.MissileAccel == 0)
             {
-                x = t*SpellData.MissileSpeed/1000;
+                x = t * SpellData.MissileSpeed / 1000;
             }
 
-                //Missile with constant acceleration.
+            //Missile with constant acceleration.
             else
             {
                 var t1 = (SpellData.MissileAccel > 0
                     ? SpellData.MissileMaxSpeed
-                    : SpellData.MissileMinSpeed - SpellData.MissileSpeed)*1000f/SpellData.MissileAccel;
+                    : SpellData.MissileMinSpeed - SpellData.MissileSpeed) * 1000f / SpellData.MissileAccel;
 
                 if (t <= t1)
                 {
                     x =
                         (int)
-                            (t*SpellData.MissileSpeed/1000d + 0.5d*SpellData.MissileAccel*Math.Pow(t/1000d, 2));
+                            (t * SpellData.MissileSpeed / 1000d + 0.5d * SpellData.MissileAccel * Math.Pow(t / 1000d, 2));
                 }
                 else
                 {
                     x =
                         (int)
-                            (t1*SpellData.MissileSpeed/1000d +
-                             0.5d*SpellData.MissileAccel*Math.Pow(t1/1000d, 2) +
-                             (t - t1)/1000d*
+                            (t1 * SpellData.MissileSpeed / 1000d +
+                             0.5d * SpellData.MissileAccel * Math.Pow(t1 / 1000d, 2) +
+                             (t - t1) / 1000d *
                              (SpellData.MissileAccel < 0 ? SpellData.MissileMaxSpeed : SpellData.MissileMinSpeed));
                 }
             }
 
-            t = (int) Math.Max(0, Math.Min(CollisionEnd.Distance(Start), x));
-            return Start + Direction*t;
+            t = (int)Math.Max(0, Math.Min(CollisionEnd.Distance(Start), x));
+            return Start + Direction * t;
         }
 
 
@@ -380,7 +380,7 @@ using LeagueSharp.Common;
 
             //skillshots without missile
             var timeToExplode = SpellData.ExtraDuration + SpellData.Delay +
-                                (int) (1000*Start.Distance(End)/SpellData.MissileSpeed) -
+                                (int)(1000 * Start.Distance(End) / SpellData.MissileSpeed) -
                                 (Environment.TickCount - StartTick);
 
             return timeToExplode > timeOffset + delay;
@@ -396,9 +396,9 @@ using LeagueSharp.Common;
             Obj_AI_Base unit = null)
         {
             var Distance = 0f;
-            timeOffset += Game.Ping/2;
+            timeOffset += Game.Ping / 2;
 
-            speed = (speed == -1) ? (int) ObjectManager.Player.MoveSpeed : speed;
+            speed = (speed == -1) ? (int)ObjectManager.Player.MoveSpeed : speed;
 
             if (unit == null)
             {
@@ -425,7 +425,7 @@ using LeagueSharp.Common;
                         segmentIntersections.Add(
                             new FoundIntersection(
                                 Distance + intersection.Point.Distance(from),
-                                (int) ((Distance + intersection.Point.Distance(from))*1000/speed),
+                                (int)((Distance + intersection.Point.Distance(from)) * 1000 / speed),
                                 intersection.Point, from));
                     }
                 }
@@ -527,7 +527,7 @@ using LeagueSharp.Common;
             }
 
             var timeToExplode = (SpellData.DontAddExtraDuration ? 0 : SpellData.ExtraDuration) + SpellData.Delay +
-                                (int) (1000*Start.Distance(End)/SpellData.MissileSpeed) -
+                                (int)(1000 * Start.Distance(End) / SpellData.MissileSpeed) -
                                 (Environment.TickCount - StartTick);
 
 
@@ -576,7 +576,7 @@ using LeagueSharp.Common;
             if (!IsSafe(unit.ServerPosition.To2D()))
             {
                 var timeToExplode = SpellData.ExtraDuration + SpellData.Delay +
-                                    (int) ((1000*Start.Distance(End))/SpellData.MissileSpeed) -
+                                    (int)((1000 * Start.Distance(End)) / SpellData.MissileSpeed) -
                                     (Environment.TickCount - StartTick);
                 if (timeToExplode <= time)
                 {

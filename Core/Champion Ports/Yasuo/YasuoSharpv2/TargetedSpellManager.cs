@@ -11,7 +11,7 @@ using MenuItem = LeagueSharp.Common.MenuItem;
 
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace YasuoSharpV2
 {
     

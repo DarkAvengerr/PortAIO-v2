@@ -28,7 +28,7 @@ using Color = System.Drawing.Color;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace YasuoSharpV2
+ namespace FloraGosYasuo
 {
     public static class Utils
     {

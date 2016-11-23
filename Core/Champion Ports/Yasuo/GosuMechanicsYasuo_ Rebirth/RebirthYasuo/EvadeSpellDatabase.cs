@@ -26,7 +26,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace YasuoSharpV2
+ namespace FloraGosYasuo
 {
     internal class EvadeSpellDatabase
     {

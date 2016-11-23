@@ -28,7 +28,7 @@ using Color = System.Drawing.Color;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace YasuoSharpV2
+ namespace FloraGosYasuo
 {
     /// <summary>
     ///     Class that contains the geometry related methods.

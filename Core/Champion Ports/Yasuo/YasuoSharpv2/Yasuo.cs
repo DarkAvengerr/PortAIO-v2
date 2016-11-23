@@ -9,7 +9,7 @@ using SharpDX;
 using Geometry = LeagueSharp.Common.Geometry;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace YasuoSharpV2
 {
     class Yasuo
@@ -49,28 +49,28 @@ using EloBuddy;
 
         internal class YasWall
         {
-            public Obj_SpellLineMissile pointL;
-            public Obj_SpellLineMissile pointR;
+            public MissileClient pointL;
+            public MissileClient pointR;
             public float endtime = 0;
             public YasWall()
             {
 
             }
 
-            public YasWall(Obj_SpellLineMissile L, Obj_SpellLineMissile R)
+            public YasWall(MissileClient L, MissileClient R)
             {
                 pointL = L;
                 pointR = R;
                 endtime = Game.Time + 4;
             }
 
-            public void setR(Obj_SpellLineMissile R)
+            public void setR(MissileClient R)
             {
                 pointR = R;
                 endtime = Game.Time + 4;
             }
 
-            public void setL(Obj_SpellLineMissile L)
+            public void setL(MissileClient L)
             {
                 pointL = L;
                 endtime = Game.Time + 4;
@@ -286,8 +286,7 @@ using EloBuddy;
             {
 
                 E.Cast(goodTarg);
-
-                SmoothMouse.addMouseEvent(target.Position);
+                
                 Q.Cast(target);
             }
             if (!useESmart(target))
@@ -316,7 +315,6 @@ using EloBuddy;
                 Vector2 clos = LeagueSharp.Common.Geometry.Closest(Player.ServerPosition.To2D(), minionPs);
                 if (Player.Distance(clos) < 475)
                 {
-                    SmoothMouse.addMouseEvent(clos.To3D());
                     Q.Cast(clos, false);
                     return;
                 }
@@ -370,7 +368,6 @@ using EloBuddy;
             if (!target.IsMoving || Player.Distance(dashPos) <= dist + 40)
                 if (dist < 330 && dist > 100 && W.IsReady())
                 {
-                    SmoothMouse.addMouseEvent(po.UnitPosition);
                     W.Cast(po.UnitPosition);
                 }
         }
@@ -431,7 +428,6 @@ using EloBuddy;
                     {
                         if (canCastFarQ())
                         {
-                            SmoothMouse.addMouseEvent(minion.Position);
                             Q.Cast(minion);
                         }
                     }
@@ -462,8 +458,6 @@ using EloBuddy;
                         MinionManager.FarmLocation farm = QEmp.GetLineFarmLocation(minionPs); //MinionManager.GetBestLineFarmLocation(minionPs, 50f, 900f);
                         if (farm.MinionsHit >= YasuoSharp.Config.Item("useEmpQHit").GetValue<Slider>().Value)
                         {
-                            //Console.WriteLine("Cast q simp Emp");
-                            SmoothMouse.addMouseEvent(farm.Position.To3D());
                             QEmp.Cast(farm.Position, false);
                             return;
                         }
@@ -486,7 +480,6 @@ using EloBuddy;
                         if (Player.Distance(clos) < 475)
                         {
                             Console.WriteLine("Cast q simp");
-                            SmoothMouse.addMouseEvent(clos.To3D());
                             Q.Cast(clos, false);
                             return;
                         }
@@ -593,7 +586,6 @@ using EloBuddy;
                     PredictionOutput po = QEmp.GetPrediction(target); //QEmp.GetPrediction(target, true);
                     if (po.Hitchance >= HitChance.Medium)
                     {
-                        SmoothMouse.addMouseEvent(po.CastPosition);
                         QEmp.Cast(po.CastPosition);
                         return;
                     }
@@ -615,7 +607,6 @@ using EloBuddy;
                     PredictionOutput po = Q.GetPrediction(target);
                     if (po.Hitchance >= HitChance.Medium)
                     {
-                        SmoothMouse.addMouseEvent(po.CastPosition);
                         Q.Cast(po.CastPosition);
                     }
                     return;
@@ -768,8 +759,8 @@ using EloBuddy;
                     return;
 
 
-                Vector3 blockwhere = Player.ServerPosition + Vector3.Normalize(skillShot.MissilePosition.To3D() - Player.ServerPosition) * 10; // missle.Position; 
-                SmoothMouse.addMouseEvent(blockwhere);
+                Vector2 blockwhere = Player.Position.To2D().Extend(skillShot.MissilePosition,150); // missle.Position; 
+               // SmoothMouse.addMouseEvent(blockwhere);
                 W.Cast(blockwhere);
             }
 
@@ -819,7 +810,6 @@ using EloBuddy;
                                 if (missle.Target.IsMe || isMissileCommingAtMe(missle))
                                 {
                                     YasuoSharp.lastSpell = missle.SData.Name;
-                                    SmoothMouse.addMouseEvent(blockWhere);
                                     W.Cast(blockWhere, true);
                                 }
                             }
@@ -853,7 +843,6 @@ using EloBuddy;
             {
                 if (isSafePoint(posAfter).IsSafe)
                 {
-                    SmoothMouse.addMouseEvent(target.Position);
                     E.Cast(target, false);
                 }
                 return true;
@@ -867,7 +856,6 @@ using EloBuddy;
                     Console.WriteLine("use gap?");
                     if (isSafePoint(posAfter,true).IsSafe)
                     {
-                        SmoothMouse.addMouseEvent(target.Position);
                         E.Cast(target, false);
                     }
                     return true;
@@ -970,8 +958,11 @@ using EloBuddy;
                         aroundAir++;
 
                 }
-                if (aroundAir >= YasuoSharp.Config.Item("useRHit").GetValue<Slider>().Value && timeToLand < 0.4f)
-                    R.Cast(enem);
+                if (timeToLand < 0.4f)
+                {
+                    if(aroundAir >= YasuoSharp.Config.Item("useRHit").GetValue<Slider>().Value || enem.HealthPercent < 35 )
+                        R.Cast(enem);
+                }
             }
         }
 
@@ -1030,7 +1021,6 @@ using EloBuddy;
                         {
                             Vector3 blockwhere = Player.ServerPosition +
                                                  Vector3.Normalize(targMis.particle.Position - Player.Position)*150;
-                            SmoothMouse.addMouseEvent(blockwhere);
                             W.Cast(blockwhere,true);
                             return;
                         }

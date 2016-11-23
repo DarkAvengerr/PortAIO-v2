@@ -23,7 +23,7 @@ using LeagueSharp;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace YasuoSharpV2
+ namespace FloraGosYasuo
 {
     public enum SpellValidTargets
     {

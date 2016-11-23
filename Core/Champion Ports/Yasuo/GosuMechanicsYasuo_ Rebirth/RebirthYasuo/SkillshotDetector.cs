@@ -28,7 +28,7 @@ using SharpDX;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace YasuoSharpV2
+ namespace FloraGosYasuo
 {
     internal static class SkillshotDetector
     {
@@ -96,10 +96,6 @@ using LeagueSharp.Common;
 #if DEBUG
             if (missile.SpellCaster is AIHeroClient)
             {
-                Console.WriteLine(
-                    Environment.TickCount + " Projectile Created: " + missile.SData.Name + " distance: " +
-                    missile.StartPosition.Distance(missile.EndPosition) + "Radius: ");
-                    //missile.SData.CastRadiusSecondary[0] + " Speed: " + missile.SData.MissileSpeed);
             }
 
 #endif
@@ -309,5 +305,61 @@ using LeagueSharp.Common;
                 DetectionType.ProcessSpell, spellData, Environment.TickCount - Game.Ping/2, startPos, endPos, sender);
         }
 
+        /// <summary>
+        ///     Detects the spells that have missile and are casted from fow.
+        /// </summary>
+        public static void GameOnOnGameProcessPacket(GamePacketEventArgs args)
+        {
+            //Gets received when a projectile is created.
+            if (args.PacketData[0] == 0x3B)
+            {
+                var packet = new GamePacket(args.PacketData);
+
+                packet.Position = 1;
+
+                packet.ReadFloat(); //Missile network ID
+
+                var missilePosition = new Vector3(packet.ReadFloat(), packet.ReadFloat(), packet.ReadFloat());
+                var unitPosition = new Vector3(packet.ReadFloat(), packet.ReadFloat(), packet.ReadFloat());
+
+                packet.Position = packet.Size() - 119;
+                var missileSpeed = packet.ReadFloat();
+
+                packet.Position = 65;
+                var endPos = new Vector3(packet.ReadFloat(), packet.ReadFloat(), packet.ReadFloat());
+
+                packet.Position = 112;
+                var id = packet.ReadByte();
+
+
+                packet.Position = packet.Size() - 83;
+
+                var unit = ObjectManager.GetUnitByNetworkId<AIHeroClient>((uint)packet.ReadInteger());
+                if ((!unit.IsValid || unit.Team == ObjectManager.Player.Team))
+                {
+                    return;
+                }
+
+                var spellData = SpellDatabase.GetBySpeed(unit.ChampionName, (int) missileSpeed, id);
+
+                if (spellData == null)
+                {
+                    return;
+                }
+                if (spellData.SpellName != "Laser")
+                {
+                    return;
+                }
+                var castTime = Environment.TickCount - Game.Ping/2 - spellData.Delay -
+                               (int)
+                                   (1000*missilePosition.SwitchYZ().To2D().Distance(unitPosition.SwitchYZ())/
+                                    spellData.MissileSpeed);
+
+                //Trigger the skillshot detection callbacks.
+                TriggerOnDetectSkillshot(
+                    DetectionType.RecvPacket, spellData, castTime, unitPosition.SwitchYZ().To2D(),
+                    endPos.SwitchYZ().To2D(), unit);
+            }
+        }
     }
 }

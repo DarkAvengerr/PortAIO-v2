@@ -5,7 +5,7 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace YasuoSharpV2
 {
     class SummonerItems
@@ -42,7 +42,6 @@ using EloBuddy;
 
         public void castIgnite(AIHeroClient target)
         {
-            SmoothMouse.addMouseEvent(target.Position);
             if (ignite != SpellSlot.Unknown && sumBook.CanUseSpell(ignite) == SpellState.Ready)
                 sumBook.CastSpell(ignite, target);
         }
@@ -65,7 +64,6 @@ using EloBuddy;
             var itemId = (int)item;
             if (Items.CanUseItem(itemId))
             {
-                SmoothMouse.addMouseEvent(target);
                 player.Spellbook.CastSpell(getInvSlot(itemId).SpellSlot, target);
             }
 
@@ -76,7 +74,6 @@ using EloBuddy;
             var itemId = (int)item;
             if (Items.CanUseItem(itemId))
             {
-                SmoothMouse.addMouseEvent(target.Position);
                 Items.UseItem(itemId, target);
             }
         }

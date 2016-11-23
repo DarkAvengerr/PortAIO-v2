@@ -3771,6 +3771,9 @@ namespace PortAIO
                         case 12: // Flowers' Yasuo
                             Flowers_Yasuo.Program.Main();
                             break;
+                        case 13: // GosuMechanicsYasuo Rebirth
+                            FloraGosYasuo.Program.Main();
+                            break; 
                     }
                     break;
                 case Champion.Yorick:
