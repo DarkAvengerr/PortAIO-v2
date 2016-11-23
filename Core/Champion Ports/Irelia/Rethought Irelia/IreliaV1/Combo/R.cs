@@ -1,5 +1,23 @@
+//     Copyright (C) 2016 Rethought
+// 
+//     This program is free software: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+// 
+//     You should have received a copy of the GNU General Public License
+//     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// 
+//     Created: 04.10.2016 1:05 PM
+//     Last Edited: 04.10.2016 1:44 PM
+
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Rethought_Irelia.IreliaV1.Combo
 {
     #region Using Directives
@@ -10,9 +28,9 @@ using EloBuddy;
     using LeagueSharp;
     using LeagueSharp.Common;
 
+    using RethoughtLib.DamageCalculator;
     using RethoughtLib.FeatureSystem.Implementations;
 
-    using Rethought_Irelia.IreliaV1.DamageCalculator;
     using Rethought_Irelia.IreliaV1.Spells;
 
     #endregion
@@ -37,6 +55,8 @@ using EloBuddy;
 
         #region Constructors and Destructors
 
+        #region Constructors
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="W" /> class.
         /// </summary>
@@ -49,6 +69,8 @@ using EloBuddy;
             this.ireliaR = ireliaR;
             this.ireliaQ = ireliaQ;
         }
+
+        #endregion
 
         #endregion
 
@@ -91,9 +113,9 @@ using EloBuddy;
         /// <summary>
         ///     Called when [load].
         /// </summary>
-        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnLoad(sender, featureBaseEventArgs);
+            base.OnLoad(sender, eventArgs);
 
             // Gets all HitChances as Type[]
             var values = Enum.GetValues(typeof(HitChance));
@@ -115,8 +137,12 @@ using EloBuddy;
             this.Menu.AddItem(new MenuItem(this.Path + "." + "usetoregen", "Use to regenerate health").SetValue(true));
 
             this.Menu.AddItem(
-                new MenuItem(this.Path + "." + "usetoregen.minlife", "Use when below X % health").SetValue(
-                    new Slider(15, 0, 100)));
+                new MenuItem(this.Path + "." + "usetoregen.minlife", " > Use when below X (percentage) health").SetValue
+                    (new Slider(20, 0, 100)));
+
+            this.Menu.AddItem(
+                new MenuItem(this.Path + "." + "usetoregen.minlifeflat", " > Use when below X (flat) health").SetValue(
+                    new Slider(200, 0, 5000)));
         }
 
         /// <summary>
@@ -130,10 +156,7 @@ using EloBuddy;
                 true,
                 collisionable: new[] { CollisionableObjects.YasuoWall });
 
-            if (prediction != null && prediction.Hitchance >= this.hitchance)
-            {
-                this.ireliaR.Spell.Cast(prediction.CastPosition);
-            }
+            if ((prediction != null) && (prediction.Hitchance >= this.hitchance)) this.ireliaR.Spell.Cast(prediction.CastPosition);
         }
 
         /// <summary>
@@ -142,10 +165,10 @@ using EloBuddy;
         /// <param name="target">The target.</param>
         private void LogicAutoCombo(Obj_AI_Base target)
         {
-            if (this.DamageCalculator.GetDamage(target) < target.Health
-                || (this.ireliaQ.GetPath(ObjectManager.Player.ServerPosition, target.ServerPosition) == null
-                    && ObjectManager.Player.Distance(target) > this.ireliaQ.Spell.Range
-                    && this.ireliaR.GetDamage(target) * this.ireliaR.EstimatedAmountInOneCombo < target.Health)) return;
+            if ((this.DamageCalculator.GetDamage(target) < target.Health)
+                || ((this.ireliaQ.GetPath(ObjectManager.Player.ServerPosition, target.ServerPosition) == null)
+                    && (ObjectManager.Player.Distance(target) > this.ireliaQ.Spell.Range)
+                    && (this.ireliaR.GetDamage(target) * this.ireliaR.EstimatedAmountInOneCombo < target.Health))) return;
 
             this.CastOnTarget(target);
         }
@@ -169,12 +192,11 @@ using EloBuddy;
 
             enemyMeanHealth /= count;
 
-            if (ObjectManager.Player.HealthPercent
-                <= this.Menu.Item(this.Path + "." + "usetoregen.minlife").GetValue<Slider>().Value
-                && ObjectManager.Player.HealthPercent <= enemyMeanHealth)
-            {
-                this.CastOnTarget(target);
-            }
+            if ((ObjectManager.Player.HealthPercent
+                 <= this.Menu.Item(this.Path + "." + "usetoregen.minlife").GetValue<Slider>().Value)
+                || ((ObjectManager.Player.Health
+                     <= this.Menu.Item(this.Path + "." + "usetoregen.minlifeflat").GetValue<Slider>().Value)
+                    && (ObjectManager.Player.HealthPercent <= enemyMeanHealth + 5))) this.CastOnTarget(target);
         }
 
         /// <summary>

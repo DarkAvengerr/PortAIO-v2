@@ -1,5 +1,23 @@
+//     Copyright (C) 2016 Rethought
+// 
+//     This program is free software: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+// 
+//     You should have received a copy of the GNU General Public License
+//     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// 
+//     Created: 04.10.2016 1:05 PM
+//     Last Edited: 04.10.2016 1:44 PM
+
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Rethought_Irelia.IreliaV1.LastHit
 {
     #region Using Directives
@@ -29,6 +47,8 @@ using EloBuddy;
 
         #region Constructors and Destructors
 
+        #region Constructors
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="Q" /> class.
         /// </summary>
@@ -37,6 +57,8 @@ using EloBuddy;
         {
             this.ireliaQ = ireliaQ;
         }
+
+        #endregion
 
         #endregion
 
@@ -77,9 +99,9 @@ using EloBuddy;
         /// <summary>
         ///     Called when [load].
         /// </summary>
-        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnLoad(sender, featureBaseEventArgs);
+            base.OnLoad(sender, eventArgs);
 
             this.Menu.AddItem(
                 new MenuItem(this.Path + "." + "clearmode", "Clear Mode: ").SetValue(
@@ -90,11 +112,9 @@ using EloBuddy;
             this.Menu.AddItem(new MenuItem("eplxaination", "Don't get closer than that to: "));
 
             foreach (var enemy in HeroManager.Enemies)
-            {
                 this.Menu.AddItem(
                     new MenuItem(this.Path + "." + enemy.ChampionName, enemy.ChampionName).SetValue(
                         new Slider(300, 0, 1000)));
-            }
         }
 
         private void LogicJungleLastHit()
@@ -115,34 +135,18 @@ using EloBuddy;
         private void LogicLaneLastHit()
         {
             var units =
-                MinionManager.GetMinions(
-                    this.ireliaQ.Spell.Range,
-                    MinionTypes.All,
-                    MinionTeam.NotAlly).Where(x => this.ireliaQ.WillReset(x)).ToList();
+                MinionManager.GetMinions(this.ireliaQ.Spell.Range, MinionTypes.All, MinionTeam.NotAlly)
+                    .Where(x => this.ireliaQ.WillReset(x))
+                    .ToList();
 
-            if (this.Menu.Item(this.Path + "." + "noturretdive").GetValue<bool>())
-            {
-                foreach (var unit2 in units.ToList())
-                {
-                    if (unit2.UnderTurret(true))
-                    {
-                        units.Remove(unit2);
-                    }
-                }
-            }
+            if (this.Menu.Item(this.Path + "." + "noturretdive").GetValue<bool>()) foreach (var unit2 in units.ToList()) if (unit2.UnderTurret(true)) units.Remove(unit2);
 
             foreach (var enemy in
-                HeroManager.Enemies.Where(x => x.Distance(ObjectManager.Player) <= 1000 + this.ireliaQ.Spell.Range))
-            {
+                HeroManager.Enemies.Where(
+                    x => !x.IsDead && (x.Distance(ObjectManager.Player) <= 1000 + this.ireliaQ.Spell.Range)))
                 foreach (var entry in units.ToList())
-                {
                     if (entry.Distance(enemy)
-                        <= this.Menu.Item(this.Path + "." + enemy.ChampionName).GetValue<Slider>().Value)
-                    {
-                        units.Remove(entry);
-                    }
-                }
-            }
+                        <= this.Menu.Item(this.Path + "." + enemy.ChampionName).GetValue<Slider>().Value) units.Remove(entry);
 
             Obj_AI_Base unit = null;
 
@@ -152,18 +156,15 @@ using EloBuddy;
                     unit =
                         units.FirstOrDefault(
                             x =>
-                            x.Distance(ObjectManager.Player) >= ObjectManager.Player.AttackRange
-                            && x.HealthPercent <= 20);
+                                (x.Distance(ObjectManager.Player) >= ObjectManager.Player.AttackRange)
+                                && (x.HealthPercent <= 10));
                     break;
                 case 1:
                     unit = units.FirstOrDefault();
                     break;
             }
 
-            if (unit != null)
-            {
-                this.ireliaQ.Spell.Cast(unit);
-            }
+            if (unit != null) this.ireliaQ.Spell.Cast(unit);
         }
 
         /// <summary>

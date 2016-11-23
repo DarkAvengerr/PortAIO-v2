@@ -1,5 +1,23 @@
+//     Copyright (C) 2016 Rethought
+// 
+//     This program is free software: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+// 
+//     You should have received a copy of the GNU General Public License
+//     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// 
+//     Created: 04.10.2016 1:05 PM
+//     Last Edited: 04.10.2016 1:44 PM
+
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Rethought_Irelia.IreliaV1.GraphGenerator
 {
     #region Using Directives
@@ -37,10 +55,14 @@ using EloBuddy;
 
         #region Constructors and Destructors
 
+        #region Constructors
+
         public GraphGeneratorModule(IreliaQ ireliaQ)
         {
             this.IreliaQ = ireliaQ;
         }
+
+        #endregion
 
         #endregion
 
@@ -63,6 +85,10 @@ using EloBuddy;
 
         #region Public Methods and Operators
 
+        #region IGraphGenerator<AStarNode,AStarEdge<AStarNode>> Members
+
+        #region Public Methods and Operators
+
         /// <summary>
         ///     Generates the specified start to end graph
         /// </summary>
@@ -72,14 +98,14 @@ using EloBuddy;
         public Graph<AStarNode, AStarEdge<AStarNode>> Generate(AStarNode start, AStarNode end)
         {
             this.graph = new Graph<AStarNode, AStarEdge<AStarNode>>(
-                new List<AStarNode>(),
-                new List<AStarEdge<AStarNode>>());
+                             new List<AStarNode>(),
+                             new List<AStarEdge<AStarNode>>());
             this.units =
                 ObjectManager.Get<Obj_AI_Base>()
                     .Where(
                         x =>
-                        !x.IsAlly && !x.IsDead && x.ServerPosition.Distance(start.Position) <= 2500
-                        && this.IreliaQ.WillReset(x))
+                            !x.IsAlly && !x.IsDead && (x.ServerPosition.Distance(start.Position) <= 2500)
+                            && this.IreliaQ.WillReset(x))
                     .ToList();
 
             var nodes = this.units.Select(unit => new UnitNode(unit.ServerPosition, unit)).Cast<AStarNode>().ToList();
@@ -91,16 +117,15 @@ using EloBuddy;
             {
                 foreach (var neighbor in
                     nodes.Where(
-                        x => centerNode != x && x.Position.Distance(centerNode.Position) <= this.IreliaQ.Spell.Range))
+                        x => (centerNode != x) && (x.Position.Distance(centerNode.Position) <= this.IreliaQ.Spell.Range))
+                )
                 {
                     this.graph.Edges.Add(
-                        new AStarEdge<AStarNode>()
+                        new AStarEdge<AStarNode>
                             {
                                 Start = centerNode,
                                 End = neighbor,
-                                Cost =
-                                    centerNode.Position.Distance(neighbor.Position)
-                                    / this.IreliaQ.Spell.Speed
+                                Cost = centerNode.Position.Distance(neighbor.Position) / this.IreliaQ.Spell.Speed
                             });
 
                     this.graph.Nodes.Add(neighbor);
@@ -119,36 +144,29 @@ using EloBuddy;
 
         #endregion
 
+        #endregion
+
+        #endregion
+
         #region Methods
 
         /// <summary>
         ///     Called when [load].
         /// </summary>
-        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnLoad(sender, featureBaseEventArgs);
-
+            base.OnLoad(sender, eventArgs);
+#if DEBUG
             var draw = this.Menu.AddItem(new MenuItem("drawgraph", "Draw (Debugging)").SetValue(false));
 
             draw.ValueChanged += (o, args) =>
                 {
-                    if (args.GetNewValue<bool>())
-                    {
-                        Drawing.OnDraw += this.DrawingOnOnDraw;
-                        Game.OnUpdate += this.DrawingOnUpdate;
-                    }
-                    else
-                    {
-                        Drawing.OnDraw -= this.DrawingOnOnDraw;
-                        Game.OnUpdate -= this.DrawingOnUpdate;
-                    }
+                    if (args.GetNewValue<bool>()) Drawing.OnDraw += this.DrawingOnOnDraw;
+                    else Drawing.OnDraw -= this.DrawingOnOnDraw;
                 };
 
-            if (draw.GetValue<bool>())
-            {
-                Drawing.OnDraw += this.DrawingOnOnDraw;
-                Game.OnUpdate -= this.DrawingOnUpdate;
-            }
+            if (draw.GetValue<bool>()) Drawing.OnDraw += this.DrawingOnOnDraw;
+#endif
         }
 
         /// <summary>
@@ -161,18 +179,15 @@ using EloBuddy;
 
         private void DrawingOnOnDraw(EventArgs args)
         {
+            if (this.graph == null) return;
+
             foreach (var edge in this.graph.Edges)
-            {
                 Drawing.DrawLine(
                     Drawing.WorldToScreen(edge.Start.Position),
                     Drawing.WorldToScreen(edge.End.Position),
                     1,
                     Color.White);
-            }
-        }
 
-        private void DrawingOnUpdate(EventArgs args)
-        {
             this.graph = null;
         }
 
@@ -183,11 +198,15 @@ using EloBuddy;
     {
         #region Constructors and Destructors
 
+        #region Constructors
+
         public UnitNode(Vector3 position, Obj_AI_Base unit)
             : base(position)
         {
             this.Unit = unit;
         }
+
+        #endregion
 
         #endregion
 

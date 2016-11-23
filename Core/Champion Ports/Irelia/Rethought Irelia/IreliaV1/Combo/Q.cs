@@ -1,5 +1,24 @@
+//     File:  Rethought Series/Rethought Irelia/Q.cs
+//     Copyright (C) 2016 Rethought
+// 
+//     This program is free software: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+// 
+//     You should have received a copy of the GNU General Public License
+//     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// 
+//     Created: 04.10.2016 1:05 PM
+//     Last Edited: 04.10.2016 3:32 PM
+
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Rethought_Irelia.IreliaV1.Combo
 {
     #region Using Directives
@@ -10,9 +29,9 @@ using EloBuddy;
     using LeagueSharp;
     using LeagueSharp.Common;
 
+    using RethoughtLib.DamageCalculator;
     using RethoughtLib.FeatureSystem.Implementations;
 
-    using Rethought_Irelia.IreliaV1.DamageCalculator;
     using Rethought_Irelia.IreliaV1.Spells;
 
     using SharpDX;
@@ -51,6 +70,8 @@ using EloBuddy;
 
         #region Constructors and Destructors
 
+        #region Constructors
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="Q" /> class.
         /// </summary>
@@ -64,6 +85,8 @@ using EloBuddy;
 
         #endregion
 
+        #endregion
+
         #region Public Properties
 
         /// <summary>
@@ -72,7 +95,7 @@ using EloBuddy;
         /// <value>
         ///     The name.
         /// </value>
-        public override string Name { get; set; } = "Q";
+        public override string Name { get; set; } = nameof(Q);
 
         /// <summary>
         ///     Gets or sets the spell priority.
@@ -89,6 +112,8 @@ using EloBuddy;
         /// <summary>
         ///     Called when [disable].
         /// </summary>
+        /// <param name="sender">the sender of the input</param>
+        /// <param name="eventArgs">the contextual information</param>
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
             base.OnDisable(sender, eventArgs);
@@ -99,6 +124,8 @@ using EloBuddy;
         /// <summary>
         ///     Called when [enable]
         /// </summary>
+        /// <param name="sender">the sender of the input</param>
+        /// <param name="eventArgs">the contextual information</param>
         protected override void OnEnable(object sender, FeatureBaseEventArgs eventArgs)
         {
             base.OnEnable(sender, eventArgs);
@@ -109,9 +136,11 @@ using EloBuddy;
         /// <summary>
         ///     Called when [load].
         /// </summary>
-        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        /// <param name="sender">the sender of the input</param>
+        /// <param name="eventArgs">the contextual information</param>
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnLoad(sender, featureBaseEventArgs);
+            base.OnLoad(sender, eventArgs);
 
             this.Menu.AddItem(new MenuItem(this.Path + "." + "pathfinding", "Gapclosing / Pathfinding").SetValue(true));
 
@@ -139,27 +168,24 @@ using EloBuddy;
         /// </summary>
         private Vector3 GetMovementPrediction()
         {
-            if (!this.Menu.Item(this.Path + "." + "movementprediction").GetValue<bool>() || this.target == null) return Vector3.Zero;
+            if (!this.Menu.Item(this.Path + "." + "movementprediction").GetValue<bool>() || (this.target == null)) return Vector3.Zero;
 
             var gapclosePath = this.ireliaQ.GetPath(ObjectManager.Player.ServerPosition, this.target.ServerPosition);
 
             var expectedTime = 0f;
 
-            if (gapclosePath == null || gapclosePath.Any()) return Vector3.Zero;
+            if ((gapclosePath == null) || gapclosePath.Any()) return Vector3.Zero;
 
             for (var i = 0; i < gapclosePath.Count - 1; i++)
             {
-                if (gapclosePath[i] == null || gapclosePath[i + 1] == null) continue;
+                if ((gapclosePath[i] == null) || (gapclosePath[i + 1] == null)) continue;
 
                 expectedTime += gapclosePath[i].Distance(gapclosePath[i + 1]) / this.ireliaQ.Spell.Speed;
             }
 
             var pred = Prediction.GetPrediction(this.target, expectedTime);
 
-            if (pred != null)
-            {
-                return pred.CastPosition;
-            }
+            if (pred != null) return pred.CastPosition;
 
             return Vector3.Zero;
         }
@@ -169,16 +195,16 @@ using EloBuddy;
         /// </summary>
         private void LogicBaitEnemy()
         {
-            if (!this.Menu.Item(this.Path + "." + "baitenemy").GetValue<bool>() || this.target == null
-                || ObjectManager.Player.ServerPosition.Distance(this.target.ServerPosition)
-                <= this.ireliaQ.Spell.Range - Baitrange) return;
+            if (!this.Menu.Item(this.Path + "." + "baitenemy").GetValue<bool>() || (this.target == null)
+                || (ObjectManager.Player.ServerPosition.Distance(this.target.ServerPosition)
+                    <= this.ireliaQ.Spell.Range - Baitrange)) return;
 
             var possibleUnits =
                 ObjectManager.Get<Obj_AI_Base>()
                     .Where(
                         x =>
-                        this.ireliaQ.WillReset(x)
-                        && x.Distance(this.target) <= ObjectManager.Player.Distance(this.target));
+                            this.ireliaQ.WillReset(x)
+                            && (x.Distance(this.target) <= ObjectManager.Player.Distance(this.target)));
 
             this.ireliaQ.Spell.Cast(possibleUnits.MinOrDefault(x => x.Distance(this.target)));
         }
@@ -188,10 +214,7 @@ using EloBuddy;
         /// </summary>
         private void LogicFinisher()
         {
-            if (this.ireliaQ.WillReset(this.target))
-            {
-                this.ireliaQ.Spell.Cast(this.target);
-            }
+            if (this.ireliaQ.WillReset(this.target)) this.ireliaQ.Spell.Cast(this.target);
         }
 
         /// <summary>
@@ -200,13 +223,10 @@ using EloBuddy;
         private void LogicOneVersusOne()
         {
             if (!this.Menu.Item(this.Path + "." + "oneversusone").GetValue<bool>()
-                || this.target.GetEnemiesInRange(1000).Count > 1) return;
+                || (this.target.GetEnemiesInRange(1000).Count > 1)) return;
 
-            if (this.damageCalculator.GetDamage(this.target) > this.target.Health
-                && ObjectManager.Player.Distance(this.target) >= ObjectManager.Player.AttackRange)
-            {
-                this.ireliaQ.Spell.Cast(this.target);
-            }
+            if ((this.damageCalculator.GetDamage(this.target) > this.target.Health)
+                && (ObjectManager.Player.Distance(this.target) >= ObjectManager.Player.AttackRange)) this.ireliaQ.Spell.Cast(this.target);
         }
 
         /// <summary>
@@ -218,14 +238,11 @@ using EloBuddy;
 
             var end = this.GetMovementPrediction();
 
-            if (end == Vector3.Zero)
-            {
-                end = Game.CursorPos;
-            }
+            if (end == Vector3.Zero) end = Game.CursorPos;
 
             var path = this.ireliaQ.GetPath(ObjectManager.Player.ServerPosition, end);
 
-            if (path == null || !path.Any()) return;
+            if ((path == null) || !path.Any()) return;
 
             this.ireliaQ.Spell.Cast(path.FirstOrDefault());
         }
@@ -242,10 +259,7 @@ using EloBuddy;
 
             if (this.target == null) return;
 
-            if (this.Menu.Item(this.Path + "." + "noturretdive").GetValue<KeyBind>().Active && this.target.UnderTurret())
-            {
-                this.target = null;
-            }
+            if (this.Menu.Item($"{this.Path}.noturretdive").GetValue<KeyBind>().Active && this.target.UnderTurret()) this.target = null;
 
             if (this.target == null) return;
 
@@ -256,7 +270,7 @@ using EloBuddy;
             this.LogicBaitEnemy();
 
             if (ObjectManager.Player.Distance(this.target)
-                <= this.Menu.Item(this.Path + "." + "minrangetogapclose").GetValue<Slider>().Value) return;
+                <= this.Menu.Item($"{this.Path}.minrangetogapclose").GetValue<Slider>().Value) return;
 
             this.LogicPathfinding();
         }

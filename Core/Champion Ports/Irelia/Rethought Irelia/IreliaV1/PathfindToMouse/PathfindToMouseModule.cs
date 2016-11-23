@@ -1,6 +1,24 @@
+//     Copyright (C) 2016 Rethought
+// 
+//     This program is free software: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+// 
+//     You should have received a copy of the GNU General Public License
+//     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// 
+//     Created: 04.10.2016 1:05 PM
+//     Last Edited: 04.10.2016 1:44 PM
+
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Rethought_Irelia.IreliaV1.DashToMouse
+using LeagueSharp.Common; 
+ namespace Rethought_Irelia.IreliaV1.PathfindToMouse
 {
     #region Using Directives
 
@@ -16,7 +34,7 @@ using EloBuddy;
 
     #endregion
 
-    internal class DashToMouseModule : ChildBase
+    internal class PathfindToMouseModule : ChildBase
     {
         #region Fields
 
@@ -26,10 +44,14 @@ using EloBuddy;
 
         #region Constructors and Destructors
 
-        public DashToMouseModule(IreliaQ ireliaQ)
+        #region Constructors
+
+        public PathfindToMouseModule(IreliaQ ireliaQ)
         {
             this.ireliaQ = ireliaQ;
         }
+
+        #endregion
 
         #endregion
 
@@ -41,7 +63,7 @@ using EloBuddy;
         /// <value>
         ///     The name.
         /// </value>
-        public override string Name { get; set; } = "Dash To Mouse";
+        public override string Name { get; set; } = "Pathfind To Mouse";
 
         #endregion
 
@@ -70,9 +92,9 @@ using EloBuddy;
         /// <summary>
         ///     Called when [load].
         /// </summary>
-        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnLoad(sender, featureBaseEventArgs);
+            base.OnLoad(sender, eventArgs);
 
             this.Menu.AddItem(new MenuItem("keybind", "Keybind").SetValue(new KeyBind('A', KeyBindType.Press)));
         }
@@ -90,10 +112,7 @@ using EloBuddy;
 
             var path = this.ireliaQ.GetPath(ObjectManager.Player.ServerPosition, Game.CursorPos);
 
-            if (path == null || !path.Any())
-            {
-                return;
-            }
+            if ((path == null) || !path.Any()) return;
 
             this.ireliaQ.Spell.Cast(path.FirstOrDefault());
         }

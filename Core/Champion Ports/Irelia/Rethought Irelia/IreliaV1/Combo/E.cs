@@ -1,5 +1,23 @@
+//     Copyright (C) 2016 Rethought
+// 
+//     This program is free software: you can redistribute it and/or modify
+//     it under the terms of the GNU General Public License as published by
+//     the Free Software Foundation, either version 3 of the License, or
+//     (at your option) any later version.
+// 
+//     This program is distributed in the hope that it will be useful,
+//     but WITHOUT ANY WARRANTY; without even the implied warranty of
+//     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//     GNU General Public License for more details.
+// 
+//     You should have received a copy of the GNU General Public License
+//     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// 
+//     Created: 04.10.2016 1:05 PM
+//     Last Edited: 04.10.2016 1:44 PM
+
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace Rethought_Irelia.IreliaV1.Combo
 {
     #region Using Directives
@@ -33,6 +51,8 @@ using EloBuddy;
 
         #region Constructors and Destructors
 
+        #region Constructors
+
         /// <summary>
         ///     Initializes a new instance of the <see cref="E" /> class.
         /// </summary>
@@ -41,6 +61,8 @@ using EloBuddy;
         {
             this.ireliaE = ireliaE;
         }
+
+        #endregion
 
         #endregion
 
@@ -81,9 +103,9 @@ using EloBuddy;
         /// <summary>
         ///     Called when [load].
         /// </summary>
-        protected override void OnLoad(object sender, FeatureBaseEventArgs featureBaseEventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
-            base.OnLoad(sender, featureBaseEventArgs);
+            base.OnLoad(sender, eventArgs);
 
             this.Menu.AddItem(
                 new MenuItem(this.Path + "." + "stunwhenpossible", "Stun whenever possible").SetValue(true));
@@ -105,16 +127,10 @@ using EloBuddy;
 
             if (this.target.HasBuffOfType(BuffType.Slow) || this.target.HasBuffOfType(BuffType.Charm)
                 || this.target.HasBuffOfType(BuffType.Taunt) || this.target.HasBuffOfType(BuffType.Flee)
-                || this.target.IsMovementImpaired())
-            {
-                return;
-            }
+                || this.target.IsMovementImpaired()) return;
 
             if (!this.target.IsFacing(ObjectManager.Player)
-                && ObjectManager.Player.Distance(this.target) > ObjectManager.Player.AttackRange - 50)
-            {
-                this.ireliaE.Spell.Cast(this.target);
-            }
+                && (ObjectManager.Player.Distance(this.target) > ObjectManager.Player.AttackRange - 50)) this.ireliaE.Spell.Cast(this.target);
         }
 
         /// <summary>
@@ -124,11 +140,8 @@ using EloBuddy;
         {
             if (!this.Menu.Item(this.Path + "." + "slowdown").GetValue<bool>()) return;
 
-            if (this.target.MoveSpeed > ObjectManager.Player.MoveSpeed && !this.target.IsMovementImpaired()
-                && ObjectManager.Player.Distance(this.target) > ObjectManager.Player.AttackRange - 50)
-            {
-                this.ireliaE.Spell.Cast(this.target);
-            }
+            if ((this.target.MoveSpeed > ObjectManager.Player.MoveSpeed) && !this.target.IsMovementImpaired()
+                && (ObjectManager.Player.Distance(this.target) > ObjectManager.Player.AttackRange - 50)) this.ireliaE.Spell.Cast(this.target);
         }
 
         /// <summary>
@@ -139,10 +152,7 @@ using EloBuddy;
             if (!this.Menu.Item(this.Path + "." + "stunwhenpossible").GetValue<bool>()) return;
 
             if (this.target.HasBuffOfType(BuffType.Charm) || this.target.HasBuffOfType(BuffType.Taunt)
-                || this.target.HasBuffOfType(BuffType.Flee) || this.target.IsMovementImpaired())
-            {
-                return;
-            }
+                || this.target.HasBuffOfType(BuffType.Flee) || this.target.IsMovementImpaired()) return;
 
             if (!this.ireliaE.CanStun(this.target)) return;
 
