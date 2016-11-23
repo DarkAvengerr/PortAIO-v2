@@ -194,6 +194,16 @@ namespace PortAIO
             {
                 ControlSharp.Program.Main();
             }
+
+            if (Misc.menu.Item("UniversalRecallTracker").GetValue<bool>())
+            {
+                UniversalRecallTracker.Program.Main();
+            }
+
+            if (Misc.menu.Item("UniversalMinimapHack").GetValue<bool>())
+            {
+                UniversalMinimapHack.Program.Main();
+            }
         }
 
         public static void LoadChampion()

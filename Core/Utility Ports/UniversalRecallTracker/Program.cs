@@ -6,9 +6,13 @@ using LeagueSharp.Common;
 using SharpDX;
 using SharpDX.Direct3D9;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace UniversalRecallTracker
+using EloBuddy;
+using LeagueSharp.Common;
+using EloBuddy.SDK.Events;
+using static EloBuddy.SDK.Events.Teleport;
+using EloBuddy.SDK.Enumerations;
+
+namespace UniversalRecallTracker
 {
     public class Program
     {
@@ -47,7 +51,7 @@ using EloBuddy;
             get { return _chatWarning.GetValue<bool>(); }
         }
 
-        public static void Main(string[] args)
+        public static void Main()
         {
             new Program();
         }
@@ -216,31 +220,38 @@ using EloBuddy;
             };
             _countdownText.Add(1);
             Game.OnUpdate += Game_OnGameUpdate;
-            Obj_AI_Base.OnTeleport += Obj_AI_Base_OnTeleport;
+            Teleport.OnTeleport += Obj_AI_Base_OnTeleport;
         }
 
-        private void Obj_AI_Base_OnTeleport(GameObject sender, GameObjectTeleportEventArgs args)
+        private void Obj_AI_Base_OnTeleport(GameObject sender, TeleportEventArgs args)
         {
-            Packet.S2C.Teleport.Struct decoded = Packet.S2C.Teleport.Decoded(sender, args);
-            if (decoded.UnitNetworkId == _hero.NetworkId && decoded.Type == Packet.S2C.Teleport.Type.Recall)
+            var unit = sender as AIHeroClient;
+
+            if (unit == null || !unit.IsValid || unit.IsAlly)
+            {
+                return;
+            }
+
+            var decoded = new RecallInf(unit.NetworkId, args.Status, args.Type, args.Duration, args.Start);
+            if (unit.NetworkId == _hero.NetworkId && decoded.Type == TeleportType.Recall)
             {
                 switch (decoded.Status)
                 {
-                    case Packet.S2C.Teleport.Status.Start:
+                    case TeleportStatus.Start:
                         _begin = Game.Time;
                         _duration = decoded.Duration;
                         _active = true;
                         break;
-                    case Packet.S2C.Teleport.Status.Finish:
+                    case TeleportStatus.Finish:
                         int colorIndex = (int) ((_hero.HealthPercent / 100) * 255);
                         string color = (255 - colorIndex).ToString("X2") + colorIndex.ToString("X2") + "00";
                         Program.Instance().Notify(_hero.ChampionName + " has recalled with <font color='#" + color + "'>" + (int) _hero.HealthPercent + "&#37; HP</font>");
                         _active = false;
                         break;
-                    case Packet.S2C.Teleport.Status.Abort:
+                    case TeleportStatus.Abort:
                         _active = false;
                         break;
-                    case Packet.S2C.Teleport.Status.Unknown:
+                    case TeleportStatus.Unknown:
                         Program.Instance()
                             .Notify(
                                 _hero.ChampionName + " is <font color='#ff3232'>unknown</font> (" +
@@ -284,6 +295,24 @@ using EloBuddy;
         {
             _sprite.Scale = new Vector2(barScale, barScale);
             Reset();
+        }
+    }
+
+    public class RecallInf
+    {
+        public int NetworkID;
+        public int Duration;
+        public int Start;
+        public TeleportType Type;
+        public TeleportStatus Status;
+
+        public RecallInf(int netid, TeleportStatus stat, TeleportType tpe, int dura, int star = 0)
+        {
+            NetworkID = netid;
+            Status = stat;
+            Type = tpe;
+            Duration = dura;
+            Start = star;
         }
     }
 }

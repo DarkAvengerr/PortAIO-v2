@@ -6303,13 +6303,13 @@
     <Compile Include="Core\Utility Ports\`WIP\UniversalLeveler\LevelOneUltiStrategy.cs" />
     <Compile Include="Core\Utility Ports\`WIP\UniversalLeveler\Program.cs" />
     <Compile Include="Core\Utility Ports\`WIP\UniversalLeveler\UdyrStrategy.cs" />
-    <Compile Include="Core\Utility Ports\`WIP\UniversalMinimapHack\HeroTracker.cs" />
-    <Compile Include="Core\Utility Ports\`WIP\UniversalMinimapHack\ImageLoader.cs" />
-    <Compile Include="Core\Utility Ports\`WIP\UniversalMinimapHack\Menu.cs" />
-    <Compile Include="Core\Utility Ports\`WIP\UniversalMinimapHack\MinimapHack.cs" />
-    <Compile Include="Core\Utility Ports\`WIP\UniversalMinimapHack\Program.cs" />
+    <Compile Include="Core\Utility Ports\UniversalMinimapHack\HeroTracker.cs" />
+    <Compile Include="Core\Utility Ports\UniversalMinimapHack\ImageLoader.cs" />
+    <Compile Include="Core\Utility Ports\UniversalMinimapHack\Menu.cs" />
+    <Compile Include="Core\Utility Ports\UniversalMinimapHack\MinimapHack.cs" />
+    <Compile Include="Core\Utility Ports\UniversalMinimapHack\Program.cs" />
     <Compile Include="Core\Utility Ports\UniversalPings\Program.cs" />
-    <Compile Include="Core\Utility Ports\`WIP\UniversalRecallTracker\Program.cs" />
+    <Compile Include="Core\Utility Ports\UniversalRecallTracker\Program.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\AIO Ports\OneKeyToWin_AIO_Sebby\Core\Activator.cs" />
@@ -6778,7 +6778,6 @@
   <ItemGroup>
     <Folder Include="Core\Champion Ports\Diana\ReformedAIO\" />
     <Folder Include="Core\Champion Ports\Gnar\ReformedAIO\" />
-    <Folder Include="Core\Utility Ports\`WIP\UniversalRecallTracker\Resources\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Core\Champion Ports\Brand\TheBrand\Commons\ComboSystem\Combo System thoughts.txt" />
