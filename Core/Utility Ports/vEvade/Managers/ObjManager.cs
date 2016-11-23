@@ -148,7 +148,7 @@ using LeagueSharp.Common;
 
         public static bool IsPet(this Obj_AI_Minion minion, bool includeClones = true)
         {
-            var name = minion.CharData.BaseSkinName.ToLower();
+            var name = minion.BaseSkinName.ToLower();
             return PetList.Contains(name) || (includeClones && CloneList.Contains(name));
         }
 
@@ -159,7 +159,7 @@ using LeagueSharp.Common;
 
         public static bool IsWard(this Obj_AI_Minion minion)
         {
-            return minion.GetMinionType().HasFlag(MinionTypes.Ward) && minion.CharData.BaseSkinName != "BlueTrinket";
+            return minion.GetMinionType().HasFlag(MinionTypes.Ward) && minion.BaseSkinName != "BlueTrinket";
         }
 
         #endregion
@@ -193,12 +193,12 @@ using LeagueSharp.Common;
 
         private static MinionTypes GetMinionType(this Obj_AI_Minion minion)
         {
-            var baseSkinName = minion.CharData.BaseSkinName;
+            var baseSkinName = minion.BaseSkinName;
 
             if (NormalMinionList.Any(n => baseSkinName.Equals(n)))
             {
                 return MinionTypes.Normal
-                       | (minion.CharData.BaseSkinName.Contains("Melee") ? MinionTypes.Melee : MinionTypes.Ranged);
+                       | (minion.BaseSkinName.Contains("Melee") ? MinionTypes.Melee : MinionTypes.Ranged);
             }
 
             if (SiegeMinionList.Any(n => baseSkinName.Equals(n)))

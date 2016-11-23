@@ -136,15 +136,15 @@ using LeagueSharp.Common;
             return SpellsDetected.Values.Where(i => i.Enable).All(i => i.IsSafeToBlink(pos, timeOffset, delay));
         }
 
-        public static void OnGameLoad()
+        public static void OnGameLoad(EventArgs args)
         {
+            SpellsDetected.OnAdd += (sender, eventArgs) => { Evading = false; };
             Configs.CreateMenu();
             Game.OnUpdate += OnUpdate;
             EloBuddy.Player.OnIssueOrder += OnIssueOrder;
             Drawing.OnDraw += OnDraw;
             CustomEvents.Unit.OnDash += OnDash;
             Orbwalking.BeforeAttack += BeforeAttack;
-            SpellsDetected.OnAdd += (sender, eventArgs) => { Evading = false; };
             Collisions.Init();
         }
 
@@ -166,6 +166,13 @@ using LeagueSharp.Common;
             {
                 if (spell.MissileObject == null && spell.ToggleObject == null && spell.TrapObject == null
                     && HeroManager.AllHeroes.Any(i => i.IsValid() && i.IsDead && i.NetworkId == spell.Unit.NetworkId))
+                {
+                    LeagueSharp.Common.Utility.DelayAction.Add(1, () => SpellsDetected.Remove(spell.SpellId));
+                }
+
+                if (spell.Data.IsDash && Utils.GameTimeTickCount - spell.StartTick > spell.Data.Delay + 100
+                    && HeroManager.AllHeroes.Any(
+                        i => i.IsValid() && !i.IsDashing() && i.NetworkId == spell.Unit.NetworkId))
                 {
                     LeagueSharp.Common.Utility.DelayAction.Add(1, () => SpellsDetected.Remove(spell.SpellId));
                 }

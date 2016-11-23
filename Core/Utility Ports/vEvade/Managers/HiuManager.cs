@@ -20,9 +20,11 @@ using LeagueSharp.Common;
     {
         #region Public Methods and Operators
 
-        public static Vector2 GetLastHiuOrientation()
+        public static Vector2 GetLastHiuOrientation(int time)
         {
-            var objs = ObjManager.ObjCache.Values.Where(i => i.Name == "Hiu").OrderByDescending(i => i.Time);
+            var objs =
+                ObjManager.ObjCache.Values.Where(i => i.Name == "Hiu" && time - i.Time >= 0 && time - i.Time <= 100)
+                    .OrderByDescending(i => i.Time);
 
             return objs.Count() >= 2
                        ? (objs.ElementAt(1).Obj.Position - objs.First().Obj.Position).To2D().Normalized()
@@ -34,7 +36,7 @@ using LeagueSharp.Common;
             var minion = sender as Obj_AI_Minion;
 
             if (minion == null || !minion.IsValid || (!Configs.Debug && !minion.IsEnemy)
-                || !minion.CharData.BaseSkinName.Contains("TestCube")
+                || !minion.BaseSkinName.Contains("TestCube")
                 || ObjManager.ObjCache.ContainsKey(minion.NetworkId))
             {
                 return;

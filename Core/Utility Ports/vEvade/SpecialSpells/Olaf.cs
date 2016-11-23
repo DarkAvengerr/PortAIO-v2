@@ -4,18 +4,16 @@ using LeagueSharp.Common;
 {
     #region
 
-    using System.Linq;
-
     using LeagueSharp;
+    using LeagueSharp.Common;
 
-    using vEvade.Managers;
     using vEvade.Spells;
 
     using SpellData = vEvade.Spells.SpellData;
 
     #endregion
 
-    public class Lulu : IChampionManager
+    public class Olaf : IChampionManager
     {
         #region Static Fields
 
@@ -33,33 +31,28 @@ using LeagueSharp.Common;
             }
 
             init = true;
-            SpellDetector.OnProcessSpell += LuluQ;
+            SpellDetector.OnProcessSpell += OlafQ;
         }
 
         #endregion
 
         #region Methods
 
-        private static void LuluQ(
+        private static void OlafQ(
             Obj_AI_Base sender,
             GameObjectProcessSpellCastEventArgs args,
             SpellData data,
             SpellArgs spellArgs)
         {
-            if (data.MenuName != "LuluQ")
+            if (data.MenuName != "OlafQ")
             {
                 return;
             }
 
-            foreach (var pix in
-                ObjectManager.Get<Obj_AI_Minion>()
-                    .Where(
-                        i =>
-                        i.IsValid() && !i.IsDead && i.IsVisible && i.BaseSkinName == "lulufaerie"
-                        && i.Team == sender.Team))
-            {
-                SpellDetector.AddSpell(sender, pix.ServerPosition, args.End, data);
-            }
+            var startPos = sender.ServerPosition.To2D();
+            var endPos = args.End.To2D().Extend(startPos, -50);
+            SpellDetector.AddSpell(sender, startPos, endPos, data);
+            spellArgs.NoProcess = true;
         }
 
         #endregion

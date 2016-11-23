@@ -59,6 +59,8 @@ using LeagueSharp.Common;
 
         public bool IsDangerous;
 
+        public bool IsDash;
+
         public bool IsSummoner;
 
         public string MenuName = "";
@@ -101,8 +103,6 @@ using LeagueSharp.Common;
 
         public string TrapName = "";
 
-        public bool UseEndPosition;
-
         #endregion
 
         #region Public Properties
@@ -111,7 +111,7 @@ using LeagueSharp.Common;
         {
             get
             {
-                return this.RawRadius + Configs.SpellExtraRadius
+                return this.RawRadius + (!Configs.Debug ? Configs.SpellExtraRadius : 0)
                        + (this.AddHitbox && this.Type != SpellType.Ring && this.Type != SpellType.Cone
                           && this.Type != SpellType.MissileCone
                               ? (int)ObjectManager.Player.BoundingRadius
@@ -128,7 +128,7 @@ using LeagueSharp.Common;
             get
             {
                 return this.RawRange
-                       + (this.Type == SpellType.Line || this.Type == SpellType.MissileLine
+                       + (!Configs.Debug && (this.Type == SpellType.Line || this.Type == SpellType.MissileLine)
                               ? Configs.SpellExtraRange
                               : 0);
             }

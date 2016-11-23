@@ -52,7 +52,7 @@ using LeagueSharp.Common;
 
             var target = args.Target as Obj_AI_Base;
 
-            if (target == null || !target.IsValid || (!Configs.Debug && !target.IsMe))
+            if (target == null || !target.IsValid || (!target.IsMe && !Configs.Debug))
             {
                 return;
             }

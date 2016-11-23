@@ -6195,8 +6195,10 @@
     <Compile Include="Core\Utility Ports\vEvade\Program.cs" />
     <Compile Include="Core\Utility Ports\vEvade\SpecialSpells\Aatrox.cs" />
     <Compile Include="Core\Utility Ports\vEvade\SpecialSpells\Azir.cs" />
+    <Compile Include="Core\Utility Ports\vEvade\SpecialSpells\Draven.cs" />
     <Compile Include="Core\Utility Ports\vEvade\SpecialSpells\Ekko.cs" />
     <Compile Include="Core\Utility Ports\vEvade\SpecialSpells\Fizz.cs" />
+    <Compile Include="Core\Utility Ports\vEvade\SpecialSpells\Galio.cs" />
     <Compile Include="Core\Utility Ports\vEvade\SpecialSpells\IChampionManager.cs" />
     <Compile Include="Core\Utility Ports\vEvade\SpecialSpells\JarvanIV.cs" />
     <Compile Include="Core\Utility Ports\vEvade\SpecialSpells\Karma.cs" />
@@ -6204,7 +6206,10 @@
     <Compile Include="Core\Utility Ports\vEvade\SpecialSpells\Lulu.cs" />
     <Compile Include="Core\Utility Ports\vEvade\SpecialSpells\Lux.cs" />
     <Compile Include="Core\Utility Ports\vEvade\SpecialSpells\Malzahar.cs" />
+    <Compile Include="Core\Utility Ports\vEvade\SpecialSpells\Olaf.cs" />
     <Compile Include="Core\Utility Ports\vEvade\SpecialSpells\Orianna.cs" />
+    <Compile Include="Core\Utility Ports\vEvade\SpecialSpells\Poppy.cs" />
+    <Compile Include="Core\Utility Ports\vEvade\SpecialSpells\Riven.cs" />
     <Compile Include="Core\Utility Ports\vEvade\SpecialSpells\Syndra.cs" />
     <Compile Include="Core\Utility Ports\vEvade\SpecialSpells\Taric.cs" />
     <Compile Include="Core\Utility Ports\vEvade\SpecialSpells\Velkoz.cs" />

@@ -77,7 +77,7 @@ using LeagueSharp.Common;
                     ObjectManager.Get<Obj_AI_Minion>()
                         .Where(
                             i =>
-                            i.IsValid() && !i.IsDead && i.CharData.BaseSkinName == "syndrasphere"
+                            i.IsValid() && !i.IsDead && i.BaseSkinName == "syndrasphere"
                             && i.Team == sender.Team)
                         .Select(i => i.ServerPosition.To2D()));
 

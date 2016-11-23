@@ -65,7 +65,7 @@ using LeagueSharp.Common;
                     3,
                     () =>
                     ObjectManager.Player.MoveSpeed
-                    * (1 + 0.12f + 0.04f * Player.Spellbook.GetSpell(SpellSlot.W).Level));
+                    * (1 + 0.12f + 0.04f * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level));
                 Spells.Add(spell);
             }
 
@@ -82,7 +82,7 @@ using LeagueSharp.Common;
                     3,
                     () =>
                     ObjectManager.Player.MoveSpeed
-                    * (1 + 0.35f + 0.05f * Player.Spellbook.GetSpell(SpellSlot.W).Level));
+                    * (1 + 0.35f + 0.05f * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level));
                 Spells.Add(spell);
             }
 
@@ -99,7 +99,7 @@ using LeagueSharp.Common;
                     3,
                     () =>
                     ObjectManager.Player.MoveSpeed
-                    * (1 + 0.2f + 0.1f * Player.Spellbook.GetSpell(SpellSlot.W).Level));
+                    * (1 + 0.2f + 0.1f * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level));
                 Spells.Add(spell);
             }
 
@@ -127,7 +127,7 @@ using LeagueSharp.Common;
                     () =>
                     ObjectManager.Get<AIHeroClient>().Any(h => h.IsValidTarget(375))
                         ? ObjectManager.Player.MoveSpeed
-                          * (1 + 0.10f + 0.05f * Player.Spellbook.GetSpell(SpellSlot.W).Level)
+                          * (1 + 0.10f + 0.05f * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level)
                         : 0);
                 Spells.Add(spell);
             }
@@ -145,7 +145,7 @@ using LeagueSharp.Common;
                     3,
                     () =>
                     ObjectManager.Player.MoveSpeed
-                    * (1 + 0.35f + 0.05f * Player.Spellbook.GetSpell(SpellSlot.E).Level));
+                    * (1 + 0.35f + 0.05f * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level));
                 Spells.Add(spell);
             }
 
@@ -198,7 +198,7 @@ using LeagueSharp.Common;
                     3,
                     () =>
                     ObjectManager.Player.MoveSpeed
-                    * (1 + 0.1f + 0.01f * Player.Spellbook.GetSpell(SpellSlot.W).Level));
+                    * (1 + 0.1f + 0.01f * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level));
                 Spells.Add(spell);
             }
 
@@ -235,7 +235,7 @@ using LeagueSharp.Common;
                     4,
                     () =>
                     ObjectManager.Player.MoveSpeed
-                    * (1 + 0.25f + 0.05f * Player.Spellbook.GetSpell(SpellSlot.W).Level));
+                    * (1 + 0.25f + 0.05f * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level));
                 spell.CheckSpellName = "ShyvanaImmolationAura";
                 Spells.Add(spell);
             }
@@ -253,9 +253,9 @@ using LeagueSharp.Common;
                     3,
                     () =>
                     ObjectManager.Player.MoveSpeed
-                    * (1 + 0.12f + 0.01f * Player.Spellbook.GetSpell(SpellSlot.E).Level
+                    * (1 + 0.12f + 0.01f * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level
                        + ObjectManager.Player.FlatMagicDamageMod / 100 * 0.075f
-                       + 0.02f * Player.Spellbook.GetSpell(SpellSlot.R).Level));
+                       + 0.02f * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level));
                 Spells.Add(spell);
             }
 
@@ -272,7 +272,7 @@ using LeagueSharp.Common;
                     3,
                     () =>
                     ObjectManager.Player.MoveSpeed
-                    * (1 + 0.06f + 0.04f * Player.Spellbook.GetSpell(SpellSlot.W).Level));
+                    * (1 + 0.06f + 0.04f * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level));
                 Spells.Add(spell);
             }
 
@@ -289,7 +289,7 @@ using LeagueSharp.Common;
                     3,
                     () =>
                     ObjectManager.Player.MoveSpeed
-                    * (1 + 0.1f + 0.05f * Player.Spellbook.GetSpell(SpellSlot.E).Level));
+                    * (1 + 0.1f + 0.05f * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level));
                 Spells.Add(spell);
             }
 

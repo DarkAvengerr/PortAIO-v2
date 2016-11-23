@@ -8,14 +8,14 @@ using LeagueSharp.Common;
 
     using LeagueSharp;
 
-    using vEvade.Managers;
+    using vEvade.Core;
     using vEvade.Spells;
 
     using SpellData = vEvade.Spells.SpellData;
 
     #endregion
 
-    public class Lulu : IChampionManager
+    public class Draven : IChampionManager
     {
         #region Static Fields
 
@@ -33,33 +33,35 @@ using LeagueSharp.Common;
             }
 
             init = true;
-            SpellDetector.OnProcessSpell += LuluQ;
+            SpellDetector.OnProcessSpell += DravenR;
         }
 
         #endregion
 
         #region Methods
 
-        private static void LuluQ(
+        private static void DravenR(
             Obj_AI_Base sender,
             GameObjectProcessSpellCastEventArgs args,
             SpellData data,
             SpellArgs spellArgs)
         {
-            if (data.MenuName != "LuluQ")
+            if (data.MenuName != "DravenR" || !args.SData.Name.Contains("Double"))
             {
                 return;
             }
 
-            foreach (var pix in
-                ObjectManager.Get<Obj_AI_Minion>()
-                    .Where(
-                        i =>
-                        i.IsValid() && !i.IsDead && i.IsVisible && i.BaseSkinName == "lulufaerie"
-                        && i.Team == sender.Team))
+            var spell =
+                Evade.SpellsDetected.Values.FirstOrDefault(
+                    i =>
+                    i.Data.MenuName == data.MenuName && i.Unit.NetworkId == sender.NetworkId && i.MissileObject != null);
+
+            if (spell != null)
             {
-                SpellDetector.AddSpell(sender, pix.ServerPosition, args.End, data);
+                Evade.SpellsDetected.Remove(spell.SpellId);
             }
+
+            spellArgs.NoProcess = true;
         }
 
         #endregion

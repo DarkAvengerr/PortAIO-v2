@@ -7,7 +7,6 @@ using LeagueSharp.Common;
     using System.Linq;
 
     using LeagueSharp;
-    using LeagueSharp.Common;
 
     using vEvade.Core;
     using vEvade.Spells;
@@ -48,12 +47,9 @@ using LeagueSharp.Common;
                 return;
             }
 
-            var dir = (missile.EndPosition - missile.StartPosition).To2D().Normalized();
             var spell =
                 Evade.SpellsDetected.Values.FirstOrDefault(
-                    i =>
-                    i.Data.MenuName == "KarmaQ" && i.Unit.NetworkId == sender.NetworkId
-                    && dir.AngleBetween(i.Direction) < 3 && i.Start.Distance(missile.StartPosition) < 100);
+                    i => i.Data.MenuName == "KarmaQ" && i.Unit.NetworkId == sender.NetworkId);
 
             if (spell != null)
             {

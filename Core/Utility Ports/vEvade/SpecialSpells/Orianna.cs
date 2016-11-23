@@ -66,14 +66,9 @@ using LeagueSharp.Common;
                     HeroManager.AllHeroes.Where(
                         i =>
                         i.IsValid() && !i.IsDead && i.IsVisible && i.Team == sender.Team
-                        && i.NetworkId != sender.NetworkId))
+                        && i.NetworkId != sender.NetworkId && i.HasBuff("OrianaGhost")))
                 {
-                    var buff = hero.GetBuff("OrianaGhost");
-
-                    if (buff != null && buff.Caster.NetworkId == sender.NetworkId)
-                    {
-                        startPos = hero.ServerPosition;
-                    }
+                    startPos = hero.ServerPosition;
                 }
 
                 if (!startPos.IsValid())
@@ -82,7 +77,7 @@ using LeagueSharp.Common;
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 i =>
-                                i.IsValid() && !i.IsDead && i.IsVisible && i.Name == "TheDoomBall"
+                                i.IsValid() && !i.IsDead && i.IsVisible && i.BaseSkinName == "oriannaball"
                                 && i.Team == sender.Team))
                     {
                         startPos = ball.ServerPosition;

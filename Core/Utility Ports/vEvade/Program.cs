@@ -16,7 +16,7 @@ using LeagueSharp.Common;
 
         public static void Main()
         {
-            Evade.OnGameLoad();
+            Evade.OnGameLoad(new System.EventArgs());
         }
 
         #endregion
