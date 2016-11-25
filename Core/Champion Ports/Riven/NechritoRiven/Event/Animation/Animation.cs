@@ -33,7 +33,7 @@ using EloBuddy;
 
             switch (args.Animation)
             {
-                case "c29a362b":
+                case "Spell1a":
                     LastQ = Utils.GameTimeTickCount;
                     Qstack = 2;
 
@@ -44,7 +44,7 @@ using EloBuddy;
                         Console.WriteLine("Q1 Delay: " + ResetDelay(MenuConfig.Qd));
                     }
                     break;
-                case "c39a37be":
+                case "Spell1b":
                     LastQ = Utils.GameTimeTickCount;
                     Qstack = 3;
 
@@ -55,7 +55,7 @@ using EloBuddy;
                         Console.WriteLine("Q2 Delay: " + ResetDelay(MenuConfig.Q2D));
                     }
                     break;
-                case "c49a3951":
+                case "Spell1c":
                     LastQ = Utils.GameTimeTickCount;
                     Qstack = 1;
 
