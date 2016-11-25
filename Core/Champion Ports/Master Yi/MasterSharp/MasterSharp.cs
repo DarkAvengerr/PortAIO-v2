@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DetuksSharp;
+//using DetuksSharp;
 using LeagueSharp;
 using LeagueSharp.Common;
 /*
@@ -38,7 +38,7 @@ namespace MasterSharp
 
         public static Menu skillShotMenuq;
         public static Menu skillShotMenuw;
-
+        public static Orbwalking.Orbwalker Orbwalker;
 
         public static List<Skillshot> DetectedSkillshots = new List<Skillshot>();
 
@@ -61,7 +61,7 @@ namespace MasterSharp
 
                 Config = new Menu("MasterYi - Sharp", "MasterYi", true);
                 var orbwalkerMenu = new Menu("DeathWalker", "my_Orbwalker");
-                DeathWalker.AddToMenu(orbwalkerMenu);
+                Orbwalker = new Orbwalking.Orbwalker(orbwalkerMenu);
                 Config.AddSubMenu(orbwalkerMenu);
 
                 //TS
@@ -110,7 +110,7 @@ namespace MasterSharp
                 SkillshotDetector.OnDeleteMissile += OnDeleteMissile;
                 //Game.OnProcessPacket += OnGameProcessPacket;
                 CustomEvents.Unit.OnDash += onDash;
-                DeathWalker.AfterAttack += afterAttack;
+                Orbwalking.AfterAttack += afterAttack;
 
 
             }
@@ -134,7 +134,7 @@ namespace MasterSharp
             {
                 if (args.Source.NetworkId == MasterYi.player.NetworkId)
                 Console.WriteLine("type: " + args.Type + " : "+ args.HitType);
-                if (args.Source.NetworkId != MasterYi.player.NetworkId || !MasterYi.W.IsReady() || DeathWalker.canAttack() || !isYiAA(args.Type))
+                if (args.Source.NetworkId != MasterYi.player.NetworkId || !MasterYi.W.IsReady() || Orbwalking.CanAttack() || !isYiAA(args.Type))
                     return;
 
 
@@ -150,7 +150,7 @@ namespace MasterSharp
                 {
                     if (Config.Item("comboWreset").GetValue<bool>())
                         MasterYi.W.Cast();
-                    DeathWalker.resetAutoAttackTimer();
+                    Orbwalking.ResetAutoAttackTimer();
                 }
                 // }
 
@@ -163,10 +163,10 @@ namespace MasterSharp
 
         private static void afterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (MasterYi.W.IsReady() && Config.Item("comboWreset").GetValue<bool>() && Config.Item("useWatHP").GetValue<Slider>().Value>=MasterYi.player.HealthPercent && target is AIHeroClient && DeathWalker.CurrentMode == DeathWalker.Mode.Combo)
+            if (MasterYi.W.IsReady() && Config.Item("comboWreset").GetValue<bool>() && Config.Item("useWatHP").GetValue<Slider>().Value>=MasterYi.player.HealthPercent && target is AIHeroClient && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 MasterYi.W.Cast();
-                LeagueSharp.Common.Utility.DelayAction.Add(100, delegate { DeathWalker.resetAutoAttackTimer(); });
+                LeagueSharp.Common.Utility.DelayAction.Add(100, delegate { Orbwalking.ResetAutoAttackTimer(); });
                 
             }
         }
@@ -174,7 +174,7 @@ namespace MasterSharp
         private static void onDash(Obj_AI_Base sender, Dash.DashItem args)
         {
             if (MasterYi.selectedTarget != null && sender.NetworkId == MasterYi.selectedTarget.NetworkId &&
-                MasterYi.Q.IsReady() && DeathWalker.CurrentMode == DeathWalker.Mode.Combo
+                MasterYi.Q.IsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo
                 && sender.Distance(MasterYi.player)<=600)
                 MasterYi.Q.Cast(sender);
         }
@@ -183,7 +183,7 @@ namespace MasterSharp
         {
             return;
 
-            if (Config.Item("comboWreset").GetValue<bool>() && args.PacketData[0] == 0x65 && MasterYi.W.IsReady() && DeathWalker.CurrentMode == DeathWalker.Mode.Combo)
+            if (Config.Item("comboWreset").GetValue<bool>() && args.PacketData[0] == 0x65 && MasterYi.W.IsReady() && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
 
                 // LogPacket(args);
@@ -208,7 +208,7 @@ namespace MasterSharp
                 Obj_AI_Base targ = ObjectManager.GetUnitByNetworkId<Obj_AI_Base>((uint)dmg.TargetNetworkId);
                 if ((int) dmg.Type == 12 || (int) dmg.Type == 4 || (int) dmg.Type == 3 )
                 {
-                    if (MasterYi.W.IsReady() && DeathWalker.inAutoAttackRange(targ))
+                    if (MasterYi.W.IsReady() && Orbwalker.InAutoAttackRange(targ))
                     {
                         MasterYi.W.Cast(targ.Position);
                        // DeathWalker.ResetAutoAttackTimer();
@@ -326,10 +326,10 @@ namespace MasterSharp
                     Console.WriteLine(buf.Name);
                 }
             }
-            if (DeathWalker.CurrentMode == DeathWalker.Mode.Combo)
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 AIHeroClient target = TargetSelector.GetTarget(800, TargetSelector.DamageType.Physical);
-                DeathWalker.ForcedTarget = target;
+                Orbwalker.ForceTarget(target);
                 if(target != null)
                     MasterYi.selectedTarget = target;
                 MasterYi.slayMaderDuker(target);

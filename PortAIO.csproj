@@ -3618,7 +3618,6 @@
     <Compile Include="Core\Champion Ports\Master Yi\MasterSharp\Evade\SpellData.cs" />
     <Compile Include="Core\Champion Ports\Master Yi\MasterSharp\Evade\SpellDatabase.cs" />
     <Compile Include="Core\Champion Ports\Master Yi\MasterSharp\Evade\Utils.cs" />
-    <Compile Include="Core\Champion Ports\Master Yi\MasterSharp\LXOrbwalker.cs" />
     <Compile Include="Core\Champion Ports\Master Yi\MasterSharp\MasterSharp.cs" />
     <Compile Include="Core\Champion Ports\Master Yi\MasterSharp\MasterYi.cs" />
     <Compile Include="Core\Champion Ports\Master Yi\MasterSharp\Program.cs" />
