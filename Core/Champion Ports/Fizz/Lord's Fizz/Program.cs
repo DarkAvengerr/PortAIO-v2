@@ -221,7 +221,7 @@ using LeagueSharp.Common;
                     #region Orbwalking Combo
                     if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     {
-                        if (useE && E.Instance.Name == "FizzJump" && Player.Distance(target.Position) <= E.Range) 
+                        if (useE && E.Instance.Name == "FizzE" && Player.Distance(target.Position) <= E.Range) 
                         {
                             SharpDX.Vector3 castPosition1 = E.GetPrediction(target, false, 1).CastPosition.Extend(Player.Position, -165);
                             E.Cast(castPosition1);
@@ -842,7 +842,7 @@ using LeagueSharp.Common;
                     W.Cast(minion);
                 }
             }
-            if (Menu.Item("laneclearE").GetValue<bool>() && E.Instance.Name == "FizzJump" && E.IsReady())
+            if (Menu.Item("laneclearE").GetValue<bool>() && E.Instance.Name == "FizzE" && E.IsReady())
             {
                 var allMinionsE = MinionManager.GetMinions(Player.Position, E.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health).ToList();
                 foreach (var minion in allMinionsE)
@@ -914,13 +914,13 @@ using LeagueSharp.Common;
                         //Do EWQ
                         if (Player.Mana >= Q.ManaCost + E.ManaCost + W.ManaCost || enoughManaEWQ)
                         {
-                            if (useE && E.Instance.Name == "FizzJump" && Player.Distance(m.Position) <= 530)
+                            if (useE && E.Instance.Name == "FizzE" && Player.Distance(m.Position) <= 530)
                             {
                                 enoughManaEWQ = true;
                                 startPos = Player.Position;
                                 SharpDX.Vector3 harassEcastPosition = E.GetPrediction(m, false, 1).CastPosition;
                                 E.Cast(harassEcastPosition);
-                                //Delay for FizzJumpTwo
+                                //Delay for FizzETwo
                                 LeagueSharp.Common.Utility.DelayAction.Add((365 - ping), () => E.Cast(E.GetPrediction(m, false, 1).CastPosition.Extend(startPos, -135)));
                             }
                             if (useW && (Player.Distance(m.Position) <= 175))
@@ -932,13 +932,13 @@ using LeagueSharp.Common;
                         //Do EQ
                         if (Player.Mana >= Q.ManaCost + E.ManaCost || enoughManaEQ)
                         {
-                            if (useE && E.Instance.Name == "FizzJump" && Player.Distance(m.Position) <= 530)
+                            if (useE && E.Instance.Name == "FizzE" && Player.Distance(m.Position) <= 530)
                             {
                                 enoughManaEQ = true;
                                 startPos = Player.Position;
                                 SharpDX.Vector3 harassEcastPosition3 = E.GetPrediction(m, false, 1).CastPosition;
                                 E.Cast(harassEcastPosition3);
-                                //Delay for FizzJumpTwo
+                                //Delay for FizzETwo
                                 LeagueSharp.Common.Utility.DelayAction.Add((365 - ping), () =>
                                 {
                                     E.Cast(E.GetPrediction(m, false, 1).CastPosition.Extend(startPos, -135));
@@ -1089,7 +1089,7 @@ using LeagueSharp.Common;
                 }
                 if (useW && Player.Distance(m.Position) <= 540) W.Cast();
                 if (useQ && Player.Distance(m.Position) <= Q.Range) Q.Cast(m);
-                if (!UseEOnlyAfterAA && E.Instance.Name == "FizzJump" && useE && Player.Distance(m.Position) > 300 && Player.Distance(m.Position) <= E.Range + 270 && !W.IsReady() && !Q.IsReady() && !R.IsReady())
+                if (!UseEOnlyAfterAA && E.Instance.Name == "FizzE" && useE && Player.Distance(m.Position) > 300 && Player.Distance(m.Position) <= E.Range + 270 && !W.IsReady() && !Q.IsReady() && !R.IsReady())
                 {
                     castPosition = E.GetPrediction(m, false, 1).CastPosition;
                     E.Cast(castPosition);
@@ -1248,13 +1248,13 @@ using LeagueSharp.Common;
                     }
                     if (E.IsReady() && Player.LastCastedSpellName() == "FizzMarinerDoom")
                     {
-                        if (E.Instance.Name == "FizzJump")
+                        if (E.Instance.Name == "FizzE")
                         {
                             //Use E1
                             castPosition = E.GetPrediction(m, false, 1).CastPosition.Extend(Player.Position, -165);
                             E.Cast(castPosition);
                         }
-                        if (E.Instance.Name == "FizzJumpTwo" && Player.Distance(m.Position) > 330)
+                        if (E.Instance.Name == "FizzETwo" && Player.Distance(m.Position) > 330)
                         {
                             //Use E2 if target not in range
                             castPosition = E.GetPrediction(m, false, 1).CastPosition.Extend(Player.Position, -135);
@@ -1262,7 +1262,7 @@ using LeagueSharp.Common;
                         }
                     }
                     //Use W
-                    if (W.IsReady() && Player.LastCastedSpellName() == "FizzJump")
+                    if (W.IsReady() && Player.LastCastedSpellName() == "FizzE")
                     {
                         W.Cast();
                     }
@@ -1281,7 +1281,7 @@ using LeagueSharp.Common;
                  if (distance <= (E.Range + F.Range + 165))
                  {
                      //E
-                     if (E.IsReady() && E.Instance.Name == "FizzJump")
+                     if (E.IsReady() && E.Instance.Name == "FizzE")
                      {
                          //Use E1
                          //ar castPosition = E.GetPrediction(m).CastPosition; //added
@@ -1290,7 +1290,7 @@ using LeagueSharp.Common;
                          LeagueSharp.Common.Utility.DelayAction.Add((990 - ping), () => isEProcessed = true);
                      }
                      //Flash
-                     if (F.IsReady() && !isEProcessed && Player.LastCastedSpellName() == "FizzJump" && Player.Distance(m.Position) <= F.Range + 530 && Player.Distance(m.Position) >= 330)
+                     if (F.IsReady() && !isEProcessed && Player.LastCastedSpellName() == "FizzE" && Player.Distance(m.Position) <= F.Range + 530 && Player.Distance(m.Position) >= 330)
                      {
                          SharpDX.Vector3 endPosition = F.GetPrediction(m, false, 1).CastPosition.Extend(Player.Position, -135);
                          F.Cast(endPosition);
