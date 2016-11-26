@@ -2094,6 +2094,9 @@ namespace PortAIO
                         case 19: // ReformedAIO
                             ReformedAIO.Program.Main();
                             break;
+                        case 20: // Lord's Lucian
+                            Lord_s_Lucian.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Lulu:

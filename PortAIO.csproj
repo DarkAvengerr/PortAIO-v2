@@ -1271,6 +1271,9 @@
     <Compile Include="Core\Champion Ports\LeBlanc\LeBlanc II\Modes\ModePerma.cs" />
     <Compile Include="Core\Champion Ports\LeBlanc\LeBlanc II\Modes\ModeSettings.cs" />
     <Compile Include="Core\Champion Ports\LeBlanc\LeBlanc II\Program.cs" />
+    <Compile Include="Core\Champion Ports\Lucian\Lord%27s Lucian\HpBar.cs" />
+    <Compile Include="Core\Champion Ports\Lucian\Lord%27s Lucian\Lucian.cs" />
+    <Compile Include="Core\Champion Ports\Lucian\Lord%27s Lucian\Program.cs" />
     <Compile Include="Core\Champion Ports\Nami\ElNamiDecentralized\Components\MyMenu.cs" />
     <Compile Include="Core\Champion Ports\Nami\ElNamiDecentralized\Components\SpellManager.cs" />
     <Compile Include="Core\Champion Ports\Nami\ElNamiDecentralized\Components\Spells\ISpell.cs" />
