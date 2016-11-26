@@ -988,7 +988,7 @@ namespace MathFizz
                 }
                 if (useW && Player.Distance(m.Position) <= 540) W.Cast();
                 if (useQ && Player.Distance(m.Position) <= Q.Range) Q.Cast(m);
-                if (!UseEOnlyAfterAA && E.Instance.Name == "FizzE" && useE && Player.Distance(m.Position) > 100 && Player.Distance(m.Position) <= E.Range + 270 && !W.IsReady() && !Q.IsReady() && !R.IsReady())
+                if (!UseEOnlyAfterAA && E.Instance.Name == "FizzE" && useE && Player.Distance(m.Position) > 250 && Player.Distance(m.Position) <= E.Range + 270 && !W.IsReady() && !Q.IsReady() && !R.IsReady())
                 {
                     castPosition = E.GetPrediction(m, false, 1).CastPosition;
                     E.Cast(castPosition);
