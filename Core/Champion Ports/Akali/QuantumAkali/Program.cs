@@ -1,4 +1,4 @@
-//star combo,  focus target have q mark, perman show auto q e
+//star combo,  focus target have q mark, perman show auto q e + auto ward near wall + r in flee
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,9 +14,9 @@ using System.Drawing;
 using TreeLib.Objects;
 using QuantumAkali;
 
-using EloBuddy;
-using LeagueSharp.Common;
-namespace QuantumAkali
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace QuantumAkali
 {
     class Program
     {
@@ -31,10 +31,10 @@ namespace QuantumAkali
 
         public static void Main()
         {
-            Game_OnGameLoad();
+            Game_OnGameLoad(new EventArgs());
         }
 
-        private static void Game_OnGameLoad()
+        private static void Game_OnGameLoad(EventArgs args)
         {
             if (Player.ChampionName != ChampionName)
                 return;
@@ -119,7 +119,7 @@ namespace QuantumAkali
             {
                 if (!eventArgs.GetNewValue<bool>())
                 {
-                    //ObjectManager.//Player.SetSkin(ObjectManager.Player.CharData.BaseSkinName, ObjectManager.Player.SkinId);
+                    //ObjectManager.//Player.SetSkin(ObjectManager.Player.BaseSkinName, ObjectManager.Player.SkinId);
                 }
             };
 
@@ -207,11 +207,11 @@ namespace QuantumAkali
         {
             if (ObjectManager.Player.Level < 4)
             {
-                if (indx == 0 && Player.Spellbook.GetSpell(SpellSlot.Q).Level == 0)
+                if (indx == 0 && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level == 0)
                     ObjectManager.Player.Spellbook.LevelSpell(SpellSlot.Q);
-                if (indx == 1 && Player.Spellbook.GetSpell(SpellSlot.W).Level == 0)
+                if (indx == 1 && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level == 0)
                     ObjectManager.Player.Spellbook.LevelSpell(SpellSlot.W);
-                if (indx == 2 && Player.Spellbook.GetSpell(SpellSlot.E).Level == 0)
+                if (indx == 2 && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level == 0)
                     ObjectManager.Player.Spellbook.LevelSpell(SpellSlot.E);
             }
             else
@@ -323,7 +323,7 @@ namespace QuantumAkali
 
             if (Menu.Item("UseSkin").GetValue<bool>())
             {
-                //Player.SetSkin(Player.CharData.BaseSkinName, Menu.Item("SkinID").GetValue<Slider>().Value);
+                //Player.SetSkin(Player.BaseSkinName, Menu.Item("SkinID").GetValue<Slider>().Value);
             }
             switch (Orbwalker.ActiveMode)
             {
@@ -416,7 +416,7 @@ namespace QuantumAkali
         {
             var autoQ = Menu.Item("AutoQ").GetValue<KeyBind>().Active && Q.IsReady();
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-            if (autoQ && !Player.UnderTurret())
+            if (autoQ && !Player.UnderTurret(true))
             {
                 Q.Cast(target);
             }
@@ -426,7 +426,7 @@ namespace QuantumAkali
         {
             var autoE = Menu.Item("AutoE").GetValue<KeyBind>().Active && E.IsReady();
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-            if (autoE && !Player.UnderTurret())
+            if (autoE && target.IsValidTarget(E.Range) && !Player.UnderTurret(true))
             {
                 E.Cast();
             }
@@ -435,7 +435,7 @@ namespace QuantumAkali
         private static void GapcloseCombo()
         {
             var Rcharges = Menu.Item("RCharges").GetValue<StringList>().SelectedIndex == 0 ? 2 : 3;
-            var Rammo = Player.Spellbook.GetSpell(SpellSlot.R).Ammo;
+            var Rammo = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Ammo;
 
             if (!(Rammo >= Rcharges))
             {
@@ -488,7 +488,6 @@ namespace QuantumAkali
         {
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
-                AIHeroClient target = TargetSelector.GetTarget(300, TargetSelector.DamageType.Magical);
                 if (Menu.Item("ComboUseE").GetValue<bool>() && E.IsReady())
                     E.Cast();
             }
@@ -528,7 +527,7 @@ namespace QuantumAkali
 
                     if (Menu.Item("UseR" + target.ChampionName).GetValue<bool>())
                     {
-                        if (Menu.Item("ComboUseR").GetValue<bool>() && !target.IsValidTarget(E.Range) && target.IsValidTarget(R.Range) && R.CanCast(target) && R.IsReady())
+                        if (!target.IsValidTarget(E.Range) && target.IsValidTarget(R.Range) && R.CanCast(target) && R.IsReady())
                             R.Cast(target);
                     }
                 }
@@ -593,6 +592,10 @@ namespace QuantumAkali
                     if (SpellQ && Q.IsReady())
                         Q.Cast(minion);
 
+                    if (minion.IsValidTarget(125) && minion.HasBuff("AkaliMota"))
+                        Orbwalking.MoveTo(minion.ServerPosition);
+                    Orbwalker.ForceTarget(minion);
+
                     if (SpellE && E.IsReady() && minion.IsValidTarget(E.Range))
                         E.Cast();
                 }
@@ -614,7 +617,11 @@ namespace QuantumAkali
                     if (minion.IsValidTarget())
                     {
                         Q.Cast(minion);
+                        
                     }
+                    if (minion.IsValidTarget(125) && minion.HasBuff("AkaliMota"))
+                        Orbwalking.MoveTo(minion.ServerPosition);
+                    Orbwalker.ForceTarget(minion);
                 }
             }
             if (Menu.Item("JungleClearUseE").GetValue<bool>() && E.IsReady())
@@ -631,7 +638,7 @@ namespace QuantumAkali
 
         private static void Flee()
         {
-            EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
+            Orbwalking.MoveTo(Game.CursorPos);
             var FleeW = Menu.Item("FleeW").GetValue<bool>();
             if (FleeW && W.IsReady())
             {
