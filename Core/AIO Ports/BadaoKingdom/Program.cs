@@ -8,15 +8,15 @@ using LeagueSharp.Common;
 using SharpDX;
 using Color = System.Drawing.Color;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace BadaoKingdom
+using EloBuddy;
+using LeagueSharp.Common;
+namespace BadaoKingdom
 {
     static class Program
     {
         public static readonly List<string> SupportedChampion = new List<string>()
         {
-            "MissFortune","Poppy","Jhin","Shen",/*"Elise","AurelionSol",*/"Gangplank", /*"Graves" ,*/ /*"Veigar", */"Yasuo"
+            "MissFortune","Poppy","Jhin","Shen",/*"Elise","AurelionSol",*/"Gangplank", /*"Graves" ,*/ /*"Veigar", */"Yasuo","Katarina"
         };
 
         public static void Main()
@@ -32,7 +32,7 @@ using EloBuddy;
                     ObjectManager.Player.ChampionName + "</font>" + "<font color=\"#24ff24\"> not supported!</font>");
                 return;
             }
-            Chat.Print("<font color=\"#24ff24\">BadaoKingdom </font>" + "<font color=\"#ff8d1a\">" + 
+            Chat.Print("<font color=\"#24ff24\">BadaoKingdom </font>" + "<font color=\"#ff8d1a\">" +
                 ObjectManager.Player.ChampionName + "</font>" + "<font color=\"#24ff24\"> loaded!</font>");
             BadaoChampionActivate();
             BadaoUtility.BadaoActivator.BadaoActivator.BadaoActivate();
@@ -40,7 +40,7 @@ using EloBuddy;
             // summoner spells
 
             BadaoMainVariables.Ignite = ObjectManager.Player.GetSpellSlot("SummonerDot");
-            BadaoMainVariables.Flash  = ObjectManager.Player.GetSpellSlot("SummonerFlash");
+            BadaoMainVariables.Flash = ObjectManager.Player.GetSpellSlot("SummonerFlash");
             foreach (var spells in ObjectManager.Player.Spellbook.Spells.Where(
                 x =>
                 (x.Slot == SpellSlot.Summoner1 || x.Slot == SpellSlot.Summoner2)
@@ -74,6 +74,8 @@ using EloBuddy;
             //    BadaoChampion.BadaoVeigar.BadaoVeigar.BadaoActivate();
             else if (ChampionName == "Yasuo")
                 BadaoChampion.BadaoYasuo.BadaoYasuo.BadaoActivate();
+            else if (ChampionName == "Katarina")
+                BadaoChampion.BadaoKatarina.BadaoKatarina.BadaoActivate();
             ;
         }
     }

@@ -149,6 +149,14 @@
     <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoJhin\BadaoJhinPassive.cs" />
     <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoJhin\BadaoJhinPing.cs" />
     <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoJhin\BadaoJhinVariables.cs" />
+    <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoKatarina\BadaoKatarina.cs" />
+    <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoKatarina\BadaoKatarinaAuto.cs" />
+    <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoKatarina\BadaoKatarinaCombo.cs" />
+    <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoKatarina\BadaoKatarinaConfig.cs" />
+    <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoKatarina\BadaoKatarinaFlee.cs" />
+    <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoKatarina\BadaoKatarinaHarass.cs" />
+    <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoKatarina\BadaoKatarinaHelper.cs" />
+    <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoKatarina\BadaoKatarinaVariables.cs" />
     <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoPoppy\BadaoPoppy.cs" />
     <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoPoppy\BadaoPoppyAssasinate.cs" />
     <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoPoppy\BadaoPoppyAuto.cs" />

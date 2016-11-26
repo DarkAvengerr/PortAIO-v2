@@ -1807,6 +1807,9 @@ namespace PortAIO
                         case 10: // ElKatarinaDecentralized
                             ElKatarinaDecentralized.Program.Main();
                             break;
+                        case 11: // BadaoKingdom
+                            BadaoKingdom.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Kayle:

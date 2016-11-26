@@ -65,5 +65,20 @@ using EloBuddy;
             }
             return true;
         }
+        public static bool IsRealWall(Vector2 firstwall, Vector2 lastwall)
+        {
+            var midwall = new Vector2((firstwall.X + lastwall.X) / 2, (firstwall.Y + lastwall.Y) / 2);
+            var point = midwall.Extend(lastwall, 75);
+            for (int i = 90; i <= 271; i = i + 180)
+            {
+                var testpoint = point.BadaoRotateAround(midwall, i);
+                var flags = NavMesh.GetCollisionFlags(testpoint.X, testpoint.Y);
+                if (!flags.HasFlag(CollisionFlags.Wall) && !flags.HasFlag(CollisionFlags.Building))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }
