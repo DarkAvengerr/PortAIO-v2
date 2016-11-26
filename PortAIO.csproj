@@ -1216,6 +1216,12 @@
     <Compile Include="Core\Champion Ports\Jhin\Flowers%27 Jhin\Prediction\SDKPrediction.cs" />
     <Compile Include="Core\Champion Ports\Jhin\Flowers%27 Jhin\Prediction\xcsoftPrediction.cs" />
     <Compile Include="Core\Champion Ports\Jhin\Flowers%27 Jhin\Program.cs" />
+    <Compile Include="Core\Champion Ports\Katarina\e.Motion Katarina\BlockIssueOrder.cs" />
+    <Compile Include="Core\Champion Ports\Katarina\e.Motion Katarina\Config.cs" />
+    <Compile Include="Core\Champion Ports\Katarina\e.Motion Katarina\Dagger.cs" />
+    <Compile Include="Core\Champion Ports\Katarina\e.Motion Katarina\DaggerManager.cs" />
+    <Compile Include="Core\Champion Ports\Katarina\e.Motion Katarina\DrawDamage.cs" />
+    <Compile Include="Core\Champion Ports\Katarina\e.Motion Katarina\Logic.cs" />
     <Compile Include="Core\Champion Ports\Katarina\ElKatarinaDecentralized\Components\MyMenu.cs" />
     <Compile Include="Core\Champion Ports\Katarina\ElKatarinaDecentralized\Components\SpellManager.cs" />
     <Compile Include="Core\Champion Ports\Katarina\ElKatarinaDecentralized\Components\Spells\ISpell.cs" />

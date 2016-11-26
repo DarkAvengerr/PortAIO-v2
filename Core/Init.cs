@@ -1790,7 +1790,7 @@ namespace PortAIO
                             xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                         case 4: // e.Motion Katarina
-                            e.Motion_Katarina.Program.Game_OnGameLoad();
+                            e.Motion_Katarina.Program.Main();
                             break;
                         case 5: // EasyCarry Katarina
                             EasyCarryKatarina.Program.Main();
