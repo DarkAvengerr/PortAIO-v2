@@ -409,17 +409,17 @@ using LeagueSharp.Common;
                 return;
             }
 
-            if (Args.Animation.Contains("c29"))
+            if (Args.Animation.Contains("Spell1a"))
             {
                 QStack = 1;
                 ResetQA(Menu.Item("Q1Delay", true).GetValue<Slider>().Value);
             }
-            else if (Args.Animation.Contains("c39"))
+            else if (Args.Animation.Contains("Spell1b"))
             {
                 QStack = 2;
                 ResetQA(Menu.Item("Q2Delay", true).GetValue<Slider>().Value);
             }
-            else if (Args.Animation.Contains("c49"))
+            else if (Args.Animation.Contains("Spell1c"))
             {
                 QStack = 0;
                 ResetQA(Menu.Item("Q3Delay", true).GetValue<Slider>().Value);
