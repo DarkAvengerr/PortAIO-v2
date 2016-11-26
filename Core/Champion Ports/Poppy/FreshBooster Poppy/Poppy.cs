@@ -49,7 +49,7 @@ using EloBuddy;
                 _E = new Spell(SpellSlot.E, 590f);
                 _R = new Spell(SpellSlot.R, 1230f);
                 _R.SetSkillshot(0.6f, 120f, float.MaxValue, false, SkillshotType.SkillshotLine);
-                _R.SetCharged("PoppyR", "PoppyR", 470, 1230, 1.5f);
+                _R.SetCharged( 470, 1230, 1.5f);
             }
             catch (Exception)
             {

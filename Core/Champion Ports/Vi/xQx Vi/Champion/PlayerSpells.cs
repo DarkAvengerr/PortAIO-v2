@@ -38,7 +38,7 @@ using EloBuddy;
         {
             Q = new Spell(SpellSlot.Q, 860f);
             Q.SetSkillshot(0.5f, 75f, float.MaxValue, false, SkillshotType.SkillshotLine);
-            Q.SetCharged("ViQ", "ViQ", 50, 860, 1f);
+            Q.SetCharged(50, 860, 1f);
             
             E = new Spell(SpellSlot.E, 310);
             E.SetSkillshot(0.15f, 150f, float.MaxValue, false, SkillshotType.SkillshotLine);

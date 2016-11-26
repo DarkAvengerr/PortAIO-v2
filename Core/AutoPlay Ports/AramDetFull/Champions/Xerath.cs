@@ -147,7 +147,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             E.SetSkillshot(0.25f, 60f, 1400f, true, SkillshotType.SkillshotLine);
             R.SetSkillshot(0.7f, 120f, float.MaxValue, false, SkillshotType.SkillshotCircle);
 
-            Q.SetCharged("XerathArcanopulseChargeUp", "XerathArcanopulseChargeUp", 750, 1550, 1.5f);
+            Q.SetCharged(750, 1550, 1.5f);
         }
 
         public override void useSpells()

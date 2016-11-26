@@ -34,7 +34,7 @@
                 }
                 else if (this.Charged)
                 {
-                    this.SpellObject.SetCharged(this.SpellName, this.BuffName, this.MinRange, this.MaxRange, this.DeltaT);
+                    this.SpellObject.SetCharged( this.MinRange, this.MaxRange, this.DeltaT);
                 }
                 else
                 {

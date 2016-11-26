@@ -27,7 +27,7 @@ namespace SharpShooter.Plugins
             _e.SetSkillshot(1.0f, 250f, 1750f, false, SkillshotType.SkillshotCircle);
             _r.SetSkillshot(0.25f, 120f, 1200f, false, SkillshotType.SkillshotLine);
 
-            _q.SetCharged("VarusQ", "VarusQ", 250, 1600, 1.2f);
+            _q.SetCharged(250, 1600, 1.2f);
 
             MenuProvider.Champion.Combo.AddUseQ();
             MenuProvider.Champion.Combo.AddItem("Q Min Charge", new Slider(800, 0, 1600));

@@ -91,7 +91,7 @@ using EloBuddy;
             spells[Spells.W].SetSkillshot(0.7f, 125f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             spells[Spells.E].SetSkillshot(0.25f, 60f, 1400f, true, SkillshotType.SkillshotLine);
             spells[Spells.R].SetSkillshot(0.7f, 130f, float.MaxValue, false, SkillshotType.SkillshotCircle);
-            spells[Spells.Q].SetCharged("XerathArcanopulseChargeUp", "XerathArcanopulseChargeUp", 750, 1550, 1.5f);
+            spells[Spells.Q].SetCharged(750, 1550, 1.5f);
             _ignite = Player.GetSpellSlot("summonerdot");
 
             ElXerathMenu.Initialize();

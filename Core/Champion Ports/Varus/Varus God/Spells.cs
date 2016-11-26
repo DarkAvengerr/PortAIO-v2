@@ -18,7 +18,7 @@ using EloBuddy;
             Q = new Spell(SpellSlot.Q, 1625);
             Q.SetSkillshot(Q.Instance.SData.SpellCastTime, Q.Instance.SData.LineWidth, Q.Instance.SData.MissileSpeed,
                 false, SkillshotType.SkillshotLine);
-            Q.SetCharged("VarusQ", "VarusQ", 925, 1625, 1.0f);
+            Q.SetCharged(925, 1625, 1.0f);
             //Q.MinHitChance = HitChance.VeryHigh;
             W = new Spell(SpellSlot.W);
             E = new Spell(SpellSlot.E, 925);

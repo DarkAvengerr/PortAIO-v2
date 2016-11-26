@@ -176,7 +176,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
         {
             Q = new Spell(SpellSlot.Q, 920);
             Q.SetSkillshot(0.6f, 100f, float.MaxValue, false, SkillshotType.SkillshotLine);
-            Q.SetCharged("SionQ", "SionQ", 600, 920, 2.0f);
+            Q.SetCharged( 600, 920, 2.0f);
             W = new Spell(SpellSlot.W, 450);
             E = new Spell(SpellSlot.E, 800);
             E.SetSkillshot(0.25f, 80f, 1800, false, SkillshotType.SkillshotLine);

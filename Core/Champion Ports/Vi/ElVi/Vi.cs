@@ -159,7 +159,7 @@ using EloBuddy; namespace ElVi
             flash = Player.GetSpellSlot("SummonerFlash");
 
             Spells[ElVi.Spells.Q].SetSkillshot(0.5f, 75f, float.MaxValue, false, SkillshotType.SkillshotLine);
-            Spells[ElVi.Spells.Q].SetCharged("ViQ", "ViQ", 100, 860, 1f);
+            Spells[ElVi.Spells.Q].SetCharged(100, 860, 1f);
 
             Spells[ElVi.Spells.E].SetSkillshot(0.15f, 150f, float.MaxValue, false, SkillshotType.SkillshotLine);
             Spells[ElVi.Spells.R].SetTargetted(0.15f, 1500f);

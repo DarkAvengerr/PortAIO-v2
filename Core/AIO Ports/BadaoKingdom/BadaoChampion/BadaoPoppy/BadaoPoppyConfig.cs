@@ -24,7 +24,7 @@ using EloBuddy;
             BadaoMainVariables.E = new Spell(SpellSlot.E, 525);
             BadaoMainVariables.E.SetTargetted(0, float.MaxValue);
             BadaoMainVariables.R = new Spell(SpellSlot.R, 1200);
-            BadaoMainVariables.R.SetCharged("PoppyR", "PoppyR", 495, 1200, 1.5f);
+            BadaoMainVariables.R.SetCharged(495, 1200, 1.5f);
 
             // main menu
             config = new Menu("BadaoKingdom " + ObjectManager.Player.ChampionName, ObjectManager.Player.ChampionName, true);

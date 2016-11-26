@@ -125,7 +125,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             R = new Spell(SpellSlot.R, 800f);
 
             Q.SetSkillshot(0.5f, 75f, float.MaxValue, false, SkillshotType.SkillshotLine);
-            Q.SetCharged("ViQ", "ViQ", 100, 860, 1f);
+            Q.SetCharged(100, 860, 1f);
 
             E.SetSkillshot(0.15f, 150f, float.MaxValue, false, SkillshotType.SkillshotLine);
             R.SetTargetted(0.15f, 1500f);

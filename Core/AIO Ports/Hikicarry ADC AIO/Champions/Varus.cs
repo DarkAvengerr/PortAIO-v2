@@ -26,7 +26,7 @@ using EloBuddy;
             E = new Spell(SpellSlot.E, 925);
             R = new Spell(SpellSlot.R, 1075);
 
-            Q.SetCharged("VarusQ", "VarusQ", 250, 1600, 1.2f);
+            Q.SetCharged(250, 1600, 1.2f);
 
             Q.SetSkillshot(0.25f, 70f, 1500f, false, SkillshotType.SkillshotLine);
             E.SetSkillshot(.50f, 250, 1400, false, SkillshotType.SkillshotCircle);

@@ -87,7 +87,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             E = new Spell(SpellSlot.E, 525);
             R = new Spell(SpellSlot.R, 250);
             R.SetSkillshot(0.5f, 90f, 1400, true, SkillshotType.SkillshotLine);
-            R.SetCharged("PoppyR", "PoppyR", 425, 1000, 1.0f);
+            R.SetCharged( 425, 1000, 1.0f);
         }
     }
 }

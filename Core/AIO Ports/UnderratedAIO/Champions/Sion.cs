@@ -74,7 +74,7 @@ using LeagueSharp.Common;
         {
             Q = new Spell(SpellSlot.Q, 740);
             Q.SetSkillshot(0.6f, 100f, float.MaxValue, false, SkillshotType.SkillshotLine);
-            Q.SetCharged("SionQ", "SionQ", 350, 740, 0.6f);
+            Q.SetCharged(350, 740, 0.6f);
             W = new Spell(SpellSlot.W, 490);
             E = new Spell(SpellSlot.E, 775);
             E.SetSkillshot(0.25f, 80f, 1800, false, SkillshotType.SkillshotLine);

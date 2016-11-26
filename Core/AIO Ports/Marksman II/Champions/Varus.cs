@@ -33,7 +33,7 @@ using LeagueSharp.Common;
             E.SetSkillshot(.50f, 250f, 1400f, false, SkillshotType.SkillshotCircle);
             R.SetSkillshot(.25f, 120f, 1950f, false, SkillshotType.SkillshotLine);
 
-            Q.SetCharged("VarusQ", "VarusQ", 250, 1600, 1.2f);
+            Q.SetCharged(250, 1600, 1.2f);
 
             LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = GetComboDamage;
             LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;

@@ -57,7 +57,7 @@ using EloBuddy;
             _ignite.SetTargetted(0.1f, float.MaxValue);
 
             spells[Spells.Q].SetTargetted((float)0.3, 400);
-            spells[Spells.R].SetCharged("KatarinaR", "KatarinaR", 550, 550, 1.0f);
+            spells[Spells.R].SetCharged(550, 550, 1.0f);
 
             _cutlass = ItemData.Bilgewater_Cutlass.GetItem();
             _hextech = ItemData.Hextech_Gunblade.GetItem();

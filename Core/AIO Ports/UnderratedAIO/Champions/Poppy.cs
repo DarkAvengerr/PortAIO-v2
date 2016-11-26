@@ -383,7 +383,7 @@ using LeagueSharp.Common;
             E = new Spell(SpellSlot.E, 500);
             R = new Spell(SpellSlot.R);
             R.SetSkillshot(0.5f, 90f, 1400, true, SkillshotType.SkillshotLine);
-            R.SetCharged("PoppyR", "PoppyR", 425, 1400, 1.0f);
+            R.SetCharged(425, 1400, 1.0f);
         }
 
         private static void InitMenu()

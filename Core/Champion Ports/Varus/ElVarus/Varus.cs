@@ -62,7 +62,7 @@ namespace Elvarus
             spells[Spells.E].SetSkillshot(0.35f, 120, 1500, false, SkillshotType.SkillshotCircle);
             spells[Spells.R].SetSkillshot(.25f, 120f, 1950f, false, SkillshotType.SkillshotLine);
 
-            spells[Spells.Q].SetCharged("VarusQ", "VarusQ", 250, 1600, 1.2f);
+            spells[Spells.Q].SetCharged(250, 1600, 1.2f);
 
             ElVarusMenu.Initialize();
             Game.OnUpdate += OnGameUpdate;

@@ -69,7 +69,7 @@ namespace Zac_The_Secret_Flubber
 
             Q.SetSkillshot(550, 120, int.MaxValue, false, SkillshotType.SkillshotLine);
             E.SetSkillshot(1550, 250, 1500, true, SkillshotType.SkillshotCone);
-            E.SetCharged("ZacE", "ZacE", 1150, 1550, 1.5f);
+            E.SetCharged(1150, 1550, 1.5f);
 
             SpellList.Add(Q);
             SpellList.Add(W);

@@ -23,7 +23,7 @@ using LeagueSharp.Common;
             SpellManager.R = new Spell(SpellSlot.R, 550f);
 
             SpellManager.Q.SetTargetted(400f, 1400f);
-            SpellManager.R.SetCharged("KatarinaR", "KatarinaR", 550, 550, 1.0f);
+            SpellManager.R.SetCharged(550, 550, 1.0f);
 
             SpellManager.SpellList.Add(Q);
             SpellManager.SpellList.Add(E);

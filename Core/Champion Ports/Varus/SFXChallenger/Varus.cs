@@ -76,7 +76,7 @@ using EloBuddy; namespace SFXChallenger.Champions
         {
             Q = new Spell(SpellSlot.Q, 925f);
             Q.SetSkillshot(0.25f, 70f, 1800f, false, SkillshotType.SkillshotLine);
-            Q.SetCharged("VarusQ", "VarusQ", 925, 1700, 1.5f);
+            Q.SetCharged(925, 1700, 1.5f);
 
             W = new Spell(SpellSlot.W, 0f, DamageType.Magical);
 

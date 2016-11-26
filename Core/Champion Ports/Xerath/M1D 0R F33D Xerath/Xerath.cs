@@ -28,7 +28,7 @@ using EloBuddy;
             this.R = new Spell(SpellSlot.R, 3200);
 
             this.Q.SetSkillshot(0.6f, 100, int.MaxValue, false, SkillshotType.SkillshotLine);
-            this.Q.SetCharged("XerathArcanopulseChargeUp", "XerathArcanopulseChargeUp", 800, 1600, 1.45f);
+            this.Q.SetCharged(800, 1600, 1.45f);
             this.W.SetSkillshot(0.7f, 200, int.MaxValue, false, SkillshotType.SkillshotCircle);
             this.E.SetSkillshot(0.26f, 60, 1400, true, SkillshotType.SkillshotLine);
             this.R.SetSkillshot(0.7f, 120, int.MaxValue, false, SkillshotType.SkillshotCircle);

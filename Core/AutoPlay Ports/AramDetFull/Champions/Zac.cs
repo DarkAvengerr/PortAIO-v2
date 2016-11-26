@@ -109,7 +109,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             else if (enemyPred.UnitPosition.Distance(player.Position) < eRanges[E.Level - 1] &&
                      300 < target.Distance(player.Position))
             {
-                E.SetCharged("ZacE", "ZacE", 300, eRanges[E.Level - 1], eChannelTimes[E.Level - 1]);
+                E.SetCharged(300, eRanges[E.Level - 1], eChannelTimes[E.Level - 1]);
                 E.StartCharging(eFlyPred.UnitPosition);
             }
         }
@@ -151,7 +151,7 @@ using EloBuddy; namespace ARAMDetFull.Champions
             Q.SetSkillshot(550, 120, int.MaxValue, false, SkillshotType.SkillshotLine);
 
             E.SetSkillshot(0.75f, 230, 1500, false, SkillshotType.SkillshotCircle);
-            E.SetCharged("ZacE", "ZacE", 295, eRanges[0], eChannelTimes[0]);
+            E.SetCharged( 295, eRanges[0], eChannelTimes[0]);
 
         }
 

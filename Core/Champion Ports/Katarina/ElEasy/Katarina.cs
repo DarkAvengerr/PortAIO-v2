@@ -260,7 +260,7 @@ namespace ElEasy.Plugins
             {
                 Console.WriteLine("Loaded Katarina");
                 Ignite = this.Player.GetSpellSlot("summonerdot");
-                spells[Spells.R].SetCharged("KatarinaR", "KatarinaR", 550, 550, 1.0f);
+                spells[Spells.R].SetCharged( 550, 550, 1.0f);
 
                 Game.OnUpdate += this.OnUpdate;
                 Drawing.OnDraw += this.OnDraw;

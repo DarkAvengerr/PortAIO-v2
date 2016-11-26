@@ -712,7 +712,7 @@ using EloBuddy; namespace ElKatarina
 
             igniteSlot = Player.GetSpellSlot("summonerdot");
 
-            spells[Spells.R].SetCharged("KatarinaR", "KatarinaR", 550, 550, 1.0f);
+            spells[Spells.R].SetCharged( 550, 550, 1.0f);
 
             Drawing.OnDraw += Drawings;
             MenuLoad();

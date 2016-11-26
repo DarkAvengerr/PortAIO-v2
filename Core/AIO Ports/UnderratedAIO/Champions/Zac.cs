@@ -69,7 +69,7 @@ using LeagueSharp.Common;
             W = new Spell(SpellSlot.W, 320);
             E = new Spell(SpellSlot.E);
             E.SetSkillshot(0.75f, 230, 1500, false, SkillshotType.SkillshotCircle);
-            E.SetCharged("ZacE", "ZacE", 295, eRanges[0], eChannelTimes[0]);
+            E.SetCharged(295, eRanges[0], eChannelTimes[0]);
             R = new Spell(SpellSlot.R, 300);
         }
 
@@ -330,7 +330,7 @@ using LeagueSharp.Common;
             else if (enemyPred.UnitPosition.Distance(player.Position) < eRanges[E.Level - 1] &&
                      config.Item("Emin", true).GetValue<Slider>().Value < target.Distance(player.Position))
             {
-                E.SetCharged("ZacE", "ZacE", 300, eRanges[E.Level - 1], eChannelTimes[E.Level - 1]);
+                E.SetCharged(300, eRanges[E.Level - 1], eChannelTimes[E.Level - 1]);
                 E.StartCharging(eFlyPred.UnitPosition);
             }
         }
@@ -350,7 +350,7 @@ using LeagueSharp.Common;
             }
             else if (target.Distance(player.Position) < eRanges[E.Level - 1])
             {
-                E.SetCharged("ZacE", "ZacE", 295, eRanges[E.Level - 1], eChannelTimes[E.Level - 1]);
+                E.SetCharged(295, eRanges[E.Level - 1], eChannelTimes[E.Level - 1]);
                 E.StartCharging(target);
             }
         }

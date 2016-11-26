@@ -28,7 +28,7 @@ using LeagueSharp.Common;
             E.SetSkillshot(0.35f, 120f, 1500f, false, SkillshotType.SkillshotCircle);
             R.SetSkillshot(0.25f, 120f, 1950f, false, SkillshotType.SkillshotLine);
 
-            Q.SetCharged("VarusQ", "VarusQ", 925, 1600, 1.5f);
+            Q.SetCharged(925, 1600, 1.5f);
 
             var ComboMenu = Menu.AddSubMenu(new Menu("Combo", "Combo"));
             {
