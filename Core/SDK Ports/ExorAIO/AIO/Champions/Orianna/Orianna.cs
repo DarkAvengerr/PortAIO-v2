@@ -67,7 +67,7 @@ using LeagueSharp.SDK;
         /// <param name="args">The <see cref="Events.GapCloserEventArgs" /> instance containing the event data.</param>
         public static void OnGapCloser(object sender, Events.GapCloserEventArgs args)
         {
-            if (GameObjects.Player.IsDead || !Invulnerable.Check(args.Sender, DamageType.Magical, false))
+            if (GameObjects.Player.IsDead || Invulnerable.Check(args.Sender, DamageType.Magical, false))
             {
                 return;
             }
@@ -87,7 +87,7 @@ using LeagueSharp.SDK;
         public static void OnInterruptableTarget(object sender, Events.InterruptableTargetEventArgs args)
         {
             if (BallPosition == null || GameObjects.Player.IsDead
-                || !Invulnerable.Check(args.Sender, DamageType.Magical, false))
+                || Invulnerable.Check(args.Sender, DamageType.Magical, false))
             {
                 return;
             }

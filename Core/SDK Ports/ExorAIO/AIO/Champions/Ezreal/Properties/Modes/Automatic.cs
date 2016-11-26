@@ -132,7 +132,7 @@ using LeagueSharp.SDK;
             ///     The Automatic W Logic.
             /// </summary>
             if (Vars.W.IsReady()
-                && ObjectManager.Player.ManaPercent
+                && GameObjects.Player.ManaPercent
                 > ManaManager.GetNeededMana(Vars.W.Slot, Vars.Menu["spells"]["w"]["logical"])
                 && Vars.Menu["spells"]["w"]["logical"].GetValue<MenuSliderButton>().BValue)
             {

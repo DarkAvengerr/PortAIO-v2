@@ -42,7 +42,8 @@ using LeagueSharp.SDK;
             }
 
             if (Bools.HasSheenBuff() && !Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
-                || !Targets.Target.IsValidTarget() || Invulnerable.Check(Targets.Target) || GameObjects.Player.Mana < Vars.E.Instance.SData.Mana + Vars.Q.Instance.SData.Mana)
+                || !Targets.Target.IsValidTarget() || Invulnerable.Check(Targets.Target)
+                || GameObjects.Player.Mana < Vars.E.Instance.SData.Mana + Vars.Q.Instance.SData.Mana)
             {
                 return;
             }

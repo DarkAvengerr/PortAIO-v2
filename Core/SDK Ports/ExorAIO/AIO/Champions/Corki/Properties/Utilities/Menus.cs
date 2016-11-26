@@ -33,9 +33,9 @@ using LeagueSharp.SDK;
                 Vars.QMenu = new Menu("q", "Use Q to:");
                 {
                     Vars.QMenu.Add(new MenuBool("combo", "Combo", true));
-                    Vars.QMenu.Add(new MenuBool("logical", "Logical", true));
                     Vars.QMenu.Add(new MenuBool("killsteal", "KillSteal", true));
-                    Vars.QMenu.Add(new MenuSliderButton("clear", "Clear / if Mana >= x%", 50, 0, 99, true));
+                    Vars.QMenu.Add(new MenuSliderButton("laneclear", "LaneClear / if Mana >= x%", 50, 0, 99, true));
+                    Vars.QMenu.Add(new MenuSliderButton("jungleclear", "JungleClear / if Mana >= x%", 50, 0, 99, true));
                 }
                 Vars.SpellsMenu.Add(Vars.QMenu);
 
@@ -45,7 +45,8 @@ using LeagueSharp.SDK;
                 Vars.EMenu = new Menu("e", "Use E to:");
                 {
                     Vars.EMenu.Add(new MenuBool("combo", "Combo", true));
-                    Vars.EMenu.Add(new MenuSliderButton("clear", "Clear / if Mana >= x%", 50, 0, 99, true));
+                    Vars.EMenu.Add(new MenuSliderButton("laneclear", "LaneClear / if Mana >= x%", 50, 0, 99, true));
+                    Vars.EMenu.Add(new MenuSliderButton("jungleclear", "JungleClear / if Mana >= x%", 50, 0, 99, true));
                 }
                 Vars.SpellsMenu.Add(Vars.EMenu);
 
@@ -56,9 +57,10 @@ using LeagueSharp.SDK;
                 {
                     Vars.RMenu.Add(new MenuBool("combo", "Combo", true));
                     Vars.RMenu.Add(new MenuBool("killsteal", "KillSteal", true));
-                    Vars.RMenu.Add(new MenuSliderButton("logical", "Logical / if Mana >= x%", 50, 0, 99, true));
-                    Vars.RMenu.Add(new MenuSliderButton("clear", "Clear / if Mana >= x%", 50, 0, 99, true));
-                    Vars.RMenu.Add(new MenuSliderButton("autoharass", "AutoHarass / if Mana >= x%", 50, 0, 99));
+                    Vars.RMenu.Add(new MenuSliderButton("laneclear", "LaneClear / if Mana >= x%", 50, 0, 99, true));
+                    Vars.RMenu.Add(new MenuSliderButton("jungleclear", "JungleClear / if Mana >= x%", 50, 0, 99, true));
+                    Vars.RMenu.Add(new MenuSliderButton("farmhelper", "Auto-LastHit / if Mana >= x%", 50, 0, 99, true));
+                    Vars.RMenu.Add(new MenuSliderButton("autoharass", "Auto-Harass / if Mana >= x%", 50, 0, 99));
                     {
                         /// <summary>
                         ///     Sets the menu for the R Whitelist.
@@ -90,6 +92,7 @@ using LeagueSharp.SDK;
             Vars.DrawingsMenu = new Menu("drawings", "Drawings");
             {
                 Vars.DrawingsMenu.Add(new MenuBool("q", "Q Range"));
+                Vars.DrawingsMenu.Add(new MenuBool("e", "E Range"));
                 Vars.DrawingsMenu.Add(new MenuBool("e", "E Range"));
                 Vars.DrawingsMenu.Add(new MenuBool("r", "R Range"));
             }

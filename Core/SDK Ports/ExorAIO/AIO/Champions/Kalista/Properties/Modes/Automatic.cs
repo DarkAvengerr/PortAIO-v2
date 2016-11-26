@@ -16,7 +16,6 @@ using LeagueSharp.SDK;
     using LeagueSharp.SDK;
     using LeagueSharp.SDK.Enumerations;
     using LeagueSharp.SDK.UI;
-    using LeagueSharp.SDK.Utils;
 
     /// <summary>
     ///     The logics class.
@@ -46,9 +45,8 @@ using LeagueSharp.SDK;
                 ///     The Automatic R Logic.
                 /// </summary>
                 if (Vars.R.IsReady()
-                    && (Kalista.SoulBound.HealthPercent <= 10
-                        || Health.GetPrediction(Kalista.SoulBound, (int)(250 + Game.Ping / 2f))
-                        <= Kalista.SoulBound.MaxHealth / 4) && Kalista.SoulBound.CountEnemyHeroesInRange(800f) > 0
+                    && Health.GetPrediction(Kalista.SoulBound, (int)(250 + Game.Ping / 2f))
+                    <= Kalista.SoulBound.MaxHealth / 4 && Kalista.SoulBound.CountEnemyHeroesInRange(800f) > 0
                     && Kalista.SoulBound.IsValidTarget(Vars.R.Range, false)
                     && Vars.Menu["spells"]["r"]["lifesaver"].GetValue<MenuBool>().Value)
                 {
@@ -101,11 +99,12 @@ using LeagueSharp.SDK;
 
                 var validTargets = GameObjects.EnemyHeroes.Where(Bools.IsPerfectRendTarget);
 
+                var objAiMinions = validMinions as IList<Obj_AI_Minion> ?? validMinions.ToList();
+                var objAiHeroes = validTargets as IList<AIHeroClient> ?? validTargets.ToList();
+
                 /// <summary>
                 ///     The E Minion Harass Logic.
                 /// </summary>
-                var objAiMinions = validMinions as IList<Obj_AI_Minion> ?? validMinions.ToList();
-                var objAiHeroes = validTargets as IList<AIHeroClient> ?? validTargets.ToList();
                 if (objAiMinions.Any() && objAiHeroes.Any()
                     && Vars.Menu["spells"]["e"]["harass"].GetValue<MenuSliderButton>().BValue)
                 {
@@ -136,13 +135,7 @@ using LeagueSharp.SDK;
                                 return;
                             }
                         }
-                    }
 
-                    /// <summary>
-                    ///     Check for invulnerability through all the harassable targets.
-                    /// </summary>
-                    if (objAiHeroes.All(t => !Invulnerable.Check(t)))
-                    {
                         Vars.E.Cast();
                     }
                 }

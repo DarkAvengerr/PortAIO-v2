@@ -30,42 +30,66 @@ using LeagueSharp.SDK;
         /// <param name="args">The <see cref="OrbwalkingActionArgs" /> instance containing the event data.</param>
         public static void OnAction(object sender, OrbwalkingActionArgs args)
         {
-            if (Variables.Orbwalker.ActiveMode != OrbwalkingMode.LastHit
-                && Variables.Orbwalker.ActiveMode != OrbwalkingMode.LaneClear)
-            {
-                return;
-            }
-
             switch (args.Type)
             {
                 case OrbwalkingType.BeforeAttack:
-                    var canLastHit = Vars.Menu["spells"]["q"]["lasthit"].GetValue<MenuSliderButton>().BValue
-                                     && GameObjects.Player.ManaPercent
-                                     > ManaManager.GetNeededMana(Vars.W.Slot, Vars.Menu["spells"]["q"]["lasthit"]);
-                    var canLaneClear = Vars.Menu["spells"]["q"]["clear"].GetValue<MenuSliderButton>().BValue
-                                       && GameObjects.Player.ManaPercent
-                                       > ManaManager.GetNeededMana(Vars.W.Slot, Vars.Menu["spells"]["q"]["lasthit"]);
+                    var isUsingFishBones = GameObjects.Player.HasBuff("JinxQ");
 
-                    if (Vars.Q.IsReady() && args.Target != null)
+                    switch (Variables.Orbwalker.ActiveMode)
                     {
-                        var isUsingFishBones = GameObjects.Player.HasBuff("JinxQ");
-                        var minionsInRange = GameObjects.EnemyMinions.Count(m => m.Distance(args.Target) < 160f);
-                        if (isUsingFishBones)
-                        {
-                            if (minionsInRange < 3)
+                        case OrbwalkingMode.LastHit:
+                        case OrbwalkingMode.LaneClear:
+                            const float SplashRange = 160f;
+                            var minionTarget = args.Target as Obj_AI_Minion;
+                            var canLastHit = Vars.Menu["spells"]["q"]["lasthit"].GetValue<MenuSliderButton>().BValue
+                                             && GameObjects.Player.ManaPercent
+                                             > ManaManager.GetNeededMana(
+                                                 Vars.W.Slot,
+                                                 Vars.Menu["spells"]["q"]["lasthit"]);
+
+                            var canLaneClear = Vars.Menu["spells"]["q"]["clear"].GetValue<MenuSliderButton>().BValue
+                                               && GameObjects.Player.ManaPercent
+                                               > ManaManager.GetNeededMana(
+                                                   Vars.W.Slot,
+                                                   Vars.Menu["spells"]["q"]["lasthit"]);
+
+                            if (Vars.Q.IsReady() && minionTarget != null)
                             {
-                                Vars.Q.Cast();
+                                var minionsInRange =
+                                    GameObjects.EnemyMinions.Count(m => m.Distance(minionTarget) < SplashRange);
+                                if (isUsingFishBones)
+                                {
+                                    if (minionsInRange < 3)
+                                    {
+                                        Vars.Q.Cast();
+                                    }
+                                }
+                                else
+                                {
+                                    if (minionsInRange >= 3
+                                        && (Variables.Orbwalker.ActiveMode == OrbwalkingMode.LastHit && canLastHit
+                                            || Variables.Orbwalker.ActiveMode == OrbwalkingMode.LaneClear
+                                            && canLaneClear))
+                                    {
+                                        Vars.Q.Cast();
+                                    }
+                                }
                             }
-                        }
-                        else
-                        {
-                            if (minionsInRange >= 3
-                                && (Variables.Orbwalker.ActiveMode == OrbwalkingMode.LastHit && canLastHit
-                                    || Variables.Orbwalker.ActiveMode == OrbwalkingMode.LaneClear && canLaneClear))
+                            break;
+
+                        case OrbwalkingMode.Combo:
+                            var target = Variables.Orbwalker.GetTarget() as AIHeroClient ?? Targets.Target;
+                            var minSplashRangeEnemies =
+                                Vars.Menu["spells"]["q"]["combo"].GetValue<MenuSliderButton>().SValue;
+                            if (isUsingFishBones)
                             {
-                                Vars.Q.Cast();
+                                if (GameObjects.Player.Distance(target) < Vars.PowPow.Range
+                                    && target.CountEnemyHeroesInRange(SplashRange) < minSplashRangeEnemies)
+                                {
+                                    Vars.Q.Cast();
+                                }
                             }
-                        }
+                            break;
                     }
                     break;
             }
@@ -78,7 +102,7 @@ using LeagueSharp.SDK;
         /// <param name="args">The <see cref="Events.GapCloserEventArgs" /> instance containing the event data.</param>
         public static void OnGapCloser(object sender, Events.GapCloserEventArgs args)
         {
-            if (GameObjects.Player.IsDead || !Invulnerable.Check(args.Sender, DamageType.Magical, false))
+            if (GameObjects.Player.IsDead || Invulnerable.Check(args.Sender, DamageType.Magical, false))
             {
                 return;
             }

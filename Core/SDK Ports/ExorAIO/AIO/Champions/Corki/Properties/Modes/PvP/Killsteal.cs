@@ -61,7 +61,7 @@ using LeagueSharp.SDK;
                           GameObjects.Player.GetSpellDamage(
                               t,
                               SpellSlot.R,
-                              ObjectManager.Player.HasBuff("corkimissilebarragecounterbig")
+                              GameObjects.Player.HasBuff("corkimissilebarragecounterbig")
                                   ? DamageStage.Empowered
                                   : DamageStage.Default)))
                 {

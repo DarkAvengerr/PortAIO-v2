@@ -38,7 +38,7 @@ using LeagueSharp.SDK;
                     GameObjects.EnemyHeroes.Where(
                         t =>
                         !Invulnerable.Check(t) && t.IsValidTarget(Vars.W.Range - 100f)
-                        && !t.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
+                        && GameObjects.Player.CountEnemyHeroesInRange(Vars.Q.Range) < 3
                         && Vars.GetRealHealth(t) < (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.W)))
                 {
                     if (!Vars.W.GetPrediction(target).CollisionObjects.Any())
