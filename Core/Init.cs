@@ -740,6 +740,9 @@ namespace PortAIO
                         case 9: // sAIO
                             sAIO.Program.Main();
                             break;
+                        case 10: // DevCassio2
+                            DevCassio.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Chogath:

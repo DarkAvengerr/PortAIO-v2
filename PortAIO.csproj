@@ -1124,6 +1124,13 @@
     <Compile Include="Core\Champion Ports\Brand\SergixBrand\Spells.cs" />
     <Compile Include="Core\Champion Ports\Brand\SergixBrand\Spells1.cs" />
     <Compile Include="Core\Champion Ports\Caitlyn\Caitlyn_Master_Headshot\Program.cs" />
+    <Compile Include="Core\Champion Ports\Cassiopeia\DevCassio2\DevCommon\DevHelper.cs" />
+    <Compile Include="Core\Champion Ports\Cassiopeia\DevCassio2\DevCommon\IgniteManager.cs" />
+    <Compile Include="Core\Champion Ports\Cassiopeia\DevCassio2\DevCommon\ItemManager.cs" />
+    <Compile Include="Core\Champion Ports\Cassiopeia\DevCassio2\DevCommon\LevelUpManager.cs" />
+    <Compile Include="Core\Champion Ports\Cassiopeia\DevCassio2\DevCommon\MessageManager.cs" />
+    <Compile Include="Core\Champion Ports\Cassiopeia\DevCassio2\DevCommon\SummonerSpellManager.cs" />
+    <Compile Include="Core\Champion Ports\Cassiopeia\DevCassio2\Program.cs" />
     <Compile Include="Core\Champion Ports\Ekko\Ekko - Master of Time\Core.cs" />
     <Compile Include="Core\Champion Ports\Ekko\Ekko - Master of Time\EkkoMenu.cs" />
     <Compile Include="Core\Champion Ports\Ekko\Ekko - Master of Time\EkkoModes.cs" />
