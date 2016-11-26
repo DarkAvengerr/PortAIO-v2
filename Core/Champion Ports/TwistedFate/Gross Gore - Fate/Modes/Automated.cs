@@ -137,29 +137,24 @@ using LeagueSharp.Common;
                 return;
             }
 
-            foreach (var enemy in HeroManager.Enemies)
+            foreach (var enemy in HeroManager.Enemies.Where(e => e.IsValidTarget(Spells._q.Range) && !e.IsDead))
             {
-                if(!enemy.IsDead && enemy != null)
-                {
-                    if(enemy.IsValidTarget(Spells._q.Range * 2))
-                    {
-                        var pred = Spells._q.GetPrediction(enemy);
+                var pred = Spells._q.GetPrediction(enemy);
 
-                        if(Config.IsImmobile)
+                if(Config.IsImmobile)
+                {
+                    if(ObjectManager.Player.ManaPercent >= Config.AutoqMana)
+                    {
+                        Pred.CastSebbyPredict(Spells._q, enemy, HitChance.Immobile);
+                    }
+
+                }else if(Config.IsDashing)
+                {
+                    if(ObjectManager.Player.ManaPercent >= Config.AutoqMana)
+                    {
+                        if(pred.Hitchance == HitChance.Dashing)
                         {
-                            if(ObjectManager.Player.ManaPercent >= Config.AutoqMana)
-                            {
-                                Pred.CastSebbyPredict(Spells._q, enemy, HitChance.Immobile);
-                            }
-                        }else if(Config.IsDashing)
-                        {
-                            if(ObjectManager.Player.ManaPercent >= Config.AutoqMana)
-                            {
-                                if(pred.Hitchance == HitChance.Dashing)
-                                {
-                                    CastQ(enemy, pred.UnitPosition.To2D());
-                                }
-                            }
+                            CastQ(enemy, pred.UnitPosition.To2D());
                         }
                     }
                 }
@@ -172,51 +167,11 @@ using LeagueSharp.Common;
                         {
                             if(enemy.MoveSpeed <= 270)
                             {
-                                switch (Config.PredAutoQ)
-                                {
-                                    //High
-                                    case 0:
-                                    {
-                                        Pred.CastSebbyPredict(Spells._q, enemy, Spells._q.MinHitChance);
-                                        return;
-                                    }
-                                    //VeryHigh
-                                    case 1:
-                                    {
-                                        Pred.CastSebbyPredict(Spells._q, enemy, HitChance.VeryHigh);
-                                        return;
-                                    }
-                                    //Medium
-                                    case 2:
-                                    {
-                                        Pred.CastSebbyPredict(Spells._q, enemy, HitChance.Medium);
-                                        return;
-                                    }
-                                }
+                                Pred.CastSebbyPredict(Spells._q, enemy, Spells._q.MinHitChance);
                             }
                         }else if(enemy.IsCharmed)
                         {
-                            switch (Config.PredAutoQ)
-                            {
-                                //High
-                                case 0:
-                                {
-                                    Pred.CastSebbyPredict(Spells._q, enemy, Spells._q.MinHitChance);
-                                    return;
-                                }
-                                //VeryHigh
-                                case 1:
-                                {
-                                    Pred.CastSebbyPredict(Spells._q, enemy, HitChance.VeryHigh);
-                                    return;
-                                }
-                                //Medium
-                                case 2:
-                                {
-                                    Pred.CastSebbyPredict(Spells._q, enemy, HitChance.Medium);
-                                    return;
-                                }
-                            }
+                            Pred.CastSebbyPredict(Spells._q, enemy, Spells._q.MinHitChance);
                         }
                     }
                 }
@@ -232,41 +187,18 @@ using LeagueSharp.Common;
 
             var qMana = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).SData.Mana;
 
-            foreach (var enemy in HeroManager.Enemies)
+            foreach (var enemy in HeroManager.Enemies.Where(e => !e.IsDead))
             {
-                if (!enemy.IsDead && enemy != null)
+                if (enemy.IsKillableAndValidTarget(Spells._q.GetDamage(enemy), Spells._q.DamageType, Spells._q.Range))
                 {
-                    if (enemy.IsKillableAndValidTarget(Spells._q.GetDamage(enemy), Spells._q.DamageType, Spells._q.Range))
+                    if(!enemy.IsKillableAndValidTarget(Spells._w.GetDamage(enemy), Spells._w.DamageType, SebbyLib.Orbwalking.GetRealAutoAttackRange(ObjectManager.Player)) || !Spells._w.IsReadyPerfectly())
                     {
-                        if(!enemy.IsKillableAndValidTarget(Spells._w.GetDamage(enemy), Spells._w.DamageType, Orbwalking.GetRealAutoAttackRange(ObjectManager.Player)) && !Spells._w.IsReadyPerfectly())
+                        if (ObjectManager.Player.Distance(enemy) >= SebbyLib.Orbwalking.GetRealAutoAttackRange(ObjectManager.Player)
+                        || !Spells._w.IsReadyPerfectly()
+                        || CardSelector.Status != SelectStatus.Selecting
+                        || CardSelector.Status != SelectStatus.Selected)
                         {
-                            if (ObjectManager.Player.Distance(enemy) >= Orbwalking.GetRealAutoAttackRange(ObjectManager.Player)
-                            || !Spells._w.IsReadyPerfectly()
-                            || CardSelector.Status != SelectStatus.Selecting
-                            || CardSelector.Status != SelectStatus.Selected)
-                            {
-                                switch (Config.PredAutoQ)
-                                {
-                                    //High
-                                    case 0:
-                                    {
-                                        Pred.CastSebbyPredict(Spells._q, enemy, Spells._q.MinHitChance);
-                                        return;
-                                    }
-                                    //VeryHigh
-                                    case 1:
-                                    {
-                                        Pred.CastSebbyPredict(Spells._q, enemy, HitChance.VeryHigh);
-                                        return;
-                                    }
-                                    //Medium
-                                    case 2:
-                                    {
-                                        Pred.CastSebbyPredict(Spells._q, enemy, HitChance.Medium);
-                                        return;
-                                    }
-                                }
-                            }
+                            Pred.CastSebbyPredict(Spells._q, enemy, Spells._q.MinHitChance);
                         }
                     }
                 }

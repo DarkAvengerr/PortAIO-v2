@@ -35,7 +35,7 @@ using LeagueSharp.Common;
                         }
                     }
 
-                    return;
+                    break;
                 }
                 case SelectStatus.Selecting:
                 {
@@ -54,7 +54,7 @@ using LeagueSharp.Common;
                         CardSelector.JumpToCard(Cards.Red);
                     }
 
-                    return;
+                    break;
                 }
             }
         }

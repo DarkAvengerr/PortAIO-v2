@@ -27,41 +27,15 @@ using LeagueSharp.Common;
         {
             if (Config.UseQEnemy)
             {
-                if(Spells._q.IsReadyPerfectly())
+                if (Spells._q.IsReadyPerfectly())
                 {
                     CastQTick = Utils.TickCount;
 
-                    foreach (var enemy in HeroManager.Enemies)
+                    foreach (var enemy in HeroManager.Enemies.Where(e => e.IsValidTarget(Spells._q.Range) && !e.IsDead))
                     {
-                        if (!enemy.IsDead && enemy != null)
+                        if(Utils.TickCount - CastQTick < 500)
                         {
-                            if (enemy.IsValidTarget(Spells._q.Range))
-                            {
-                                if(Utils.TickCount - CastQTick < 500)
-                                {
-                                    switch (Config.PredSemiQ)
-                                    {
-                                        //VeryHigh
-                                        case 0:
-                                        {
-                                            Pred.CastSebbyPredict(Spells._q, enemy, HitChance.VeryHigh);
-                                            return;
-                                        }
-                                        //High
-                                        case 1:
-                                        {
-                                            Pred.CastSebbyPredict(Spells._q, enemy, Spells._q.MinHitChance);
-                                            return;
-                                        }
-                                        //Medium
-                                        case 2:
-                                        {
-                                            Pred.CastSebbyPredict(Spells._q, enemy, HitChance.Medium);
-                                            return;
-                                        }
-                                    }
-                                }
-                            }
+                            Pred.CastSebbyPredict(Spells._q, enemy, Spells._q.MinHitChance);
                         }
                     }
                 }

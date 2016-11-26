@@ -4,6 +4,7 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using ItemData = LeagueSharp.Common.Data.ItemData;
+using System.Collections.Generic;
 #endregion
 
 using EloBuddy; 
@@ -54,7 +55,7 @@ using LeagueSharp.Common;
                         case SelectStatus.Selecting:
                         {
                             CardSelector.JumpToCard(Cards.Yellow);
-                            return;
+                            break;
                         }
                         case SelectStatus.Ready:
                         {
@@ -62,15 +63,15 @@ using LeagueSharp.Common;
                             {
                                 CardSelector.StartSelecting(Cards.Yellow);
                             }
-                            return;
+                            break;
                         }
                     }
 
                     if(HasGold)
                     {
-                        if (Orbwalking.InAutoAttackRange(sender))
+                        if (SebbyLib.Orbwalking.InAutoAttackRange(sender))
                         {
-                            if (Orbwalking.CanAttack())
+                            if (SebbyLib.Orbwalking.CanAttack())
                             {
                                 EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, sender);
                             }
@@ -93,12 +94,12 @@ using LeagueSharp.Common;
 
                 if (gapcloser.Sender.IsValidTarget(Spells._w.Range))
                 {
-                    switch (CardSelector.Status)
+                    switch(CardSelector.Status)
                     {
                         case SelectStatus.Selecting:
                         {
                             CardSelector.JumpToCard(Cards.Yellow);
-                            return;
+                            break;
                         }
                         case SelectStatus.Ready:
                         {
@@ -106,15 +107,15 @@ using LeagueSharp.Common;
                             {
                                 CardSelector.StartSelecting(Cards.Yellow);
                             }
-                            return;
+                            break;
                         }
                     }
 
                     if (HasGold)
                     {
-                        if (Orbwalking.InAutoAttackRange(gapcloser.Sender))
+                        if (SebbyLib.Orbwalking.InAutoAttackRange(gapcloser.Sender))
                         {
-                            if (Orbwalking.CanAttack())
+                            if (SebbyLib.Orbwalking.CanAttack())
                             {
                                 EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, gapcloser.Sender);
                             }
@@ -124,52 +125,89 @@ using LeagueSharp.Common;
             }
         }
 
-        public static void OnBeforeAttack(Orbwalking.BeforeAttackEventArgs args)
+        public static void OnBeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
         {
             if (ObjectManager.Player.IsDead)
             {
                 return;
             }
 
-            if (args.Target is AIHeroClient)
+            if(Mainframe.Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Combo)
             {
-                args.Process = CardSelector.Status != SelectStatus.Selecting
-                               && Environment.TickCount - CardSelector.LastWSent > 300;
-            }
+                if(CardSelector.Status == SelectStatus.Selecting 
+                    || CardSelector.Status == SelectStatus.Ready)
+                {
+                    args.Process = false;
+                }
 
-            if(Mainframe.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            }else if(Mainframe.Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Mixed)
             {
-                if(CardSelector.Status == SelectStatus.Selecting || Spells._w.IsReadyPerfectly())
+                if (CardSelector.Status == SelectStatus.Selecting)
                 {
                     args.Process = false;
                 }
             }
 
-            if(Mainframe.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
+            if(Mainframe.Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Mixed)
             {
                 if(HasACard != "empty")
                 {
                     if(!HeroManager.Enemies.Contains(args.Target))
                     {
-                        foreach (var enemy in HeroManager.Enemies)
+                        foreach (var enemy in HeroManager.Enemies.Where(e => !e.IsDead))
                         {
-                            if (!enemy.IsDead && enemy != null && !enemy.IsZombie)
+                            if (enemy.IsValidTarget(Spells._q.Range))
                             {
-                                if (enemy.IsValidTarget(Spells._q.Range))
+                                if((ObjectManager.Player.Distance(enemy) <= SebbyLib.Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + 100))
                                 {
-                                    if((ObjectManager.Player.Distance(enemy) <= Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + 150))
-                                    {
-                                        args.Process = false;
+                                    args.Process = false;
 
-                                        if(Orbwalking.InAutoAttackRange(enemy))
+                                    if(SebbyLib.Orbwalking.InAutoAttackRange(enemy))
+                                    {
+                                        if (SebbyLib.Orbwalking.CanAttack())
                                         {
-                                            if (Orbwalking.CanAttack())
-                                            {
-                                                EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, enemy);
-                                            }
+                                            EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, enemy);
                                         }
                                     }
                                 }
+                            }
+                        }
+                    }
+                }
+            }
+            else if(Mainframe.Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.LaneClear)
+            {
+                if(HasACard != "none" && HasRed)
+                {
+                    args.Process = false;
+
+                    IDictionary<Obj_AI_Minion, int> creeps = new Dictionary<Obj_AI_Minion, int>();
+
+                    foreach (var x in ObjectManager.Get<Obj_AI_Minion>().Where(x => x.Team != ObjectManager.Player.Team && x.Team != GameObjectTeam.Neutral && SebbyLib.Orbwalking.InAutoAttackRange(x)))
+                    {
+                        creeps.Add(x, ObjectManager.Get<Obj_AI_Minion>().Count(y => y.Team != ObjectManager.Player.Team && y.Team != GameObjectTeam.Neutral && y.IsValidTarget() && y.Distance(x.Position) <= 300));
+                    }
+
+                    foreach (var x in ObjectManager.Get<Obj_AI_Minion>().Where(x => x.Team == GameObjectTeam.Neutral && SebbyLib.Orbwalking.InAutoAttackRange(x)))
+                    {
+                        creeps.Add(x, ObjectManager.Get<Obj_AI_Minion>().Count(y => y.Team == GameObjectTeam.Neutral && y.IsValidTarget() && y.Distance(x.Position) <= 300));
+                    }
+
+                    var sbire = creeps.OrderByDescending(x => x.Value).FirstOrDefault();
+
+                    EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, sbire.Key);
+                }
+                else if(args.Target is Obj_AI_Turret)
+                {
+                    if(ObjectManager.Player.CountEnemiesInRange(900) == 0)
+                    {
+                        if(Spells._w.IsReadyPerfectly() && CardSelector.Status == SelectStatus.Ready)
+                        {
+                            CardSelector.StartSelecting(Cards.Blue);
+
+                            if (CardSelector.Status == SelectStatus.Selected && SebbyLib.Orbwalking.InAutoAttackRange(args.Target))
+                            {
+                                EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, args.Target);
                             }
                         }
                     }
@@ -192,17 +230,17 @@ using LeagueSharp.Common;
                     {
                         if (args.SData.Name.ToLowerInvariant() == "gate")
                         {
-                            switch (CardSelector.Status)
+                            switch(CardSelector.Status)
                             {
                                 case SelectStatus.Selecting:
                                 {
                                     CardSelector.JumpToCard(Cards.Yellow);
-                                    return;
+                                    break;
                                 }
                                 case SelectStatus.Ready:
                                 {
                                     CardSelector.StartSelecting(Cards.Yellow);
-                                    return;
+                                    break;
                                 }
                             }
                         }
@@ -214,8 +252,8 @@ using LeagueSharp.Common;
         public static void YellowIntoQ(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!Config.PredictQ || ObjectManager.Player.IsDead
-                || (Mainframe.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo
-                && Mainframe.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Mixed))
+                || (Mainframe.Orbwalker.ActiveMode != SebbyLib.Orbwalking.OrbwalkingMode.Combo
+                && Mainframe.Orbwalker.ActiveMode != SebbyLib.Orbwalking.OrbwalkingMode.Mixed))
             {
                 return;
             }
@@ -228,36 +266,13 @@ using LeagueSharp.Common;
                     {
                         if (ObjectManager.Player.ManaPercent >= Config.AutoqMana)
                         {
-                            foreach (var enemy in HeroManager.Enemies)
+                            foreach (var enemy in HeroManager.Enemies.Where(e => !e.IsDead))
                             {
-                                if (!enemy.IsDead && enemy != null)
+                                if (!enemy.IsKillableAndValidTarget(Spells._w.GetDamage(enemy), Spells._w.DamageType, Spells._q.Range))
                                 {
-                                    if (!enemy.IsKillableAndValidTarget(Spells._w.GetDamage(enemy), Spells._w.DamageType, Spells._q.Range))
+                                    if (enemy.IsValidTarget(SebbyLib.Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + 50))
                                     {
-                                        if (enemy.IsValidTarget(Spells._q.Range / 2))
-                                        {
-                                            switch (Config.PredFastQW)
-                                            {
-                                                //VeryHigh
-                                                case 0:
-                                                {
-                                                    Pred.CastSebbyPredict(Spells._q, enemy, HitChance.VeryHigh);
-                                                    return;
-                                                }
-                                                //High
-                                                case 1:
-                                                {
-                                                    Pred.CastSebbyPredict(Spells._q, enemy, Spells._q.MinHitChance);
-                                                    return;
-                                                }
-                                                //Medium
-                                                case 2:
-                                                {
-                                                    Pred.CastSebbyPredict(Spells._q, enemy, HitChance.Medium);
-                                                    return;
-                                                }
-                                            }
-                                        }
+                                        Pred.CastSebbyPredict(Spells._q, enemy, Spells._q.MinHitChance);
                                     }
                                 }
                             }
@@ -270,8 +285,8 @@ using LeagueSharp.Common;
         public static void RedIntoQ(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!Config.PredictQ || ObjectManager.Player.IsDead
-                || (Mainframe.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo
-                && Mainframe.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Mixed))
+                || (Mainframe.Orbwalker.ActiveMode != SebbyLib.Orbwalking.OrbwalkingMode.Combo
+                && Mainframe.Orbwalker.ActiveMode != SebbyLib.Orbwalking.OrbwalkingMode.Mixed))
             {
                 return;
             }
@@ -284,36 +299,13 @@ using LeagueSharp.Common;
                     {
                         if (ObjectManager.Player.ManaPercent >= Config.AutoqMana)
                         {
-                            foreach (var enemy in HeroManager.Enemies)
+                            foreach (var enemy in HeroManager.Enemies.Where(e => !e.IsDead))
                             {
-                                if (!enemy.IsDead && enemy != null)
+                                if (!enemy.IsKillableAndValidTarget(Spells._w.GetDamage(enemy), Spells._w.DamageType, Spells._q.Range))
                                 {
-                                    if (!enemy.IsKillableAndValidTarget(Spells._w.GetDamage(enemy), Spells._w.DamageType, Spells._q.Range))
+                                    if (enemy.IsValidTarget(SebbyLib.Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + 50))
                                     {
-                                        if (enemy.IsValidTarget(Spells._q.Range / 2))
-                                        {
-                                            switch (Config.PredFastQW)
-                                            {
-                                                //VeryHigh
-                                                case 0:
-                                                {
-                                                    Pred.CastSebbyPredict(Spells._q, enemy, HitChance.VeryHigh);
-                                                    return;
-                                                }
-                                                //High
-                                                case 1:
-                                                {
-                                                    Pred.CastSebbyPredict(Spells._q, enemy, Spells._q.MinHitChance);
-                                                    return;
-                                                }
-                                                //Medium
-                                                case 2:
-                                                {
-                                                    Pred.CastSebbyPredict(Spells._q, enemy, HitChance.Medium);
-                                                    return;
-                                                }
-                                            }
-                                        }
+                                        Pred.CastSebbyPredict(Spells._q, enemy, Spells._q.MinHitChance);
                                     }
                                 }
                             }

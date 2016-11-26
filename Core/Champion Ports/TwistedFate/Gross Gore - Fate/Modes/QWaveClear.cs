@@ -26,7 +26,7 @@ using LeagueSharp.Common;
                 {
                     if(ObjectManager.Player.Mana >= qMana)
                     {
-                        var minions = MinionManager.GetMinions(ObjectManager.Player.Position, Spells._q.Range).Where(x => x.Type == GameObjectType.obj_AI_Minion && x.Team != ObjectManager.Player.Team).ToList();
+                        var minions = SebbyLib.Cache.GetMinions(ObjectManager.Player.ServerPosition, Spells._q.Range);
 
                         if (minions.Any() && minions.Count > 2)
                         {

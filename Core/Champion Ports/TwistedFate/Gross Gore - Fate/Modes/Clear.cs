@@ -20,15 +20,7 @@ using LeagueSharp.Common;
             var wMana = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).SData.Mana;
             var qMana = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).SData.Mana;
 
-            if (ObjectManager.Player.Mana < (wMana*2) + qMana)
-            {
-                return;
-            }
-
-            var jungle = MinionManager.GetMinions(ObjectManager.Player.Position,
-                            ObjectManager.Player.AttackRange + 200, MinionTypes.All, MinionTeam.Neutral)
-                        .Where(x => x.Team == GameObjectTeam.Neutral)
-                        .OrderByDescending(x => x.MaxHealth);
+            var jungle = SebbyLib.Cache.GetMinions(ObjectManager.Player.ServerPosition, 700, MinionTeam.Neutral);
 
             if (!jungle.Any() || jungle.FirstOrDefault() == null)
             {
@@ -44,12 +36,12 @@ using LeagueSharp.Common;
                         case SelectStatus.Ready:
                         {
                             CardSelector.StartSelecting(Cards.Blue);
-                            return;
+                            break;
                         }
                         case SelectStatus.Selecting:
                         {
                             CardSelector.JumpToCard(Cards.Blue);
-                            return;
+                            break;
                         }
                     }
                 }
@@ -68,30 +60,30 @@ using LeagueSharp.Common;
                                 case SelectStatus.Ready:
                                 {
                                     CardSelector.StartSelecting(Cards.Red);
-                                    return;
+                                    break;
                                 }
                                 case SelectStatus.Selecting:
                                 {
                                     CardSelector.JumpToCard(Cards.Red);
-                                    return;
+                                    break;
                                 }
                             }
                         }
                         else
                         {
-                            if (jungle.FirstOrDefault().HealthPercent >= 50 && ObjectManager.Player.HealthPercent < 50)
+                            if (jungle.FirstOrDefault().HealthPercent >= 70 && ObjectManager.Player.HealthPercent < 50)
                             {
                                 switch (CardSelector.Status)
                                 {
                                     case SelectStatus.Ready:
                                     {
                                         CardSelector.StartSelecting(Cards.Yellow);
-                                        return;
+                                        break;
                                     }
                                     case SelectStatus.Selecting:
                                     {
                                         CardSelector.JumpToCard(Cards.Yellow);
-                                        return;
+                                        break;
                                     }
                                 }
                             }
@@ -111,11 +103,14 @@ using LeagueSharp.Common;
 
             if(Spells._q.IsReadyPerfectly())
             {
-                var target = jungle.FirstOrDefault(x => x.IsValidTarget(Spells._q.Range));
-
-                if (target != null)
+                if (ObjectManager.Player.Mana - qMana >= wMana)
                 {
-                    Spells._q.Cast(target);
+                    var target = jungle.FirstOrDefault(x => x.IsValidTarget(Spells._q.Range));
+
+                    if (target != null)
+                    {
+                        Spells._q.Cast(target);
+                    }
                 }
             }
         }

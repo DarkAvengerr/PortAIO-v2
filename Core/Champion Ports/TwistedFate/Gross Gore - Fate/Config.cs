@@ -45,10 +45,12 @@ using LeagueSharp.Common;
 
             TargetSelectorMenu = new Menu("Target Selector", "targetselector");
             TargetSelector.AddToMenu(TargetSelectorMenu);
+
             TwistedFateMenu.AddSubMenu(TargetSelectorMenu);
 
-            OrbwalkMenu = new Menu("Orbwalker", "orbwalker");
-            Mainframe.Orbwalker = new Orbwalking.Orbwalker(OrbwalkMenu);
+            OrbwalkMenu = new Menu("Sebby's Orbwalker", "orbwalker");
+            Mainframe.Orbwalker = new SebbyLib.Orbwalking.Orbwalker(OrbwalkMenu);
+
             TwistedFateMenu.AddSubMenu(OrbwalkMenu);
 
             QMenu = new Menu("Q Spell", "qSpellMenu");
@@ -69,9 +71,10 @@ using LeagueSharp.Common;
             QAutoMenu.AddItem(new MenuItem("qImmobile", "if target is immobile").SetValue(true));
             QAutoMenu.AddItem(new MenuItem("qKS", "killsteal").SetValue(true));
             QMenu.AddItem(new MenuItem("qOptimize", "Combo/Mixed Fast W->Q")).SetFontStyle(FontStyle.Bold, SharpDX.Color.BlueViolet);
-            QMenu.AddItem(new MenuItem("qAfterW", "Predict Gold-Red into Q").SetValue(true));
+            QMenu.AddItem(new MenuItem("qAfterW", "Predict Gold-Red into Q (AA Range)").SetValue(true));
             QMenu.AddSubMenu(QKBMenu);
             QMenu.AddSubMenu(QAutoMenu);
+
             TwistedFateMenu.AddSubMenu(QMenu);
 
             WMenu = new Menu("W Spell", "wSpellMenu");
@@ -95,36 +98,32 @@ using LeagueSharp.Common;
             WGCMenu.AddItem(new MenuItem("wmenu.menu.goldtitle", "Gold Card")).SetFontStyle(FontStyle.Bold, SharpDX.Color.BlueViolet);
             WGCMenu.AddItem(new MenuItem("wCGold", "Always: Spacebar").SetValue(true));
             WGCMenu.AddItem(new MenuItem("goldInter", "Interrupter").SetValue(true));
-            WGCMenu.AddItem(new MenuItem("goldGap", "Anti-GapCloser").SetValue(true));  
+            WGCMenu.AddItem(new MenuItem("goldGap", "Anti-GapCloser").SetValue(true));
+            WMenu.AddItem(new MenuItem("w.kill", "[Combo] Pick the first card if can kill").SetValue(true));
             WMenu.AddSubMenu(WSHMenu);
             WMenu.AddSubMenu(WKSMenu);
             WMenu.AddSubMenu(WGCMenu);
+
             TwistedFateMenu.AddSubMenu(WMenu);
 
             ExtraMenu = new Menu("Settings", "extraMenu");
             ExtraMenu.AddItem(new MenuItem("extra.menu.warning", "Recommended: Default")).SetFontStyle(FontStyle.Bold, SharpDX.Color.OrangeRed);
             ExtraMenu.AddItem(new MenuItem("extra.menu.harass", "Harass [Shuffle]")).SetFontStyle(FontStyle.Bold, SharpDX.Color.BlueViolet);
-            ExtraMenu.AddItem(new MenuItem("wHRange", "Extra AA Range to start W").SetValue(new Slider(250, 100, 300)));
-            ExtraMenu.AddItem(new MenuItem("wHLock", "Extra AA Range to lock card").SetValue(new Slider(100, 0, 200)));
-            ExtraMenu.AddItem(new MenuItem("extra.menu.pred", "Prediction [OKTW]")).SetFontStyle(FontStyle.Bold, SharpDX.Color.BlueViolet);
-            ExtraMenu.AddItem(
-                new MenuItem("extra.menu.pred.semiq", "Semi-Auto Q").SetValue(
-                    new StringList(new[] { "VeryHigh", "High", "Medium" })));
-            ExtraMenu.AddItem(
-               new MenuItem("extra.menu.pred.autoq", "Automated Q").SetValue(
-                   new StringList(new[] { "High", "VeryHigh", "Medium" })));
-            ExtraMenu.AddItem(
-               new MenuItem("extra.menu.pred.wqc", "Fast W->Q").SetValue(
-                   new StringList(new[] { "VeryHigh", "High", "Medium" })));
+            ExtraMenu.AddItem(new MenuItem("wHRange", "Extra AA Range to start W").SetValue(new Slider(200, 100, 300)));
+            ExtraMenu.AddItem(new MenuItem("wHLock", "Extra AA Range to lock card").SetValue(new Slider(80, 0, 200)));
+            
             TwistedFateMenu.AddSubMenu(ExtraMenu);
 
             DrawMenu = new Menu("Drawings", "drawings");
             DrawMenu.AddItem(new MenuItem("drawQrange", "Q Range").SetValue(true));
             DrawMenu.AddItem(new MenuItem("drawRrange", "R Range").SetValue(true));
             DrawMenu.AddItem(new MenuItem("drawRmap", "R Range Minimap").SetValue(true));
+            DrawMenu.AddItem(new MenuItem("drawRotate", "Shuffle cards Range").SetValue(true));
+            DrawMenu.AddItem(new MenuItem("drawLock", "Lock card Range").SetValue(true));
             DrawMenu.AddItem(new MenuItem("combo.damage", "Damage Indicator")).SetFontStyle(FontStyle.Bold, SharpDX.Color.BlueViolet);
             DrawMenu.AddItem(new MenuItem("drawComboDmg", "Combo Damage").SetValue(true));
             DrawMenu.AddItem(new MenuItem("fillDmg", "Damage Fill Color").SetValue(new Circle(true, Color.LightGoldenrodYellow)));
+
             TwistedFateMenu.AddSubMenu(DrawMenu);
 
             #region DamageDrawings
@@ -184,6 +183,8 @@ using LeagueSharp.Common;
 
         internal static bool UseAntiGapCloser { get { return IsChecked("goldGap"); } }
 
+        internal static bool CanKillW { get { return IsChecked("w.kill"); } }
+
         internal static bool GoldKey { get { return TwistedFateMenu.Item("csGold").GetValue<KeyBind>().Active; } }
 
         internal static bool BlueKey { get { return TwistedFateMenu.Item("csBlue").GetValue<KeyBind>().Active; } }
@@ -197,6 +198,10 @@ using LeagueSharp.Common;
         internal static bool UseQEnemy { get { return TwistedFateMenu.Item("qEnemy").GetValue<KeyBind>().Active; } }
 
         internal static bool Rotate { get { return IsChecked("wHarass"); } }
+
+        internal static bool DrawRotate { get { return IsChecked("drawRotate"); } }
+
+        internal static bool DrawLock { get { return IsChecked("drawLock"); } }
 
         internal static int RotateRange { get { return TwistedFateMenu.Item("wHRange").GetValue<Slider>().Value; } }
 
@@ -219,12 +224,6 @@ using LeagueSharp.Common;
         internal static bool PredictQ { get { return IsChecked("qAfterW"); } }
 
         internal static int Prioritize { get { return TwistedFateMenu.Item("rotate.prioritize").GetValue<StringList>().SelectedIndex; } }
-
-        internal static int PredSemiQ { get { return TwistedFateMenu.Item("extra.menu.pred.semiq").GetValue<StringList>().SelectedIndex; } }
-
-        internal static int PredAutoQ { get { return TwistedFateMenu.Item("extra.menu.pred.autoq").GetValue<StringList>().SelectedIndex; } }
-
-        internal static int PredFastQW { get { return TwistedFateMenu.Item("extra.menu.pred.wqc").GetValue<StringList>().SelectedIndex; } }
 
         #endregion
 
