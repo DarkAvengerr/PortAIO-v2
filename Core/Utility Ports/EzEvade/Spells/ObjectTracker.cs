@@ -51,11 +51,23 @@ using LeagueSharp.Common;
     {
         public static Dictionary<int, ObjectTrackerInfo> objTracker = new Dictionary<int, ObjectTrackerInfo>();
         public static int objTrackerID = 0;
+        private static bool _loaded = false;
 
         static ObjectTracker()
         {
             Obj_AI_Minion.OnCreate += HiuCreate_ObjectTracker;
             //Obj_AI_Minion.OnCreate += HiuDelete_ObjectTracker;
+
+            _loaded = true;
+        }
+
+        public static void HuiTrackerForceLoad()
+        {
+            if (!_loaded)
+            {
+                Obj_AI_Minion.OnCreate += HiuCreate_ObjectTracker;
+                _loaded = true;
+            }
         }
 
         public static void AddObjTrackerPosition(string name, Vector3 position, float timeExpires)
@@ -70,15 +82,13 @@ using LeagueSharp.Common;
 
         private static void HiuCreate_ObjectTracker(GameObject obj, EventArgs args)
         {
-            if (obj.IsEnemy && obj.Type == GameObjectType.obj_AI_Minion
-                && !ObjectTracker.objTracker.ContainsKey(obj.NetworkId))
+            if (!objTracker.ContainsKey(obj.NetworkId))
             {
                 var minion = obj as Obj_AI_Minion;
-
-                if (minion.BaseSkinName.Contains("testcube"))
+                if (minion != null && minion.CheckTeam() && minion.BaseSkinName.ToLower().Contains("testcube"))
                 {
-                    ObjectTracker.objTracker.Add(obj.NetworkId, new ObjectTrackerInfo(obj, "hiu"));
-                    DelayAction.Add(250, () => ObjectTracker.objTracker.Remove(obj.NetworkId));
+                    objTracker.Add(obj.NetworkId, new ObjectTrackerInfo(obj, "hiu"));
+                    DelayAction.Add(250, () => objTracker.Remove(obj.NetworkId));
                 }
             }
         }
@@ -93,7 +103,7 @@ using LeagueSharp.Common;
 
         public static Vector2 GetLastHiuOrientation()
         {
-            var objList = ObjectTracker.objTracker.Values.Where(o => o.Name == "hiu");
+            var objList = objTracker.Values.Where(o => o.Name == "hiu");
             var sortedObjList = objList.OrderByDescending(o => o.timestamp);
 
             if (sortedObjList.Count() >= 2)

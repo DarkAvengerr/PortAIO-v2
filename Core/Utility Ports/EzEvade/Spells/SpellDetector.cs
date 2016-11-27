@@ -16,6 +16,7 @@ using LeagueSharp.Common;
     public class SpecialSpellEventArgs : EventArgs
     {
         public bool noProcess { get; set; }
+        public SpellData spellData { get; set; }
     }
 
     internal class SpellDetector
@@ -173,8 +174,11 @@ using LeagueSharp.Common;
                 {
                     if (spellData.usePackets == false)
                     {
-                        var specialSpellArgs = new SpecialSpellEventArgs();
+                        var specialSpellArgs = new SpecialSpellEventArgs { spellData = spellData };
                         OnProcessSpecialSpell?.Invoke(hero, args, spellData, specialSpellArgs);
+
+                        // optional update from specialSpellArgs
+                        spellData = specialSpellArgs.spellData;
 
                         if (specialSpellArgs.noProcess == false && spellData.noProcess == false)
                         {
@@ -264,9 +268,8 @@ using LeagueSharp.Common;
 
                     if (spellData.useEndPosition)
                     {
-                        var range = spellEndPos.To2D().Distance(spellStartPos.To2D());
+                        var range = endPosition.Distance(startPosition);
                         endTick = spellData.spellDelay + (range / spellData.projectileSpeed) * 1000;
-                        endPosition = spellEndPos.To2D();
                     }
 
                     if (obj != null)

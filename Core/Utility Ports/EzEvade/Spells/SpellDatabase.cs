@@ -48,10 +48,9 @@ using LeagueSharp.Common;
                 dangerlevel = 3,
                 missileName = "AatroxQ",
                 name = "Dark Flight",
-                projectileSpeed = 450,
                 radius = 285,
                 range = 650,
-                spellDelay = 250,
+                spellDelay = 650,
                 spellKey = SpellSlot.Q,
                 spellName = "AatroxQ",
                 spellType = SpellType.Circular
@@ -62,14 +61,13 @@ using LeagueSharp.Common;
             {
                 charName = "Aatrox",
                 dangerlevel = 2,
-                missileName = "AatroxE",
-                name = "Blade of Torment",
+                name = "Blade of Torment [Beta]",
                 projectileSpeed = 1200,
-                radius = 100,
+                radius = 40,
                 range = 1075,
                 spellDelay = 250,
                 spellKey = SpellSlot.E,
-                spellName = "AatroxE",
+                spellName = "AatroxEConeMissile",
                 spellType = SpellType.Line,
 
             });
@@ -198,8 +196,6 @@ using LeagueSharp.Common;
                 range = 1250,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
-                secondaryRadius = 210,
-                extraDrawHeight = 165,
                 spellName = "FlashFrostSpell",
                 spellType = SpellType.Line
             });
@@ -273,7 +269,7 @@ using LeagueSharp.Common;
                 spellDelay = 250,
                 spellKey = SpellSlot.W,
                 spellName = "Volley",
-                spellType = SpellType.Line,
+                spellType = SpellType.Cone, // temp removal
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
                 isSpecial = true
             });
@@ -599,7 +595,7 @@ using LeagueSharp.Common;
                 name = "Noxious Blast",
                 radius = 200,
                 range = 850,
-                spellDelay = 825,
+                spellDelay = 750,
                 spellKey = SpellSlot.Q,
                 spellName = "CassiopeiaQ",
                 spellType = SpellType.Circular
@@ -852,11 +848,11 @@ using LeagueSharp.Common;
             {
                 charName = "Ekko",
                 dangerlevel = 2,
-                missileName = "ekkowmis",
                 name = "Parallel Convergence",
+                projectileSpeed = 1650,
                 radius = 375,
-                range = 1600,
-                spellDelay = 2250,
+                range = 1750,
+                spellDelay = 3750,
                 spellKey = SpellSlot.W,
                 spellName = "ekkow",
                 spellType = SpellType.Circular
@@ -866,12 +862,13 @@ using LeagueSharp.Common;
             new SpellData
             {
                 charName = "Ekko",
-                dangerlevel = 3,
+                dangerlevel = 4,
                 missileName = "EkkoR",
                 name = "Chronobreak",
+                projectileSpeed = 1650,
                 radius = 375,
                 range = 1600,
-                spellDelay = 100,
+                spellDelay = 250,
                 spellKey = SpellSlot.R,
                 spellName = "EkkoR",
                 spellType = SpellType.Circular,
@@ -1017,19 +1014,21 @@ using LeagueSharp.Common;
                 charName = "Fizz",
                 dangerlevel = 4,
                 missileName = "FizzRMissile",
-                name = "Chum the Waters [Beta]",
+                name = "Chum the Waters",
                 projectileSpeed = 1350,
                 radius = 120,
-                range = 1275,
+                range = 1300,
                 spellDelay = 250,
                 spellKey = SpellSlot.R,
                 spellName = "FizzR",
                 spellType = SpellType.Line,
-                collisionObjects = new[] { CollisionObjectType.EnemyChampions, },
-                secondaryRadius = 250,
                 hasEndExplosion = true,
-                useEndPosition = true
+                useEndPosition = true,
+                isSpecial = true,
 
+                // this will be the radius if it come from FoW, 
+                // if vissible will be updated accordingly
+                secondaryRadius = 300
             });
 
             #endregion Fizz
@@ -1108,13 +1107,13 @@ using LeagueSharp.Common;
             {
                 charName = "Gnar",
                 dangerlevel = 4,
-                missileName = "GnarR",
+                projectileSpeed = 0,
                 name = "GNAR!",
-                radius = 590,
-                range = 590,
+                radius = 500,
+                range = 500,
                 spellDelay = 250,
                 spellKey = SpellSlot.R,
-                spellName = "GnarR", // todo: check wall
+                spellName = "GnarR",
                 spellType = SpellType.Circular
             });
 
@@ -1130,7 +1129,6 @@ using LeagueSharp.Common;
                 spellKey = SpellSlot.W,
                 spellName = "gnarbigw",
                 spellType = SpellType.Line,
-
             });
 
             Spells.Add(
@@ -1792,7 +1790,7 @@ using LeagueSharp.Common;
                 missileName = "KarmaQMissile",
                 name = "Inner Flame",
                 projectileSpeed = 1700,
-                radius = 70,
+                radius = 60,
                 range = 1050,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
@@ -1802,7 +1800,6 @@ using LeagueSharp.Common;
                 fixedRange = true
             });
 
-            //TODO: Fix end circle extra end time
             Spells.Add(
             new SpellData
             {
@@ -1811,16 +1808,15 @@ using LeagueSharp.Common;
                 missileName = "KarmaQMissileMantra",
                 name = "Soulflare (Mantra)",
                 projectileSpeed = 1700,
-                radius = 90,
+                radius = 80,
                 range = 1050,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 spellName = "KarmaQMissileMantra",
                 spellType = SpellType.Line,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
-                hasEndExplosion = true,
-                secondaryRadius = 250,
-                usePackets = true
+                //hasEndExplosion = true,
+                secondaryRadius = 250
 
             });
             #endregion Karma
@@ -3201,7 +3197,7 @@ using LeagueSharp.Common;
                 spellDelay = 500,
                 spellKey = SpellSlot.R,
                 spellName = "SionR",
-                spellType = SpellType.Line,
+                spellType = SpellType.Cone, // temp removal
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions },
                 isSpecial = true
             });

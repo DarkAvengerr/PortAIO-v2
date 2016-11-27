@@ -7,9 +7,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy;
-using LeagueSharp.Common;
-namespace ezEvade
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace ezEvade
 {
     internal class Evade
     {
@@ -71,15 +71,12 @@ namespace ezEvade
             LoadAssembly();
         }
 
-        private void LoadAssembly()
+        public void LoadAssembly()
         {
-            DelayAction.Add(0, () =>
-            {
-                Game_OnGameLoad(new EventArgs());
-            });
+            Game_OnGameLoad(new EventArgs());
         }
 
-        private void Game_OnGameLoad(EventArgs args)
+        public void Game_OnGameLoad(EventArgs args)
         {
             try
             {
@@ -116,7 +113,7 @@ namespace ezEvade
                 spellDetector = new SpellDetector(menu);
                 evadeSpell = new EvadeSpell(menu);
 
-                Menu keyMenu = new Menu("Key Settings", "KeySettings");
+                Menu keyMenu = new Menu("Key Settings", "KeySettings");                
                 keyMenu.AddItem(new MenuItem("DodgeDangerousKeyEnabled", "Enable Dodge Only Dangerous Keys").SetValue(false));
                 keyMenu.AddItem(new MenuItem("DodgeDangerousKey", "Dodge Only Dangerous Key").SetValue(new KeyBind(32, KeyBindType.Press)));
                 keyMenu.AddItem(new MenuItem("DodgeDangerousKey2", "Dodge Only Dangerous Key 2").SetValue(new KeyBind('V', KeyBindType.Press)));
@@ -136,22 +133,22 @@ namespace ezEvade
                 miscMenu.AddItem(new MenuItem("PreventDodgingNearEnemy", "Prevent Dodging Near Enemies").SetValue(true));
                 miscMenu.AddItem(new MenuItem("AdvancedSpellDetection", "Advanced Spell Detection").SetValue(false));
                 miscMenu.AddItem(new MenuItem("ClickRemove", "Allow Left Click Removal")
-                    .SetValue(true).SetTooltip("Left Click to Remove Circular Spells and Globals"));
+                    .SetValue(true).SetTooltip("Left Click to Remove Traps and Globals"));
                 //miscMenu.AddItem(new MenuItem("AllowCrossing", "Allow Crossing").SetValue(false));
                 //miscMenu.AddItem(new MenuItem("CalculateHeroPos", "Calculate Hero Position").SetValue(false));
                 miscMenu.AddItem(new MenuItem("EvadeMode", "Evade Profile")
-                    .SetValue(new StringList(new[] { "Smooth", "Very Smooth", "Fastest", "Hawk", "Kurisu", "GuessWho" }, 0)));
+                    .SetValue(new StringList(new[] {"Smooth", "Very Smooth", "Fastest", "Hawk", "Kurisu", "GuessWho"}, 0)));
                 miscMenu.Item("EvadeMode").ValueChanged += OnEvadeModeChange;
                 miscMenu.AddItem(new MenuItem("ResetConfig", "Reset Evade Config").SetValue(false));
 
                 Menu limiterMenu = new Menu("Humanizer", "Limiter");
                 limiterMenu.AddItem(new MenuItem("ClickOnlyOnce", "Click Only Once").SetValue(true));
-                limiterMenu.AddItem(new MenuItem("EnableEvadeDistance", "Extended Evade").SetValue(false));
+                limiterMenu.AddItem(new MenuItem("EnableEvadeDistance", "Extended Evade").SetValue(false));            
                 limiterMenu.AddItem(new MenuItem("TickLimiter", "Tick Limiter").SetValue(new Slider(100, 0, 500)));
                 limiterMenu.AddItem(new MenuItem("SpellDetectionTime", "Spell Detection Time").SetValue(new Slider(0, 0, 1000)));
                 limiterMenu.AddItem(new MenuItem("ReactionTime", "Reaction Time").SetValue(new Slider(0, 0, 500)));
                 limiterMenu.AddItem(new MenuItem("DodgeInterval", "Dodge Interval").SetValue(new Slider(0, 0, 2000)));
-
+                                
                 miscMenu.AddSubMenu(limiterMenu);
 
                 Menu fastEvadeMenu = new Menu("Fast Evade", "FastEvade");
@@ -199,6 +196,11 @@ namespace ezEvade
                 if (devModeOn)
                 {
                     LeagueSharp.Common.Utility.DelayAction.Add(100, () => loadTestMenu.Item("LoadSpellTester").SetValue(true));
+
+                    var evadeTester = new Menu("ezEvade: Test", "ezEvadeTest", true);
+                    var o = new EvadeTester(evadeTester);
+                    evadeTester.AddToMainMenu();
+
                 }
 
                 Console.WriteLine("ezEvade Loaded");
@@ -242,7 +244,7 @@ namespace ezEvade
             menu.Item("ExtraPingBuffer").SetValue(new Slider(65, 0, 200));
             menu.Item("ExtraCPADistance").SetValue(new Slider(10, 0, 150));
             menu.Item("ExtraSpellRadius").SetValue(new Slider(0, 0, 100));
-            menu.Item("ExtraEvadeDistance").SetValue(new Slider(100, 0, 300));
+            menu.Item("ExtraEvadeDistance").SetValue(new Slider(200, 0, 300));
             menu.Item("ExtraAvoidDistance").SetValue(new Slider(50, 0, 300));
             menu.Item("MinComfortZone").SetValue(new Slider(550, 0, 1000));
 
@@ -289,7 +291,6 @@ namespace ezEvade
                 menu.Item("RejectMinDistance").SetValue(new Slider(0, 0, 100));
                 menu.Item("ExtraCPADistance").SetValue(new Slider(0, 0, 150));
                 menu.Item("ExtraPingBuffer").SetValue(new Slider(40, 0, 200));
-                menu.Item("AdvancedSpellDetection").SetValue(true);
             }
             else if (mode == "Smooth")
             {
@@ -365,7 +366,7 @@ namespace ezEvade
                 menu.Item("ExtraAvoidDistance").SetValue(new Slider(60, 0, 300));
                 menu.Item("MinComfortZone").SetValue(new Slider(420, 0, 1000));
             }
-
+            
             else if (mode == "GuessWho")
             {
                 ResetConfig(false);
@@ -420,7 +421,7 @@ namespace ezEvade
             }
 
             //block spell commmands if evade spell just used
-            if (EvadeSpell.lastSpellEvadeCommand != null &&
+            if (EvadeSpell.lastSpellEvadeCommand != null && 
                 EvadeSpell.lastSpellEvadeCommand.timestamp + ObjectCache.gamePing + 150 > EvadeUtils.TickCount)
             {
                 args.Process = false;
@@ -455,7 +456,7 @@ namespace ezEvade
 
             foreach (var evadeSpell in EvadeSpell.evadeSpells)
             {
-                if (evadeSpell.isItem == false && evadeSpell.spellKey == args.Slot && evadeSpell.untargetable == false)
+                if (evadeSpell.isItem == false &&  evadeSpell.spellKey == args.Slot && evadeSpell.untargetable == false)
                 {
                     if (evadeSpell.evadeType == EvadeType.Blink)
                     {
@@ -470,7 +471,7 @@ namespace ezEvade
                         var posInfo = EvadeHelper.CanHeroWalkToPos(end, evadeSpell.speed, ObjectCache.gamePing, 0);
                         if (posInfo.posDangerCount < 1)
                         {
-                            if (lastPosInfo != null)
+                            if (lastPosInfo != null)                              
                                 lastPosInfo = posInfo;
 
                             if (lastPosInfo == null)
@@ -481,13 +482,14 @@ namespace ezEvade
                                 EvadeCommand.MoveTo(Game.CursorPos.To2D());
                                 lastStopEvadeTime = EvadeUtils.TickCount + ObjectCache.gamePing + 100;
                             }
+
                             return;
                         }
                     }
 
                     if (evadeSpell.evadeType == EvadeType.Dash)
                     {
-                        var dashPos = args.StartPosition.To2D();
+                        var dashPos = args.StartPosition.To2D(); 
 
                         if (args.Target != null)
                         {
@@ -553,7 +555,7 @@ namespace ezEvade
                 {
                     var movePos = args.TargetPosition.To2D();
                     var extraDelay = ObjectCache.menuCache.cache["ExtraPingBuffer"].GetValue<Slider>().Value;
-
+                
                     if (EvadeHelper.CheckMovePath(movePos, ObjectCache.gamePing + extraDelay))
                     {
                         /*if (ObjectCache.menuCache.cache["AllowCrossing"].GetValue<bool>())
@@ -726,7 +728,7 @@ namespace ezEvade
                 }
 
                 var limitDelay = ObjectCache.menuCache.cache["TickLimiter"].GetValue<Slider>().Value; //Tick limiter                
-                if (EvadeHelper.fastEvadeMode || EvadeUtils.TickCount - lastTickCount > limitDelay && EvadeUtils.TickCount > lastStopEvadeTime)
+                if (EvadeHelper.fastEvadeMode || EvadeUtils.TickCount - lastTickCount > limitDelay&& EvadeUtils.TickCount > lastStopEvadeTime)
                 {
                     DodgeSkillShots(); //walking           
                     ContinueLastBlockedCommand();

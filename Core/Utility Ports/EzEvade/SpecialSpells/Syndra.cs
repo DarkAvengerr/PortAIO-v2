@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
@@ -26,11 +23,15 @@ using LeagueSharp.Common;
         {
             if (spellData.spellName.ToLower() == "syndrae")
             {
-                Game.OnUpdate += Game_OnUpdate;
-                Obj_AI_Base.OnPlayAnimation += Obj_AI_Base_OnPlayAnimation;
-                GameObject.OnCreate += GameObject_OnCreate;
-                GameObject.OnDelete += GameObject_OnDelete;
-                SpellDetector.OnProcessSpecialSpell += SpellDetector_OnProcessSpecialSpell;
+                var hero = HeroManager.AllHeroes.FirstOrDefault(x => x.ChampionName == "Syndra");
+                if (hero != null && hero.CheckTeam())
+                {
+                    Game.OnUpdate += Game_OnUpdate;
+                    Obj_AI_Base.OnPlayAnimation += Obj_AI_Base_OnPlayAnimation;
+                    GameObject.OnCreate += GameObject_OnCreate;
+                    GameObject.OnDelete += GameObject_OnDelete;
+                    SpellDetector.OnProcessSpecialSpell += SpellDetector_OnProcessSpecialSpell;
+                }
             }
         }
 
@@ -51,8 +52,7 @@ using LeagueSharp.Common;
         private static void Obj_AI_Base_OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
         {
             var sphere = sender as Obj_AI_Minion;
-            if (sphere != null && sphere.BaseSkinName == _sphereName &&
-                sphere.CheckTeam())
+            if (sphere != null && sphere.BaseSkinName == _sphereName && sphere.CheckTeam())
             {
                 if (args.Animation == "Death")
                 {
@@ -64,8 +64,7 @@ using LeagueSharp.Common;
         private static void GameObject_OnCreate(GameObject sender, EventArgs args)
         {
             var sphere = sender as Obj_AI_Minion;
-            if (sphere != null && sphere.BaseSkinName == _sphereName &&
-                sphere.CheckTeam()) 
+            if (sphere != null && sphere.BaseSkinName == _sphereName && sphere.CheckTeam()) 
             {
                 if (!_spheres.Contains(sphere))
                 {
@@ -78,8 +77,7 @@ using LeagueSharp.Common;
         private static void GameObject_OnDelete(GameObject sender, EventArgs args)
         {
             var sphere = sender as Obj_AI_Minion;
-            if (sphere != null && sphere.BaseSkinName == _sphereName &&
-                sphere.CheckTeam())
+            if (sphere != null && sphere.BaseSkinName == _sphereName && sphere.CheckTeam())
             {
                 _spheres.RemoveAll(i => i.NetworkId == sphere.NetworkId);
             }
@@ -90,7 +88,7 @@ using LeagueSharp.Common;
             if (spellData.spellName.ToLower() == "syndrae")
             {
                 var estart = args.Start;
-                var eend = args.Start + (args.End - args.Start).Normalized() * 700;
+                var eend = args.Start + (args.End - args.Start).Normalized() * 800;
 
                 foreach (var sphere in _spheres.Where(s => s.IsValid && !s.IsDead))
                 {

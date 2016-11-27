@@ -182,6 +182,23 @@ using LeagueSharp.Common;
 
             #endregion
 
+            #region Elise
+            Spells.Add(
+            new EvadeSpellData
+            {
+                charName = "Elise",
+                dangerlevel = 4,
+                name = "Rappel",
+                spellName = "EliseSpiderEInitial",
+                spellDelay = 50,
+                spellKey = SpellSlot.E,
+                evadeType = EvadeType.SpellShield,
+                castType = CastType.Self,
+                isSpecial = true
+            });
+
+            #endregion
+
             #region Evelynn
 
             Spells.Add(
