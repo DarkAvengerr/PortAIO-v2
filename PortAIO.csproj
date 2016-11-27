@@ -6769,6 +6769,11 @@
     <Compile Include="Core\Utility Ports\ShadowTracker\OnDraw.cs" />
     <Compile Include="Core\Utility Ports\ShadowTracker\Program.cs" />
     <Compile Include="Core\Utility Ports\`WIP\TiltSharp\Program.cs" />
+    <Compile Include="Properties\en1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>en.resx</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -6788,6 +6793,10 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
     </Content>
+    <EmbeddedResource Include="Properties\en.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>en1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
