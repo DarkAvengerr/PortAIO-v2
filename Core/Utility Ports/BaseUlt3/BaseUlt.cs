@@ -183,7 +183,7 @@ The idea where the lines come from is that u can calculate how far they are from
             {"Jinx",    new UltSpellDataS { SpellStage = 1, DamageMultiplicator = 1.0f, Width = 140f, Delay = 0600f/1000f, Speed = 1700f, Collision = true}},
             {"Ashe",    new UltSpellDataS { SpellStage = 0, DamageMultiplicator = 1.0f, Width = 130f, Delay = 0250f/1000f, Speed = 1600f, Collision = true}},
             {"Draven",  new UltSpellDataS { SpellStage = 0, DamageMultiplicator = 0.7f, Width = 160f, Delay = 0400f/1000f, Speed = 2000f, Collision = true}},
-            {"Ezreal",  new UltSpellDataS { SpellStage = 0, DamageMultiplicator = 0.7f, Width = 160f, Delay = 1000f/1000f, Speed = 2000f, Collision = false}},
+            {"Ezreal",  new UltSpellDataS { SpellStage = 0, DamageMultiplicator = 1.34f, Width = 160f, Delay = 1000f/1000f, Speed = 2000f, Collision = false}},
             {"Karthus", new UltSpellDataS { SpellStage = 0, DamageMultiplicator = 1.0f, Width = 000f, Delay = 3125f/1000f, Speed = 0000f, Collision = false}}
         };
 
@@ -267,7 +267,9 @@ The idea where the lines come from is that u can calculate how far they are from
                     return false;
             }
             else if (totalUltDamage < targetHealth)
+            {
                 return false;
+            }
 
             return true;
         }
@@ -277,7 +279,9 @@ The idea where the lines come from is that u can calculate how far they are from
             if (enemyInfo.Player.IsHPBarRendered)
                 return enemyInfo.Player.Health;
 
-            float predictedHealth = enemyInfo.Player.Health + enemyInfo.Player.HPRegenRate * ((Utils.TickCount - enemyInfo.LastSeen + additionalTime) / 1000f);
+            var healthPerSec = 0.45f * enemyInfo.Player.Level;
+
+            float predictedHealth = enemyInfo.Player.Health + (healthPerSec * ((Utils.TickCount - enemyInfo.LastSeen + additionalTime) / 1000f));
 
             return predictedHealth > enemyInfo.Player.MaxHealth ? enemyInfo.Player.MaxHealth : predictedHealth;
         }
