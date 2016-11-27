@@ -22,12 +22,26 @@ using LeagueSharp.Common;
             var useW = core.GetMenu.GetMenu.Item("CW").GetValue<bool>();
             var useE = core.GetMenu.GetMenu.Item("CE").GetValue<bool>();
             var useR = core.GetMenu.GetMenu.Item("CR").GetValue<bool>();
-            if (useQ)
-                core.GetSpells.CastQ();
-            if (useW)
-                core.GetSpells.CastW();
-            if (useE)
-                core.GetSpells.CastE(core);
+            var qeRange = core.GetSpells.GetQ.Range + 500;
+            var qeTarget = TargetSelector.GetTarget(qeRange, TargetSelector.DamageType.Magical);
+            if (qeTarget != null)
+            {
+
+                if (!core.GetSpells.castE(qeTarget))
+                {
+                    if (useQ)
+                        core.GetSpells.CastQ();
+                    if (useW)
+                        core.GetSpells.CastW();
+                }
+                if (useE)
+                {
+                    var eTarget = TargetSelector.GetTarget(core.GetSpells.EQ.Range, TargetSelector.DamageType.Magical);
+                    if (eTarget != null && core.GetSpells.GetE.IsReady())
+                        core.GetSpells.castE(eTarget);
+                }
+
+            }
             if (useR)
                 core.GetSpells.CastR(core);
             base.Combo(core);
@@ -88,16 +102,21 @@ using LeagueSharp.Common;
                 {
                     var qeRange = core.GetSpells.GetQ.Range + 500;
                     var qeTarget = TargetSelector.GetTarget(qeRange, TargetSelector.DamageType.Magical);
+                    /*   
+                        if (qeTarget != null)
+                        {
+                            var predpos = Prediction.GetPrediction(qeTarget, 500);
+                            if (predpos.UnitPosition.Distance(core.Hero.Position) < qeRange)    
+                            {
+                                var ballPos = core.Hero.Position.Extend(predpos.UnitPosition, core.GetSpells.GetQ.Range);
+                                core.GetSpells.GetQ.Cast(ballPos);
+                                LeagueSharp.Common.Utility.DelayAction.Add(250 + Game.Ping, () => core.GetSpells.GetE.Cast(ballPos));
+                                AutoQE = true;
+                            }
+                        }*/
                     if (qeTarget != null)
                     {
-                        var predpos = Prediction.GetPrediction(qeTarget, 500);
-                        if (predpos.UnitPosition.Distance(core.Hero.Position) < qeRange)    
-                        {
-                            var ballPos = core.Hero.Position.Extend(predpos.UnitPosition, core.GetSpells.GetQ.Range);
-                            core.GetSpells.GetQ.Cast(ballPos);
-                            LeagueSharp.Common.Utility.DelayAction.Add(250 + Game.Ping, () => core.GetSpells.GetE.Cast(ballPos));
-                            AutoQE = true;
-                        }
+                        core.GetSpells.TryBallE(qeTarget);
                     }
                 }
             }

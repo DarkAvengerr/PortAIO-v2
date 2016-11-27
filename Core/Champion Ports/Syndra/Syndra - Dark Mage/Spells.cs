@@ -17,6 +17,8 @@ using LeagueSharp.Common;
         public Spell GetW { get; }
         public Spell GetE { get; }
         public Spell GetR { get; }
+        public Spell EQ { get; }
+        public Spell Eany { get; }
         public OrbManager GetOrbs { get; }
 
         public Spells()
@@ -26,9 +28,13 @@ using LeagueSharp.Common;
             GetW = new Spell(EloBuddy.SpellSlot.W, 925);
             GetE = new Spell(SpellSlot.E, 700);
             GetR = new Spell(SpellSlot.R, 675);
+            EQ = new Spell(SpellSlot.Q, GetQ.Range + 450);
+            Eany = new Spell(SpellSlot.Q, GetQ.Range + 450);
             GetQ.SetSkillshot(0.6f, 125f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             GetW.SetSkillshot(0.25f, 140f, 1600f, false, SkillshotType.SkillshotCircle);
             GetE.SetSkillshot(0.25f, (float) (45*0.5), 2500f, false, SkillshotType.SkillshotCone);
+            EQ.SetSkillshot(0.6f, 100f, 2500f, false, SkillshotType.SkillshotLine);
+            Eany.SetSkillshot(0.30f, 50f, 2500f, false, SkillshotType.SkillshotLine);
         }
 
         public bool CastQ()
@@ -44,7 +50,77 @@ using LeagueSharp.Common;
             return false;
         }
 
- 
+        private bool EQcastNow;
+
+        public void CastQE(Obj_AI_Base target)
+        {
+
+            if (GetE.IsReady())
+            {
+            //    var prediction = Prediction.GetPrediction(target, 500);
+                var predictionInput = new PredictionInput
+                {
+                    Aoe = false,
+                    Collision = EQ.Collision,
+                    Speed = EQ.Speed,
+                    Delay = EQ.Delay,
+                    Range = EQ.Range,
+                    From = HeroManager.Player.ServerPosition,
+                    Radius = EQ.Width,
+                    Unit = target,
+                    Type = SkillshotType.SkillshotLine
+                };
+          var prediction = Prediction.GetPrediction(predictionInput);
+
+
+                Vector3 castQpos = prediction.CastPosition;
+
+                if (HeroManager.Player.Distance(castQpos) > GetQ.Range)
+                    castQpos = HeroManager.Player.Position.Extend(castQpos, GetE.Range);
+
+
+                if (prediction.Hitchance >= HitChance.VeryHigh)
+                {
+                    EQcastNow = true;
+                    GetQ.Cast(castQpos);
+                }
+            }
+        }
+
+        public void TryBallE(AIHeroClient t)
+        {
+            if(!castE(t))
+            if (GetQ.IsReady())
+            {
+                CastQE(t);
+            }
+
+            
+        }
+
+        public bool castE(AIHeroClient t)
+        {
+            if (!GetE.IsReady()) return false;
+            var ePred = Eany.GetPrediction(t);
+            if (ePred.Hitchance >= HitChance.VeryHigh)
+            {
+                var playerToCP = HeroManager.Player.Distance(ePred.CastPosition);
+                foreach (var pos in GetOrbs.GetOrbs())
+                {
+                    if (HeroManager.Player.Distance(pos) < GetE.Range)
+                    {
+                        var ballFinalPos = HeroManager.Player.ServerPosition.Extend(pos, playerToCP);
+                        if (ballFinalPos.Distance(ePred.CastPosition) < 50)
+                        {
+                            GetE.Cast(pos);
+
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }
 
         public bool CastW()
         {
@@ -52,12 +128,12 @@ using LeagueSharp.Common;
             var wTarget = TargetSelector.GetTarget(GetW.Range, TargetSelector.DamageType.Magical);
             if (wTarget == null) return false;
             if(GetW.IsInRange(wTarget))
-            if (HeroManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState ==1&& GetW.IsReady())
+            if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState ==1&& GetW.IsReady())
             {
                 var orb = GetOrbs.GetOrbToGrab((int) GetW.Range);
                 GetW.Cast(orb);
             }
-            else if (HeroManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 1 && HeroManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 1 && GetW.IsReady())
+            else if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 1 && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 1 && GetW.IsReady())
             {
                 if (GetW.IsInRange(wTarget))
                 {
@@ -77,12 +153,12 @@ using LeagueSharp.Common;
         {
             if (GetW.IsReady())
             {
-                if (HeroManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1 && GetW.IsReady())
+                if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1 && GetW.IsReady())
                 {
                     var orb = GetOrbs.GetOrbToGrab((int) GetW.Range);
                     GetW.Cast(orb);
                 }
-                else if (HeroManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 1 && GetW.IsReady())
+                else if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 1 && GetW.IsReady())
                 {
                     if (GetOrbs.WObject(false) != null)
                     {

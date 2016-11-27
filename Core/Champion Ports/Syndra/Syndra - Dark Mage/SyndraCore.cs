@@ -28,9 +28,7 @@ using LeagueSharp.Common;
         {
             _tittle = "[Syndra]Dark Mage";
             _version = "1.0.0.0";
-            AntiGapcloser.OnEnemyGapcloser += OnGapcloser;
-            Interrupter2.OnInterruptableTarget += OnInterrupt;
-            OnLoad();
+            OnLoad(new EventArgs());
         }
 
         private void OnInterrupt(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
@@ -57,7 +55,7 @@ using LeagueSharp.Common;
             }
         }
 
-        private void OnLoad()
+        private void OnLoad(EventArgs args)
         {
             if (Hero.ChampionName != "Syndra") return;
             Chat.Print("<b><font color =\"#FF33D6\">Dark Mage Loaded!</font></b>");
@@ -66,6 +64,8 @@ using LeagueSharp.Common;
             GetSpells = new Spells();
             drawDamage = new DrawDamage(this);
             _modes = new SyndraModes();
+            AntiGapcloser.OnEnemyGapcloser += OnGapcloser;
+            Interrupter2.OnInterruptableTarget += OnInterrupt;
             Game.OnUpdate += OnUpdate;
             EloBuddy.Drawing.OnDraw += Ondraw;
 
@@ -103,7 +103,7 @@ using LeagueSharp.Common;
             if (GetSpells.GetR.IsReady() && drawR)
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, GetSpells.GetR.Range, System.Drawing.Color.DarkCyan, 2);
             if(drawQE&&GetSpells.GetE.IsReady()&&GetSpells.GetQ.IsReady())
-            Render.Circle.DrawCircle(ObjectManager.Player.Position, GetSpells.GetQ.Range+500, System.Drawing.Color.Red, 2);
+            Render.Circle.DrawCircle(ObjectManager.Player.Position, GetSpells.GetQ.Range+450, System.Drawing.Color.Red, 2);
             var orbs = GetOrbs;
             if (orbs != null)
             {
