@@ -282,7 +282,7 @@ using EloBuddy; namespace ElVi
                         var prediction = Spells[ElVi.Spells.Q].GetPrediction(target);
                         if (prediction.Hitchance >= HitChance.High)
                         {
-                            if (Spells[ElVi.Spells.Q].Range == Spells[ElVi.Spells.Q].ChargedMaxRange)
+                            if (Spells[ElVi.Spells.Q].Range >= Spells[ElVi.Spells.Q].ChargedMaxRange)
                             {
                                 if (Spells[ElVi.Spells.Q].Cast(prediction.CastPosition))
                                 {

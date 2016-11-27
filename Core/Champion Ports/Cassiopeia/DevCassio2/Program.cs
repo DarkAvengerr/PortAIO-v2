@@ -9,7 +9,7 @@ using LeagueSharp.Common;
     using System.Drawing;
     using LeagueSharp;
     using LeagueSharp.Common;
-    using DevCommom2;
+    using DevCommom;
     using SharpDX;
 
     /*
@@ -30,9 +30,9 @@ using LeagueSharp.Common;
      * + R to Save Yourself, when MinHealth and Enemy IsFacing
      * + Auto Spell Level UP
      * + Play Legit Menu :)
-     * done harass e, last hit,jungle no du use e,check gap close. ,flash r,(temp sfx),e dmg fixed,assist r ok ,check mim R enemym,, flee, ks
+     * done harass e, last hit,jungle no du use e,check gap close. ,flash r,(temp sfx),e dmg fixed,assist r ok ,check mim R enemym,, flee, ks,block r with flash r.
      * --------------------------------------------------------------------------------------------
-     *  + block r
+     *  +  aa + e fix, , auto lvl
      *  
      */
 
@@ -104,12 +104,14 @@ using LeagueSharp.Common;
 
         private static void InitializeLevelUpManager()
         {
-            var priority1 = new[] { 0, 2, 2, 1, 2, 3, 2, 0, 2, 0, 3, 0, 0, 1, 2, 3, 1, 1 };
-            var priority2 = new[] { 0, 2, 1, 2, 2, 3, 2, 0, 2, 0, 3, 0, 0, 1, 1, 3, 1, 1 };
+            var priority1 = new[] { 2, 0, 2, 1, 2, 3, 2, 0, 2, 0, 3, 0, 0, 1, 1, 3, 1, 1 };
+            var priority2 = new[] { 0, 2, 2, 1, 2, 3, 2, 0, 2, 0, 3, 0, 0, 1, 2, 3, 1, 1 };
+            var priority3 = new[] { 0, 2, 1, 2, 2, 3, 2, 0, 2, 0, 3, 0, 0, 1, 1, 3, 1, 1 };
 
             levelUpManager = new LevelUpManager();
-            levelUpManager.Add("Q > E > E > W ", priority1);
-            levelUpManager.Add("Q > E > W > E ", priority2);
+            levelUpManager.Add("E > Q > E > W ", priority1);
+            levelUpManager.Add("Q > E > E > W ", priority2);
+            levelUpManager.Add("Q > E > W > E ", priority3);
         }
 
         private static void InitializeMainMenu()
@@ -130,20 +132,23 @@ using LeagueSharp.Common;
             var comboMenu = Config.AddSubMenu(new Menu("Combo", "Combo").SetFontStyle(
                 FontStyle.Bold, SharpDX.Color.Green));
             {
+                comboMenu.AddItem(new MenuItem("ComboMode", "Combo Mode:")
+                    .SetValue(new StringList(new[] { "Dev Combo", "Rylai Combo" })));
                 comboMenu.AddItem(new MenuItem("UseQCombo", "Use Q").SetValue(true));
                 comboMenu.AddItem(new MenuItem("UseWCombo", "Use W").SetValue(true));
                 comboMenu.AddItem(new MenuItem("UseECombo", "Use E").SetValue(true));
                 comboMenu.AddItem(new MenuItem("UseRCombo", "Use R").SetValue(true));
                 comboMenu.AddItem(new MenuItem("UseIgnite", "Use Ignite").SetValue(true));
                 comboMenu.AddItem(new MenuItem("UseAACombo", "Use AA in Combo").SetValue(true));
+                comboMenu.AddItem(new MenuItem("Mode", "Combo Mode Explain").SetValue(true).SetTooltip("Just Here To Explain Rylai Mode - Will Cast E, And Only Use Q Hit Chance Is High AND Target Have Slow Buff"));
                 /*comboMenu.AddItem(new MenuItem("ProbeltR", "Use Problet R").SetValue(false));*/
                 comboMenu
                     .AddItem(new MenuItem("Rflash", "Use Flash R").SetValue(true))
                     .SetValue(new KeyBind("J".ToCharArray()[0], KeyBindType.Press));
-                comboMenu.AddItem(new MenuItem("Rminflash", "Min Enemies F + R").SetValue(new Slider(2, 1, 5)));
+                comboMenu.AddItem(new MenuItem("Rminflash", "Min Enemies F + R").SetValue(new Slider(2, 1, 5)).SetTooltip("Set This Up! It will affect your game play"));
                 comboMenu.AddItem(new MenuItem("UseRSaveYourself", "Use R Save Yourself").SetValue(true));
                 comboMenu
-                    .AddItem(new MenuItem("UseRSaveYourselfMinHealth", "Use R Save MinHealth").SetValue(new Slider(25)));
+                    .AddItem(new MenuItem("UseRSaveYourselfMinHealth", "Use R Save MinHealth").SetValue(new Slider(25)).SetTooltip("Set This Up! It will affect your game play"));
             }
 
             var harassMenu = Config.AddSubMenu(new Menu("Harass", "Harass"));
@@ -193,11 +198,11 @@ using LeagueSharp.Common;
                     .AddItem(
                         new MenuItem("AssistedUltKey", "Assisted Ult Key").SetValue(
                             new KeyBind("R".ToCharArray()[0], KeyBindType.Press)));
-                /*ultMenu.AddItem(new MenuItem("BlockR", "Block Ult When 0 Hit").SetValue(true));*/
+                ultMenu.AddItem(new MenuItem("BlockR", "Block Ult When 0 Hit").SetValue(true));
                 ultMenu.AddItem(new MenuItem("UseUltUnderTower", "Ult Enemy Under Tower").SetValue(true));
                 ultMenu.AddItem(new MenuItem("UltRange", "Ultimate Range").SetValue(new Slider(650, 0, 800)));
-                ultMenu.AddItem(new MenuItem("RMinHit", "Min Enemies Hit").SetValue(new Slider(2, 1, 5)));
-                ultMenu.AddItem(new MenuItem("RMinHitFacing", "Min Enemies Facing").SetValue(new Slider(1, 1, 5)));
+                ultMenu.AddItem(new MenuItem("RMinHit", "Min Enemies Hit").SetValue(new Slider(2, 1, 5))).SetTooltip("Set This Up! It will affect your game play");
+                ultMenu.AddItem(new MenuItem("RMinHitFacing", "Min Enemies Facing").SetValue(new Slider(1, 1, 5)).SetTooltip("Set This Up! It will affect your game play"));
             }
 
             var gapcloserMenu = Config.AddSubMenu(new Menu("Gapcloser", "Gapcloser"));
@@ -274,6 +279,9 @@ using LeagueSharp.Common;
                     .AddItem(
                         new MenuItem("RRange", "R Range").SetValue(new Circle(false,
                             System.Drawing.Color.FromArgb(255, 255, 255, 255))));
+                drawingMenu
+                    .AddItem(
+                        new MenuItem("ComboStatus", "Draw Combo Status").SetValue(true));
                 drawingMenu.AddItem(new MenuItem("EDamage", "Show E Damage on HPBar").SetValue(true));
             }
 
@@ -321,6 +329,7 @@ using LeagueSharp.Common;
             Game.OnWndProc += Game_OnWndProc;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
+            Spellbook.OnCastSpell += Spellbook_OnCastSpell;
             Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
             Drawing.OnDraw += OnDraw;
         }
@@ -361,7 +370,6 @@ using LeagueSharp.Common;
 
             UseUltUnderTower();
             levelUpManager.Update();
-
             switch (Orbwalker.ActiveMode)
             {
                 case Orbwalking.OrbwalkingMode.Combo:
@@ -386,7 +394,7 @@ using LeagueSharp.Common;
         private static void FlashCombo()
         {
             if (HeroManager.Enemies.Count(x => x.IsValidTarget(R.Range + R.Width + 425f)) > 0 && R.IsReady() &&
-                ObjectManager.Player.Spellbook.CanUseSpell(Player.GetSpellSlot("SummonerFlash")) == SpellState.Ready)
+            ObjectManager.Player.Spellbook.CanUseSpell(Player.GetSpellSlot("SummonerFlash")) == SpellState.Ready)
             {
                 foreach (
                     var target in
@@ -397,14 +405,14 @@ using LeagueSharp.Common;
                 {
                     var flashPos = Player.Position.Extend(target.Position, 425f);
                     var rHit = GetRHitCount(flashPos);
-                    
+
                     if (rHit.Item1.Count >= Config.Item("Rminflash").GetValue<Slider>().Value)
                     {
                         var castPos = Player.Position.Extend(rHit.Item2, -(Player.Position.Distance(rHit.Item2) * 2));
 
                         if (R.Cast(castPos))
                         {
-                            LeagueSharp.Common.Utility.DelayAction.Add(300 + Game.Ping/2,
+                            LeagueSharp.Common.Utility.DelayAction.Add(300 + Game.Ping / 2,
                                 () =>
                                     ObjectManager.Player.Spellbook.CastSpell(Player.GetSpellSlot("SummonerFlash"),
                                         flashPos));
@@ -519,104 +527,193 @@ using LeagueSharp.Common;
             var UseRSaveYourself = Config.Item("UseRSaveYourself").GetValue<bool>();
             var UseRSaveYourselfMinHealth = Config.Item("UseRSaveYourselfMinHealth").GetValue<Slider>().Value;
 
-            if (eTarget.IsValidTarget(R.Range) && R.IsReady() && UseRSaveYourself)
+            switch (Config.Item("ComboMode").GetValue<StringList>().SelectedIndex)
             {
-                if (Player.GetHealthPerc() < UseRSaveYourselfMinHealth && eTarget.IsFacing(Player) && !eTarget.IsInvulnerable)
-                {
-                    R.Cast(eTarget, true);
-                    if (dtLastSaveYourself + 3000 < Environment.TickCount)
+                case 0:
+                    //Dev Combo
+                    if (eTarget.IsValidTarget(R.Range) && R.IsReady() && UseRSaveYourself)
                     {
-                        Chat.Print("Save Yourself!");
-                        dtLastSaveYourself = Environment.TickCount;
-                    }
-                }
-            }
-
-            if (eTarget.IsValidTarget(R.Range) && R.IsReady() && useR)
-            {
-                var castPred = R.GetPrediction(eTarget, true, R.Range);
-                var enemiesHit = DevHelper.GetEnemyList().Where(x => R.WillHit(x, castPred.CastPosition) && !x.IsInvulnerable).ToList();
-                var enemiesFacing = enemiesHit.Where(x => x.IsFacing(Player)).ToList();
-
-                //if (mustDebug)
-                //    Chat.Print("Hit:{0} Facing:{1}", enemiesHit.Count(), enemiesFacing.Count());
-
-                if (enemiesHit.Count >= RMinHit && enemiesFacing.Count >= RMinHitFacing)
-                {
-                    R.Cast(castPred.CastPosition);
-                }
-            }
-
-            if (E.IsReady() && useE)
-            {
-                var eTargetCastE = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-
-                if (eTargetCastE != null && eTargetCastE.HasBuffOfType(BuffType.Poison))
-                {
-                    var query =
-                        DevHelper.GetEnemyList()
-                            .Where(x => x.IsValidTarget(E.Range) && x.HasBuffOfType(BuffType.Poison));
-
-                    if (query.Any())
-                    {
-                        eTargetCastE = query.First();
-                    }
-                }
-                else if (eTargetCastE != null && eTargetCastE.IsValidTarget(E.Range) && !eTargetCastE.IsZombie)
-                {
-                    CastE(eTarget);
-                }
-
-                if (eTargetCastE != null)
-                {
-                    var buffEndTime = GetPoisonBuffEndTime(eTargetCastE);
-
-                    if (buffEndTime > Game.Time + E.Delay ||
-                        Player.GetSpellDamage(eTargetCastE, SpellSlot.E) > eTargetCastE.Health * 0.9)
-                    {
-                        CastE(eTarget);
-
-                        if (Player.GetSpellDamage(eTargetCastE, SpellSlot.E) > eTargetCastE.Health * 0.9)
+                        if (Player.GetHealthPerc() < UseRSaveYourselfMinHealth && eTarget.IsFacing(Player) && !eTarget.IsInvulnerable)
                         {
-                            return;
+                            R.Cast(eTarget, true);
+                            if (dtLastSaveYourself + 3000 < Environment.TickCount)
+                            {
+                                Chat.Print("Save Yourself!");
+                                dtLastSaveYourself = Environment.TickCount;
+                            }
                         }
                     }
-                }
+
+                    if (eTarget.IsValidTarget(R.Range) && R.IsReady() && useR)
+                    {
+                        var castPred = R.GetPrediction(eTarget, true, R.Range);
+                        var enemiesHit = DevHelper.GetEnemyList().Where(x => R.WillHit(x, castPred.CastPosition) && !x.IsInvulnerable).ToList();
+                        var enemiesFacing = enemiesHit.Where(x => x.IsFacing(Player)).ToList();
+
+                        //if (mustDebug)
+                        //    Chat.Print("Hit:{0} Facing:{1}", enemiesHit.Count(), enemiesFacing.Count());
+
+                        if (enemiesHit.Count >= RMinHit && enemiesFacing.Count >= RMinHitFacing)
+                        {
+                            R.Cast(castPred.CastPosition);
+                        }
+                    }
+
+                    if (E.IsReady() && useE)
+                    {
+                        var eTargetCastE = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
+
+                        if (eTargetCastE != null && eTargetCastE.HasBuffOfType(BuffType.Poison))
+                        {
+                            var query =
+                                DevHelper.GetEnemyList()
+                                    .Where(x => x.IsValidTarget(E.Range) && x.HasBuffOfType(BuffType.Poison));
+
+                            if (query.Any())
+                            {
+                                eTargetCastE = query.First();
+                            }
+                        }
+                        else if (eTargetCastE != null && eTargetCastE.IsValidTarget(E.Range) && !eTargetCastE.IsZombie)
+                        {
+                            CastE(eTarget);
+                        }
+
+                        if (eTargetCastE != null)
+                        {
+                            var buffEndTime = GetPoisonBuffEndTime(eTargetCastE);
+
+                            if (buffEndTime > Game.Time + E.Delay ||
+                                Player.GetSpellDamage(eTargetCastE, SpellSlot.E) > eTargetCastE.Health * 0.9)
+                            {
+                                CastE(eTarget);
+
+                                if (Player.GetSpellDamage(eTargetCastE, SpellSlot.E) > eTargetCastE.Health * 0.9)
+                                {
+                                    return;
+                                }
+                            }
+                        }
+                    }
+
+                    if (eTarget.IsValidTarget(Q.Range) && Q.IsReady() && useQ)
+                    {
+                        if (Q.Cast(eTarget, true) == Spell.CastStates.SuccessfullyCasted)
+                        {
+                            dtLastQCast = Environment.TickCount;
+                        }
+                    }
+
+                    if (W.IsReady() && useW && !eTarget.IsValidTarget(275))
+                    {
+                        W.CastIfHitchanceEquals(eTarget, HitChance.High);
+                    }
+
+                    if (useW)
+                    {
+                        useW = !eTarget.HasBuffOfType(BuffType.Poison) ||
+                               (!eTarget.IsValidTarget(Q.Range) && eTarget.IsValidTarget(W.Range + W.Width / 2));
+                    }
+
+                    if (W.IsReady() && useW && Environment.TickCount > dtLastQCast + Q.Delay * 1000)
+                    {
+                        W.CastIfHitchanceEquals(eTarget, eTarget.IsMoving ? HitChance.High : HitChance.Medium);
+                    }
+
+                    var igniteDamage = summonerSpellManager.GetIgniteDamage(eTarget) +
+                                       Player.GetSpellDamage(eTarget, SpellSlot.E) * 2;
+
+                    if (eTarget.Health < igniteDamage && E.Level > 0 && eTarget.IsValidTarget(600) &&
+                        eTarget.HasBuffOfType(BuffType.Poison))
+                    {
+                        summonerSpellManager.CastIgnite(eTarget);
+                    }
+                    break;
+
+                case 1:
+                    if (E.IsReady() && useE)
+                    {
+                        var eTargetCastE = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
+
+                        if (eTargetCastE != null && eTargetCastE.HasBuffOfType(BuffType.Poison))
+                        {
+                            var query =
+                                DevHelper.GetEnemyList()
+                                    .Where(x => x.IsValidTarget(E.Range) && x.HasBuffOfType(BuffType.Poison));
+
+                            if (query.Any())
+                            {
+                                eTargetCastE = query.First();
+                            }
+                        }
+                        else if (eTargetCastE != null && eTargetCastE.IsValidTarget(E.Range) && !eTargetCastE.IsZombie)
+                        {
+                            CastE(eTarget);
+                        }
+
+                        if (eTargetCastE != null)
+                        {
+                            var buffEndTime = GetPoisonBuffEndTime(eTargetCastE);
+
+                            if (buffEndTime > Game.Time + E.Delay ||
+                                Player.GetSpellDamage(eTargetCastE, SpellSlot.E) > eTargetCastE.Health * 0.9)
+                            {
+                                CastE(eTarget);
+
+                                if (Player.GetSpellDamage(eTargetCastE, SpellSlot.E) > eTargetCastE.Health * 0.9)
+                                {
+                                    return;
+                                }
+                            }
+                        }
+                    }
+
+                    if (W.IsReady() && useW && !eTarget.IsValidTarget(275))
+                    {
+                        W.CastIfHitchanceEquals(eTarget, HitChance.High);
+                    }
+
+                    if (useW)
+                    {
+                        useW = !eTarget.HasBuffOfType(BuffType.Poison) ||
+                               (!eTarget.IsValidTarget(Q.Range) && eTarget.IsValidTarget(W.Range + W.Width / 2));
+                    }
+
+                    if (W.IsReady() && useW && Environment.TickCount > dtLastQCast + Q.Delay * 1000)
+                    {
+                        W.CastIfHitchanceEquals(eTarget, eTarget.IsMoving ? HitChance.High : HitChance.Medium);
+                    }
+
+                    if (eTarget.IsValidTarget(R.Range) && R.IsReady() && useR)
+                    {
+                        var castPred = R.GetPrediction(eTarget, true, R.Range);
+                        var enemiesHit = DevHelper.GetEnemyList().Where(x => R.WillHit(x, castPred.CastPosition) && !x.IsInvulnerable).ToList();
+                        var enemiesFacing = enemiesHit.Where(x => x.IsFacing(Player)).ToList();
+
+                        //if (mustDebug)
+                        //    Chat.Print("Hit:{0} Facing:{1}", enemiesHit.Count(), enemiesFacing.Count());
+
+                        if (enemiesHit.Count >= RMinHit && enemiesFacing.Count >= RMinHitFacing)
+                        {
+                            R.Cast(castPred.CastPosition);
+                        }
+                    }
+
+                    var castPredQ = Q.GetPrediction(eTarget, true, Q.Range);
+                    if (eTarget.IsValidTarget(Q.Range) && Q.IsReady() && useQ)
+                    {
+                        if (!eTarget.HasBuffOfType(BuffType.Slow))
+                            break;
+                        if (Q.Cast(eTarget, true) == Spell.CastStates.SuccessfullyCasted && eTarget.MoveSpeed > Player.MoveSpeed || eTarget.IsDashing())
+                            if(Q.CastIfHitchanceEquals(eTarget, HitChance.High))
+                        {
+                            R.Cast(castPredQ.CastPosition);
+                            dtLastQCast = Environment.TickCount; //test this, fix block r, fix minion last hit and aa
+                        }
+                    }
+                    break;
+
             }
-
-            if (eTarget.IsValidTarget(Q.Range) && Q.IsReady() && useQ)
-            {
-                if (Q.Cast(eTarget, true) == Spell.CastStates.SuccessfullyCasted)
-                {
-                    dtLastQCast = Environment.TickCount;
-                }
-            }
-
-            if (W.IsReady() && useW && !eTarget.IsValidTarget(275))
-            {
-                W.CastIfHitchanceEquals(eTarget, HitChance.High);
-            }
-
-            if (useW)
-            {
-                useW = !eTarget.HasBuffOfType(BuffType.Poison) ||
-                       (!eTarget.IsValidTarget(Q.Range) && eTarget.IsValidTarget(W.Range + W.Width / 2));
-            }
-
-            if (W.IsReady() && useW && Environment.TickCount > dtLastQCast + Q.Delay * 1000)
-            {
-                W.CastIfHitchanceEquals(eTarget, eTarget.IsMoving ? HitChance.High : HitChance.Medium);
-            }
-
-            var igniteDamage = summonerSpellManager.GetIgniteDamage(eTarget) +
-                               Player.GetSpellDamage(eTarget, SpellSlot.E) * 2;
-
-            if (eTarget.Health < igniteDamage && E.Level > 0 && eTarget.IsValidTarget(600) &&
-                eTarget.HasBuffOfType(BuffType.Poison))
-            {
-                summonerSpellManager.CastIgnite(eTarget);
-            }
-
         }
 
         private static void BurstCombo()
@@ -965,6 +1062,7 @@ using LeagueSharp.Common;
                 args.Process = false;
                 CastAssistedUlt();
             }
+
         }
 
         private static void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
@@ -993,6 +1091,24 @@ using LeagueSharp.Common;
             }
         }
 
+        private static void Spellbook_OnCastSpell(Spellbook sender, SpellbookCastSpellEventArgs args)
+        {
+            /*var enemy = Orbwalker.GetTarget() as AIHeroClient;
+            var enemyr = HeroManager.Enemies.Where(x => R.WillHit(enemy, args.Target.Position));
+
+            var query = DevHelper.GetEnemyList().Where(x => !R.WillHit(enemy, args.StartPosition));*/
+            var menuItem = Config.Item("Rflash").GetValue<KeyBind>();
+
+                if (Config.Item("BlockR").GetValue<bool>() && !menuItem.Active)
+            {
+                if (HeroManager.Enemies.All(x => !x.IsValidTarget(R.Range) || !R.WillHit(x, args.StartPosition)) && args.Slot == SpellSlot.R)
+                {
+                    args.Process = false;
+                    Chat.Print(string.Format("Ult Blocked"));
+                }
+            }
+        }
+
         private static void Orbwalking_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
@@ -1013,6 +1129,9 @@ using LeagueSharp.Common;
 
         private static void OnDraw(EventArgs args)
         {
+            if (Player.IsDead)
+                return;
+
             foreach (var spell in SpellList)
             {
                 var menuItem = Config.Item(spell.Slot + "Range").GetValue<Circle>();
@@ -1022,6 +1141,30 @@ using LeagueSharp.Common;
                     Render.Circle.DrawCircle(ObjectManager.Player.Position, spell.Range,
                         spell.IsReady() ? System.Drawing.Color.Green : System.Drawing.Color.Red);
                 }
+            }
+
+            if (!Config.Item("ComboStatus").GetValue<bool>())
+            { 
+                return;
+            }
+
+            var Pos = Drawing.WorldToScreen(Player.Position);
+            switch (Config.Item("ComboMode").GetValue<StringList>().SelectedIndex)
+            {
+                case 0:
+                    Drawing.DrawText(
+                        Pos.X - 25f,
+                        Pos.Y + 25f,
+                        System.Drawing.Color.LightGreen,
+                        "Dev Combo");
+                    break;
+                case 1:
+                    Drawing.DrawText(
+                        Pos.X - 25f,
+                        Pos.Y + 25f,
+                        System.Drawing.Color.GreenYellow,
+                        "Rylai Combo");
+                    break;
             }
 
             //if (mustDebugPredict)
@@ -1038,6 +1181,40 @@ using LeagueSharp.Common;
         //    var Qpredict = Q.GetPrediction(eTarget, true);
         //    Render.Circle.DrawCircle(Qpredict.CastPosition, Q.Width, Qpredict.Hitchance >= HitChance.High ? System.Drawing.Color.Green : System.Drawing.Color.Red);
         //}
+
+        /*private static List<Vector3> PointsAroundTheTarget(Vector3 pos, float dist, float prec = 15, float prec2 = 6)//Soreus
+        {
+            if (!pos.IsValid())
+            {
+                return new List<Vector3>();
+            }
+            List<Vector3> list = new List<Vector3>();
+            if (dist > 205)
+            {
+                prec = 30;
+                prec2 = 8;
+            }
+            if (dist > 805)
+            {
+                dist = (float)(dist * 1.5);
+                prec = 45;
+                prec2 = 10;
+            }
+            var angle = 360 / prec * Math.PI / 180.0f;
+            var step = dist * 2 / prec2;
+            for (int i = 0; i < prec; i++)
+            {
+                for (int j = 0; j < 6; j++)
+                {
+                    list.Add(
+                        new Vector3(
+                            pos.X + (float)(Math.Cos(angle * i) * (j * step)),
+                            pos.Y + (float)(Math.Sin(angle * i) * (j * step)) - 90, pos.Z));
+                }
+            }
+
+            return list;
+        }*/
 
         private static Tuple<List<AIHeroClient>, Vector3> GetRHitCount(Vector3 fromPos = default(Vector3))//SFX Challenger
         {
