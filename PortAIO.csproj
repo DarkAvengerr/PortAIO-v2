@@ -1400,6 +1400,11 @@
     <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\Program.cs" />
     <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\Spells.cs" />
     <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\SyndraCore.cs" />
+    <Compile Include="Core\Champion Ports\Taliyah\Hinata%27s Taliyah\Champions\Taliyah.cs" />
+    <Compile Include="Core\Champion Ports\Taliyah\Hinata%27s Taliyah\Extensions\Menus.cs" />
+    <Compile Include="Core\Champion Ports\Taliyah\Hinata%27s Taliyah\Extensions\Spells.cs" />
+    <Compile Include="Core\Champion Ports\Taliyah\Hinata%27s Taliyah\Extensions\Utilities.cs" />
+    <Compile Include="Core\Champion Ports\Taliyah\Hinata%27s Taliyah\Program.cs" />
     <Compile Include="Core\Champion Ports\Talon\Flowers%27 Talon\Common\Common.cs" />
     <Compile Include="Core\Champion Ports\Talon\Flowers%27 Talon\Common\HpBarDraw.cs" />
     <Compile Include="Core\Champion Ports\Talon\Flowers%27 Talon\Common\xQxTargetSelector.cs" />

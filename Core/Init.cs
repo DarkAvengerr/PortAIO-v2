@@ -3043,6 +3043,9 @@ namespace PortAIO
                         case 2: // Stoneweaver
                             Taliyah.Program.Main();
                             break;
+                        case 3: // Hinata's Taliyah
+                            Hinata_s_Taliyah.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Talon:
