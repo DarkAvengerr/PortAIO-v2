@@ -109,7 +109,7 @@ using LeagueSharp.Common;
                     var t = TargetSelector.GetTarget(R.Range + 150, TargetSelector.DamageType.Magical);
                     if (t.IsValidTarget() && OktwCommon.ValidUlt(t))
                     {
-                        Player.Spellbook.UpdateChargeableSpell(SpellSlot.R, R.GetPrediction(t, true).CastPosition, false, false);
+                        ObjectManager.Player.Spellbook.UpdateChargeableSpell(SpellSlot.R, R.GetPrediction(t, true).CastPosition, false, false);
                     }
                 }
                 OktwCommon.blockMove = true;

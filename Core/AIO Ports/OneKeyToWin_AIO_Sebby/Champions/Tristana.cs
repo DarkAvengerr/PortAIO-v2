@@ -153,7 +153,7 @@ using LeagueSharp.Common;
 
             if ((Program.LagFree(4) || Program.LagFree(2)) && R.IsReady() )
                 LogicR();
-            if (Program.LagFree(3) && W.IsReady() && !Player.Spellbook.IsAutoAttacking)
+            if (Program.LagFree(3) && W.IsReady() && !ObjectManager.Player.Spellbook.IsAutoAttacking)
                 LogicW();
         }
 

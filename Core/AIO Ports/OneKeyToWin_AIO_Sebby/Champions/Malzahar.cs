@@ -44,16 +44,20 @@ using LeagueSharp.Common;
             Config.SubMenu(Player.ChampionName).SubMenu("E Config").AddItem(new MenuItem("harassE", "Harass E", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("E Config").AddItem(new MenuItem("harrasEminion", "Try harras E on minion", true).SetValue(true));
 
+            
             Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("autoR", "Auto R", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("useR", "Fast combo key", true).SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press))); //32 == space
+            Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("Rturrent", "Don't R under turret", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("smartR", "Semi-manual cast R key", true).SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press)));
 
             foreach (var enemy in HeroManager.Enemies)
                 Config.SubMenu(Player.ChampionName).SubMenu("R Config").SubMenu("Gapcloser").AddItem(new MenuItem("gapcloser" + enemy.ChampionName, enemy.ChampionName).SetValue(false));
 
-            foreach (var enemy in HeroManager.Enemies)
-                Config.SubMenu(Player.ChampionName).SubMenu("R Config").SubMenu("Fast combo key use on:").AddItem(new MenuItem("Ron" + enemy.ChampionName, enemy.ChampionName).SetValue(true));
 
-            Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("Rturrent", "Don't R under turret", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Misc").AddItem(new MenuItem("useR", "Fast combo key", true).SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press))); //32 == space
+            foreach (var enemy in HeroManager.Enemies)
+                Config.SubMenu(Player.ChampionName).SubMenu("Misc").SubMenu("Fast combo key use on:").AddItem(new MenuItem("Ron" + enemy.ChampionName, enemy.ChampionName).SetValue(true));
+
+           
 
             Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("farmQ", "Lane clear Q", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("farmW", "Lane clear W", true).SetValue(true));
@@ -72,7 +76,8 @@ using LeagueSharp.Common;
 
         private void Spellbook_OnCastSpell(Spellbook sender, SpellbookCastSpellEventArgs args)
         {
-            if (args.Slot == SpellSlot.R)
+
+            if (args.Slot == SpellSlot.R && !Config.Item("smartR", true).GetValue<KeyBind>().Active)
             {
                 var t = args.Target as AIHeroClient;
                 if (t != null && t.Health - OktwCommon.GetIncomingDamage(t) > R.GetDamage(t) * 2.5)
@@ -152,13 +157,27 @@ using LeagueSharp.Common;
                 SebbyLib.Orbwalking.Move = true;
             }
 
+            
+
             if (R.IsReady() && Config.Item("useR", true).GetValue<KeyBind>().Active)
             {
-                var t = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
-                if (t.IsValidTarget(R.Range) && Config.Item("Ron" + t.ChampionName).GetValue<bool>() && OktwCommon.ValidUlt(t))
+                if (Config.Item("useR", true).GetValue<KeyBind>().Active)
                 {
-                    R.CastOnUnit(t);
-                    return;
+                    var t = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
+                    if (t.IsValidTarget(R.Range) && Config.Item("Ron" + t.ChampionName).GetValue<bool>() && OktwCommon.ValidUlt(t))
+                    {
+                        R.CastOnUnit(t);
+                        return;
+                    }
+                }
+                else if (Config.Item("smartR", true).GetValue<KeyBind>().Active)
+                {
+                    var t = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
+                    if (t.IsValidTarget(R.Range) && OktwCommon.ValidUlt(t))
+                    {
+                        R.CastOnUnit(t);
+                        return;
+                    }
                 }
             }
 

@@ -227,7 +227,7 @@ using LeagueSharp.Common;
 
                 if (Program.LagFree(3) && SebbyLib.Orbwalking.CanMove(50) && Player.Mana > RMANA + QMANA + WMANA && Config.Item("bushR2", true).GetValue<bool>() && Utils.TickCount - R.LastCastAttemptT > 2000)
                 {
-                    if (Player.Spellbook.GetSpell(SpellSlot.R).Ammo > 1 + Player.CountEnemiesInRange(1200) && Player.CountEnemiesInRange(800) == 0)
+                    if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Ammo > 1 + Player.CountEnemiesInRange(1200) && Player.CountEnemiesInRange(800) == 0)
                     {
                         var points = OktwCommon.CirclePoints(12, R.Range, Player.Position);
                         points.Add(Player.Position);

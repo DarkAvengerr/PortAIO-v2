@@ -132,12 +132,12 @@ using LeagueSharp.Common;
             if (Program.LagFree(2) && W.IsReady() && Config.Item("autoW", true).GetValue<bool>())
                 LogicW();
 
-            if (!Player.Spellbook.IsAutoAttacking && Q.IsReady())
+            if (!ObjectManager.Player.Spellbook.IsAutoAttacking && Q.IsReady())
             {
                 LogicQ();
             }
 
-            if (Program.LagFree(4) && !Player.Spellbook.IsAutoAttacking && R.IsReady())
+            if (Program.LagFree(4) && !ObjectManager.Player.Spellbook.IsAutoAttacking && R.IsReady())
                 LogicR();
         }
 

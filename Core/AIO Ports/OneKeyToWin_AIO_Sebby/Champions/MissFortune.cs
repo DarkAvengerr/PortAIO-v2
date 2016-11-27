@@ -148,7 +148,7 @@ using LeagueSharp.Common;
                 if (mobs.Count > 0)
                 {
                     var mob = mobs[0];
-                    if (Q.IsReady() && Config.Item("jungleQ", true).GetValue<bool>() && !SebbyLib.Orbwalking.CanAttack() && !Player.Spellbook.IsAutoAttacking)
+                    if (Q.IsReady() && Config.Item("jungleQ", true).GetValue<bool>() && !SebbyLib.Orbwalking.CanAttack() && !ObjectManager.Player.Spellbook.IsAutoAttacking)
                     {
                         Q.Cast(mob);
                         return;
@@ -241,13 +241,13 @@ using LeagueSharp.Common;
                 Jungle();
             }
 
-            if (Program.LagFree(2) && !Player.Spellbook.IsAutoAttacking && Q.IsReady() && Config.Item("autoQ", true).GetValue<bool>())
+            if (Program.LagFree(2) && !ObjectManager.Player.Spellbook.IsAutoAttacking && Q.IsReady() && Config.Item("autoQ", true).GetValue<bool>())
                 LogicQ();
 
-            if (Program.LagFree(3) && !Player.Spellbook.IsAutoAttacking && E.IsReady() && Config.Item("autoE", true).GetValue<bool>())
+            if (Program.LagFree(3) && !ObjectManager.Player.Spellbook.IsAutoAttacking && E.IsReady() && Config.Item("autoE", true).GetValue<bool>())
                 LogicE();
 
-            if (Program.LagFree(4) && !Player.Spellbook.IsAutoAttacking && R.IsReady() && Config.Item("autoR", true).GetValue<bool>())
+            if (Program.LagFree(4) && !ObjectManager.Player.Spellbook.IsAutoAttacking && R.IsReady() && Config.Item("autoR", true).GetValue<bool>())
                 LogicR();
             
         }

@@ -69,11 +69,11 @@ using LeagueSharp.Common;
                 SetMana();
                 farm();
             }
-            if (Program.LagFree(1) && Q.IsReady() && !Player.Spellbook.IsAutoAttacking && Sheen())
+            if (Program.LagFree(1) && Q.IsReady() && !ObjectManager.Player.Spellbook.IsAutoAttacking && Sheen())
                 LogicQ();
             if (Program.LagFree(2) && Program.Combo && W.IsReady())
                 LogicW();
-            if (Program.LagFree(4) && R.IsReady() && !Player.Spellbook.IsAutoAttacking && Sheen() && !Player.Spellbook.IsAutoAttacking)
+            if (Program.LagFree(4) && R.IsReady() && !ObjectManager.Player.Spellbook.IsAutoAttacking && Sheen() && !ObjectManager.Player.Spellbook.IsAutoAttacking)
                 LogicR();
         }
 
@@ -95,7 +95,7 @@ using LeagueSharp.Common;
                     CastR(R, t);
                 else if (t.IsValidTarget(Q.Range) && qDmg + rDmg > t.Health)
                     CastR(R, t);
-                if (Player.Spellbook.GetSpell(SpellSlot.R).Ammo > 1)
+                if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Ammo > 1)
                 {
                     foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(R.Range) && enemy.CountEnemiesInRange(rSplash) > 1))
                         t = enemy;
@@ -104,7 +104,7 @@ using LeagueSharp.Common;
                     {
                         CastR(R, t);
                     }
-                    else if (Program.Harass && Player.Mana > RMANA + EMANA + QMANA + WMANA && Player.Spellbook.GetSpell(SpellSlot.R).Ammo >= Config.Item("Rammo", true).GetValue<Slider>().Value && OktwCommon.CanHarras())
+                    else if (Program.Harass && Player.Mana > RMANA + EMANA + QMANA + WMANA && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Ammo >= Config.Item("Rammo", true).GetValue<Slider>().Value && OktwCommon.CanHarras())
                     {
                         foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(R.Range) && Config.Item("Harass" + enemy.ChampionName).GetValue<bool>()))
                             CastR(R, enemy);
@@ -187,7 +187,7 @@ using LeagueSharp.Common;
         }
         public void farm()
         {
-            if (Program.LaneClear && !Player.Spellbook.IsAutoAttacking && Sheen())
+            if (Program.LaneClear && !ObjectManager.Player.Spellbook.IsAutoAttacking && Sheen())
             {
                 var mobs = Cache.GetMinions(Player.ServerPosition, Q.Range, MinionTeam.Neutral);
                 if (mobs.Count > 0 && Player.Mana > RMANA + WMANA + EMANA + QMANA)
@@ -210,7 +210,7 @@ using LeagueSharp.Common;
                 {
                     var minions = Cache.GetMinions(Player.ServerPosition, Q.Range);
 
-                    if (R.IsReady() && Config.Item("farmR", true).GetValue<bool>() && Player.Spellbook.GetSpell(SpellSlot.R).Ammo >= Config.Item("RammoLC", true).GetValue<Slider>().Value)
+                    if (R.IsReady() && Config.Item("farmR", true).GetValue<bool>() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Ammo >= Config.Item("RammoLC", true).GetValue<Slider>().Value)
                     {
                         var rfarm = R.GetCircularFarmLocation(minions, 100);
                         if (rfarm.MinionsHit >= FarmMinions)

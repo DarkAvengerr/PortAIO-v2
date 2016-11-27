@@ -176,7 +176,7 @@ using LeagueSharp.Common;
             if (Program.LagFree(2) && Q.IsReady() && Config.Item("autoQ", true).GetValue<bool>())
                 LogicQ();
 
-            if (Program.LagFree(3) && W.IsReady() && !Player.Spellbook.IsAutoAttacking && Config.Item("autoW", true).GetValue<bool>())
+            if (Program.LagFree(3) && W.IsReady() && !ObjectManager.Player.Spellbook.IsAutoAttacking && Config.Item("autoW", true).GetValue<bool>())
                 LogicW();
         }
 
@@ -296,7 +296,7 @@ using LeagueSharp.Common;
             var t = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
             if (t.IsValidTarget() && Config.Item("EmodeCombo", true).GetValue<StringList>().SelectedIndex != 2)
             {
-                if (Program.Combo && !Player.Spellbook.IsAutoAttacking)
+                if (Program.Combo && !ObjectManager.Player.Spellbook.IsAutoAttacking)
                 {
                     if (Config.Item("EmodeCombo", true).GetValue<StringList>().SelectedIndex == 1)
                     {
@@ -358,7 +358,7 @@ using LeagueSharp.Common;
                 }
 
             }
-            else if(!SebbyLib.Orbwalking.CanAttack() && !Player.Spellbook.IsAutoAttacking)
+            else if(!SebbyLib.Orbwalking.CanAttack() && !ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
                 var t = torb as AIHeroClient;
                 if (t.Health < GetQdmg(t) + GetWdmg(t))

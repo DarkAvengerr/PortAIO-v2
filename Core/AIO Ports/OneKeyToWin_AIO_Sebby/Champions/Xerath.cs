@@ -30,7 +30,7 @@ using LeagueSharp.Common;
             E.SetSkillshot(0.25f, 60f, 1400f, true, SkillshotType.SkillshotLine);
             R.SetSkillshot(0.7f, 130f, float.MaxValue, false, SkillshotType.SkillshotCircle);
 
-            Q.SetCharged( 750, 1550, 1.5f);
+            Q.SetCharged(750, 1550, 1.5f);
 
             Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("noti", "Show notification & line", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("onlyRdy", "Draw only ready spells", true).SetValue(true));
@@ -198,9 +198,9 @@ using LeagueSharp.Common;
 
             if (E.IsReady() && Config.Item("autoE", true).GetValue<bool>())
                 LogicE();
-            if (Program.LagFree(2) && W.IsReady() && !Player.Spellbook.IsAutoAttacking && Config.Item("autoW", true).GetValue<bool>())
+            if (Program.LagFree(2) && W.IsReady() && !ObjectManager.Player.Spellbook.IsAutoAttacking && Config.Item("autoW", true).GetValue<bool>())
                 LogicW();
-            if (Program.LagFree(4) && Q.IsReady() && !Player.Spellbook.IsAutoAttacking && Config.Item("autoQ", true).GetValue<bool>())
+            if (Program.LagFree(4) && Q.IsReady() && !ObjectManager.Player.Spellbook.IsAutoAttacking && Config.Item("autoQ", true).GetValue<bool>())
                 LogicQ();
         }
 

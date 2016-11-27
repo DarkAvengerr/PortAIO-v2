@@ -86,7 +86,7 @@ using LeagueSharp.Common;
 
             if (Program.LagFree(1) && W.IsReady())
                 LogicW();
-            if (Program.LagFree(2) && Q.IsReady() && SebbyLib.Orbwalking.CanMove(50) && !Player.Spellbook.IsAutoAttacking)
+            if (Program.LagFree(2) && Q.IsReady() && SebbyLib.Orbwalking.CanMove(50) && !ObjectManager.Player.Spellbook.IsAutoAttacking)
                 LogicQ();
             if (Program.LagFree(3) && E.IsReady())
                 LogicE();
@@ -96,7 +96,7 @@ using LeagueSharp.Common;
 
         private void LogicW()
         {
-            if (!Player.Spellbook.IsAutoAttacking && Config.Item("farmW", true).GetValue<bool>() && Program.Farm)
+            if (!ObjectManager.Player.Spellbook.IsAutoAttacking && Config.Item("farmW", true).GetValue<bool>() && Program.Farm)
             {
                 var minions = Cache.GetMinions(Player.Position, Player.AttackRange);
 

@@ -302,7 +302,7 @@ using LeagueSharp.Common;
                 }
             }
 
-            if (Player.Spellbook.IsAutoAttacking)
+            if (ObjectManager.Player.Spellbook.IsAutoAttacking)
                 return;
 
             if (!Program.None && !Program.Combo )

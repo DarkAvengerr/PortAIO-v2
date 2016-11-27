@@ -72,9 +72,9 @@ using LeagueSharp.Common;
             }
             if (Program.LagFree(1) && E.IsReady())
                 LogicE();
-            if (Program.LagFree(2) && Q.IsReady() && !Player.Spellbook.IsAutoAttacking)
+            if (Program.LagFree(2) && Q.IsReady() && !ObjectManager.Player.Spellbook.IsAutoAttacking)
                 LogicQ();
-            if (Program.LagFree(3) && Config.Item("autoW", true).GetValue<bool>() && W.IsReady() && !Player.Spellbook.IsAutoAttacking)
+            if (Program.LagFree(3) && Config.Item("autoW", true).GetValue<bool>() && W.IsReady() && !ObjectManager.Player.Spellbook.IsAutoAttacking)
                 LogicW();
             if (Program.LagFree(4) && R.IsReady() && Program.Combo)
                 LogicR();

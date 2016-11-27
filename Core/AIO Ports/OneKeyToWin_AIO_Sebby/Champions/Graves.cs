@@ -109,9 +109,9 @@ using LeagueSharp.Common;
             
             if (!Config.Item("QWlogic", true).GetValue<bool>() || !Player.HasBuff("gravesbasicattackammo1"))
             {
-                if (Program.LagFree(2) && Q.IsReady() && !Player.Spellbook.IsAutoAttacking && Config.Item("autoQ", true).GetValue<bool>())
+                if (Program.LagFree(2) && Q.IsReady() && !ObjectManager.Player.Spellbook.IsAutoAttacking && Config.Item("autoQ", true).GetValue<bool>())
                     LogicQ();
-                if (Program.LagFree(3) && W.IsReady() && !Player.Spellbook.IsAutoAttacking && Config.Item("autoW", true).GetValue<bool>())
+                if (Program.LagFree(3) && W.IsReady() && !ObjectManager.Player.Spellbook.IsAutoAttacking && Config.Item("autoW", true).GetValue<bool>())
                     LogicW();
             }
             if (Program.LagFree(4) && R.IsReady() && Config.Item("autoR", true).GetValue<bool>())

@@ -186,7 +186,7 @@ using LeagueSharp.Common;
             if (Program.LagFree(3) && W.IsReady())
                 LogicW();
 
-            if (Program.LagFree(4) && R.IsReady() && !Player.Spellbook.IsAutoAttacking)
+            if (Program.LagFree(4) && R.IsReady() && !ObjectManager.Player.Spellbook.IsAutoAttacking)
                 LogicR();
         }
 

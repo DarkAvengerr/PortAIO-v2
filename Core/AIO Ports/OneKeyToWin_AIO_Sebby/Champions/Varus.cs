@@ -152,9 +152,9 @@ using LeagueSharp.Common;
                 }
             }
 
-            if (Program.LagFree(1) && E.IsReady() && Config.Item("autoQ", true).GetValue<bool>() && !Player.Spellbook.IsAutoAttacking)
+            if (Program.LagFree(1) && E.IsReady() && Config.Item("autoQ", true).GetValue<bool>() && !ObjectManager.Player.Spellbook.IsAutoAttacking)
                 LogicE();
-            if (Program.LagFree(2) && Q.IsReady() && Config.Item("autoE", true).GetValue<bool>() && !Player.Spellbook.IsAutoAttacking)
+            if (Program.LagFree(2) && Q.IsReady() && Config.Item("autoE", true).GetValue<bool>() && !ObjectManager.Player.Spellbook.IsAutoAttacking)
                 LogicQ();
             if (Program.LagFree(3) && R.IsReady() && Config.Item("autoR", true).GetValue<bool>())
                 LogicR();

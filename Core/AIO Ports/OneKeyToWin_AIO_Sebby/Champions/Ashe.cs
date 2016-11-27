@@ -153,7 +153,7 @@ using LeagueSharp.Common;
                 Jungle();
             }
 
-            if (Program.LagFree(3) && W.IsReady() && !Player.Spellbook.IsAutoAttacking && Config.Item("autoW", true).GetValue<bool>())
+            if (Program.LagFree(3) && W.IsReady() && !ObjectManager.Player.Spellbook.IsAutoAttacking && Config.Item("autoW", true).GetValue<bool>())
                 LogicW();
 
             if (Program.LagFree(4) && R.IsReady())

@@ -154,7 +154,7 @@ using LeagueSharp.Common;
                 SetMana();
             }
            
-            if (Program.LagFree(1) && Q.IsReady() && !Player.Spellbook.IsAutoAttacking)
+            if (Program.LagFree(1) && Q.IsReady() && !ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
                 LogicQ();
             }

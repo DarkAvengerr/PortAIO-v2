@@ -153,7 +153,7 @@ using LeagueSharp.Common;
             if (Program.LagFree(2) && Q.IsReady() && Config.Item("autoQ", true).GetValue<bool>())
                 LogicQ();
 
-            if (Program.LagFree(3) && W.IsReady() && !Player.Spellbook.IsAutoAttacking && Config.Item("autoW", true).GetValue<bool>())
+            if (Program.LagFree(3) && W.IsReady() && !ObjectManager.Player.Spellbook.IsAutoAttacking && Config.Item("autoW", true).GetValue<bool>())
                 LogicW();
 
             if (Program.LagFree(4) && R.IsReady())
@@ -162,7 +162,7 @@ using LeagueSharp.Common;
 
         private void LogicQ()
         {
-            if (Program.Farm && !FishBoneActive && !Player.Spellbook.IsAutoAttacking && Orbwalker.GetTarget() == null && SebbyLib.Orbwalking.CanAttack() && Config.Item("farmQout", true).GetValue<bool>() && Player.Mana > RMANA + WMANA + EMANA + 10)
+            if (Program.Farm && !FishBoneActive && !ObjectManager.Player.Spellbook.IsAutoAttacking && Orbwalker.GetTarget() == null && SebbyLib.Orbwalking.CanAttack() && Config.Item("farmQout", true).GetValue<bool>() && Player.Mana > RMANA + WMANA + EMANA + 10)
             {
                 foreach (var minion in Cache.GetMinions(Player.Position, bonusRange() + 30).Where(
                 minion => !SebbyLib.Orbwalking.InAutoAttackRange(minion) && GetRealPowPowRange(minion) < GetRealDistance(minion) && bonusRange() < GetRealDistance(minion)))
@@ -185,7 +185,7 @@ using LeagueSharp.Common;
                     var distance = GetRealDistance(t);
                     if (Program.Combo && (Player.Mana > RMANA + WMANA + 10 || Player.GetAutoAttackDamage(t) * 3 > t.Health))
                         Q.Cast();
-                    else if (Program.Harass && !Player.Spellbook.IsAutoAttacking && SebbyLib.Orbwalking.CanAttack() && Config.Item("Qharras", true).GetValue<bool>() && !ObjectManager.Player.UnderTurret(true) && Player.Mana > RMANA + WMANA + EMANA + 20 && distance < bonusRange() + t.BoundingRadius + Player.BoundingRadius)
+                    else if (Program.Harass && !ObjectManager.Player.Spellbook.IsAutoAttacking && SebbyLib.Orbwalking.CanAttack() && Config.Item("Qharras", true).GetValue<bool>() && !ObjectManager.Player.UnderTurret(true) && Player.Mana > RMANA + WMANA + EMANA + 20 && distance < bonusRange() + t.BoundingRadius + Player.BoundingRadius)
                         Q.Cast();
                 }
             }
@@ -329,7 +329,7 @@ using LeagueSharp.Common;
             }
         }
 
-        private float bonusRange() { return 670f + Player.BoundingRadius + 25 * Player.Spellbook.GetSpell(SpellSlot.Q).Level; }
+        private float bonusRange() { return 670f + Player.BoundingRadius + 25 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level; }
 
         private bool FishBoneActive { get { return Player.HasBuff("JinxQ"); } }
 

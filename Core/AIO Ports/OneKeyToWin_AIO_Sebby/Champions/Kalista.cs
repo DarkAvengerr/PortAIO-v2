@@ -125,11 +125,11 @@ using LeagueSharp.Common;
                 JungleE();
             }
 
-            if (Program.LagFree(1) && Q.IsReady() && !Player.Spellbook.IsAutoAttacking && !Player.IsDashing())
+            if (Program.LagFree(1) && Q.IsReady() && !ObjectManager.Player.Spellbook.IsAutoAttacking && !Player.IsDashing())
                 LogicQ();
-            if (Program.LagFree(2) && Program.LaneClear && Q.IsReady() && !Player.Spellbook.IsAutoAttacking && !Player.IsDashing() && Config.Item("farmQ", true).GetValue<bool>())
+            if (Program.LagFree(2) && Program.LaneClear && Q.IsReady() && !ObjectManager.Player.Spellbook.IsAutoAttacking && !Player.IsDashing() && Config.Item("farmQ", true).GetValue<bool>())
                 FarmQ();
-            if (Program.LagFree(4) && W.IsReady() && Program.None && !Player.Spellbook.IsAutoAttacking && !Player.IsDashing())
+            if (Program.LagFree(4) && W.IsReady() && Program.None && !ObjectManager.Player.Spellbook.IsAutoAttacking && !Player.IsDashing())
                 LogicW();
             if (R.IsReady() && Config.Item("autoR", true).GetValue<bool>())
                 LogicR();

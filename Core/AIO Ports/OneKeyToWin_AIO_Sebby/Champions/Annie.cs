@@ -130,7 +130,7 @@ using LeagueSharp.Common;
                         var aoeCountFlash = poutputFlas.AoeTargetsHitCount;
                         if (HaveStun && aoeCountFlash >= Config.Item("rCountFlash", true).GetValue<Slider>().Value && Config.Item("rCountFlash", true).GetValue<Slider>().Value > 0)
                         {
-                            Player.Spellbook.CastSpell(flash, poutputFlas.CastPosition);
+                            ObjectManager.Player.Spellbook.CastSpell(flash, poutputFlas.CastPosition);
                             R.Cast(poutputFlas.CastPosition);
                         }
                     }

@@ -102,22 +102,22 @@ using LeagueSharp.Common;
         {
             if (Program.LagFree(0))
             {
-                R.Range = 870 + 300 * Player.Spellbook.GetSpell(SpellSlot.R).Level;
-                W.Range = 650 + 30 * Player.Spellbook.GetSpell(SpellSlot.W).Level;
+                R.Range = 870 + 300 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level;
+                W.Range = 650 + 30 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level;
                 SetMana();
                 Jungle();
 
             }
-            if (Program.LagFree(1) && E.IsReady() && !Player.Spellbook.IsAutoAttacking && Config.Item("autoE", true).GetValue<bool>())
+            if (Program.LagFree(1) && E.IsReady() && !ObjectManager.Player.Spellbook.IsAutoAttacking && Config.Item("autoE", true).GetValue<bool>())
                 LogicE();
 
-            if (Program.LagFree(2) && Q.IsReady() && !Player.Spellbook.IsAutoAttacking && Config.Item("autoQ", true).GetValue<bool>())
+            if (Program.LagFree(2) && Q.IsReady() && !ObjectManager.Player.Spellbook.IsAutoAttacking && Config.Item("autoQ", true).GetValue<bool>())
                 LogicQ();
 
             if (Program.LagFree(3) && W.IsReady() && Config.Item("autoW", true).GetValue<bool>())
                 LogicW();
 
-            if (Program.LagFree(4) && R.IsReady() && !Player.Spellbook.IsAutoAttacking)
+            if (Program.LagFree(4) && R.IsReady() && !ObjectManager.Player.Spellbook.IsAutoAttacking)
                 LogicR();
             
         }
