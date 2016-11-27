@@ -39,8 +39,8 @@ namespace AutoJungle
 
         public static ResourceManager resourceM;
         public static string culture;
-        public static String[] languages = new String[] { "English", "Chinese (Simplified)", "Chinese (Traditional)" };
-        public static String[] languagesShort = new String[] { "en", "cn", "tw" };
+        public static String[] languages = new String[] { "English"};
+        public static String[] languagesShort = new String[] { "en" };
         public static string fileName, path;
 
         #region Main
