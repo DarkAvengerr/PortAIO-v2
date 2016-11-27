@@ -6,7 +6,6 @@ using LeagueSharp.Common;
     using LeagueSharp.Common;
     using Prediction;
     using SharpDX;
-    using SPrediction;
     using System;
     using System.Linq;
     using System.Collections.Generic;
@@ -80,26 +79,21 @@ using LeagueSharp.Common;
             return points;
         }
 
-        public static HitChance MinCommonHitChance
+        private static HitChance MinCommonHitChance
         {
             get
             {
-                if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 0)
-                {
-                    return HitChance.VeryHigh;
-                }
-
-                if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 1)
+                if (Logic.spellHitChance == 1)
                 {
                     return HitChance.High;
                 }
 
-                if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 2)
+                if (Logic.spellHitChance == 2)
                 {
                     return HitChance.Medium;
                 }
 
-                if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 3)
+                if (Logic.spellHitChance == 3)
                 {
                     return HitChance.Low;
                 }
@@ -108,26 +102,21 @@ using LeagueSharp.Common;
             }
         }
 
-        public static OktwPrediction.HitChance MinOKTWHitChance
+        private static OktwPrediction.HitChance MinOKTWHitChance
         {
             get
             {
-                if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 0)
-                {
-                    return OktwPrediction.HitChance.VeryHigh;
-                }
-
-                if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 1)
+                if (Logic.spellHitChance == 1)
                 {
                     return OktwPrediction.HitChance.High;
                 }
 
-                if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 2)
+                if (Logic.spellHitChance == 2)
                 {
                     return OktwPrediction.HitChance.Medium;
                 }
 
-                if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 3)
+                if (Logic.spellHitChance == 3)
                 {
                     return OktwPrediction.HitChance.Low;
                 }
@@ -136,26 +125,21 @@ using LeagueSharp.Common;
             }
         }
 
-        public static SDKPrediction.HitChance MinSDKHitChance
+        private static SDKPrediction.HitChance MinSDKHitChance
         {
             get
             {
-                if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 0)
-                {
-                    return SDKPrediction.HitChance.VeryHigh;
-                }
-
-                if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 1)
+                if (Logic.spellHitChance == 1)
                 {
                     return SDKPrediction.HitChance.High;
                 }
 
-                if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 2)
+                if (Logic.spellHitChance == 2)
                 {
                     return SDKPrediction.HitChance.Medium;
                 }
 
-                if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 3)
+                if (Logic.spellHitChance == 3)
                 {
                     return SDKPrediction.HitChance.Low;
                 }
@@ -166,7 +150,7 @@ using LeagueSharp.Common;
 
         public static void CastTo(this Spell Spells, Obj_AI_Base target, bool AOE = false)
         {
-            switch (Program.Menu.Item("SelectPred", true).GetValue<StringList>().SelectedIndex)
+            switch (Logic.SelectPred)
             {
                 case 0:
                     {
@@ -181,15 +165,20 @@ using LeagueSharp.Common;
                 case 1:
                     {
                         var CoreType2 = OktwPrediction.SkillshotType.SkillshotLine;
+                        var aoe2 = false;
 
                         if (Spells.Type == SkillshotType.SkillshotCircle)
                         {
                             CoreType2 = OktwPrediction.SkillshotType.SkillshotCircle;
+                            aoe2 = true;
                         }
+
+                        if (Spells.Width > 80 && !Spells.Collision)
+                            aoe2 = true;
 
                         var predInput2 = new OktwPrediction.PredictionInput
                         {
-                            Aoe = AOE,
+                            Aoe = aoe2,
                             Collision = Spells.Collision,
                             Speed = Spells.Speed,
                             Delay = Spells.Delay,
@@ -199,7 +188,6 @@ using LeagueSharp.Common;
                             Unit = target,
                             Type = CoreType2
                         };
-
                         var poutput2 = OktwPrediction.Prediction.GetPrediction(predInput2);
 
                         if (Spells.Speed != float.MaxValue &&
@@ -252,41 +240,6 @@ using LeagueSharp.Common;
                                  poutput2.Hitchance >= MinSDKHitChance - 1)
                         {
                             Spells.Cast(poutput2.CastPosition, true);
-                        }
-                    }
-                    break;
-                case 3:
-                {
-                    var hero = target as AIHeroClient;
-
-                        if (hero != null && hero.IsValid)
-                        {
-                            var t = hero;
-
-                            if (t.IsValidTarget())
-                            {
-                                Spells.SPredictionCast(t, MinCommonHitChance);
-                            }
-                        }
-                        else
-                        {
-                            Spells.CastIfHitchanceEquals(target, MinCommonHitChance);
-                        }
-                    }
-                    break;
-                case 4:
-                    {
-                        if (Spells.Type == SkillshotType.SkillshotCircle)
-                        {
-                            Spells.CastCircle(target);
-                        }
-                        else if (Spells.Type == SkillshotType.SkillshotLine)
-                        {
-                            Spells.CastLine(target);
-                        }
-                        else if (Spells.Type == SkillshotType.SkillshotCone)
-                        {
-                            Spells.CastCone(target);
                         }
                     }
                     break;
@@ -528,7 +481,7 @@ using LeagueSharp.Common;
             return source.DistanceSquared(position.To2D());
         }
 
-        public static float DistanceSquared(this Obj_AI_Base source, Vector2 position)
+        private static float DistanceSquared(this Obj_AI_Base source, Vector2 position)
         {
             return source.ServerPosition.DistanceSquared(position);
         }
@@ -543,11 +496,6 @@ using LeagueSharp.Common;
             return Vector2.DistanceSquared(vector2, toVector2);
         }
 
-        public static float DistanceSquared(this Obj_AI_Base source, Obj_AI_Base target)
-        {
-            return source.DistanceSquared(target.ServerPosition);
-        }
-
         public static float DistanceSquared(this Vector3 vector3, Vector3 toVector3)
         {
             return vector3.To2D().DistanceSquared(toVector3);
@@ -558,11 +506,14 @@ using LeagueSharp.Common;
             return Vector2.DistanceSquared(vector2, toVector3.To2D());
         }
 
-        public static float DistanceSquared(this Vector2 point, Vector2 segmentStart, Vector2 segmentEnd, bool onlyIfOnSegment = false)
+        public static float DistanceSquared(this Vector2 point, Vector2 segmentStart, Vector2 segmentEnd,
+            bool onlyIfOnSegment = false)
         {
             var objects = point.ProjectOn(segmentStart, segmentEnd);
 
-            return (objects.IsOnSegment || onlyIfOnSegment == false) ? Vector2.DistanceSquared(objects.SegmentPoint, point) : float.MaxValue;
+            return objects.IsOnSegment || onlyIfOnSegment == false
+                ? Vector2.DistanceSquared(objects.SegmentPoint, point)
+                : float.MaxValue;
         }
 
         public static Vector2[] CircleCircleIntersection(this Vector2 center1, Vector2 center2, float radius1, float radius2)
@@ -598,17 +549,24 @@ using LeagueSharp.Common;
             .VectorMovementCollision(pointVelocityA, pointB, pointVelocityB, delay);
         }
 
-        public static MovementCollisionInfo VectorMovementCollision(this Vector2[] pointA, float pointVelocityA, Vector2 pointB, float pointVelocityB, float delay = 0f)
+        private static MovementCollisionInfo VectorMovementCollision(this Vector2[] pointA, float pointVelocityA,
+            Vector2 pointB, float pointVelocityB, float delay = 0f)
         {
             if (pointA.Length < 1)
             {
                 return default(MovementCollisionInfo);
             }
 
-            float sP1X = pointA[0].X, sP1Y = pointA[0].Y, eP1X = pointA[1].X, eP1Y = pointA[1].Y, sP2X = pointB.X, sP2Y = pointB.Y;
+            float sP1X = pointA[0].X,
+                sP1Y = pointA[0].Y,
+                eP1X = pointA[1].X,
+                eP1Y = pointA[1].Y,
+                sP2X = pointB.X,
+                sP2Y = pointB.Y;
             float d = eP1X - sP1X, e = eP1Y - sP1Y;
             float dist = (float)Math.Sqrt((d * d) + (e * e)), t1 = float.NaN;
-            float s = Math.Abs(dist) > float.Epsilon ? pointVelocityA * d / dist : 0, k = (Math.Abs(dist) > float.Epsilon) ? pointVelocityA * e / dist : 0f;
+            float s = Math.Abs(dist) > float.Epsilon ? pointVelocityA*d/dist : 0,
+                k = (Math.Abs(dist) > float.Epsilon) ? pointVelocityA*e/dist : 0f;
 
             float r = sP2X - sP1X, j = sP2Y - sP1Y;
             var c = (r * r) + (j * j);
@@ -676,13 +634,14 @@ using LeagueSharp.Common;
                 t1 = 0f;
             }
 
-            return new MovementCollisionInfo(t1, !float.IsNaN(t1) ? new Vector2(sP1X + (s * t1), sP1Y + (k * t1)) : default(Vector2));
+            return new MovementCollisionInfo(t1,
+                !float.IsNaN(t1) ? new Vector2(sP1X + (s*t1), sP1Y + (k*t1)) : default(Vector2));
         }
 
         public struct MovementCollisionInfo
         {
-            public Vector2 CollisionPosition;
-            public float CollisionTime;
+            private readonly Vector2 CollisionPosition;
+            private readonly float CollisionTime;
 
             internal MovementCollisionInfo(float collisionTime, Vector2 collisionPosition)
             {
@@ -703,14 +662,9 @@ using LeagueSharp.Common;
             return position.To2D().DistanceToPlayer();
         }
 
-        public static float DistanceToPlayer(this Vector2 position)
+        private static float DistanceToPlayer(this Vector2 position)
         {
             return ObjectManager.Player.Distance(position);
-        }
-
-        public static float DistanceToMouse(this Obj_AI_Base source)
-        {
-            return Game.CursorPos.Distance(source.Position);
         }
 
         public static float DistanceToMouse(this Vector3 position)
@@ -718,7 +672,7 @@ using LeagueSharp.Common;
             return position.To2D().DistanceToMouse();
         }
 
-        public static float DistanceToMouse(this Vector2 position)
+        private static float DistanceToMouse(this Vector2 position)
         {
             return Game.CursorPos.Distance(position.To3D());
         }

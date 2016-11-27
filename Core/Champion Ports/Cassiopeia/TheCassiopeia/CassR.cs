@@ -11,7 +11,7 @@ using TheCassiopeia.Commons.ComboSystem;
 using Color = System.Drawing.Color;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace TheCassiopeia
 {
     class CassR : Skill
@@ -42,13 +42,15 @@ using EloBuddy;
         {
             if (!MinEnemiesOnlyInCombo && CanBeCast())
             {
-                var pred = GetPrediction(target);
-                if (pred.Hitchance < HitChance.Low) return;
+                //var pred = GetPrediction(target);
+                //if (pred.Hitchance < HitChance.Low) return;
 
-                var targets = HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(Range) && WillHit(enemy.Position, pred.CastPosition));
-                var looking = targets.Count(trgt => trgt.IsFacingMe());
-                if (looking >= MinTargetsFacing || targets.Count() >= MinTargetsNotFacing)
-                    Cast(pred.CastPosition);
+                //var targets = HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(Range) && WillHit(enemy.Position, pred.CastPosition));
+                //var looking = targets.Count(trgt => trgt.IsFacingMe());
+                //if (looking >= MinTargetsFacing || targets.Count() >= MinTargetsNotFacing)
+                //    Cast(pred.CastPosition);
+
+                TryMassUlt();
 
             }
 
@@ -116,9 +118,8 @@ using EloBuddy;
             return null;
         }
 
-        public override void Execute(AIHeroClient target)
+        private void TryMassUlt()
         {
-            //Console.WriteLine(Delay);
             var bestPosFacing = GetBestPosition(HeroManager.Enemies.Where(item => item.IsFacingMe()));
 
             if (MinTargetsFacing <= bestPosFacing?.Item2)
@@ -133,9 +134,19 @@ using EloBuddy;
                 Cast(bestPos.Item1);
                 return;
             }
+        }
 
+        public override void Execute(AIHeroClient target)
+        {
+            //Console.WriteLine(Delay);
 
-            if (UltOnKillable && Provider.GetComboDamage(target) > target.Health && target.IsFacingMe() && target.HealthPercent > MinHealth && target.IsValidTarget() || PanicModeHealth > ObjectManager.Player.HealthPercent || BurstMode.IsActive())
+            if (MinEnemiesOnlyInCombo)
+                TryMassUlt();
+
+            if (!target.IsValidTarget())
+                return;
+
+            if (UltOnKillable && Provider.GetComboDamage(target) > target.Health && target.IsFacingMe() && target.HealthPercent > MinHealth || PanicModeHealth > ObjectManager.Player.HealthPercent || BurstMode.IsActive())
             {
                 var targetPos = CassW.GetMovementPrediction(target);
                 if (targetPos.Distance(ObjectManager.Player.Position, true) < Range * Range)

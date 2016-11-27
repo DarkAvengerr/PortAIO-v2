@@ -12,7 +12,7 @@ using TheCassiopeia.Commons.ComboSystem;
 using Color = System.Drawing.Color;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace TheCassiopeia
 {
     class CassQ : Skill
@@ -117,6 +117,9 @@ using EloBuddy;
 
         public override void Execute(AIHeroClient target)
         {
+            if (_e.CanBeCast() && _e.IsKillable(target))
+                return;
+
             if (!OnlyQWhenNotPoisoned || !target.IsPoisoned())
                 Cast(target);
         }

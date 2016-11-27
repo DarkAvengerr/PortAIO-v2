@@ -13,11 +13,11 @@ using LeagueSharp.Common;
     using Orbwalking = Orbwalking;
     using static Common.Common;
 
-    internal class Caitlyn : Program
+    internal class Caitlyn : Logic
     {
         private int LastQTime;
         private int LastWTime;
-        private new readonly Menu Menu = Championmenu;
+        private readonly Menu Menu = Championmenu;
 
         public Caitlyn()
         {

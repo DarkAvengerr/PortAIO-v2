@@ -11,7 +11,7 @@ using LeagueSharp.Common;
     using Orbwalking = Orbwalking;
     using ItemData = LeagueSharp.Common.Data.ItemData;
 
-    internal class AutoWard : Program //This Part From SFX Utility 
+    internal class AutoWard : Logic //This Part From SFX Utility 
     {
         private const float CheckInterval = 333f;
         private const float MaxRange = 600f;
@@ -20,7 +20,7 @@ using LeagueSharp.Common;
         private static float lastCheckTime = Environment.TickCount;
         private static float lastRevealTime;
 
-        public static readonly List<ChampionObject> championObject = new List<ChampionObject>();
+        private static readonly List<ChampionObject> championObject = new List<ChampionObject>();
 
         private static readonly HashSet<SpellData> SpellList = new HashSet<SpellData>
         {
@@ -35,7 +35,7 @@ using LeagueSharp.Common;
             new SpellData("Twitch", SpellSlot.Q)
         };
 
-        private new static readonly Menu Menu = Utilitymenu;
+        private static readonly Menu Menu = Utilitymenu;
 
         internal static void Init()
         {
@@ -296,7 +296,7 @@ using LeagueSharp.Common;
             return SpellSlot.Unknown;
         }
 
-        internal class SpellData
+        private class SpellData
         {
             public SpellData(string hero, SpellSlot slot, bool custom = false, string name = null)
             {
@@ -307,7 +307,7 @@ using LeagueSharp.Common;
             }
 
             public string Hero { get; private set; }
-            public SpellSlot Slot { get; private set; }
+            private SpellSlot Slot { get; set; }
             public string Name { get; private set; }
             public bool Custom { get; private set; }
 
@@ -329,7 +329,7 @@ using LeagueSharp.Common;
             }
         }
 
-        internal class ChampionObject
+        private class ChampionObject
         {
             public ChampionObject(AIHeroClient hero)
             {
@@ -340,7 +340,7 @@ using LeagueSharp.Common;
             public float LastSeen { get; set; }
         }
 
-        internal class GrassLocation
+        private class GrassLocation
         {
             public readonly int Index;
             public int Count;
@@ -352,7 +352,7 @@ using LeagueSharp.Common;
             }
         }
 
-        internal class WardLocation
+        private class WardLocation
         {
             public readonly bool Grass;
             public readonly Vector3 Pos;

@@ -12,10 +12,10 @@ using LeagueSharp.Common;
     using Orbwalking = Orbwalking;
     using static Common.Common;
 
-    internal class Varus : Program
+    internal class Varus : Logic
     {
-        private float qRange = 1600f;
-        private new readonly Menu Menu = Championmenu;
+        private readonly float qRange = 1600f;
+        private readonly Menu Menu = Championmenu;
 
         public Varus()
         {
@@ -52,12 +52,6 @@ using LeagueSharp.Common;
                     new MenuItem("HarassMana", "When Player ManaPercent >= x%", true).SetValue(new Slider(60)));
             }
 
-            var KillStealMenu = Menu.AddSubMenu(new Menu("KillSteal", "KillSteal"));
-            {
-                KillStealMenu.AddItem(new MenuItem("KillStealQ", "Use Q", true).SetValue(true));
-                KillStealMenu.AddItem(new MenuItem("KillStealE", "Use E", true).SetValue(true));
-            }
-
             var LaneClearMenu = Menu.AddSubMenu(new Menu("LaneClear", "LaneClear"));
             {
                 LaneClearMenu.AddItem(new MenuItem("LaneClearQ", "Use Q", true).SetValue(true));
@@ -76,6 +70,12 @@ using LeagueSharp.Common;
                 JungleClearMenu.AddItem(new MenuItem("JungleClearE", "Use E", true).SetValue(true));
                 JungleClearMenu.AddItem(
                     new MenuItem("JungleClearMana", "When Player ManaPercent >= x%", true).SetValue(new Slider(30)));
+            }
+
+            var KillStealMenu = Menu.AddSubMenu(new Menu("KillSteal", "KillSteal"));
+            {
+                KillStealMenu.AddItem(new MenuItem("KillStealQ", "Use Q", true).SetValue(true));
+                KillStealMenu.AddItem(new MenuItem("KillStealE", "Use E", true).SetValue(true));
             }
 
             var MiscMenu = Menu.AddSubMenu(new Menu("Misc", "Misc"));
@@ -212,19 +212,14 @@ using LeagueSharp.Common;
                     }
                 }
 
-                if (Menu.Item("ComboQ", true).GetValue<bool>() && Q.IsReady() && target.IsValidTarget(qRange))
+                if (Menu.Item("ComboQ", true).GetValue<bool>() && target.IsValidTarget(qRange))
                 {
-                    if (target.DistanceToPlayer() >= Orbwalking.GetRealAutoAttackRange(Me) + 100 ||
+                    if (target.DistanceToPlayer() >= Orbwalking.GetRealAutoAttackRange(Me) + 200 ||
                         GetPassiveCount(target) >= Menu.Item("ComboPassive", true).GetValue<Slider>().Value ||
                         W.Level == 0 || target.Health < Q.GetDamage(target))
                     {
                         CastQ(target);
                     }
-                }
-
-                if (Q.IsCharging)
-                {
-                    return;
                 }
 
                 if (Menu.Item("ComboE", true).GetValue<bool>() && E.IsReady() && target.IsValidTarget(E.Range))
@@ -362,17 +357,34 @@ using LeagueSharp.Common;
             }
         }
 
-        private void CastQ(Obj_AI_Base target = null, Vector3 pos = new Vector3())
+        private void CastQ(Obj_AI_Base target = null, Vector3 pos = default(Vector3))
         {
             if (Q.IsCharging)
             {
-                if (target != null)
+                if (target != null && target.IsValidTarget(qRange))
                 {
-                    Q.CastTo(target);
+                    Q.CastTo(target, true);
                 }
-                else
+                
+                if (pos != default(Vector3))
                 {
                     Q.Cast(pos, true);
+                }
+
+                if (target == null && pos == default(Vector3))
+                {
+                    foreach (
+                        var t in
+                        HeroManager.Enemies.Where(x => !x.IsDead && !x.IsZombie && x.IsValidTarget(qRange))
+                            .OrderBy(x => x.Health))
+                    {
+                        var qPred = Q.GetPrediction(t, true);
+
+                        if (qPred.Hitchance >= HitChance.VeryHigh)
+                        {
+                            Q.Cast(qPred.CastPosition, true);
+                        }
+                    }
                 }
             }
             else

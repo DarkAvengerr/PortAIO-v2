@@ -12,10 +12,10 @@ using LeagueSharp.Common;
     using Orbwalking = Orbwalking;
     using static Common.Common;
 
-    internal class Twitch : Program
+    internal class Twitch : Logic
     {
         private bool PlayerIsKillTarget;
-        private new readonly Menu Menu = Championmenu;
+        private readonly Menu Menu = Championmenu;
 
         public Twitch()
         {
@@ -170,15 +170,16 @@ using LeagueSharp.Common;
 
             if (CheckTarget(target, R.Range))
             {
-                if (Menu.Item("ComboQ", true).GetValue<bool>() && Q.IsReady())
+                if (Menu.Item("ComboQ", true).GetValue<bool>() && Q.IsReady() &&
+                    target.DistanceToPlayer() <= Menu.Item("ComboQRange", true).GetValue<Slider>().Value &&
+                    (Me.CountEnemiesInRange(Orbwalking.GetRealAutoAttackRange(Me) + 150) >= 2 || Me.HealthPercent <= 50 ||
+                     (target.HealthPercent <= 80 && target.HealthPercent >= 30)))
                 {
-                    if (target.DistanceToPlayer() <= Menu.Item("ComboQRange", true).GetValue<Slider>().Value)
-                    {
-                        Q.Cast();
-                    }
+                    Q.Cast();
                 }
 
-                if (Menu.Item("ComboW", true).GetValue<bool>() && W.IsReady() && target.IsValidTarget(W.Range))
+                if (Menu.Item("ComboW", true).GetValue<bool>() && W.IsReady() && target.IsValidTarget(W.Range) &&
+                    Me.Mana >= W.Instance.SData.Mana + E.Instance.SData.Mana + R.Instance.SData.Mana)
                 {
                     W.CastTo(target);
                 }
@@ -275,9 +276,13 @@ using LeagueSharp.Common;
                     MinionOrderTypes.MaxHealth);
 
                 foreach (
-                    var mob in mobs.Where(x => !x.Name.ToLower().Contains("mini") && x.DistanceToPlayer() <= E.Range))
+                    var mob in
+                    mobs.Where(
+                        x =>
+                            !x.Name.ToLower().Contains("mini") && x.DistanceToPlayer() <= E.Range &&
+                            x.HasBuff("TwitchDeadlyVenom")))
                 {
-                    if (E.IsKillable(mob))
+                    if (mob.Health < E.GetDamage(mob))
                     {
                         E.Cast();
                     }

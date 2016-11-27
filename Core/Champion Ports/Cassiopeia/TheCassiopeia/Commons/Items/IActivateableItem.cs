@@ -2,7 +2,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace TheCassiopeia.Commons.Items
 {
     public interface IActivateableItem

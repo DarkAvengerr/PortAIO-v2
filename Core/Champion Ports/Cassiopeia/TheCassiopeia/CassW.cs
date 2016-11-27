@@ -11,19 +11,21 @@ using TheCassiopeia.Commons.ComboSystem;
 using Prediction = TheCassiopeia.Commons.Prediction.Prediction;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace TheCassiopeia
 {
     class CassW : Skill
     {
         private CassQ _q;
+        private CassE _e;
         private CassR _r;
         public bool UseOnGapcloser;
         public float MinRange = 500f;
-        public float MaxRange = 900f;
+        public float MaxRange = 800f;
         public float MinRangeHigh = 500f;
-        public float MaxRangeHigh = 900f;
+        public float MaxRangeHigh = 800f;
         public int ClearMinHit;
+
 
         public CassW(SpellSlot slot)
             : base(slot)
@@ -39,13 +41,17 @@ using EloBuddy;
         {
             _q = combo.GetSkill<CassQ>();
             _r = combo.GetSkill<CassR>();
+            _e = combo.GetSkill<CassE>();
             base.Initialize(combo);
         }
 
         public override void Execute(AIHeroClient target)
         {
+            if (_e.CanBeCast() && _e.IsKillable(target))
+                return;
+
             var bestPosition = GetBestPosition(HeroManager.Enemies);
-            if (bestPosition.Item1.X != 0)
+            if (Math.Abs(bestPosition.Item1.X) > 1)
             {
                 Cast(bestPosition.Item1);
             }
@@ -148,7 +154,7 @@ using EloBuddy;
         {
             var minions = GetBestPosition(MinionManager.GetMinions(800, MinionTypes.All, MinionTeam.NotAlly));
             // var minions = Grouped(MinionManager.GetMinions(800, MinionTypes.All, MinionTeam.NotAlly).Where(min => min.Distance(ObjectManager.Player.Position, true) > MinRange * MinRange).Select(item => item.Position).ToArray());
-         //   Console.WriteLine(minions.Item2);
+            //   Console.WriteLine(minions.Item2);
 
             if (minions.Item2 > ClearMinHit)
             {

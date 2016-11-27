@@ -12,9 +12,9 @@ using LeagueSharp.Common;
     using Orbwalking = Orbwalking;
     using static Common.Common;
 
-    internal class KogMaw : Program
+    internal class KogMaw : Logic
     {
-        private new readonly Menu Menu = Championmenu;
+        private readonly Menu Menu = Championmenu;
 
         public KogMaw()
         {

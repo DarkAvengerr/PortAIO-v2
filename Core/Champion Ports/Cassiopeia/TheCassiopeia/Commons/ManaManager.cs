@@ -4,7 +4,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace TheCassiopeia.Commons
 {
     public static class ManaManager
@@ -46,10 +46,10 @@ using EloBuddy;
             return ManaSettings.ToList();
         }
 
-      public static bool CanUseMana(Orbwalking.OrbwalkingMode mode)
+        public static bool CanUseMana(Orbwalking.OrbwalkingMode mode)
         {
             //  Console.WriteLine(mode + " " + ObjectManager.Player.ManaPercent + " > " + ManaSettings[mode]);
-            return EloBuddy.Player.Instance.ManaPercent >= ManaSettings[mode] || !EnableLimitations;
+            return ObjectManager.Player.ManaPercent >= ManaSettings[mode] || !EnableLimitations;
         }
 
     }

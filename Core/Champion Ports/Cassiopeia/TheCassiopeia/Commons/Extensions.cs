@@ -7,7 +7,7 @@ using SharpDX;
 using Collision = LeagueSharp.Common.Collision;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace TheCassiopeia.Commons
 {
     public static class Extensions

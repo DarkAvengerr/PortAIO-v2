@@ -12,13 +12,15 @@ using TheCassiopeia.Commons.Debug;
 using Color = System.Drawing.Color;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace TheCassiopeia
 {
     class Cassiopeia
     {
-        public void Load()
+        public void Load(EventArgs eArgs)
         {
+
+
             if (ObjectManager.Player.ChampionName != "Cassiopeia") return;
             //ItemSeraphsEmbrace
             var mainMenu = new Menu("The Cassiopeia", "TheCassiopeia", true);
@@ -110,7 +112,7 @@ using EloBuddy;
 
             miscMenu.AddMItem("Enable this if you are Hawk", false, (sender, args) =>
             {
-                //ObjectManager.Player.SetSkin(args.GetNewValue<bool>() ? "Trundle" : "Cassiopeia", 0);
+                //ObjectManager.//Player.SetSkin(args.GetNewValue<bool>() ? "Trundle" : "Cassiopeia", 0);
                 LeagueSharp.Common.Utility.DelayAction.Add(1000, () => Chat.Say("/laugh"));
             });
 

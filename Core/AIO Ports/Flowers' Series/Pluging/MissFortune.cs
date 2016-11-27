@@ -13,9 +13,9 @@ using LeagueSharp.Common;
     using Orbwalking = Orbwalking;
     using static Common.Common;
 
-    internal class MissFortune : Program
+    internal class MissFortune : Logic
     {
-        private new readonly Menu Menu = Championmenu;
+        private readonly Menu Menu = Championmenu;
 
         public MissFortune()
         {

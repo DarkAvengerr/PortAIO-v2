@@ -4,7 +4,7 @@ using System.Linq;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace TheCassiopeia.Commons
 {
     public static class MenuCommons

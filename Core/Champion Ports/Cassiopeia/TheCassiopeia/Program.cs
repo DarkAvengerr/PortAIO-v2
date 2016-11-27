@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace TheCassiopeia
 {
     class Program
@@ -15,7 +15,7 @@ using EloBuddy;
 
         public static void Main()
         {
-            new Cassiopeia().Load();
+            new Cassiopeia().Load(new EventArgs());
         }
     }
 }

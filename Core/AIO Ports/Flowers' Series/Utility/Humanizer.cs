@@ -7,12 +7,12 @@ using LeagueSharp.Common;
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    internal class Humanizer : Program
+    internal class Humanizer : Logic
     {
         private static int randomTime, allTime;
         private static bool Enabled;
         private static Random random;
-        private new static readonly Menu Menu = Utilitymenu;
+        private static readonly Menu Menu = Utilitymenu;
 
         internal static void Init()
         {

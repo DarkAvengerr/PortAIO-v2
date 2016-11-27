@@ -1,12 +1,13 @@
 using System;
 using System.Linq;
-using EloBuddy;
+using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using Color = System.Drawing.Color;
-using EloBuddy.SDK.Rendering;
 
-namespace TheCassiopeia.Commons
+using EloBuddy; 
+using LeagueSharp.Common; 
+ namespace TheCassiopeia.Commons
 {
     /*
         Note: This class is from the xSalice Religion AIO!
@@ -16,8 +17,8 @@ namespace TheCassiopeia.Commons
     {
         public delegate float DamageToUnitDelegate(AIHeroClient hero);
 
-        private const int XOffset = 0;
-        private const int YOffset = 5;
+        private const int XOffset = 10;
+        private const int YOffset = 20;
         private const int Width = 103;
         private const int Height = 8;
 
@@ -28,8 +29,8 @@ namespace TheCassiopeia.Commons
         public static bool Enabled = true;
         private static DamageToUnitDelegate _damageToUnit;
 
-        //private static readonly Render.Text Text = new Render.Text(0, 0, "", 11, new ColorBGRA(255, 0, 0, 255), "monospace");
-        private static Text Text = new Text(string.Empty, new System.Drawing.Font(System.Drawing.FontFamily.GenericSansSerif, 8, System.Drawing.FontStyle.Regular));
+        private static readonly Render.Text Text = new Render.Text(
+            0, 0, "", 11, new ColorBGRA(255, 0, 0, 255), "monospace");
 
         public static DamageToUnitDelegate DamageToUnit
         {
@@ -39,7 +40,7 @@ namespace TheCassiopeia.Commons
             {
                 if (_damageToUnit == null)
                 {
-                    Drawing.OnPresent += Drawing_OnDraw;
+                    Drawing.OnDraw += Drawing_OnDraw;
                 }
                 _damageToUnit = value;
             }
@@ -65,9 +66,8 @@ namespace TheCassiopeia.Commons
                 {
                     Text.X = (int)barPos.X + XOffset;
                     Text.Y = (int)barPos.Y + YOffset - 13;
-                    Text.TextValue = ((int)(unit.Health - damage)).ToString();
-                    Text.Position = new Vector2(Text.X, Text.Y);
-                    Text.Draw();
+                    Text.text = ((int)(unit.Health - damage)).ToString();
+                    Text.OnEndScene();
                 }
 
                 Drawing.DrawLine(xPosDamage, yPos, xPosDamage, yPos + Height, 2, Color);

@@ -12,10 +12,10 @@ using LeagueSharp.Common;
     using Orbwalking = Orbwalking;
     using static Common.Common;
 
-    internal class Lucian : Program
+    internal class Lucian : Logic
     {
         private int CastSpellTime;
-        private new readonly Menu Menu = Championmenu;
+        private readonly Menu Menu = Championmenu;
 
         public Lucian()
         {

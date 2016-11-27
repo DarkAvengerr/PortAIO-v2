@@ -11,10 +11,10 @@ using LeagueSharp.Common;
 
     public class SebbyLibCache
     {
-        public static List<Obj_AI_Base> AllMinionsObj = new List<Obj_AI_Base>();
-        public static List<Obj_AI_Base> MinionsListEnemy = new List<Obj_AI_Base>();
-        public static List<Obj_AI_Base> MinionsListAlly = new List<Obj_AI_Base>();
-        public static List<Obj_AI_Base> MinionsListNeutral = new List<Obj_AI_Base>();
+        private static readonly List<Obj_AI_Base> AllMinionsObj = new List<Obj_AI_Base>();
+        public static readonly List<Obj_AI_Base> MinionsListEnemy = new List<Obj_AI_Base>();
+        private static readonly List<Obj_AI_Base> MinionsListAlly = new List<Obj_AI_Base>();
+        private static readonly List<Obj_AI_Base> MinionsListNeutral = new List<Obj_AI_Base>();
         public static List<Obj_AI_Turret> TurretList = ObjectManager.Get<Obj_AI_Turret>().ToList();
         public static List<Obj_HQ> NexusList = ObjectManager.Get<Obj_HQ>().ToList();
         public static List<Obj_BarracksDampener> InhiList = ObjectManager.Get<Obj_BarracksDampener>().ToList();
@@ -66,7 +66,7 @@ using LeagueSharp.Common;
                 {
                     MinionsListNeutral.Add(minion);
                 }
-                else if (minion.MaxMana == 0 && minion.MaxHealth >= 300)
+                else if (minion.MaxMana == 0 && minion.MaxHealth >= 250)
                 {
                     if (minion.Team == GameObjectTeam.Unknown)
                     {

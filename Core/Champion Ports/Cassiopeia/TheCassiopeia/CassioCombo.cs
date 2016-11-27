@@ -12,7 +12,7 @@ using TheCassiopeia.Commons.ComboSystem;
 using Collision = LeagueSharp.Common.Collision;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace TheCassiopeia
 {
     class CassioCombo : ComboProvider

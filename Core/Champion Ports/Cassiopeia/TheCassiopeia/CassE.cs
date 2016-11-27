@@ -10,7 +10,7 @@ using TheCassiopeia.Commons;
 using TheCassiopeia.Commons.ComboSystem;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace TheCassiopeia
 {
     class CassE : Skill

@@ -12,9 +12,9 @@ using LeagueSharp.Common;
     using Orbwalking = Orbwalking;
     using static Common.Common;
 
-    internal class Sivir : Program
+    internal class Sivir : Logic
     {
-        private new readonly Menu Menu = Championmenu;
+        private readonly Menu Menu = Championmenu;
 
         public Sivir()
         {

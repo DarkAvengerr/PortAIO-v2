@@ -7,10 +7,10 @@ using LeagueSharp.Common;
     using LeagueSharp.Common;
     using Orbwalking = Orbwalking;
 
-    internal class Items : Program
+    internal class Items : Logic
     {
         private static readonly LeagueSharp.Common.Items.Item BlutTrinket = new LeagueSharp.Common.Items.Item(3363);
-        private new static readonly Menu Menu = Utilitymenu;
+        private static readonly Menu Menu = Utilitymenu;
 
         public static void Init()
         {

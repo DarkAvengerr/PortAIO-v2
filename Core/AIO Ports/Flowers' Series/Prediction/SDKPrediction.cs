@@ -1,14 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Flowers_ADC_Series.Common;
+using LeagueSharp.Common;
+using SharpDX;
 using EloBuddy; 
-using LeagueSharp.Common; 
+
  namespace Flowers_ADC_Series.Prediction
 {
-    using Common;
-    using LeagueSharp;
-    using SharpDX;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
+    using LeagueSharp.Common;
     public static class SDKPrediction
     {
         [Flags]
@@ -17,7 +17,6 @@ using LeagueSharp.Common;
             Minions = 1,
             Heroes = 2,
             YasuoWall = 4,
-            BraumShield = 8,
             Walls = 16
         }
 
@@ -31,8 +30,7 @@ using LeagueSharp.Common;
             Low = 3,
             Impossible = 2,
             OutOfRange = 1,
-            Collision = 0,
-            None = -1
+            Collision = 0
         }
 
         public enum SkillshotType
@@ -77,7 +75,7 @@ using LeagueSharp.Common;
             return GetPrediction(input, true, true);
         }
 
-        internal static PredictionOutput GetDashingPrediction(PredictionInput input)
+        private static PredictionOutput GetDashingPrediction(PredictionInput input)
         {
             var dashData = input.Unit.GetDashInfo();
             var result = new PredictionOutput
@@ -130,7 +128,7 @@ using LeagueSharp.Common;
             return result;
         }
 
-        internal static PredictionOutput GetImmobilePrediction(PredictionInput input, double remainingImmobileT)
+        private static PredictionOutput GetImmobilePrediction(PredictionInput input, double remainingImmobileT)
         {
             var result = new PredictionOutput
             {
@@ -154,7 +152,7 @@ using LeagueSharp.Common;
             return result;
         }
 
-        internal static PredictionOutput GetPositionOnPath(PredictionInput input, List<Vector2> path, float speed = -1)
+        private static PredictionOutput GetPositionOnPath(PredictionInput input, List<Vector2> path, float speed = -1)
         {
             speed = Math.Abs(speed - -1) < float.Epsilon ? input.Unit.MoveSpeed : speed;
 
@@ -265,7 +263,7 @@ using LeagueSharp.Common;
             };
         }
 
-        internal static PredictionOutput GetPrediction(PredictionInput input, bool ft, bool checkCollision)
+        private static PredictionOutput GetPrediction(PredictionInput input, bool ft, bool checkCollision)
         {
             if (!input.Unit.IsValidTarget(float.MaxValue, false))
             {
@@ -358,7 +356,7 @@ using LeagueSharp.Common;
             return result;
         }
 
-        public static List<Obj_AI_Base> GetCollision(List<Vector3> positions, PredictionInput input)
+        private static List<Obj_AI_Base> GetCollision(List<Vector3> positions, PredictionInput input)
         {
             var result = new List<Obj_AI_Base>();
 
@@ -427,7 +425,7 @@ using LeagueSharp.Common;
             return result.Distinct().ToList();
         }
 
-        public static class Cluster
+        private static class Cluster
         {
             public static PredictionOutput GetAoEPrediction(PredictionInput input)
             {
@@ -444,7 +442,7 @@ using LeagueSharp.Common;
                 return new PredictionOutput();
             }
 
-            internal static List<PossibleTarget> GetPossibleTargets(PredictionInput input)
+            private static List<PossibleTarget> GetPossibleTargets(PredictionInput input)
             {
                 var result = new List<PossibleTarget>();
 
@@ -479,7 +477,7 @@ using LeagueSharp.Common;
                 return result;
             }
 
-            public static class Circle
+            private static class Circle
             {
                 public static PredictionOutput GetCirclePrediction(PredictionInput input)
                 {
@@ -537,7 +535,7 @@ using LeagueSharp.Common;
                 }
             }
 
-            public static class Cone
+            private static class Cone
             {
                 public static PredictionOutput GetConePrediction(PredictionInput input)
                 {
@@ -614,7 +612,7 @@ using LeagueSharp.Common;
                     return mainTargetPrediction;
                 }
 
-                internal static int GetHits(Vector2 end, double range, float angle, List<Vector2> points)
+                private static int GetHits(Vector2 end, double range, float angle, List<Vector2> points)
                 {
                     return (from point in points
                         let edge1 = end.Rotated(-angle/2)
@@ -626,7 +624,7 @@ using LeagueSharp.Common;
                 }
             }
 
-            public static class Line
+            private static class Line
             {
                 public static PredictionOutput GetLinePrediction(PredictionInput input)
                 {
@@ -721,7 +719,7 @@ using LeagueSharp.Common;
                     return mainTargetPrediction;
                 }
 
-                internal static Vector2[] GetCandidates(Vector2 from, Vector2 to, float radius, float range)
+                private static Vector2[] GetCandidates(Vector2 from, Vector2 to, float radius, float range)
                 {
                     var middlePoint = (from + to) / 2;
                     var intersections = from.CircleCircleIntersection(middlePoint, radius, from.Distance(middlePoint));
@@ -740,13 +738,13 @@ using LeagueSharp.Common;
                     return new Vector2[] { };
                 }
 
-                internal static IEnumerable<Vector2> GetHits(Vector2 start, Vector2 end, double radius, List<Vector2> points)
+                private static IEnumerable<Vector2> GetHits(Vector2 start, Vector2 end, double radius, List<Vector2> points)
                 {
                     return points.Where(p => p.DistanceSquared(start, end, true) <= radius * radius);
                 }
             }
 
-            internal class PossibleTarget
+            private class PossibleTarget
             {
                 public Vector2 Position { get; set; }
 
@@ -754,15 +752,11 @@ using LeagueSharp.Common;
             }
         }
 
-        public class ConvexHull
+        public static class ConvexHull
         {
-            public static RectangleF MinMaxBox { get; set; }
-
-            public static Vector2[] MinMaxCorners { get; set; }
-
             public static Vector2[] NonCulledPoints { get; set; }
 
-            public static void FindMinimalBoundingCircle(List<Vector2> points, out Vector2 center, out float radius)
+            private static void FindMinimalBoundingCircle(List<Vector2> points, out Vector2 center, out float radius)
             {
                 var hull = MakeConvexHull(points);
                 var bestCenter = points[0];
@@ -845,7 +839,7 @@ using LeagueSharp.Common;
                 return new MecCircle(center, radius);
             }
 
-            public static List<Vector2> MakeConvexHull(List<Vector2> points)
+            private static List<Vector2> MakeConvexHull(List<Vector2> points)
             {
                 points = HullCull(points);
 
@@ -1012,8 +1006,6 @@ using LeagueSharp.Common;
 
                 var result = new RectangleF(xmin, ymin, xmax - xmin, ymax - ymin);
 
-                MinMaxBox = result;
-
                 return result;
             }
 
@@ -1043,8 +1035,6 @@ using LeagueSharp.Common;
                     }
                 }
 
-                MinMaxCorners = new[] { upperLeft, upperRight, lowerRight, lowerLeft };
-
                 return new MinMaxCornersInfo(upperLeft, upperRight, lowerLeft, lowerRight);
             }
 
@@ -1062,7 +1052,7 @@ using LeagueSharp.Common;
             public struct MecCircle
             {
                 public Vector2 Center;
-                public float Radius;
+                public readonly float Radius;
 
                 internal MecCircle(Vector2 center, float radius)
                 {
@@ -1071,12 +1061,12 @@ using LeagueSharp.Common;
                 }
             }
 
-            public struct MinMaxCornersInfo
+            private struct MinMaxCornersInfo
             {
-                public Vector2 LowerLeft;
-                public Vector2 LowerRight;
-                public Vector2 UpperLeft;
-                public Vector2 UpperRight;
+                public readonly Vector2 LowerLeft;
+                public readonly Vector2 LowerRight;
+                public readonly Vector2 UpperLeft;
+                public readonly Vector2 UpperRight;
 
                 public MinMaxCornersInfo(Vector2 upperLeft, Vector2 upperRight, Vector2 lowerLeft, Vector2 lowerRight)
                 {
@@ -1088,7 +1078,7 @@ using LeagueSharp.Common;
             }
         }
 
-        internal static PredictionOutput GetStandardPrediction(PredictionInput input)
+        private static PredictionOutput GetStandardPrediction(PredictionInput input)
         {
             var speed = input.Unit.MoveSpeed;
 
@@ -1100,7 +1090,7 @@ using LeagueSharp.Common;
             return GetPositionOnPath(input, input.Unit.GetWaypoints(), speed);
         }
 
-        internal static double UnitIsImmobileUntil(Obj_AI_Base unit)
+        private static double UnitIsImmobileUntil(Obj_AI_Base unit)
         {
             var result =
                 unit.Buffs.Where(
@@ -1223,7 +1213,7 @@ using LeagueSharp.Common;
             return HitChance.Medium;
         }
 
-        internal class UnitTracker
+        private static class UnitTracker
         {
             private static readonly Dictionary<int, UnitTrackerEntry> DictData = new Dictionary<int, UnitTrackerEntry>();
 
@@ -1322,7 +1312,7 @@ using LeagueSharp.Common;
 
             public bool Collision { get; set; }
 
-            public CollisionableObjects CollisionObjects { get; set; } = CollisionableObjects.Minions |
+            public CollisionableObjects CollisionObjects { get; } = CollisionableObjects.Minions |
                                                                          CollisionableObjects.YasuoWall;
 
             public float Delay { get; set; }
@@ -1361,7 +1351,7 @@ using LeagueSharp.Common;
 
             public Obj_AI_Base Unit { get; set; } = ObjectManager.Player;
 
-            public bool UseBoundingRadius { get; set; } = true;
+            private bool UseBoundingRadius { get; } = true;
 
             internal float RealRadius => UseBoundingRadius ? Radius + Unit.BoundingRadius : Radius;
 
@@ -1376,9 +1366,9 @@ using LeagueSharp.Common;
             private Vector3 castPosition;
             private Vector3 unitPosition;
 
-            public int AoeHitCount { get; set; }
+            public int AoeHitCount { private get; set; }
 
-            public List<AIHeroClient> AoeTargetsHit { get; set; } = new List<AIHeroClient>();
+            public List<AIHeroClient> AoeTargetsHit { private get; set; } = new List<AIHeroClient>();
 
             public int AoeTargetsHitCount => Math.Max(AoeHitCount, AoeTargetsHit.Count);
 
@@ -1398,7 +1388,7 @@ using LeagueSharp.Common;
 
             public HitChance Hitchance { get; set; } = HitChance.Impossible;
 
-            public PredictionInput Input { get; set; }
+            public PredictionInput Input { private get; set; }
 
             public Vector3 UnitPosition
             {
@@ -1415,7 +1405,7 @@ using LeagueSharp.Common;
             }
         }
 
-        public class GamePath
+        public static class GamePath
         {
             public static class PathTracker
             {
@@ -1472,7 +1462,7 @@ using LeagueSharp.Common;
                     return distance / maxT;
                 }
 
-                public static List<StoredPath> GetStoredPaths(Obj_AI_Base unit, double maxT)
+                private static List<StoredPath> GetStoredPaths(Obj_AI_Base unit, double maxT)
                 {
                     List<StoredPath> value;
 
@@ -1512,7 +1502,7 @@ using LeagueSharp.Common;
 
                 public Vector2 StartPoint => Path.FirstOrDefault();
 
-                public int Tick { get; set; }
+                public int Tick { private get; set; }
 
                 public double Time => (Utils.TickCount - Tick) / 1000d;
 

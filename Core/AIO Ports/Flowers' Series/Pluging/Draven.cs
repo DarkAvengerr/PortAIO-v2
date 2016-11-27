@@ -13,9 +13,9 @@ using LeagueSharp.Common;
     using Orbwalking = Orbwalking;
     using static Common.Common;
 
-    internal class Draven : Program
+    internal class Draven : Logic
     {
-        private new readonly Menu Menu = Championmenu;
+        private readonly Menu Menu = Championmenu;
         private static readonly List<AllAxe> AxeList = new List<AllAxe>();
         private static int CatchTime;
 

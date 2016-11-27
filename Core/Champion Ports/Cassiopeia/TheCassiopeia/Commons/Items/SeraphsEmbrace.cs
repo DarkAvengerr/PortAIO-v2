@@ -7,7 +7,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace TheCassiopeia.Commons.Items
 {
     class SeraphsEmbrace : IActivateableItem
@@ -29,13 +29,13 @@ using EloBuddy;
                 {
                     if (args.Target != null && args.Target.IsValid && args.Target.IsMe)
                     {
-                        Use(args.Target as Obj_AI_Base);
+                        Use(sender.Owner as Obj_AI_Base);
                         return;
                     }
 
                     var halfLineLength = (args.EndPosition - args.StartPosition).Length()/2f;
                     if (ObjectManager.Player.Position.Distance(args.StartPosition) > halfLineLength && ObjectManager.Player.Position.Distance(args.EndPosition) > halfLineLength) return;
-                    Use(args.Target as Obj_AI_Base);
+                    Use(sender.Owner as Obj_AI_Base);
                 }
             };
         }

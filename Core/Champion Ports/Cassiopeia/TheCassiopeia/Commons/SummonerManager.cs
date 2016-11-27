@@ -6,7 +6,7 @@ using TheCassiopeia.Commons.ComboSystem;
 using TheCassiopeia.Commons.Summoners;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace TheCassiopeia.Commons
 {
     public class SummonerManager : IManager

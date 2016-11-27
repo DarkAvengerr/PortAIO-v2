@@ -12,7 +12,7 @@ using LeagueSharp.Common;
     using Orbwalking = Orbwalking;
     using static Common.Common;
 
-    internal class Jhin : Program
+    internal class Jhin : Logic
     {
         private AIHeroClient rShotTarget;
         private int LastPingT;
@@ -20,7 +20,7 @@ using LeagueSharp.Common;
         private int LastShowNoit;
         private bool IsAttack;
         private Vector2 PingLocation;
-        private new readonly Menu Menu = Championmenu;
+        private readonly Menu Menu = Championmenu;
 
         public Jhin()
         {
