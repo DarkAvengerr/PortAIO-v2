@@ -1292,6 +1292,12 @@
     <Compile Include="Core\Champion Ports\LeBlanc\LeBlanc II\Modes\ModePerma.cs" />
     <Compile Include="Core\Champion Ports\LeBlanc\LeBlanc II\Modes\ModeSettings.cs" />
     <Compile Include="Core\Champion Ports\LeBlanc\LeBlanc II\Program.cs" />
+    <Compile Include="Core\Champion Ports\Leona\Kuroko%27s Leona\Champions\Leona.cs" />
+    <Compile Include="Core\Champion Ports\Leona\Kuroko%27s Leona\Extensions\Menus.cs" />
+    <Compile Include="Core\Champion Ports\Leona\Kuroko%27s Leona\Extensions\Predictions.cs" />
+    <Compile Include="Core\Champion Ports\Leona\Kuroko%27s Leona\Extensions\Spells.cs" />
+    <Compile Include="Core\Champion Ports\Leona\Kuroko%27s Leona\Extensions\Utilities.cs" />
+    <Compile Include="Core\Champion Ports\Leona\Kuroko%27s Leona\Program.cs" />
     <Compile Include="Core\Champion Ports\Lucian\Lord%27s Lucian\HpBar.cs" />
     <Compile Include="Core\Champion Ports\Lucian\Lord%27s Lucian\Lucian.cs" />
     <Compile Include="Core\Champion Ports\Lucian\Lord%27s Lucian\Program.cs" />

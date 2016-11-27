@@ -2021,6 +2021,9 @@ namespace PortAIO
                         case 5: // sAIO
                             sAIO.Program.Main();
                             break;
+                        case 6: // Kuroko's Leona
+                            Kuroko_s_Leona.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Lissandra:
