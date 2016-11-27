@@ -10,7 +10,7 @@ using Color = System.Drawing.Color;
 
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace BadaoKingdom.BadaoChampion.BadaoGraves
 {
     public static class BadaoGravesHelper

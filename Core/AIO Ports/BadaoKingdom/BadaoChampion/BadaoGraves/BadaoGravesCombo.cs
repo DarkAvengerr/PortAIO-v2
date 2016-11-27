@@ -10,7 +10,7 @@ using Color = System.Drawing.Color;
 
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace BadaoKingdom.BadaoChampion.BadaoGraves
 {
     public static class BadaoGravesCombo
@@ -19,46 +19,89 @@ using EloBuddy;
         public static void BadaoActivate()
         {
             Game.OnUpdate += Game_OnUpdate;
-            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            //Orbwalking.OnAttack += Orbwalking_OnAttack;
+            EloBuddy.Player.OnIssueOrder += Obj_AI_Base_OnIssueOrder;
         }
 
-
-        private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        private static void Obj_AI_Base_OnIssueOrder(Obj_AI_Base sender, PlayerIssueOrderEventArgs args)
         {
             if (BadaoMainVariables.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo)
                 return;
             if (!sender.IsMe)
                 return;
-            Chat.Print(args.SData.Name);
-            if (args.SData.IsAutoAttack() && args.Target != null)
+            if (args.Order != GameObjectOrder.AttackUnit)
+                return;
+            if (args.Target == null)
+                return;
+            if (!(args.Target is Obj_AI_Base))
+                return;
+            if (Player.Distance(args.Target.Position) > Player.BoundingRadius + Player.AttackRange + args.Target.BoundingRadius - 20)
+                return;
+            var target = args.Target;
+            LeagueSharp.Common.Utility.DelayAction.Add(Game.Ping - Game.Ping, () =>
             {
-                LeagueSharp.Common.Utility.DelayAction.Add(50 - Game.Ping, () =>
+                if (BadaoMainVariables.E.IsReady() && BadaoGravesVariables.ComboE.GetValue<bool>())
                 {
-                    if (BadaoMainVariables.E.IsReady() && BadaoGravesVariables.ComboE.GetValue<bool>())
+                    List<Vector2> positions = new List<Vector2>();
+                    for (int i = 250; i <= 425; i += 5)
                     {
-                        var position = Player.Position.To2D().Extend(Game.CursorPos.To2D(), BadaoMainVariables.E.Range);
-                        if (args.Target.Position.To2D().Distance(position) <= -100 + Player.AttackRange + Player.BoundingRadius
-                            && !LeagueSharp.Common.Utility.UnderTurret(position.To3D(), true))
-                        {
-                            BadaoMainVariables.E.Cast(position);
-                        }
-                        else
-                        {
-                            var points = Geometry.CircleCircleIntersection(Player.Position.To2D(), args.Target.Position.To2D(), 425,
-                                -100 + Player.AttackRange + Player.BoundingRadius);
-                            var pos = points.Where(x => !NavMesh.GetCollisionFlags(x.X, x.Y).HasFlag(CollisionFlags.Wall)
-                                && !NavMesh.GetCollisionFlags(x.X, x.Y).HasFlag(CollisionFlags.Building) && !LeagueSharp.Common.Utility.UnderTurret(x.To3D(), true))
-                                .OrderBy(x => x.Distance(Game.CursorPos)/*x.To3D().CountEnemiesInRange(1000)*/).FirstOrDefault();
-                            if (pos != null)
-                            {
-                                BadaoMainVariables.E.Cast(pos);
-                            }
-                        }
+                        positions.Add(Player.Position.To2D().Extend(Game.CursorPos.To2D(), 250));
+                    }
+                    Vector2 position = positions.OrderBy(x => x.Distance(target.Position)).FirstOrDefault();
+                    if (position.IsValid() && target.Position.To2D().Distance(position) <= Player.AttackRange + Player.BoundingRadius)
+                    {
+                        BadaoMainVariables.E.Cast(position);
+                        LeagueSharp.Common.Utility.DelayAction.Add(0, () => Orbwalking.ResetAutoAttackTimer());
+                        //for (int i = 0; i < delay2; i = i + 5)
+                        //{
+                        //    LeagueSharp.Common.Utility.DelayAction.Add(i, () =>
+                        //    {
+                        //        EloBuddy.Player.DoEmote(Emote.Dance);
+                        //        EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
+                        //        EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, target);
+                        //    });
+                        //}
                     }
                 }
-                );
             }
+            );
         }
+
+        private static void Orbwalking_OnAttack(AttackableUnit unit, AttackableUnit target)
+        {
+            if (BadaoMainVariables.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo)
+                return;
+            if (!unit.IsMe)
+                return;
+            int delay2 = 200;
+            LeagueSharp.Common.Utility.DelayAction.Add(Game.Ping - Game.Ping, () =>
+            {
+                if (BadaoMainVariables.E.IsReady() && BadaoGravesVariables.ComboE.GetValue<bool>())
+                {
+                    List<Vector2> positions = new List<Vector2>();
+                    for (int i = 250; i <= 425; i += 5)
+                    {
+                        positions.Add(Player.Position.To2D().Extend(Game.CursorPos.To2D(), 250/*i*/));
+                    }
+                    Vector2 position = positions.OrderBy(x => x.Distance(target.Position)).FirstOrDefault();
+                    if (position.IsValid() && target.Position.To2D().Distance(position) <= Player.AttackRange + Player.BoundingRadius)
+                    {
+                        BadaoMainVariables.E.Cast(position);
+                        //for (int i = 0; i < delay2; i = i + 5)
+                        //{
+                        //    LeagueSharp.Common.Utility.DelayAction.Add(i, () =>
+                        //    {
+                        //        EloBuddy.Player.DoEmote(Emote.Dance);
+                        //        EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
+                        //        EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, target);
+                        //    });
+                        //}
+                    }
+                }
+            }
+            );
+        }
+            
 
         private static void Game_OnUpdate(EventArgs args)
         {

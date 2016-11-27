@@ -9,7 +9,7 @@ using SharpDX;
 using Color = System.Drawing.Color;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace BadaoKingdom.BadaoChampion.BadaoGraves
 {
     public static class BadaoGraves
@@ -18,6 +18,8 @@ using EloBuddy;
         {
             BadaoGravesConfig.BadaoActivate();
             BadaoGravesCombo.BadaoActivate();
+            BadaoGravesAuto.BadaoActivate();
+            BadaoGravesJungle.BadaoActivate();
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
         }
 
@@ -25,7 +27,7 @@ using EloBuddy;
         {
             if (args.Slot == SpellSlot.E)
             {
-                LeagueSharp.Common.Utility.DelayAction.Add(150, () => Orbwalking.ResetAutoAttackTimer());
+                LeagueSharp.Common.Utility.DelayAction.Add(0, () => Orbwalking.ResetAutoAttackTimer());
             }
         }
     }

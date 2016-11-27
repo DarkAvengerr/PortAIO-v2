@@ -133,9 +133,11 @@
     <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoElise\BadaoEliseSpellsManager.cs" />
     <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoElise\BadaoEliseVariables.cs" />
     <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoGraves\BadaoGraves.cs" />
+    <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoGraves\BadaoGravesAuto.cs" />
     <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoGraves\BadaoGravesCombo.cs" />
     <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoGraves\BadaoGravesConfig.cs" />
     <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoGraves\BadaoGravesHelper.cs" />
+    <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoGraves\BadaoGravesJungle.cs" />
     <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoGraves\BadaoGravesVariables.cs" />
     <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoJhin\BadaoJhin.cs" />
     <Compile Include="Core\AIO Ports\BadaoKingdom\BadaoChampion\BadaoJhin\BadaoJhinAuto.cs" />

@@ -10,7 +10,7 @@ using Color = System.Drawing.Color;
 
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace BadaoKingdom.BadaoChampion.BadaoGraves
 {
     public static class BadaoGravesConfig
@@ -50,6 +50,16 @@ using EloBuddy;
             BadaoGravesVariables.ComboE = Combo.AddItem(new MenuItem("ComboE", "E")).SetValue(true);
             BadaoGravesVariables.ComboR = Combo.AddItem(new MenuItem("ComboR", "R")).SetValue(true);
 
+            //Jungle
+            Menu JungleClear = config.AddSubMenu(new Menu("JungleClear", "JungleClear"));
+            BadaoGravesVariables.JungleQ = JungleClear.AddItem(new MenuItem("JungleQ", "Q")).SetValue(true);
+            BadaoGravesVariables.JungleE = JungleClear.AddItem(new MenuItem("JungleE", "E")).SetValue(true);
+            BadaoGravesVariables.ManaJungle = JungleClear.AddItem(new MenuItem("ManaJungle", "Min Mana").SetValue(new Slider(40, 0, 100)));
+
+            // Auto
+            Menu Auto = config.AddSubMenu(new Menu("Auto", "Auto"));
+            BadaoGravesVariables.AutoSmite = Auto.AddItem(new MenuItem("AutoSmite", "Smite Baron, Dragon")).SetValue(true);
+            BadaoGravesVariables.AutoRKS = Auto.AddItem(new MenuItem("AutoRKS", "R KS")).SetValue(true);
             // attach to mainmenu
             config.AddToMainMenu();
         }

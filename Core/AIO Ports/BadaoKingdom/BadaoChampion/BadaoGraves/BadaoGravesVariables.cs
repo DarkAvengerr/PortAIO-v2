@@ -10,7 +10,7 @@ using Color = System.Drawing.Color;
 
 
 using EloBuddy; 
- using LeagueSharp.Common; 
+using LeagueSharp.Common; 
  namespace BadaoKingdom.BadaoChampion.BadaoGraves
 {
     public static class BadaoGravesVariables
@@ -21,5 +21,12 @@ using EloBuddy;
         public static MenuItem ComboW;
         public static MenuItem ComboR;
         public static MenuItem ComboE;
+
+        public static MenuItem ManaJungle;
+        public static MenuItem JungleQ;
+        public static MenuItem JungleE;
+
+        public static MenuItem AutoSmite;
+        public static MenuItem AutoRKS;
     }
 }
