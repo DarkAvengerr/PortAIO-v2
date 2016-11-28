@@ -2692,28 +2692,16 @@
   <data name="Zyra2" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\elutility\zyra.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="cn" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\autojungle\cn.resx;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="cn_Designer" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\autojungle\cn.designer.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="en" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\autojungle\en.resx;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="en_Designer" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\autojungle\en.designer.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="tw" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\autojungle\tw.resx;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
-  <data name="tw_Designer" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\resources\autojungle\tw.designer.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
-  </data>
   <data name="Resource1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\core\aio ports\onekeytowin_aio_sebby\resource1.resx;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="Resource1_Designer" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\core\aio ports\onekeytowin_aio_sebby\resource1.designer.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="en" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\autojungle\en.resx;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="en1_Designer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\autojungle\en1.designer.cs;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
 </root>

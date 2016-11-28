@@ -6769,19 +6769,16 @@
     <Compile Include="Core\Utility Ports\ShadowTracker\OnDraw.cs" />
     <Compile Include="Core\Utility Ports\ShadowTracker\Program.cs" />
     <Compile Include="Core\Utility Ports\`WIP\TiltSharp\Program.cs" />
-    <Compile Include="Properties\en1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>en.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Content Include="Resources\AutoJungle\cn.Designer.cs" />
-    <Content Include="Resources\AutoJungle\en.Designer.cs" />
-    <Content Include="Resources\AutoJungle\tw.Designer.cs" />
+    <Compile Include="Resources\AutoJungle\en1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>en.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -6793,12 +6790,13 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
     </Content>
-    <EmbeddedResource Include="Properties\en.resx">
+    <EmbeddedResource Include="Resources\AutoJungle\en.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>en1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
@@ -7204,9 +7202,6 @@
     <Content Include="Resources\ElUtility\CD_summonersmite.png" />
     <Content Include="Resources\ElUtility\CD_summonerteleport.png" />
     <Content Include="Resources\ElUtility\Chogath.png" />
-    <Content Include="Resources\AutoJungle\cn.resx" />
-    <Content Include="Resources\AutoJungle\en.resx" />
-    <Content Include="Resources\AutoJungle\tw.resx" />
     <Content Include="Resources\ElUtility\Corki.png" />
     <Content Include="Resources\ElUtility\Darius.png" />
     <Content Include="Resources\ElUtility\Diana.png" />

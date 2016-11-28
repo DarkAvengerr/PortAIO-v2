@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace AutoJungle.Resource {
+namespace PortAIO.Resources.AutoJungle {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace AutoJungle.Resource {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class cn {
+    internal class en {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal cn() {
+        internal en() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace AutoJungle.Resource {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("AutoJungle.Resource.cn", typeof(cn).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("PortAIO.Resources.AutoJungle.en", typeof(en).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -61,7 +61,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 游戏结束自动关闭.
+        ///   Looks up a localized string similar to Close at the end.
         /// </summary>
         internal static string AutoClose {
             get {
@@ -70,7 +70,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 爱台湾S7-自动打野.
+        ///   Looks up a localized string similar to S7-AutoJungle.
         /// </summary>
         internal static string AutoJungle {
             get {
@@ -79,20 +79,11 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Soresu原作 | LOVETAIWAN更新 v.
+        ///   Looks up a localized string similar to Soresu | Updated by LOVETAIWAN v.
         /// </summary>
         internal static string AutoJungleInfo2 {
             get {
                 return ResourceManager.GetString("AutoJungleInfo2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to 合成血手/战士后F5，挂机则会无法使用!.
-        /// </summary>
-        internal static string AutoJungleInfo3 {
-            get {
-                return ResourceManager.GetString("AutoJungleInfo3", resourceCulture);
             }
         }
         
@@ -106,7 +97,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bu Zhi Chi Ci Ying Xiong!.
+        ///   Looks up a localized string similar to This champion is not supported!.
         /// </summary>
         internal static string ChampNotSupported {
             get {
@@ -115,7 +106,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 使用惩戒.
+        ///   Looks up a localized string similar to Use Smite.
         /// </summary>
         internal static string ComboSmite {
             get {
@@ -124,7 +115,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 控制台显示调试信息.
+        ///   Looks up a localized string similar to Print to console.
         /// </summary>
         internal static string debug {
             get {
@@ -133,7 +124,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 调试.
+        ///   Looks up a localized string similar to Debug.
         /// </summary>
         internal static string dsettings {
             get {
@@ -142,7 +133,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 开启挂机.
+        ///   Looks up a localized string similar to Enabled.
         /// </summary>
         internal static string Enabled {
             get {
@@ -151,7 +142,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 入侵敌方野区.
+        ///   Looks up a localized string similar to Go into enemy jungle.
         /// </summary>
         internal static string EnemyJungle {
             get {
@@ -160,7 +151,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Gank次数.
+        ///   Looks up a localized string similar to Ganking frequency.
         /// </summary>
         internal static string GankFrequency {
             get {
@@ -169,7 +160,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 最低等级进行Gank.
+        ///   Looks up a localized string similar to Min level to gank.
         /// </summary>
         internal static string GankLevel {
             get {
@@ -178,7 +169,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 搜索范围.
+        ///   Looks up a localized string similar to Searching range.
         /// </summary>
         internal static string GankRange {
             get {
@@ -187,7 +178,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Gank设置.
+        ///   Looks up a localized string similar to Gank settings.
         /// </summary>
         internal static string gsettings {
             get {
@@ -196,7 +187,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 血量%使用药水.
+        ///   Looks up a localized string similar to HP% to use potion.
         /// </summary>
         internal static string HealthToPotion {
             get {
@@ -205,7 +196,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 回城血量(%).
+        ///   Looks up a localized string similar to Recall on HP(%).
         /// </summary>
         internal static string HealtToBack {
             get {
@@ -214,7 +205,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 野区设置.
+        ///   Looks up a localized string similar to Jungle settings.
         /// </summary>
         internal static string jsettings {
             get {
@@ -241,7 +232,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Di Tu Bu Zhi Chi!.
+        ///   Looks up a localized string similar to This map is not supported!.
         /// </summary>
         internal static string MapNotSupported {
             get {
@@ -250,7 +241,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ni mei you Cheng Jie/Zhong Ji!.
+        ///   Looks up a localized string similar to You don&apos;t have smite!.
         /// </summary>
         internal static string NoSmite {
             get {
@@ -268,7 +259,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 显示游戏状态.
+        ///   Looks up a localized string similar to Show GameState.
         /// </summary>
         internal static string State {
             get {
@@ -277,7 +268,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 支持的英雄.
+        ///   Looks up a localized string similar to Supported champions.
         /// </summary>
         internal static string supported {
             get {
@@ -286,7 +277,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 寡妇.
+        ///   Looks up a localized string similar to Evelynn.
         /// </summary>
         internal static string supportedEvelyn {
             get {
@@ -295,7 +286,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 武器大师.
+        ///   Looks up a localized string similar to Jax.
         /// </summary>
         internal static string supportedJax {
             get {
@@ -304,7 +295,25 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 梦魇.
+        ///   Looks up a localized string similar to Kayle.
+        /// </summary>
+        internal static string supportedKayle {
+            get {
+                return ResourceManager.GetString("supportedKayle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to KogMaw.
+        /// </summary>
+        internal static string supportedKogMaw {
+            get {
+                return ResourceManager.GetString("supportedKogMaw", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nocturne.
         /// </summary>
         internal static string supportedNocturne {
             get {
@@ -313,7 +322,25 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 龙女.
+        ///   Looks up a localized string similar to Nunu.
+        /// </summary>
+        internal static string supportedNunu {
+            get {
+                return ResourceManager.GetString("supportedNunu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Olaf.
+        /// </summary>
+        internal static string supportedOlaf {
+            get {
+                return ResourceManager.GetString("supportedOlaf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Shyvana.
         /// </summary>
         internal static string supportedShyvana {
             get {
@@ -322,7 +349,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 蛮王.
+        ///   Looks up a localized string similar to Tryndamere.
         /// </summary>
         internal static string supportedTryndamere {
             get {
@@ -331,7 +358,16 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 雷霆咆哮.
+        ///   Looks up a localized string similar to Udyr.
+        /// </summary>
+        internal static string supportedUdyr {
+            get {
+                return ResourceManager.GetString("supportedUdyr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Volibear.
         /// </summary>
         internal static string supportedVolibear {
             get {
@@ -340,7 +376,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 狼人.
+        ///   Looks up a localized string similar to Warwick.
         /// </summary>
         internal static string supportedWarwick {
             get {
@@ -349,7 +385,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 赵信.
+        ///   Looks up a localized string similar to Xin Zhao.
         /// </summary>
         internal static string supportedXinZhao {
             get {
@@ -358,7 +394,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 易大师.
+        ///   Looks up a localized string similar to Master Yi.
         /// </summary>
         internal static string supportedYi {
             get {
@@ -394,7 +430,7 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to    Change focus if ignite kills.
+        ///   Looks up a localized string similar to Change focus if ignite kills.
         /// </summary>
         internal static string UseIgniteOpt {
             get {
@@ -403,11 +439,20 @@ namespace AutoJungle.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 使用饰品.
+        ///   Looks up a localized string similar to Use Trinket.
         /// </summary>
         internal static string UseTrinket {
             get {
                 return ResourceManager.GetString("UseTrinket", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wait for smite at level 2(HP 55% Lower).
+        /// </summary>
+        internal static string WaitAtLvlTWO {
+            get {
+                return ResourceManager.GetString("WaitAtLvlTWO", resourceCulture);
             }
         }
     }
