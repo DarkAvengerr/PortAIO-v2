@@ -154,6 +154,8 @@ using EloBuddy;
             DefineSpells();
             Game.OnUpdate += GameTick;
             Obj_AI_Base.OnProcessSpellCast += HealUltTrigger;
+            Obj_AI_Base.OnBasicAttack += HealUltTrigger;
+            Obj_AI_Base.OnSpellCast += HealUltTrigger;
             Drawing.OnDraw += OnDraw;
         }
 
@@ -309,7 +311,12 @@ using EloBuddy;
             var senderhero = sender as AIHeroClient;
             var senderturret = sender as Obj_AI_Turret;
 
-            if (sender.IsAlly || (target == null) || !target.IsAlly && !target.IsMe)
+            if (sender.IsAlly || sender.IsMe || target == null)
+            {
+                return;
+            }
+
+            if (!target.IsAlly && !target.IsMe)
             {
                 return;
             }
@@ -461,7 +468,6 @@ using EloBuddy;
 
             if (GetBool("Ultingon") && !GetBool("onlyuincdmg"))
             {
-                Console.WriteLine(Player.HealthPercent);
                 var herolist = HeroManager.Allies
                     .Where(
                         h =>
