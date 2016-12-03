@@ -116,7 +116,6 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\AIO Ports\ADCPackage\CustomOrbwalker.cs" />
     <Compile Include="Core\AIO Ports\ADCPackage\Managers\ItemManager.cs" />
     <Compile Include="Core\AIO Ports\ADCPackage\Managers\MenuManager.cs" />
     <Compile Include="Core\AIO Ports\ADCPackage\Managers\ModeManager.cs" />

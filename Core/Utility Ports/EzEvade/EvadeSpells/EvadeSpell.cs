@@ -331,18 +331,17 @@ using LeagueSharp.Common;
                         CastEvadeSpell(() => Items.UseItem((int)evadeSpell.itemID), processSpell);
                         return true;
                     }
-                    else
+
+                    if (evadeSpell.castType == CastType.Target)
                     {
-                        if (evadeSpell.castType == CastType.Target)
-                        {
-                            CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell, myHero), processSpell);
-                            return true;
-                        }
-                        else if (evadeSpell.castType == CastType.Self)
-                        {
-                            CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell), processSpell);
-                            return true;
-                        }
+                        CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell, myHero), processSpell);
+                        return true;
+                    }
+
+                    if (evadeSpell.castType == CastType.Self)
+                    {
+                        CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell), processSpell);
+                        return true;
                     }
                 }
                 else if (evadeSpell.evadeType == EvadeType.MovementSpeedBuff)
@@ -353,32 +352,21 @@ using LeagueSharp.Common;
                         if (posInfo != null)
                         {
                             CastEvadeSpell(() => Items.UseItem((int)evadeSpell.itemID), processSpell);
-                            EvadeCommand.MoveTo(posInfo.position);
+                            DelayAction.Add(5, () => EvadeCommand.MoveTo(posInfo.position));
                             return true;
                         }
                     }
                     else
                     {
-                        if (evadeSpell.castType == CastType.Target)
-                        {
-                            var posInfo = EvadeHelper.GetBestPosition();
-                            if (posInfo != null)
-                            {
-                                CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell, myHero), processSpell);
-                                EvadeCommand.MoveTo(posInfo.position);
-                                return true;
-                            }
-                        }
-                        else if (evadeSpell.castType == CastType.Self)
+                        if (evadeSpell.castType == CastType.Self)
                         {
                             var posInfo = EvadeHelper.GetBestPosition();
                             if (posInfo != null)
                             {
                                 CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell), processSpell);
-                                EvadeCommand.MoveTo(posInfo.position);
+                                DelayAction.Add(5, () => EvadeCommand.MoveTo(posInfo.position));
                                 return true;
                             }
-
                         }
 
                         else if (evadeSpell.castType == CastType.Position)
@@ -387,7 +375,7 @@ using LeagueSharp.Common;
                             if (posInfo != null)
                             {
                                 CastEvadeSpell(() => EvadeCommand.CastSpell(evadeSpell, posInfo.position), processSpell);
-                                EvadeCommand.MoveTo(posInfo.position);
+                                DelayAction.Add(5, () => EvadeCommand.MoveTo(posInfo.position));
                                 return true;
                             }
                         }

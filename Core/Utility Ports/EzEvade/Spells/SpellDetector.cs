@@ -205,7 +205,7 @@ using LeagueSharp.Common;
                                 }
                             }
 
-                            if (foundMissile == false || spellData.dontcheckDuplicates)
+                            if (foundMissile == false)
                             {
                                 CreateSpellData(hero, hero.ServerPosition, args.End, spellData);
                             }
@@ -308,7 +308,20 @@ using LeagueSharp.Common;
                 }
                 else if (spellType == SpellType.Cone)
                 {
-                    return;
+                    endPosition = startPosition + direction * spellData.range;
+                    endTick = spellData.spellDelay;
+
+                    if (endPosition.Distance(startPosition) > spellData.range)
+                        endPosition = startPosition + direction * spellData.range;
+
+                    if (spellData.projectileSpeed == 0 && hero != null)
+                    {
+                        endPosition = hero.ServerPosition.To2D();
+                    }
+                    else if (spellData.projectileSpeed > 0)
+                    {
+                        endTick = endTick + 1000 * startPosition.Distance(endPosition) / spellData.projectileSpeed;
+                    }
                 }
                 else
                 {
@@ -330,7 +343,6 @@ using LeagueSharp.Common;
                 endTick += extraEndTick;
 
                 Spell newSpell = new Spell();
-
                 newSpell.startTime = EvadeUtils.TickCount;
                 newSpell.endTime = EvadeUtils.TickCount + endTick;
                 newSpell.startPos = startPosition;
@@ -341,11 +353,17 @@ using LeagueSharp.Common;
                 newSpell.spellType = spellType;
                 newSpell.radius = spellRadius > 0 ? spellRadius : newSpell.GetSpellRadius();
 
-                if (hero != null)
+                if (spellType == SpellType.Cone)
                 {
-                    newSpell.heroID = hero.NetworkId;
+                    newSpell.radius = 100 + (newSpell.radius * 3); // for now.. eh
+                    newSpell.cnStart = startPosition + direction;
+                    newSpell.cnLeft = endPosition + direction.Perpendicular() * newSpell.radius;
+                    newSpell.cnRight = endPosition - direction.Perpendicular() * newSpell.radius;
                 }
 
+                if (hero != null)
+                    newSpell.heroID = hero.NetworkId;
+ 
                 if (obj != null)
                 {
                     newSpell.spellObject = obj;
@@ -681,24 +699,24 @@ using LeagueSharp.Common;
 
         public static void InitChannelSpells()
         {
-            channeledSpells["Drain"] = "FiddleSticks";
-            channeledSpells["Crowstorm"] = "FiddleSticks";
-            channeledSpells["KatarinaR"] = "Katarina";
-            channeledSpells["AbsoluteZero"] = "Nunu";
-            channeledSpells["GalioIdolOfDurand"] = "Galio";
-            channeledSpells["MissFortuneBulletTime"] = "MissFortune";
-            channeledSpells["Meditate"] = "MasterYi";
-            channeledSpells["NetherGrasp"] = "Malzahar";
-            channeledSpells["ReapTheWhirlwind"] = "Janna";
-            channeledSpells["KarthusFallenOne"] = "Karthus";
-            channeledSpells["KarthusFallenOne2"] = "Karthus";
-            channeledSpells["VelkozR"] = "Velkoz";
-            channeledSpells["XerathLocusOfPower2"] = "Xerath";
-            channeledSpells["ZacE"] = "Zac";
-            channeledSpells["Pantheon_Heartseeker"] = "Pantheon";
-            channeledSpells["JhinR"] = "Jhin";
-            channeledSpells["OdinRecall"] = "AllChampions";
-            channeledSpells["Recall"] = "AllChampions";
+            channeledSpells["drain"] = "FiddleSticks";
+            channeledSpells["crowstorm"] = "FiddleSticks";
+            channeledSpells["katarinar"] = "Katarina";
+            channeledSpells["absolutezero"] = "Nunu";
+            channeledSpells["galioidolofdurand"] = "Galio";
+            channeledSpells["missfortunebullettime"] = "MissFortune";
+            channeledSpells["meditate"] = "MasterYi";
+            channeledSpells["malzaharr"] = "Malzahar";
+            channeledSpells["reapthewhirlwind"] = "Janna";
+            channeledSpells["karthusfallenone"] = "Karthus";
+            channeledSpells["karthusfallenone2"] = "Karthus";
+            channeledSpells["velkozr"] = "Velkoz";
+            channeledSpells["xerathlocusofpower2"] = "Xerath";
+            channeledSpells["zace"] = "Zac";
+            channeledSpells["pantheon_heartseeker"] = "Pantheon";
+            channeledSpells["jhinr"] = "Jhin";
+            channeledSpells["odinrecall"] = "AllChampions";
+            channeledSpells["recall"] = "AllChampions";
         }
 
         public static void LoadDummySpell(SpellData spell)
@@ -825,10 +843,10 @@ using LeagueSharp.Common;
 
                             if (!onProcessSpells.ContainsKey(spell.spellName.ToLower() + "trap"))
                             {
-                                if (spell.trapBaseName == "")
+                                if (string.IsNullOrEmpty(spell.trapBaseName))
                                     spell.trapBaseName = spell.spellName + "1";
   
-                                if (spell.trapTroyName == "")
+                                if (string.IsNullOrEmpty(spell.trapTroyName))
                                     spell.trapTroyName = spell.spellName + "2";
 
                                 onProcessTraps.Add(spell.trapBaseName.ToLower(), spell);
@@ -863,11 +881,11 @@ using LeagueSharp.Common;
                     foreach (var spell in SpellDatabase.Spells.Where(
                         s => (s.charName == hero.ChampionName) || (s.charName == "AllChampions")))
                     {
+
                         if (spell.hasTrap && spell.projectileSpeed < 3000 || !spell.hasTrap)
                         {
-                            if (!(spell.spellType == SpellType.Circular
-                                  || spell.spellType == SpellType.Line
-                                  || spell.spellType == SpellType.Arc))
+                            if (spell.spellType != SpellType.Circular && spell.spellType != SpellType.Line &&
+                                spell.spellType != SpellType.Arc && spell.spellType != SpellType.Cone)
                                 continue;
 
                             if (spell.charName == "AllChampions")
@@ -881,7 +899,7 @@ using LeagueSharp.Common;
 
                             if (!onProcessSpells.ContainsKey(spell.spellName.ToLower()))
                             {
-                                if (spell.missileName == "")
+                                if (string.IsNullOrEmpty(spell.missileName))
                                     spell.missileName = spell.spellName;
 
                                 onProcessSpells.Add(spell.spellName.ToLower(), spell);
@@ -908,7 +926,7 @@ using LeagueSharp.Common;
                                 string menuName = spell.charName + " (" + spell.spellKey.ToString() + ") Settings";
 
                                 var enableSpell = !spell.defaultOff;
-                                var isnewSpell = spell.name.Contains("[Beta]");
+                                var isnewSpell = spell.name.Contains("[Beta]") || spell.spellType == SpellType.Cone;
 
                                 Menu newSpellMenu = new Menu(menuName, spell.charName + spell.spellName + "Settings");
 
@@ -945,10 +963,8 @@ using LeagueSharp.Common;
                             }
                         }
                     }
-
                 }
             }
-
         }
     }
 }

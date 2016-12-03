@@ -31,7 +31,7 @@ using EloBuddy; namespace ADCPackage.Plugins
         public static void Load()
         {
             Chat.Print("[<font color='#F8F46D'>ADC Package</font>] by <font color='#79BAEC'>God</font> - <font color='#FFFFFF'>Jinx</font> loaded");
-            CustomOrbwalker.BeforeAttack += CustomOrbwalker_BeforeAttack;
+            Orbwalking.BeforeAttack += CustomOrbwalker_BeforeAttack;
             Game.OnUpdate += PermaActive;
             Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
@@ -55,7 +55,7 @@ using EloBuddy; namespace ADCPackage.Plugins
             }
         }
 
-        private static void CustomOrbwalker_BeforeAttack(CustomOrbwalker.BeforeAttackEventArgs args)
+        private static void CustomOrbwalker_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
             if (args.Target.Type == GameObjectType.AIHeroClient)
             {
@@ -522,7 +522,7 @@ using EloBuddy; namespace ADCPackage.Plugins
                 return;
             }
 
-            if (Menu.Orbwalker.ActiveMode == CustomOrbwalker.OrbwalkingMode.Mixed && Menu.Orbwalker.GetTarget() != null &&
+            if (Menu.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && Menu.Orbwalker.GetTarget() != null &&
                 Menu.Orbwalker.GetTarget().Type == GameObjectType.obj_AI_Minion)
             {
                 if (Q.IsReady() && FishBones)
@@ -536,13 +536,13 @@ using EloBuddy; namespace ADCPackage.Plugins
             // todo: fishbones when no enemy
 
             if (Menu.Config.SubMenu("adcpackage.jinx").SubMenu("combo").Item("q.range").GetValue<bool>() &&
-                Menu.Orbwalker.ActiveMode == CustomOrbwalker.OrbwalkingMode.Combo ||
+                Menu.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo ||
                 Menu.Config.SubMenu("adcpackage.jinx").SubMenu("harass").Item("q.range").GetValue<bool>() &&
-                Menu.Orbwalker.ActiveMode == CustomOrbwalker.OrbwalkingMode.Mixed)
+                Menu.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
                 if (!EnemyInRange && !FishBones && Q.IsReady()) // go rocket
                 {
-                    if (Menu.Orbwalker.ActiveMode == CustomOrbwalker.OrbwalkingMode.Mixed &&
+                    if (Menu.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed &&
                         Menu.Orbwalker.GetTarget() == null)
                     {
                         return;
@@ -555,9 +555,9 @@ using EloBuddy; namespace ADCPackage.Plugins
             // todo: force target and go fishbones if AOE
 
             if (Menu.Config.SubMenu("adcpackage.jinx").SubMenu("combo").Item("q.aoe").GetValue<Slider>().Value != 6 &&
-                Menu.Orbwalker.ActiveMode == CustomOrbwalker.OrbwalkingMode.Combo ||
+                Menu.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo ||
                 Menu.Config.SubMenu("adcpackage.jinx").SubMenu("harass").Item("q.aoe").GetValue<Slider>().Value != 6 &&
-                Menu.Orbwalker.ActiveMode == CustomOrbwalker.OrbwalkingMode.Mixed)
+                Menu.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
                 foreach (
                     var enemy in
@@ -567,7 +567,7 @@ using EloBuddy; namespace ADCPackage.Plugins
                             .Where(
                                 enemy =>
                                     enemy.CountEnemiesInRange(150) >= (Menu.Orbwalker.ActiveMode ==
-                                                                       CustomOrbwalker.OrbwalkingMode.Combo
+                                                                       Orbwalking.OrbwalkingMode.Combo
                                         ? Menu.Config.SubMenu("adcpackage.jinx")
                                             .SubMenu("combo")
                                             .Item("q.aoe")
@@ -593,9 +593,9 @@ using EloBuddy; namespace ADCPackage.Plugins
             var target = TargetSelector.GetTarget(525 + Player.BoundingRadius, TargetSelector.DamageType.Physical);
 
             if (Menu.Config.SubMenu("adcpackage.jinx").SubMenu("combo").Item("q.range").GetValue<bool>() &&
-                Menu.Orbwalker.ActiveMode == CustomOrbwalker.OrbwalkingMode.Combo ||
+                Menu.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo ||
                 Menu.Config.SubMenu("adcpackage.jinx").SubMenu("harass").Item("q.range").GetValue<bool>() &&
-                Menu.Orbwalker.ActiveMode == CustomOrbwalker.OrbwalkingMode.Mixed)
+                Menu.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
                 if (qtarget != null && target != null && qtarget != target && !FishBones && Q.IsReady())
                     // maybe just switch to if qtarget isnt in range..? idk

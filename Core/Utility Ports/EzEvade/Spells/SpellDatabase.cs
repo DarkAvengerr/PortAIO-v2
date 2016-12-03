@@ -216,7 +216,7 @@ using LeagueSharp.Common;
                 spellDelay = 250,
                 spellKey = SpellSlot.W,
                 spellName = "Incinerate",
-                spellType = SpellType.Cone,
+                spellType = SpellType.Cone
             });
 
             Spells.Add(
@@ -224,7 +224,6 @@ using LeagueSharp.Common;
             {
                 charName = "Annie",
                 dangerlevel = 4,
-                missileName = "Incinerate",
                 name = "Summom: Tibbers",
                 radius = 290,
                 range = 600,
@@ -260,7 +259,7 @@ using LeagueSharp.Common;
             {
                 angle = 5,
                 charName = "Ashe",
-                dangerlevel = 2,
+                dangerlevel = 1,
                 //missileName = "VolleyAttack",
                 name = "Volley",
                 projectileSpeed = 1500,
@@ -269,7 +268,7 @@ using LeagueSharp.Common;
                 spellDelay = 250,
                 spellKey = SpellSlot.W,
                 spellName = "Volley",
-                spellType = SpellType.Cone, // temp removal
+                spellType = SpellType.Line,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
                 isSpecial = true
             });
@@ -558,7 +557,7 @@ using LeagueSharp.Common;
                 charName = "Cassiopeia",
                 dangerlevel = 4,
                 name = "Petrifying Gaze",
-                radius = 20,
+                radius = 145,
                 range = 825,
                 spellDelay = 500,
                 spellKey = SpellSlot.R,
@@ -613,7 +612,7 @@ using LeagueSharp.Common;
                 dangerlevel = 2,
                 missileName = "FeralScream",
                 name = "Feral Scream",
-                radius = 20,
+                radius = 80,
                 range = 650,
                 spellDelay = 250,
                 spellKey = SpellSlot.W,
@@ -718,7 +717,7 @@ using LeagueSharp.Common;
                 dangerlevel = 3,
                 missileName = "DariusAxeGrabCone",
                 name = "Axe Cone Grab",
-                radius = 20,
+                radius = 55,
                 range = 570,
                 spellDelay = 320,
                 spellKey = SpellSlot.E,
@@ -1351,13 +1350,19 @@ using LeagueSharp.Common;
             {
                 charName = "Hecarim",
                 dangerlevel = 4,
-                name = "Onslaught of Shadows",
-                projectileSpeed = 1250,
-                radius = 40,
-                range = 1500,
-                spellDelay = 100,
+                name = "Onslaught of Shadows [Beta]",
+                projectileSpeed = 1100,
+                radius = 60,
+                range = 1525,
+                spellDelay = 0,
                 spellKey = SpellSlot.R,
                 spellName = "HecarimUltMissile",
+                extraMissileNames =
+                    new[]
+                    {
+                        "HecarimUltMissileSkn4R1", "HecarimUltMissileSkn4c", "HecarimUltMissileSkn4R2",
+                        "HecarimUltMissileSKn4L2", "HecarimUltMissileSkn4L1"
+                    },
                 spellType = SpellType.Line,
                 usePackets = true,
                 fixedRange = true
@@ -1828,7 +1833,6 @@ using LeagueSharp.Common;
             {
                 charName = "Karthus",
                 dangerlevel = 2,
-                missileName = "KarthusLayWasteA1",
                 name = "Lay Waste",
                 radius = 190,
                 range = 875,
@@ -1865,7 +1869,7 @@ using LeagueSharp.Common;
                 charName = "Kassadin",
                 dangerlevel = 2,
                 name = "Force Pulse",
-                radius = 20,
+                radius = 80,
                 range = 700,
                 spellDelay = 250,
                 spellKey = SpellSlot.E,
@@ -2219,7 +2223,7 @@ using LeagueSharp.Common;
                 name = "Ice Shard",
                 projectileSpeed = 2200,
                 radius = 75,
-                range = 700,
+                range = 825,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 spellName = "LissandraQ",
@@ -2233,10 +2237,9 @@ using LeagueSharp.Common;
                 charName = "Lissandra",
                 dangerlevel = 2,
                 name = "Ice Shard Extended",
-                missileName = "lissandraqshards",
                 projectileSpeed = 2200,
                 radius = 90,
-                range = 1025,
+                range = 825,
                 spellDelay = 250,
                 spellKey = SpellSlot.Q,
                 spellName = "LissandraQShards",
@@ -2317,7 +2320,7 @@ using LeagueSharp.Common;
                 extraMissileNames = new[] { "lucianrmissileoffhand" },
                 spellType = SpellType.Line,
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions, CollisionObjectType.EnemyMinions },
-                dontcheckDuplicates = true,
+                usePackets = true,
                 fixedRange = true
             });
             
@@ -2475,7 +2478,7 @@ using LeagueSharp.Common;
                 charName = "Mordekaiser",
                 dangerlevel = 3,
                 name = "Syphon Of Destruction",
-                radius = 160,
+                radius = 80,
                 range = 675,
                 spellDelay = 250,
                 spellKey = SpellSlot.E,
@@ -2528,20 +2531,21 @@ using LeagueSharp.Common;
 
             #region MonkeyKing
 
-            //Spells.Add(
-            //new SpellData
-            //{
-            //    charName = "MonkeyKing",
-            //    dangerlevel = 4,
-            //    defaultOff = true,
-            //    name = "Cyclone",
-            //    radius = 450,
-            //    range = 450,
-            //    spellDelay = 0,
-            //    spellKey = SpellSlot.R,
-            //    spellName = "MonkeyKingSpinToWin",
-            //    spellType = SpellType.Circular
-            //});
+            Spells.Add(
+            new SpellData
+            {
+                charName = "MonkeyKing",
+                dangerlevel = 4,
+                name = "Cyclone [Beta]",
+                projectileSpeed = 0,
+                radius = 250,
+                range = 250,
+                spellDelay = 125,
+                spellKey = SpellSlot.R,
+                spellName = "MonkeyKingSpinToWin",
+                spellType = SpellType.Circular,
+                defaultOff = true
+            });
 
             #endregion MonkeyKing
 
@@ -2785,7 +2789,7 @@ using LeagueSharp.Common;
                 charName = "Pantheon",
                 dangerlevel = 2,
                 name = "Heartseeker",
-                radius = 50,
+                radius = 80,
                 range = 600,
                 extraEndTime = 750,
                 spellDelay = 1000,
@@ -2895,12 +2899,12 @@ using LeagueSharp.Common;
             {
                 charName = "RekSai",
                 dangerlevel = 3,
-                missileName = "ReksaiWBurrowed",
                 name = "Unburrow",
                 projectileSpeed = 2300,
                 radius = 160,
                 range = 160,
                 spellDelay = 250f,
+                extraEndTime = 500f,
                 spellKey = SpellSlot.W,
                 spellName = "ReksaiWBurrowed",
                 spellType = SpellType.Circular
@@ -3197,7 +3201,7 @@ using LeagueSharp.Common;
                 spellDelay = 500,
                 spellKey = SpellSlot.R,
                 spellName = "SionR",
-                spellType = SpellType.Cone, // temp removal
+                spellType = SpellType.None, // temp removal
                 collisionObjects = new[] { CollisionObjectType.EnemyChampions },
                 isSpecial = true
             });
