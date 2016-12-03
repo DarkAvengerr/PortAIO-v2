@@ -469,12 +469,14 @@ using LeagueSharp.Common;
         public static bool CanMove(this AIHeroClient Target)
         {
             return !(Target.MoveSpeed < 50) && !Target.IsStunned && !Target.HasBuffOfType(BuffType.Stun) &&
-                !Target.HasBuffOfType(BuffType.Fear) && !Target.HasBuffOfType(BuffType.Snare) &&
-                !Target.HasBuffOfType(BuffType.Knockup) && !Target.HasBuff("Recall") && !Target.HasBuffOfType(BuffType.Knockback) 
-                && !Target.HasBuffOfType(BuffType.Charm) && !Target.HasBuffOfType(BuffType.Taunt) && 
-                !Target.HasBuffOfType(BuffType.Suppression) && (!Target.IsCastingInterruptableSpell()
-                || Target.IsMoving);
-        }
+                   !Target.HasBuffOfType(BuffType.Fear) && !Target.HasBuffOfType(BuffType.Snare) &&
+                   !Target.HasBuffOfType(BuffType.Knockup) && !Target.HasBuff("Recall") &&
+                   !Target.HasBuffOfType(BuffType.Knockback)
+                   && !Target.HasBuffOfType(BuffType.Charm) && !Target.HasBuffOfType(BuffType.Taunt) &&
+                   !Target.HasBuffOfType(BuffType.Suppression) && (!Target.IsCastingInterruptableSpell()
+                                                                   || Target.IsMoving) &&
+                   !Target.HasBuff("zhonyasringshield") && !Target.HasBuff("bardrstasis");
+        }           // zhonya                               // bard r
 
         public static float DistanceSquared(this Obj_AI_Base source, Vector3 position)
         {

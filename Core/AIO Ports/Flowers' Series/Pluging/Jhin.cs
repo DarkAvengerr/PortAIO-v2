@@ -36,6 +36,7 @@ using LeagueSharp.Common;
             var ComboMenu = Menu.AddSubMenu(new Menu("Combo", "Combo"));
             {
                 ComboMenu.AddItem(new MenuItem("ComboQ", "Use Q", true).SetValue(true));
+                ComboMenu.AddItem(new MenuItem("ComboQMinion", "Use Q| Minion", true).SetValue(true));
                 ComboMenu.AddItem(new MenuItem("ComboW", "Use W", true).SetValue(true));
                 ComboMenu.AddItem(new MenuItem("ComboWAA", "Use W| After Attack?", true).SetValue(true));
                 ComboMenu.AddItem(new MenuItem("ComboWOnly", "Use W| Only Use to MarkTarget?", true).SetValue(true));
@@ -600,21 +601,21 @@ using LeagueSharp.Common;
                 {
                     Q.CastOnUnit(qTarget, true);
                 }
-                else if (CheckTarget(target, Q.Range + 300))
+                else if (CheckTarget(target, Q.Range + 300) && Menu.Item("ComboQMinion", true).GetValue<bool>())
                 {
                     if (Me.HasBuff("JhinPassiveReload") ||
                         (!Me.HasBuff("JhinPassiveReload") &&
-                         Me.CountEnemiesInRange(Orbwalking.GetRealAutoAttackRange(Me)) == 0))
+                         Me.CountEnemiesInRange(Orbwalking.GetRealAutoAttackRange(Me) + Me.BoundingRadius) == 0))
                     {
                         var qPred = Prediction.GetPrediction(target, 0.25f);
                         var bestQMinion =
                             MinionManager.GetMinions(qPred.CastPosition, 300)
                                 .Where(x => x.IsValidTarget(Q.Range))
-                                .OrderBy(x => x.Distance(target))
-                                .ThenBy(x => x.Health)
+                                .OrderBy(x => x.Health)
+                                .ThenBy(x => x.Distance(target))
                                 .FirstOrDefault();
 
-                        if (bestQMinion != null)
+                        if (bestQMinion != null && bestQMinion.IsValidTarget(Q.Range))
                         {
                             Q.CastOnUnit(bestQMinion, true);
                         }

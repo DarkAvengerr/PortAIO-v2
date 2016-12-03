@@ -81,11 +81,48 @@ using LeagueSharp.Common;
 
             var MiscMenu = Menu.AddSubMenu(new Menu("Misc", "Misc"));
             {
-                MiscMenu.AddItem(new MenuItem("AutoQ", "Auto Q?", true).SetValue(true));
+                var qSettings = MiscMenu.AddSubMenu(new Menu("Q Settings", "Q Settings"));
+                {
+                    qSettings.AddItem(new MenuItem("AutoQ", "Auto Q?", true).SetValue(true));
+                }
+
+                var wSettings = MiscMenu.AddSubMenu(new Menu("W Settings", "W Settings"));
+                {
+                    wSettings.AddItem(new MenuItem("AutoWCC", "Auto W|CC", true).SetValue(true));
+                    wSettings.AddItem(new MenuItem("AutoWTP", "Auto W|Teleport", true).SetValue(true));
+                }
+
+                var eSettings = MiscMenu.AddSubMenu(new Menu("E Settings", "E Settings"));
+                {
+                    var interruptMenu = eSettings.AddSubMenu(new Menu("Interrupt Settings", "Interrupt Settings"));
+                    {
+                        interruptMenu.AddItem(new MenuItem("Interrupt", "Interrupt Danger Spells", true).SetValue(true));
+                        interruptMenu.AddItem(new MenuItem("AntiAlistar", "Interrupt Alistar W", true).SetValue(true));
+                        interruptMenu.AddItem(new MenuItem("AntiRengar", "Interrupt Rengar Jump", true).SetValue(true));
+                        interruptMenu.AddItem(new MenuItem("AntiKhazix", "Interrupt Khazix R", true).SetValue(true));
+                    }
+
+                    var antigapcloserMenu =
+                        eSettings.AddSubMenu(new Menu("AntiGapcloser Settings", "AntiGapcloser Settings"));
+                    {
+                        antigapcloserMenu.AddItem(new MenuItem("Gapcloser", "Anti Gapcloser", true).SetValue(false));
+                        foreach (var target in HeroManager.Enemies)
+                        {
+                            antigapcloserMenu.AddItem(
+                                new MenuItem("AntiGapcloser" + target.ChampionName.ToLower(), target.ChampionName, true)
+                                    .SetValue(false));
+                        }
+                    }
+                }
+
+                var rSettings = MiscMenu.AddSubMenu(new Menu("R Settings", "R Settings"));
+                {
+                    rSettings.AddItem(
+                        new MenuItem("SemiR", "Semi-manual R Key", true).SetValue(new KeyBind('T', KeyBindType.Press)));
+                }
+
                 MiscMenu.AddItem(
                     new MenuItem("EQKey", "One Key EQ target", true).SetValue(new KeyBind('G', KeyBindType.Press)));
-                MiscMenu.AddItem(
-                    new MenuItem("SemiR", "Semi-manual R Key", true).SetValue(new KeyBind('T', KeyBindType.Press)));
             }
 
             var DrawMenu = Menu.AddSubMenu(new Menu("Drawings", "Drawings"));
@@ -98,10 +135,56 @@ using LeagueSharp.Common;
                 DrawMenu.AddItem(new MenuItem("DrawDamage", "Draw ComboDamage", true).SetValue(true));
             }
 
+
+            AntiGapcloser.OnEnemyGapcloser += OnEnemyGapcloser;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
             Game.OnUpdate += OnUpdate;
             Drawing.OnDraw += OnDraw;
             Drawing.OnEndScene += OnEndScene;
+        }
+
+        private void OnCreate(GameObject sender, EventArgs Args)
+        {
+            var Rengar = HeroManager.Enemies.Find(heros => heros.ChampionName.Equals("Rengar"));
+            var Khazix = HeroManager.Enemies.Find(heros => heros.ChampionName.Equals("Khazix"));
+
+            if (Rengar != null && Menu.Item("AntiRengar", true).GetValue<bool>())
+            {
+                if (sender.Name == "Rengar_LeapSound.troy" && sender.Position.Distance(Me.Position) < E.Range)
+                {
+                    E.CastOnUnit(Rengar);
+                }
+            }
+
+            if (Khazix != null && Menu.Item("AntiKhazix", true).GetValue<bool>())
+            {
+                if (sender.Name == "Khazix_Base_E_Tar.troy" && sender.Position.Distance(Me.Position) <= 300)
+                {
+                    E.CastOnUnit(Khazix);
+                }
+            }
+        }
+
+
+        private void OnEnemyGapcloser(ActiveGapcloser Args)
+        {
+            if (E.IsReady())
+            {
+                if (Menu.Item("AntiAlistar", true).GetValue<bool>() && Args.Sender.ChampionName == "Alistar" &&
+                    Args.SkillType == GapcloserType.Targeted)
+                {
+                    E.CastOnUnit(Args.Sender, true);
+                }
+
+                if (Menu.Item("Gapcloser", true).GetValue<bool>() &&
+                    Menu.Item("AntiGapcloser" + Args.Sender.ChampionName.ToLower(), true).GetValue<bool>())
+                {
+                    if (Args.Sender.DistanceToPlayer() <= 200 && Args.Sender.IsValid)
+                    {
+                        E.CastOnUnit(Args.Sender, true);
+                    }
+                }
+            }
         }
 
         private void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs Args)
@@ -131,7 +214,7 @@ using LeagueSharp.Common;
                 return;
             }
 
-            AutoQ();
+            Auto();
             KillSteal();
 
             switch (Orbwalker.ActiveMode)
@@ -177,16 +260,56 @@ using LeagueSharp.Common;
             }
         }
 
-        private void AutoQ()
+        private void Auto()
         {
-            if (Menu.Item("AutoQ", true).GetValue<bool>() && Q.IsReady() &&
-                Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo)
+            if (Menu.Item("AutoQ", true).GetValue<bool>() && Q.IsReady() && 
+                Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo && 
+                Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Mixed)
             {
                 var target = TargetSelector.GetTarget(Q.Range - 30, TargetSelector.DamageType.Physical);
 
                 if (CheckTarget(target, Q.Range) && !target.CanMove())
                 {
                     Q.CastTo(target);
+                }
+            }
+
+            if (W.IsReady())
+            {
+                if (Menu.Item("AutoWCC", true).GetValue<bool>())
+                {
+                    foreach (
+                        var target in
+                        HeroManager.Enemies.Where(
+                            x => x.IsValidTarget(W.Range) && !x.CanMove() && !x.HasBuff("caitlynyordletrapinternal")))
+                    {
+                        if (Utils.TickCount - LastWTime > 1500)
+                        {
+                            W.Cast(target.Position, true);
+                        }
+                    }
+                }
+
+                if (Menu.Item("AutoWTP", true).GetValue<bool>())
+                {
+                    var obj =
+                        ObjectManager
+                            .Get<Obj_AI_Base>()
+                            .FirstOrDefault(x => !x.IsAlly && !x.IsMe && x.DistanceToPlayer() <= W.Range &&
+                                                 x.Buffs.Any(
+                                                     a =>
+                                                         a.Name.ToLower().Contains("teleport") || // tp
+                                                         a.Name.ToLower().Contains("gate")) && // tf r
+                                                 !ObjectManager.Get<Obj_AI_Base>()
+                                                     .Any(b => b.Name.ToLower().Contains("trap") && b.Distance(x) <= 150));
+
+                    if (obj != null)
+                    {
+                        if (Utils.TickCount - LastWTime > 1500)
+                        {
+                            W.Cast(obj.Position, true);
+                        }
+                    }
                 }
             }
         }

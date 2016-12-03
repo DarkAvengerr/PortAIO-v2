@@ -83,6 +83,10 @@ using LeagueSharp.Common;
             {
                 BurstMenu.AddItem(new MenuItem("BurstKeys", "Burst Key -> Please Check The Orbwalker Key!", true));
                 BurstMenu.AddItem(new MenuItem("Bursttarget", "Burst Target -> Left Click to Lock!", true));
+                BurstMenu.AddItem(new MenuItem("Burstranges",
+                    "How to Burst -> Lock the target and then just press Burst Key!", true));
+                BurstMenu.AddItem(new MenuItem("BurstER", "Burst Mode -> Enabled E->R?", true).SetValue(false))
+                    .SetTooltip("if you dont enabled is RE Burst Mode");
             }
             
             var MiscMenu = Menu.AddSubMenu(new Menu("Misc", "Misc"));
@@ -100,11 +104,42 @@ using LeagueSharp.Common;
                 DrawMenu.AddItem(new MenuItem("DrawDamage", "Draw ComboDamage", true).SetValue(true));
             }
 
+            Obj_AI_Base.OnPlayAnimation += OnPlayAnimation;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
             Game.OnUpdate += OnUpdate;
             Obj_AI_Base.OnSpellCast += OnSpellCast;
             AntiGapcloser.OnEnemyGapcloser += OnEnemyGapcloser;
             Drawing.OnDraw += OnDraw;
+        }
+
+        private void OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs Args)
+        {
+            if (!sender.IsMe || Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Burst)
+            {
+                return;
+            }
+
+            if (Args.Animation == "Spell3")
+            {
+                Orbwalking.ResetAutoAttackTimer();
+                canE = false;
+
+                if (Menu.Item("BurstER", true).GetValue<bool>() && TargetSelector.GetSelectedTarget() != null && R.IsReady())
+                {
+                    var target = TargetSelector.GetSelectedTarget();
+
+                    if (target != null)
+                    {
+                        LeagueSharp.Common.Utility.DelayAction.Add(Game.Ping, () => R.Cast(target.ServerPosition, true));
+                    }
+                }
+            }
+
+            if ((Args.Animation == "Spell4" || Args.Animation == "785121b3") && TargetSelector.GetSelectedTarget() != null && 
+                !Menu.Item("BurstER", true).GetValue<bool>() && E.IsReady())
+            {
+                E.Cast(TargetSelector.GetSelectedTarget().Position, true);
+            }
         }
 
         private void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs Args)
@@ -114,21 +149,10 @@ using LeagueSharp.Common;
                 return;
             }
 
-            switch (Args.SData.Name)
+            if (Args.SData.Name.Contains("GravesMove"))
             {
-                case "GravesMove":
-                    Orbwalking.ResetAutoAttackTimer();
-                    canE = false;
-                    break;
-                case "GravesChargeShot":
-                    if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Burst &&
-                        TargetSelector.GetSelectedTarget() != null && E.IsReady())
-                    {
-                        var target = TargetSelector.GetSelectedTarget();
-
-                        E.Cast(target.Position, true);
-                    }
-                    break;
+                Orbwalking.ResetAutoAttackTimer();
+                canE = false;
             }
         }
 
@@ -202,18 +226,27 @@ using LeagueSharp.Common;
         {
             var target = TargetSelector.GetSelectedTarget();
 
-            if (CheckTarget(target, 700f))
+            if (CheckTarget(target, 800f))
             {
-                if (R.IsReady() && E.IsReady())
-                {
-                    var rPred = R.GetPrediction(target, true);
+                var pos = Me.Position.Extend(target.Position, E.Range);
 
-                    if (rPred.Hitchance >= HitChance.High && target.IsValidTarget(R.Range))
+                if (R.IsReady())
+                {
+                    if (!Menu.Item("BurstER", true).GetValue<bool>())
                     {
-                        if (R.Cast(rPred.CastPosition, true))
+                        if (E.IsReady() && target.IsValidTarget(600f))
+                        {
+                            if (R.CanCast(target))
+                            {
+                                R.Cast(target, true);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (E.IsReady() && target.IsValidTarget(600f))
                         {
                             E.Cast(target.Position, true);
-                            Orbwalking.ResetAutoAttackTimer();
                         }
                     }
                 }
@@ -343,6 +376,17 @@ using LeagueSharp.Common;
                 return;
             }
 
+            if (Args.SData.Name.Contains("GravesChargeShot"))
+            {
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Burst &&
+                    TargetSelector.GetSelectedTarget() != null && E.IsReady())
+                {
+                    var target = TargetSelector.GetSelectedTarget();
+                    var pos = Me.Position.Extend(target.Position, E.Range);
+                    E.Cast(pos);
+                }
+            }
+
             if (Orbwalking.IsAutoAttack(Args.SData.Name))
             {
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
@@ -421,7 +465,7 @@ using LeagueSharp.Common;
 
                 if (Menu.Item("DrawBurst", true).GetValue<bool>())
                 {
-                    Render.Circle.DrawCircle(Me.Position, 700f, Color.FromArgb(90, 255, 255), 1);
+                    Render.Circle.DrawCircle(Me.Position, Orbwalking.GetRealAutoAttackRange(Me), Color.FromArgb(90, 255, 255), 1);
                 }
 
                 if (Menu.Item("DrawDamage", true).GetValue<bool>())
@@ -518,11 +562,8 @@ using LeagueSharp.Common;
 
             if (canE)
             {
-                if (E.Cast(ePosition, true))
-                {
-                    Orbwalking.ResetAutoAttackTimer();
-                    canE = false;
-                }
+                E.Cast(ePosition, true);
+                canE = false;
             }
         }
     }

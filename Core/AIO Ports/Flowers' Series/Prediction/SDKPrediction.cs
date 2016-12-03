@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Flowers_ADC_Series.Common;
-using LeagueSharp.Common;
+using LeagueSharp;
 using SharpDX;
 using EloBuddy; 
-
  namespace Flowers_ADC_Series.Prediction
 {
     using LeagueSharp.Common;

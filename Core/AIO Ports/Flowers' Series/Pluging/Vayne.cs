@@ -73,25 +73,43 @@ using LeagueSharp.Common;
 
                 var EMenu = MiscMenu.AddSubMenu(new Menu("E Settings", "E Settings"));
                 {
-                    EMenu.AddItem(
-                        new MenuItem("ComboEMode", "Use E Mode:", true).SetValue(
-                            new StringList(new[] { "Default", "VHR", "Marksman", "SharpShooter", "OKTW" })));
-                    EMenu.AddItem(new MenuItem("ComboEPush", "Use E|Push Tolerance", true).SetValue(new Slider(0, -100)));
-                    EMenu.AddItem(new MenuItem("Interrupt", "Interrupt Danger Spells", true).SetValue(true));
-                    EMenu.AddItem(new MenuItem("AntiAlistar", "Anti Alistar", true).SetValue(true));
-                    EMenu.AddItem(new MenuItem("AntiRengar", "Anti Rengar", true).SetValue(true));
-                    EMenu.AddItem(new MenuItem("AntiKhazix", "Anti Khazix", true).SetValue(true));
-                    EMenu.AddItem(new MenuItem("Gapcloser", "Anti Gapcloser", true).SetValue(true));
-                    foreach (var target in HeroManager.Enemies)
+                    var condemnMenu = EMenu.AddSubMenu(new Menu("Condemn Settings", "Condemn Settings"));
                     {
-                        EMenu.AddItem(new MenuItem("AntiGapcloser" + target.ChampionName.ToLower(),
-                            "AntiGapcloser: " + target.ChampionName, true).SetValue(false));
+                        condemnMenu.AddItem(
+                            new MenuItem("EMode", "Use E Mode:", true).SetValue(
+                                new StringList(new[] {"Default", "VHR", "Marksman", "SharpShooter", "OKTW"})));
+                        condemnMenu.AddItem(
+                            new MenuItem("ComboEPush", "Use E|Push Tolerance", true).SetValue(new Slider(0, -50, 50)));
                     }
-                    EMenu.AddItem(new MenuItem("AutoE", "Auto E?", true).SetValue(false));
-                    foreach (var target in HeroManager.Enemies)
+
+                    var interruptMenu = EMenu.AddSubMenu(new Menu("Interrupt Settings", "Interrupt Settings"));
                     {
-                        EMenu.AddItem(new MenuItem("AutoE" + target.ChampionName.ToLower(),
-                            "AutoE: " + target.ChampionName, true).SetValue(true));
+                        interruptMenu.AddItem(new MenuItem("Interrupt", "Interrupt Danger Spells", true).SetValue(true));
+                        interruptMenu.AddItem(new MenuItem("AntiAlistar", "Interrupt Alistar W", true).SetValue(true));
+                        interruptMenu.AddItem(new MenuItem("AntiRengar", "Interrupt Rengar Jump", true).SetValue(true));
+                        interruptMenu.AddItem(new MenuItem("AntiKhazix", "Interrupt Khazix R", true).SetValue(true));
+                    }
+
+                    var antigapcloserMenu =
+                        EMenu.AddSubMenu(new Menu("AntiGapcloser Settings", "AntiGapcloser Settings"));
+                    {
+                        antigapcloserMenu.AddItem(new MenuItem("Gapcloser", "Anti Gapcloser", true).SetValue(false));
+                        foreach (var target in HeroManager.Enemies)
+                        {
+                            antigapcloserMenu.AddItem(
+                                new MenuItem("AntiGapcloser" + target.ChampionName.ToLower(), target.ChampionName, true)
+                                    .SetValue(false));
+                        }
+                    }
+
+                    var autocondemnMenu = EMenu.AddSubMenu(new Menu("AutoCondemn Settings", "AutoCondemn Settings"));
+                    {
+                        autocondemnMenu.AddItem(new MenuItem("AutoE", "Auto E?", true).SetValue(false));
+                        foreach (var target in HeroManager.Enemies)
+                        {
+                            autocondemnMenu.AddItem(new MenuItem("AutoE" + target.ChampionName.ToLower(),
+                                target.ChampionName, true).SetValue(true));
+                        }
                     }
                 }
 
@@ -537,7 +555,7 @@ using LeagueSharp.Common;
         {
             if (target != null)
             {
-                switch (Menu.Item("ComboEMode", true).GetValue<StringList>().SelectedIndex)
+                switch (Menu.Item("EMode", true).GetValue<StringList>().SelectedIndex)
                 {
                     case 0:
                         {
