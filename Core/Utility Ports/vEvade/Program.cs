@@ -7,6 +7,7 @@ using LeagueSharp.Common;
     using LeagueSharp.Common;
 
     using vEvade.Core;
+    using vEvade.Helpers;
 
     #endregion
 
@@ -16,6 +17,7 @@ using LeagueSharp.Common;
 
         public static void Main()
         {
+            Configs.Debug = false;
             Evade.OnGameLoad(new System.EventArgs());
         }
 

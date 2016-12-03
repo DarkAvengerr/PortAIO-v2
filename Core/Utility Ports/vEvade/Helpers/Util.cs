@@ -96,9 +96,8 @@ using LeagueSharp.Common;
                                       || buff.Type == BuffType.Stun || buff.Type == BuffType.Suppression
                                       || buff.Type == BuffType.Snare)
                               select buff.EndTime).Concat(new[] { 0f }).Max();
-
-                return (result.Equals(0) ? -1 : (int)(Utils.GameTimeTickCount + (result - Game.Time) * 1000))
-                       - Utils.GameTimeTickCount > Game.Ping / 2 + 70;
+                var time = result.Equals(0f) ? -1 : (int)(Utils.GameTimeTickCount + (result - Game.Time) * 1000);
+                return time != -1 && time - Utils.GameTimeTickCount > Game.Ping / 2 + 70;
             }
         }
 
@@ -106,9 +105,9 @@ using LeagueSharp.Common;
 
         #region Public Methods and Operators
 
-        public static void DrawLine(Vector3 start, Vector3 end, Color color)
+        public static void DrawLine(Vector2 start, Vector2 end, Color color)
         {
-            Drawing.DrawLine(Drawing.WorldToScreen(start), Drawing.WorldToScreen(end), 2, color);
+            Drawing.DrawLine(Drawing.WorldToScreen(start.To3D()), Drawing.WorldToScreen(end.To3D()), 1, color);
         }
 
         public static void Move(this Vector2 pos)

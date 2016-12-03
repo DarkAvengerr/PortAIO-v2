@@ -9,6 +9,7 @@ using LeagueSharp.Common;
     using LeagueSharp;
     using LeagueSharp.Common;
 
+    using vEvade.Managers;
     using vEvade.Spells;
 
     using SpellData = vEvade.Spells.SpellData;
@@ -52,14 +53,11 @@ using LeagueSharp.Common;
             }
 
             foreach (var hero in
-                HeroManager.AllHeroes.Where(i => !i.IsDead && i.IsVisible && i.Team == sender.Team))
+                HeroManager.AllHeroes.Where(
+                    i =>
+                    i.IsValid() && !i.IsDead && i.IsVisible && i.Team == sender.Team && i.HasBuff("taricwleashactive")))
             {
-                var buff = hero.GetBuff("taricwleashactive");
-
-                if (buff != null && buff.Caster.NetworkId == sender.NetworkId)
-                {
-                    SpellDetector.AddSpell(hero, hero.ServerPosition, args.End, data);
-                }
+                SpellDetector.AddSpell(hero, hero.ServerPosition, args.End, data);
             }
         }
 

@@ -37,8 +37,9 @@ using LeagueSharp.Common;
             }
 
             init = true;
+            SpellDetector.OnCreateSpell += EkkoW;
             SpellDetector.OnProcessSpell += EkkoR;
-            GameObject.OnCreate += EkkoWDetonate;
+            GameObject.OnCreate += EkkoW2;
         }
 
         #endregion
@@ -66,23 +67,41 @@ using LeagueSharp.Common;
             spellArgs.NoProcess = true;
         }
 
-        private static void EkkoWDetonate(GameObject sender, EventArgs args)
+        private static void EkkoW(Obj_AI_Base sender, MissileClient missile, SpellData data, SpellArgs spellArgs)
         {
-            var toggle = sender as Obj_GeneralParticleEmitter;
-
-            if (toggle == null || !toggle.IsValid || !new Regex("Ekko_.+_W_Detonate").IsMatch(toggle.Name)
-                || toggle.Name.Contains("Slow"))
+            if (data.MenuName != "EkkoW")
             {
                 return;
             }
 
             var spell =
-                Evade.SpellsDetected.Values.FirstOrDefault(
-                    i => i.Data.MenuName == "EkkoW" && i.End.Distance(toggle.Position) < 100);
+                Evade.DetectedSpells.Values.FirstOrDefault(
+                    i =>
+                    i.Data.MenuName == data.MenuName && i.Unit.NetworkId == sender.NetworkId
+                    && i.End.Distance(missile.EndPosition) < 100);
 
             if (spell != null)
             {
-                Evade.SpellsDetected.Remove(spell.SpellId);
+                Evade.DetectedSpells.Remove(spell.SpellId);
+            }
+        }
+
+        private static void EkkoW2(GameObject sender, EventArgs args)
+        {
+            var obj = sender as Obj_GeneralParticleEmitter;
+
+            if (obj == null || !obj.IsValid || !new Regex("Ekko_.+_W_Detonate.troy").IsMatch(obj.Name))
+            {
+                return;
+            }
+
+            var spell =
+                Evade.DetectedSpells.Values.FirstOrDefault(
+                    i => i.Data.MenuName == "EkkoW" && i.End.Distance(obj.Position) < 100);
+
+            if (spell != null)
+            {
+                Evade.DetectedSpells.Remove(spell.SpellId);
             }
         }
 

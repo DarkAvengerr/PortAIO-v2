@@ -4,8 +4,6 @@ using LeagueSharp.Common;
 {
     #region
 
-    using System.Linq;
-
     using LeagueSharp;
 
     using vEvade.Core;
@@ -15,7 +13,7 @@ using LeagueSharp.Common;
 
     #endregion
 
-    public class Draven : IChampionManager
+    public class Diana : IChampionManager
     {
         #region Static Fields
 
@@ -33,34 +31,30 @@ using LeagueSharp.Common;
             }
 
             init = true;
-            SpellDetector.OnProcessSpell += DravenR;
+            SpellDetector.OnProcessSpell += DianaQ;
         }
 
         #endregion
 
         #region Methods
 
-        private static void DravenR(
+        private static void DianaQ(
             Obj_AI_Base sender,
             GameObjectProcessSpellCastEventArgs args,
             SpellData data,
             SpellArgs spellArgs)
         {
-            if (data.MenuName != "DravenR" || !args.SData.Name.Contains("Double"))
+            if (data.MenuName != "DianaQCircle")
             {
                 return;
             }
 
-            var spell =
-                Evade.DetectedSpells.Values.FirstOrDefault(
-                    i => i.Data.MenuName == data.MenuName && i.Unit.NetworkId == sender.NetworkId);
+            SpellData arcData;
 
-            if (spell != null)
+            if (Evade.OnProcessSpells.TryGetValue("DianaQArc", out arcData))
             {
-                Evade.DetectedSpells.Remove(spell.SpellId);
+                SpellDetector.AddSpell(sender, sender.ServerPosition, args.End, arcData);
             }
-
-            spellArgs.NoProcess = true;
         }
 
         #endregion

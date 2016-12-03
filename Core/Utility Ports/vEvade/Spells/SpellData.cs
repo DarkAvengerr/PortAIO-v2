@@ -31,8 +31,6 @@ using LeagueSharp.Common;
 
         public int Delay = 250;
 
-        public int DelayEx;
-
         public bool DisabledByDefault;
 
         public bool DontAddExtraDuration;
@@ -41,9 +39,13 @@ using LeagueSharp.Common;
 
         public bool DontCheckForDuplicates;
 
+        public int ExtraDelay;
+
         public int ExtraDuration;
 
         public string[] ExtraMissileNames = { };
+
+        public int ExtraRange;
 
         public string[] ExtraSpellNames = { };
 
@@ -111,9 +113,9 @@ using LeagueSharp.Common;
         {
             get
             {
-                return this.RawRadius + (!Configs.Debug ? Configs.SpellExtraRadius : 0)
+                return this.RawRadius
                        + (this.AddHitbox && this.Type != SpellType.Ring && this.Type != SpellType.Cone
-                          && this.Type != SpellType.MissileCone
+                          && this.Type != SpellType.MissileCone && this.Type != SpellType.Arc
                               ? (int)ObjectManager.Player.BoundingRadius
                               : 0);
             }
@@ -129,7 +131,7 @@ using LeagueSharp.Common;
             {
                 return this.RawRange
                        + (!Configs.Debug && (this.Type == SpellType.Line || this.Type == SpellType.MissileLine)
-                              ? Configs.SpellExtraRange
+                              ? Configs.ExtraSpellRange
                               : 0);
             }
             set
@@ -156,8 +158,6 @@ using LeagueSharp.Common;
 
     public enum SpellType
     {
-        Circle,
-
         Line,
 
         MissileLine,
@@ -165,6 +165,8 @@ using LeagueSharp.Common;
         Cone,
 
         MissileCone,
+
+        Circle,
 
         Ring,
 

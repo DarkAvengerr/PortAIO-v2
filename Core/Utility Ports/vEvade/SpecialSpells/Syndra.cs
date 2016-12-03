@@ -49,30 +49,30 @@ using LeagueSharp.Common;
             SpellData data,
             SpellArgs spellArgs)
         {
-            if (data.MenuName != "SyndraE")
+            if (!data.MenuName.StartsWith("SyndraE"))
             {
                 return;
             }
 
-            var newData = (SpellData)data.Clone();
-            newData.Radius = args.SData.Name.EndsWith("5") ? data.RadiusEx : data.Radius;
-            SpellDetector.AddSpell(sender, sender.ServerPosition, args.End, newData);
-            var spellE =
-                Evade.SpellsDetected.Values.FirstOrDefault(
-                    i =>
-                    i.Data.MenuName == data.MenuName && i.Unit.NetworkId == sender.NetworkId
-                    && sender.Distance(i.Start) < 100);
+            SpellDetector.AddSpell(sender, sender.ServerPosition, args.End, data);
+            var spell =
+                Evade.DetectedSpells.Values.FirstOrDefault(
+                    i => i.Data.MenuName == data.MenuName && i.Unit.NetworkId == sender.NetworkId);
+            SpellData eqData;
 
-            if (spellE != null)
+            if (spell != null && Evade.OnProcessSpells.TryGetValue("SyndraEQ", out eqData))
             {
-                var sector =
-                    new Polygons.Cone(spellE.Start, spellE.Direction, spellE.Radius + 30, spellE.Data.Range + 100)
-                        .ToPolygon();
+                var cone =
+                    new Polygons.Cone(
+                        spell.Cone.Center,
+                        spell.Cone.Direction,
+                        spell.Data.RawRadius + 30,
+                        spell.Data.RawRange + 200).ToPolygon();
                 var orbs =
-                    Evade.SpellsDetected.Values.Where(
-                        i => i.Data.MenuName == "SyndraQ" && i.Unit.NetworkId == spellE.Unit.NetworkId)
-                        .Select(i => i.End)
-                        .ToList();
+                    Evade.DetectedSpells.Values.Where(
+                        i =>
+                        i.Data.MenuName == "SyndraQ" && i.Unit.NetworkId == spell.Unit.NetworkId
+                        && Utils.GameTimeTickCount - i.StartTick < 400).Select(i => i.End).ToList();
                 orbs.AddRange(
                     ObjectManager.Get<Obj_AI_Minion>()
                         .Where(
@@ -81,23 +81,13 @@ using LeagueSharp.Common;
                             && i.Team == sender.Team)
                         .Select(i => i.ServerPosition.To2D()));
 
-                foreach (var orb in orbs.Where(i => !sector.IsOutside(i)))
+                foreach (var orb in orbs.Where(i => !cone.IsOutside(i)))
                 {
-                    var orbData = (SpellData)data.Clone();
-                    orbData.Range = 950;
-                    orbData.Delay = 0;
-                    orbData.Radius = 55;
-                    orbData.MissileSpeed = 2000;
-                    orbData.Type = SpellType.Line;
-                    SpellDetector.AddSpell(
-                        sender,
-                        orb.To3D(),
-                        spellE.Start.Extend(orb, spellE.Start.Distance(orb) > 200 ? 1300 : 1000).To3D(),
-                        orbData,
-                        null,
-                        SpellType.None,
-                        true,
-                        spellE.StartTick + data.Delay + (int)(spellE.Start.Distance(orb) / data.MissileSpeed * 1000));
+                    var startPos = orb.Extend(spell.Start, 100);
+                    var endPos = spell.Start.Extend(orb, spell.Start.Distance(orb) > 200 ? 1300 : 1100);
+                    var startT = spell.StartTick + data.Delay
+                                 + (int)(spell.Start.Distance(orb) / data.MissileSpeed * 1000);
+                    SpellDetector.AddSpell(sender, startPos, endPos, eqData, null, SpellType.None, true, startT);
                 }
             }
 

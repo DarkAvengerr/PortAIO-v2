@@ -15,7 +15,7 @@ using LeagueSharp.Common;
 
     #endregion
 
-    public class Draven : IChampionManager
+    public class Bard : IChampionManager
     {
         #region Static Fields
 
@@ -33,34 +33,35 @@ using LeagueSharp.Common;
             }
 
             init = true;
-            SpellDetector.OnProcessSpell += DravenR;
+            SpellDetector.OnCreateSpell += BardR;
         }
 
         #endregion
 
         #region Methods
 
-        private static void DravenR(
-            Obj_AI_Base sender,
-            GameObjectProcessSpellCastEventArgs args,
-            SpellData data,
-            SpellArgs spellArgs)
+        private static void BardR(Obj_AI_Base sender, MissileClient missile, SpellData data, SpellArgs spellArgs)
         {
-            if (data.MenuName != "DravenR" || !args.SData.Name.Contains("Double"))
+            if (data.MenuName != "BardR" || !missile.SData.Name.Contains("Fixed"))
             {
                 return;
             }
 
+            var newData = (SpellData)data.Clone();
+            newData.MissileSpeed = newData.MissileMinSpeed;
             var spell =
                 Evade.DetectedSpells.Values.FirstOrDefault(
                     i => i.Data.MenuName == data.MenuName && i.Unit.NetworkId == sender.NetworkId);
 
-            if (spell != null)
+            if (spell == null)
             {
-                Evade.DetectedSpells.Remove(spell.SpellId);
+                spellArgs.NewData = newData;
+
+                return;
             }
 
-            spellArgs.NoProcess = true;
+            Evade.DetectedSpells.Remove(spell.SpellId);
+            SpellDetector.AddSpell(sender, missile.StartPosition, missile.EndPosition, newData, missile);
         }
 
         #endregion

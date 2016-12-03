@@ -14,11 +14,11 @@ using LeagueSharp.Common;
 
     #endregion
 
-    public class Riven : IChampionManager
+    public class Zac : IChampionManager
     {
         #region Static Fields
 
-        private static int lastQTick;
+        private static int lastETick;
 
         #endregion
 
@@ -26,7 +26,7 @@ using LeagueSharp.Common;
 
         public void LoadSpecialSpell(SpellData spellData)
         {
-            if (spellData.MenuName != "RivenQ3")
+            if (spellData.MenuName != "ZacE")
             {
                 return;
             }
@@ -49,19 +49,10 @@ using LeagueSharp.Common;
                 return;
             }
 
-            if (Utils.GameTimeTickCount - lastQTick > 100)
+            if (Utils.GameTimeTickCount - lastETick <= 100)
             {
-                return;
+                SpellDetector.AddSpell(caster, args.StartPos, args.EndPos, data, null, SpellType.None, true, lastETick);
             }
-
-            var newData = (SpellData)data.Clone();
-
-            if (caster.HasBuff("RivenFengShuiEngine"))
-            {
-                newData.Radius += 75;
-            }
-
-            SpellDetector.AddSpell(caster, args.StartPos, args.EndPos, newData, null, SpellType.None, true, lastQTick);
         }
 
         private static void OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args, SpellData data)
@@ -74,9 +65,9 @@ using LeagueSharp.Common;
                 return;
             }
 
-            if (args.Animation == "Spell1c")
+            if (args.Animation == "af176358")
             {
-                lastQTick = Utils.GameTimeTickCount;
+                lastETick = Utils.GameTimeTickCount;
             }
         }
 

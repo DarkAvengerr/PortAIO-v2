@@ -39,6 +39,7 @@ using LeagueSharp.Common;
                 return;
             }
 
+            GameObject.OnCreate += HiuManager.OnCreate;
             GameObject.OnCreate += (sender, args) => LuxR(sender, hero, spellData);
         }
 
@@ -57,7 +58,7 @@ using LeagueSharp.Common;
 
             var startT = Utils.GameTimeTickCount;
             var alreadyAdd =
-                Evade.SpellsDetected.Values.Any(
+                Evade.DetectedSpells.Values.Any(
                     i => i.Data.MenuName == data.MenuName && i.Unit.NetworkId == hero.NetworkId);
 
             if (alreadyAdd)
@@ -65,16 +66,16 @@ using LeagueSharp.Common;
                 return;
             }
 
-            var dir = HiuManager.GetLastHiuOrientation(startT);
+            var pos = obj.Position.To2D();
+            var dir = HiuManager.GetHiuDirection(startT, pos);
 
-            if (dir.IsValid())
+            if (!dir.IsValid())
             {
-                SpellDetector.AddSpell(
-                    hero,
-                    obj.Position.To2D() - dir * (data.Range / 2f),
-                    obj.Position.To2D() + dir * (data.Range / 2f),
-                    data);
+                return;
             }
+
+            dir *= data.Range / 2f;
+            SpellDetector.AddSpell(hero, pos - dir, pos + dir, data, null, SpellType.None, true, startT);
         }
 
         #endregion

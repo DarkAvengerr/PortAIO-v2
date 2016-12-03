@@ -46,17 +46,17 @@ using LeagueSharp.Common;
 
         public bool IsInvulnerability;
 
+        public bool IsItem;
+
         public bool IsMovementSpeedBuff;
 
         public bool IsShield;
 
         public bool IsSpellShield;
 
-        public bool IsSummonerSpell;
-
         public float MaxRange;
 
-        public string MenuName = "";
+        public string MenuName;
 
         public MoveSpeedAmount MoveSpeedTotalAmount;
 
@@ -68,7 +68,7 @@ using LeagueSharp.Common;
 
         public int Speed;
 
-        public SpellValidTargets[] ValidTargets;
+        public SpellValidTargets[] ValidTargets = { };
 
         private int dangerLevel;
 
@@ -117,10 +117,11 @@ using LeagueSharp.Common;
 
         public bool IsReady
             =>
-                (this.CheckSpellName == "" || ObjectManager.Player.GetSpell(this.Slot).Name == this.CheckSpellName)
-                && this.Slot.IsReady();
+                !this.IsItem
+                && (string.IsNullOrEmpty(this.CheckSpellName)
+                    || ObjectManager.Player.GetSpell(this.Slot).Name == this.CheckSpellName) && this.Slot.IsReady();
 
-        public bool IsTargetted => this.ValidTargets != null;
+        public bool IsTargetted => this.ValidTargets != null && this.ValidTargets.Length > 0;
 
         #endregion
     }
@@ -139,8 +140,8 @@ using LeagueSharp.Common;
             int dangerLevel)
         {
             this.MenuName = menuName;
-            this.MaxRange = range;
             this.Slot = slot;
+            this.MaxRange = range;
             this.FixedRange = fixedRange;
             this.Delay = delay;
             this.Speed = speed;
@@ -155,20 +156,13 @@ using LeagueSharp.Common;
     {
         #region Constructors and Destructors
 
-        public BlinkData(
-            string menuName,
-            SpellSlot slot,
-            float range,
-            int delay,
-            int dangerLevel,
-            bool isSummonerSpell = false)
+        public BlinkData(string menuName, SpellSlot slot, float range, int delay, int dangerLevel)
         {
             this.MenuName = menuName;
-            this.MaxRange = range;
             this.Slot = slot;
+            this.MaxRange = range;
             this.Delay = delay;
             this.DangerLevel = dangerLevel;
-            this.IsSummonerSpell = isSummonerSpell;
             this.IsBlink = true;
         }
 

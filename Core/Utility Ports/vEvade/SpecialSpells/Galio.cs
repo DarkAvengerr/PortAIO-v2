@@ -9,7 +9,6 @@ using LeagueSharp.Common;
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using vEvade.Core;
     using vEvade.Helpers;
     using vEvade.Spells;
 
@@ -55,17 +54,6 @@ using LeagueSharp.Common;
 
             if (hero != null)
             {
-                var spell =
-                    Evade.SpellsDetected.Values.FirstOrDefault(
-                        i =>
-                        i.Data.MenuName == data.MenuName && i.Unit.NetworkId == hero.NetworkId
-                        && i.MissileObject == null);
-
-                if (spell != null)
-                {
-                    Evade.SpellsDetected.Remove(spell.SpellId);
-                }
-
                 SpellDetector.AddSpell(hero, missile.StartPosition, missile.EndPosition, data, missile);
             }
 

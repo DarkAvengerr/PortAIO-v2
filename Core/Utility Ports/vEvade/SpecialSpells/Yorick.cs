@@ -13,7 +13,7 @@ using LeagueSharp.Common;
 
     #endregion
 
-    public class Velkoz : IChampionManager
+    public class Yorick : IChampionManager
     {
         #region Static Fields
 
@@ -31,25 +31,30 @@ using LeagueSharp.Common;
             }
 
             init = true;
-            SpellDetector.OnProcessSpell += VelkozW;
+            SpellDetector.OnProcessSpell += YorickE;
         }
 
         #endregion
 
         #region Methods
 
-        private static void VelkozW(
+        private static void YorickE(
             Obj_AI_Base sender,
             GameObjectProcessSpellCastEventArgs args,
             SpellData data,
             SpellArgs spellArgs)
         {
-            if (data.MenuName != "VelkozW")
+            if (data.MenuName != "YorickE")
             {
                 return;
             }
 
-            SpellDetector.AddSpell(sender, sender.ServerPosition.Extend(args.End, -70), args.End, data);
+            var start = sender.ServerPosition.To2D();
+            var end = args.End.To2D();
+            var startPos = end.Extend(start, 120);
+            var endPos = startPos.Extend(start, -1);
+            var startT = Utils.GameTimeTickCount - Game.Ping / 2 + 350 + (int)(start.Distance(startPos) / 1800 * 1000);
+            SpellDetector.AddSpell(sender, startPos, endPos, data, null, SpellType.None, true, startT);
             spellArgs.NoProcess = true;
         }
 

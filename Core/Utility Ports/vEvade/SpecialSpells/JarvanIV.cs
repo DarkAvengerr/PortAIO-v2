@@ -9,8 +9,6 @@ using LeagueSharp.Common;
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using SharpDX;
-
     using vEvade.Core;
     using vEvade.Managers;
     using vEvade.Spells;
@@ -62,38 +60,25 @@ using LeagueSharp.Common;
                 return;
             }
 
-            var startPosQ = sender.ServerPosition.To2D();
-            var endPosQ = startPosQ.Extend(args.End.To2D(), qeData.Range);
-            var endPos = Vector2.Zero;
-
-            foreach (var spell in
-                Evade.SpellsDetected.Values.Where(
+            var startPos = sender.ServerPosition.To2D();
+            var qeEnd = startPos.Extend(args.End.To2D(), qeData.RawRange);
+            var endPos =
+                Evade.DetectedSpells.Values.Where(
                     i =>
                     i.Data.MenuName == "JarvanIVE" && i.Unit.NetworkId == sender.NetworkId
-                    && i.End.Distance(startPosQ, endPosQ, true) <= qeData.RadiusEx))
-            {
-                endPos = spell.End;
-                break;
-            }
+                    && i.End.Distance(startPos, qeEnd, true) < qeData.RadiusEx).Select(i => i.End).ToList();
+            endPos.AddRange(
+                ObjectManager.Get<Obj_AI_Minion>()
+                    .Where(
+                        i =>
+                        i.IsValid() && !i.IsDead && i.BaseSkinName == "jarvanivstandard"
+                        && i.Team == sender.Team
+                        && i.ServerPosition.To2D().Distance(startPos, qeEnd, true) < qeData.RadiusEx)
+                    .Select(i => i.ServerPosition.To2D()));
 
-            if (!endPos.IsValid())
+            if (endPos.Count > 0)
             {
-                foreach (var flag in
-                    ObjectManager.Get<Obj_AI_Minion>()
-                        .Where(
-                            i =>
-                            i.IsValid() && !i.IsDead && i.IsVisible && i.BaseSkinName == "jarvanivstandard"
-                            && i.Team == sender.Team
-                            && i.ServerPosition.To2D().Distance(startPosQ, endPosQ, true) <= qeData.RadiusEx))
-                {
-                    endPos = flag.ServerPosition.To2D();
-                    break;
-                }
-            }
-
-            if (endPos.IsValid())
-            {
-                SpellDetector.AddSpell(sender, startPosQ, endPos.Extend(startPosQ, -110), qeData);
+                SpellDetector.AddSpell(sender, startPos, endPos.OrderBy(i => i.Distance(startPos)).First(), qeData);
             }
         }
 

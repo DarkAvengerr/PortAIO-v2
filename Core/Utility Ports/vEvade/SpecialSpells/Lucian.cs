@@ -57,12 +57,12 @@ using LeagueSharp.Common;
                 return;
             }
 
+            var endPos = target.Position;
             SpellDetector.AddSpell(
                 sender,
                 sender.ServerPosition,
-                target.Position
-                + (target.ServerPosition - target.Position).Normalized() * target.MoveSpeed
-                * ((data.Delay - Game.Ping) / 1000f),
+                endPos
+                + (target.ServerPosition - endPos).Normalized() * target.MoveSpeed * ((data.Delay - Game.Ping) / 1000f),
                 data);
             spellArgs.NoProcess = true;
         }

@@ -5,15 +5,15 @@ using LeagueSharp.Common;
     #region
 
     using LeagueSharp;
-    using LeagueSharp.Common;
 
+    using vEvade.Core;
     using vEvade.Spells;
 
     using SpellData = vEvade.Spells.SpellData;
 
     #endregion
 
-    public class Olaf : IChampionManager
+    public class Viktor : IChampionManager
     {
         #region Static Fields
 
@@ -31,28 +31,26 @@ using LeagueSharp.Common;
             }
 
             init = true;
-            SpellDetector.OnProcessSpell += OlafQ;
+            SpellDetector.OnCreateSpell += ViktorE;
         }
 
         #endregion
 
         #region Methods
 
-        private static void OlafQ(
-            Obj_AI_Base sender,
-            GameObjectProcessSpellCastEventArgs args,
-            SpellData data,
-            SpellArgs spellArgs)
+        private static void ViktorE(Obj_AI_Base sender, MissileClient missile, SpellData data, SpellArgs spellArgs)
         {
-            if (data.MenuName != "OlafQ")
+            if (data.MenuName != "ViktorE" || missile.SData.Name == data.MissileName)
             {
                 return;
             }
 
-            var startPos = sender.ServerPosition.To2D();
-            var endPos = args.End.To2D().Extend(startPos, -50);
-            SpellDetector.AddSpell(sender, startPos, endPos, data);
-            spellArgs.NoProcess = true;
+            SpellData spell;
+
+            if (Evade.OnProcessSpells.TryGetValue("ViktorEExplosion", out spell))
+            {
+                SpellDetector.AddSpell(sender, missile.StartPosition, missile.EndPosition, spell);
+            }
         }
 
         #endregion

@@ -80,14 +80,14 @@ using LeagueSharp.Common;
             }
 
             var spell =
-                Evade.SpellsDetected.Values.FirstOrDefault(
+                Evade.DetectedSpells.Values.FirstOrDefault(
                     i =>
                     i.Data.MenuName == data.MenuName && i.Unit.NetworkId == sender.NetworkId
                     && i.Type == SpellType.Circle);
 
             if (spell != null)
             {
-                Evade.SpellsDetected[spell.SpellId].Radius = radius + (!Configs.Debug ? Configs.SpellExtraRadius : 0);
+                Evade.DetectedSpells[spell.SpellId].Radius = radius;
 
                 return;
             }

@@ -26,17 +26,17 @@ using LeagueSharp.Common;
 
             try
             {
-                var innerPolygonList = new List<Geometry.Polygon>();
-                var outerPolygonList = new List<Geometry.Polygon>();
+                var outerPolys = new List<Geometry.Polygon>();
+                var innerPolys = new List<Geometry.Polygon>();
 
-                foreach (var spell in Evade.SpellsDetected.Values.Where(i => i.Enable))
+                foreach (var spell in Evade.DetectedSpells.Values.Where(i => i.Enable))
                 {
-                    innerPolygonList.Add(spell.PathFindingInnerPolygon);
-                    outerPolygonList.Add(spell.PathFindingPolygon);
+                    outerPolys.Add(spell.PathFindingOuterPolygon);
+                    innerPolys.Add(spell.PathFindingInnerPolygon);
                 }
 
-                var innerPolygons = Geometry.ClipPolygons(innerPolygonList).ToPolygons();
-                var outerPolygons = Geometry.ClipPolygons(outerPolygonList).ToPolygons();
+                var outerPolygons = Geometry.ClipPolygons(outerPolys).ToPolygons();
+                var innerPolygons = Geometry.ClipPolygons(innerPolys).ToPolygons();
 
                 if (outerPolygons.Aggregate(false, (cur, poly) => cur || !poly.IsOutside(end)))
                 {
@@ -56,30 +56,30 @@ using LeagueSharp.Common;
                 outerPolygons.Add(new Geometry.Polygon { Points = new List<Vector2> { start, end } });
                 var nodes = new List<Node>();
 
-                foreach (var poly in outerPolygons)
+                foreach (var poly1 in outerPolygons)
                 {
-                    for (var i = 0; i < poly.Points.Count; i++)
+                    for (var i = 0; i < poly1.Points.Count; i++)
                     {
-                        if (poly.Points.Count != 2 && poly.Points.IsConcave(i))
+                        if (poly1.Points.Count != 2 && poly1.Points.IsConcave(i))
                         {
                             continue;
                         }
 
-                        var node = nodes.FirstOrDefault(a => a.Point == poly.Points[i]) ?? new Node(poly.Points[i]);
-                        nodes.Add(node);
+                        var node1 = nodes.FirstOrDefault(a => a.Point == poly1.Points[i]) ?? new Node(poly1.Points[i]);
+                        nodes.Add(node1);
 
                         foreach (var poly2 in outerPolygons)
                         {
                             foreach (var point in poly2.Points)
                             {
-                                if (!poly.Points[i].CanReach(point, innerPolygons))
+                                if (!poly1.Points[i].CanReach(point, innerPolygons))
                                 {
                                     continue;
                                 }
 
-                                var nodeToAdd = nodes.FirstOrDefault(a => a.Point == point) ?? new Node(point);
-                                nodes.Add(nodeToAdd);
-                                node.Neightbours.Add(nodeToAdd);
+                                var node2 = nodes.FirstOrDefault(a => a.Point == point) ?? new Node(point);
+                                nodes.Add(node2);
+                                node1.Neightbours.Add(node2);
                             }
                         }
                     }
@@ -124,12 +124,11 @@ using LeagueSharp.Common;
                 return false;
             }
 
-            var step = start.Distance(end) / 2;
-            var dir = (end - start).Normalized();
+            var step = start.Distance(end) / 2 * (end - start).Normalized();
 
             for (var i = 0; i <= 2; i++)
             {
-                if ((start + i * step * dir).IsWall())
+                if ((start + i * step).IsWall())
                 {
                     return false;
                 }
@@ -139,10 +138,7 @@ using LeagueSharp.Common;
             {
                 for (var i = 0; i < polygon.Points.Count; i++)
                 {
-                    var a = polygon.Points[i];
-                    var b = polygon.Points[i == polygon.Points.Count - 1 ? 0 : i + 1];
-
-                    if (start.LineSegmentsCross(end, a, b))
+                    if (start.IsCross(end, polygon.Points[i], polygon.Points[i == polygon.Points.Count - 1 ? 0 : i + 1]))
                     {
                         return false;
                     }
@@ -154,7 +150,7 @@ using LeagueSharp.Common;
 
         private static Path<Node> FindPath(
             this Node start,
-            Node destination,
+            Node dest,
             Func<Node, Node, double> dist,
             Func<Node, double> eta)
         {
@@ -171,7 +167,7 @@ using LeagueSharp.Common;
                     continue;
                 }
 
-                if (path.LastStep.Point.Equals(destination.Point))
+                if (path.LastStep.Point.Equals(dest.Point))
                 {
                     return path;
                 }
@@ -196,31 +192,30 @@ using LeagueSharp.Common;
             {
                 for (var i = 0; i <= poly.Points.Count - 1; i++)
                 {
-                    var sideStart = poly.Points[i];
-                    var sideEnd = poly.Points[i == poly.Points.Count - 1 ? 0 : i + 1];
-                    result.Add(from.ProjectOn(sideStart, sideEnd).SegmentPoint);
+                    result.Add(
+                        from.ProjectOn(poly.Points[i], poly.Points[i == poly.Points.Count - 1 ? 0 : i + 1]).SegmentPoint);
                 }
             }
 
-            return result.MinOrDefault(i => i.Distance(from));
+            return result.Count > 0 ? result.OrderBy(i => i.Distance(from)).First() : Vector2.Zero;
         }
 
-        private static bool IsConcave(this List<Vector2> vertices, int vertex)
+        private static bool IsConcave(this List<Vector2> v, int id)
         {
-            var current = vertices[vertex];
-            var next = vertices[(vertex + 1) % vertices.Count];
-            var previous = vertices[vertex == 0 ? vertices.Count - 1 : vertex - 1];
-            var left = new Vector2(current.X - previous.X, current.Y - previous.Y);
-            var right = new Vector2(next.X - current.X, next.Y - current.Y);
+            var cur = v[id];
+            var next = v[(id + 1) % v.Count];
+            var prev = v[id == 0 ? v.Count - 1 : id - 1];
+            var left = new Vector2(cur.X - prev.X, cur.Y - prev.Y);
+            var right = new Vector2(next.X - cur.X, next.Y - cur.Y);
 
             return left.X * right.Y - left.Y * right.X < 0;
         }
 
-        private static bool LineSegmentsCross(this Vector2 a, Vector2 b, Vector2 c, Vector2 d)
+        private static bool IsCross(this Vector2 a, Vector2 b, Vector2 c, Vector2 d)
         {
-            var denominator = (b.X - a.X) * (d.Y - c.Y) - (b.Y - a.Y) * (d.X - c.X);
+            var f = (b.X - a.X) * (d.Y - c.Y) - (b.Y - a.Y) * (d.X - c.X);
 
-            if (denominator.Equals(0))
+            if (f.Equals(0f))
             {
                 return false;
             }
@@ -228,13 +223,13 @@ using LeagueSharp.Common;
             var num1 = (a.Y - c.Y) * (d.X - c.X) - (a.X - c.X) * (d.Y - c.Y);
             var num2 = (a.Y - c.Y) * (b.X - a.X) - (a.X - c.X) * (b.Y - a.Y);
 
-            if (num1.Equals(0) || num2.Equals(0))
+            if (num1.Equals(0f) || num2.Equals(0f))
             {
                 return false;
             }
 
-            var r = num1 / denominator;
-            var s = num2 / denominator;
+            var r = num1 / f;
+            var s = num2 / f;
 
             return r > 0 && r < 1 && s > 0 && s < 1;
         }
@@ -291,17 +286,17 @@ using LeagueSharp.Common;
                 return deq;
             }
 
-            public void Enqueue(TP priority, TV value)
+            public void Enqueue(TP p, TV v)
             {
                 Queue<TV> q;
 
-                if (!this.list.TryGetValue(priority, out q))
+                if (!this.list.TryGetValue(p, out q))
                 {
                     q = new Queue<TV>();
-                    this.list.Add(priority, q);
+                    this.list.Add(p, q);
                 }
 
-                q.Enqueue(value);
+                q.Enqueue(v);
             }
 
             #endregion
