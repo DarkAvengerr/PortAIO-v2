@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Jax
+namespace ExorAIO.Champions.Jax
 {
     using System;
     using System.Linq;

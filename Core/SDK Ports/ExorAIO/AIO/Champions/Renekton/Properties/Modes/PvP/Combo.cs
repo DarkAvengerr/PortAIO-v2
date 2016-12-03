@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Renekton
+namespace ExorAIO.Champions.Renekton
 {
     using System;
 

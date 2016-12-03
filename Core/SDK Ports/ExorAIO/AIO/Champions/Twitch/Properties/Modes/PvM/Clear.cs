@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Twitch
+namespace ExorAIO.Champions.Twitch
 {
     using System;
     using System.Linq;

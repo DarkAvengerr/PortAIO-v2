@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Karma
+namespace ExorAIO.Champions.Karma
 {
     using ExorAIO.Utilities;
 

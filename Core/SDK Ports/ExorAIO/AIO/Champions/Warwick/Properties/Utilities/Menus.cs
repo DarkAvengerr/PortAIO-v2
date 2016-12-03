@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Warwick
+namespace ExorAIO.Champions.Warwick
 {
     using ExorAIO.Utilities;
 

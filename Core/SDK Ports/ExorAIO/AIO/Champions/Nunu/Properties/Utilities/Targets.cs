@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Nunu
+namespace ExorAIO.Champions.Nunu
 {
     using System.Collections.Generic;
     using System.Linq;

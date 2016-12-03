@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Nocturne
+namespace ExorAIO.Champions.Nocturne
 {
     using System.Collections.Generic;
     using System.Linq;

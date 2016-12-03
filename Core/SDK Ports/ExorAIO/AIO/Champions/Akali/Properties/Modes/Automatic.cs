@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Akali
+namespace ExorAIO.Champions.Akali
 {
     using System;
 

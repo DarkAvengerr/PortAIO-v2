@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Pantheon
+namespace ExorAIO.Champions.Pantheon
 {
     using LeagueSharp;
     using LeagueSharp.SDK;

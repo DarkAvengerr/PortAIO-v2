@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Core
+namespace ExorAIO.Core
 {
     using ExorAIO.Champions.Akali;
     using ExorAIO.Champions.Amumu;

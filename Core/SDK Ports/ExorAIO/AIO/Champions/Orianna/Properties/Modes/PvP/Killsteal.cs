@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Orianna
+namespace ExorAIO.Champions.Orianna
 {
     using System;
     using System.Linq;
@@ -55,7 +55,7 @@ using LeagueSharp.SDK;
                     GameObjects.EnemyHeroes.Any(
                         t =>
                         t.IsValidTarget() && !Invulnerable.Check(t, DamageType.Magical, false)
-                        && t.Distance((Vector2)Orianna.GetBallPosition()) < Vars.W.Range
+                        && t.Distance((Vector2)Orianna.GetBallPosition) < Vars.W.Range
                         && Vars.GetRealHealth(t) < (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.W)))
                 {
                     Vars.W.Cast();
@@ -71,7 +71,7 @@ using LeagueSharp.SDK;
                     GameObjects.EnemyHeroes.Any(
                         t =>
                         t.IsValidTarget() && !Invulnerable.Check(t, DamageType.Magical, false)
-                        && t.Distance((Vector2)Orianna.GetBallPosition()) < Vars.R.Range - 60f
+                        && t.Distance((Vector2)Orianna.GetBallPosition) < Vars.R.Range - 60f
                         && Vars.GetRealHealth(t) > (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.W) * 2
                         && Vars.GetRealHealth(t) < (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.R)))
                 {

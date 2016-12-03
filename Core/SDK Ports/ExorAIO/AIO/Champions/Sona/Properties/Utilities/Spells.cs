@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Sona
+namespace ExorAIO.Champions.Sona
 {
     using ExorAIO.Utilities;
 

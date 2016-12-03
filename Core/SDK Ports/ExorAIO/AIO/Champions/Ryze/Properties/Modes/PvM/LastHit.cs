@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Ryze
+namespace ExorAIO.Champions.Ryze
 {
     using System;
 

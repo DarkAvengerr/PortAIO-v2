@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Nocturne
+namespace ExorAIO.Champions.Nocturne
 {
     using System.Linq;
     using System.Windows.Forms;

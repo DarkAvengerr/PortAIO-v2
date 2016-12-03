@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Olaf
+namespace ExorAIO.Champions.Olaf
 {
     using System.Collections.Generic;
     using System.Linq;

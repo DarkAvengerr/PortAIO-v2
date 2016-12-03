@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Vayne
+namespace ExorAIO.Champions.Vayne
 {
     using System.Linq;
 

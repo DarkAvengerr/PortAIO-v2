@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Orianna
+namespace ExorAIO.Champions.Orianna
 {
     using LeagueSharp;
     using LeagueSharp.SDK;

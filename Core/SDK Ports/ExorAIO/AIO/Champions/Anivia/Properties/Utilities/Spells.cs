@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Anivia
+namespace ExorAIO.Champions.Anivia
 {
     using ExorAIO.Utilities;
 

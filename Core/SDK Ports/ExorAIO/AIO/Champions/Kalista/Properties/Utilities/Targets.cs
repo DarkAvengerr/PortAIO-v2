@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Kalista
+namespace ExorAIO.Champions.Kalista
 {
     using System.Collections.Generic;
     using System.Linq;

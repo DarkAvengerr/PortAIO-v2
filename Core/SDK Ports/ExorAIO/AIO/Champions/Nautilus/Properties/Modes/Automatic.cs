@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Nautilus
+namespace ExorAIO.Champions.Nautilus
 {
     using System;
 

@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Cassiopeia
+namespace ExorAIO.Champions.Cassiopeia
 {
     using LeagueSharp;
     using LeagueSharp.SDK;

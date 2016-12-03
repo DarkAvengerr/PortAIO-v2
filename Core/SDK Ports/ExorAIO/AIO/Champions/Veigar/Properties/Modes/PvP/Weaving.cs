@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Veigar
+namespace ExorAIO.Champions.Veigar
 {
     using LeagueSharp;
 

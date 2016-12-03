@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Corki
+namespace ExorAIO.Champions.Corki
 {
     using System;
 

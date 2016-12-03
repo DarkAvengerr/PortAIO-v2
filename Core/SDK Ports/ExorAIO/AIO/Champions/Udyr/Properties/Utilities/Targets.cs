@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Udyr
+namespace ExorAIO.Champions.Udyr
 {
     using System.Collections.Generic;
     using System.Linq;

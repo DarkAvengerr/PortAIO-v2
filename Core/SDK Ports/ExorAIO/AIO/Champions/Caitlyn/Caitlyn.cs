@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Caitlyn
+namespace ExorAIO.Champions.Caitlyn
 {
     using System;
     using System.Linq;
@@ -22,41 +22,6 @@ using LeagueSharp.SDK;
     internal class Caitlyn
     {
         #region Public Methods and Operators
-
-        /// <summary>
-        ///     Called on orbwalker action.
-        /// </summary>
-        /// <param name="sender">The object.</param>
-        /// <param name="args">The <see cref="OrbwalkingActionArgs" /> instance containing the event data.</param>
-        public static void OnAction(object sender, OrbwalkingActionArgs args)
-        {
-            switch (args.Type)
-            {
-                case OrbwalkingType.BeforeAttack:
-
-                    /// <summary>
-                    ///     The Target Forcing Logic.
-                    /// </summary>
-                    if (
-                        GameObjects.EnemyHeroes.Any(
-                            t => t.IsValidTarget() && Vars.GetRealHealth(t) < GameObjects.Player.GetAutoAttackDamage(t)))
-                    {
-                        return;
-                    }
-
-                    var target =
-                        GameObjects.EnemyHeroes.FirstOrDefault(
-                            t =>
-                            t.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange(t) + 650f)
-                            && !Invulnerable.Check(t) && t.HasBuff("caitlynyordletrapinternal"));
-                    if (target != null)
-                    {
-                        args.Process = false;
-                        Variables.Orbwalker.Attack(target);
-                    }
-                    break;
-            }
-        }
 
         /// <summary>
         ///     Fired on spell cast.

@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Caitlyn
+namespace ExorAIO.Champions.Caitlyn
 {
     using System.Windows.Forms;
 

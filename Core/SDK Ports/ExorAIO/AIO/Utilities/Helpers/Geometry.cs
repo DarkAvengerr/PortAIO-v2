@@ -17,7 +17,7 @@ using GamePath = System.Collections.Generic.List<SharpDX.Vector2>;
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Utilities
+namespace ExorAIO.Utilities
 {
     using System;
     using System.Collections.Generic;

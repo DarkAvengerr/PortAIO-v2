@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Sivir
+namespace ExorAIO.Champions.Sivir
 {
     using System;
     using System.Linq;

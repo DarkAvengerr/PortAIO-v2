@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Orianna
+namespace ExorAIO.Champions.Orianna
 {
     using System;
     using System.Linq;
@@ -42,7 +42,7 @@ using LeagueSharp.SDK;
                 && GameObjects.EnemyHeroes.Any(
                     t =>
                     !Invulnerable.Check(Targets.Target, DamageType.Magical, false)
-                    && t.Distance((Vector2)Orianna.GetBallPosition()) < Vars.W.Range)
+                    && t.Distance((Vector2)Orianna.GetBallPosition) < Vars.W.Range)
                 && GameObjects.Player.ManaPercent
                 > ManaManager.GetNeededMana(Vars.W.Slot, Vars.Menu["spells"]["w"]["harass"])
                 && Vars.Menu["spells"]["w"]["harass"].GetValue<MenuSliderButton>().BValue)
@@ -65,10 +65,10 @@ using LeagueSharp.SDK;
                 && Vars.Menu["spells"]["q"]["harass"].GetValue<MenuSliderButton>().BValue)
             {
                 if (Vars.E.IsReady() && Vars.Menu["spells"]["e"]["logical"].GetValue<MenuBool>().Value
-                    && ((Vector2)Orianna.GetBallPosition()).Distance((Vector2)GameObjects.Player.ServerPosition)
+                    && ((Vector2)Orianna.GetBallPosition).Distance((Vector2)GameObjects.Player.ServerPosition)
                     > GameObjects.Player.GetRealAutoAttackRange()
-                    && ((Vector2)Orianna.GetBallPosition()).Distance((Vector2)Targets.Target.ServerPosition)
-                    > ((Vector2)Orianna.GetBallPosition()).Distance((Vector2)GameObjects.Player.ServerPosition))
+                    && ((Vector2)Orianna.GetBallPosition).Distance((Vector2)Targets.Target.ServerPosition)
+                    > ((Vector2)Orianna.GetBallPosition).Distance((Vector2)GameObjects.Player.ServerPosition))
                 {
                     Vars.E.Cast(GameObjects.Player);
                 }

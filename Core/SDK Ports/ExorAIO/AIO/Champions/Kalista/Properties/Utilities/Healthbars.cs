@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Kalista
+namespace ExorAIO.Champions.Kalista
 {
     using System.Drawing;
     using System.Linq;

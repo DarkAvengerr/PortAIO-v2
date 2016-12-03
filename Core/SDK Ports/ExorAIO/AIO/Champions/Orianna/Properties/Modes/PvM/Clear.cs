@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Orianna
+namespace ExorAIO.Champions.Orianna
 {
     using System;
     using System.Linq;
@@ -72,7 +72,7 @@ using LeagueSharp.SDK;
                 /// <summary>
                 ///     The JungleClear W Logic.
                 /// </summary>
-                if (Targets.JungleMinions.Any(m => m.Distance((Vector2)Orianna.GetBallPosition()) < Vars.W.Range)
+                if (Targets.JungleMinions.Any(m => m.Distance((Vector2)Orianna.GetBallPosition) < Vars.W.Range)
                     && GameObjects.Player.ManaPercent
                     > ManaManager.GetNeededMana(Vars.W.Slot, Vars.Menu["spells"]["w"]["jungleclear"])
                     && Vars.Menu["spells"]["w"]["jungleclear"].GetValue<MenuSliderButton>().BValue)
@@ -87,7 +87,7 @@ using LeagueSharp.SDK;
                          && GameObjects.Player.ManaPercent
                          > ManaManager.GetNeededMana(Vars.W.Slot, Vars.Menu["spells"]["w"]["laneclear"])
                          && Vars.Menu["spells"]["w"]["laneclear"].GetValue<MenuSliderButton>().BValue
-                         && Targets.Minions.Count(m => m.Distance((Vector2)Orianna.GetBallPosition()) < Vars.W.Range)
+                         && Targets.Minions.Count(m => m.Distance((Vector2)Orianna.GetBallPosition) < Vars.W.Range)
                          >= 3)
                 {
                     Vars.W.Cast();

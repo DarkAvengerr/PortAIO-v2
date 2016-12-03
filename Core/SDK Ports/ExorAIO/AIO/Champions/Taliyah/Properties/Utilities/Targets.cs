@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Taliyah
+namespace ExorAIO.Champions.Taliyah
 {
     using System.Collections.Generic;
     using System.Linq;

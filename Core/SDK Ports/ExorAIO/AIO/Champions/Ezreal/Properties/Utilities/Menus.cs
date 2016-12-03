@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Ezreal
+namespace ExorAIO.Champions.Ezreal
 {
     using System.Windows.Forms;
 

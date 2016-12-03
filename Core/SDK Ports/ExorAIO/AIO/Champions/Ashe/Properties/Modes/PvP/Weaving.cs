@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Ashe
+namespace ExorAIO.Champions.Ashe
 {
     using ExorAIO.Utilities;
 

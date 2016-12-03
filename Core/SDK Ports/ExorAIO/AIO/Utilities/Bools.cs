@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Utilities
+namespace ExorAIO.Utilities
 {
     using System.Linq;
 

@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Caitlyn
+namespace ExorAIO.Champions.Caitlyn
 {
     using LeagueSharp;
     using LeagueSharp.SDK;
@@ -22,7 +22,6 @@ using LeagueSharp.SDK;
             Events.OnGapCloser += Caitlyn.OnGapCloser;
             Events.OnInterruptableTarget += Caitlyn.OnInterruptableTarget;
             Obj_AI_Base.OnSpellCast += Caitlyn.OnSpellCast;
-            Variables.Orbwalker.OnAction += Caitlyn.OnAction;
         }
 
         #endregion

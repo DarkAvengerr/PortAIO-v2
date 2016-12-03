@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Quinn
+namespace ExorAIO.Champions.Quinn
 {
     using System.Collections.Generic;
     using System.Linq;

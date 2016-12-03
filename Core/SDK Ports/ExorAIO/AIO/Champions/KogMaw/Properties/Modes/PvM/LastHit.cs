@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.KogMaw
+namespace ExorAIO.Champions.KogMaw
 {
     using System;
 

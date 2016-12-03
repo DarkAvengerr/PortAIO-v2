@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Darius
+namespace ExorAIO.Champions.Darius
 {
     using LeagueSharp;
     using LeagueSharp.SDK;

@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Lucian
+namespace ExorAIO.Champions.Lucian
 {
     using System;
 

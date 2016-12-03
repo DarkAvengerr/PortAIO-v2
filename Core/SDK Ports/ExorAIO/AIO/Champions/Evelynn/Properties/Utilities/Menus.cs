@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Evelynn
+namespace ExorAIO.Champions.Evelynn
 {
     using ExorAIO.Utilities;
 

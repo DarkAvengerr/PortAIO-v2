@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Amumu
+namespace ExorAIO.Champions.Amumu
 {
     using System;
 

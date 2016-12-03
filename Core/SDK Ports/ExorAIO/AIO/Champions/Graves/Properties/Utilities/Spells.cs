@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Graves
+namespace ExorAIO.Champions.Graves
 {
     using ExorAIO.Utilities;
 

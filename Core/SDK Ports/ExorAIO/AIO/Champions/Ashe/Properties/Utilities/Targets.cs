@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Ashe
+namespace ExorAIO.Champions.Ashe
 {
     using System.Collections.Generic;
     using System.Linq;

@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Jhin
+namespace ExorAIO.Champions.Jhin
 {
     using System;
 

@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Karthus
+namespace ExorAIO.Champions.Karthus
 {
     using System.Collections.Generic;
     using System.Linq;

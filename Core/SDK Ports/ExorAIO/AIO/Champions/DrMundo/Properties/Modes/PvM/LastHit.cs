@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.DrMundo
+namespace ExorAIO.Champions.DrMundo
 {
     using System;
 

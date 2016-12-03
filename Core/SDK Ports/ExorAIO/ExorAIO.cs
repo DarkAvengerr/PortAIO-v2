@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO
+namespace ExorAIO
 {
     using ExorAIO.Utilities;
 

@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Orianna
+namespace ExorAIO.Champions.Orianna
 {
     using System;
     using System.Linq;
@@ -37,7 +37,7 @@ using LeagueSharp.SDK;
             /// </summary>
             if (Vars.W.IsReady()
                 && GameObjects.EnemyHeroes.Any(
-                    t => t.IsValidTarget() && t.Distance((Vector2)Orianna.GetBallPosition()) < Vars.W.Range)
+                    t => t.IsValidTarget() && t.Distance((Vector2)Orianna.GetBallPosition) < Vars.W.Range)
                 && Vars.Menu["spells"]["w"]["combo"].GetValue<MenuBool>().Value)
             {
                 Vars.W.Cast();
@@ -57,8 +57,8 @@ using LeagueSharp.SDK;
                     var polygon = new Geometry.Rectangle(
                         ally.ServerPosition,
                         ally.ServerPosition.Extend(
-                            (Vector2)Orianna.GetBallPosition(),
-                            ally.Distance((Vector2)Orianna.GetBallPosition())),
+                            (Vector2)Orianna.GetBallPosition,
+                            ally.Distance((Vector2)Orianna.GetBallPosition)),
                         Vars.E.Width);
 
                     if (
@@ -84,8 +84,8 @@ using LeagueSharp.SDK;
             if (Vars.Q.IsReady() && Targets.Target.IsValidTarget(Vars.Q.Range)
                 && Vars.Menu["spells"]["q"]["combo"].GetValue<MenuBool>().Value)
             {
-                if (((Vector2)Orianna.GetBallPosition()).Distance((Vector2)Targets.Target.ServerPosition)
-                    > ((Vector2)Orianna.GetBallPosition()).Distance((Vector2)GameObjects.Player.ServerPosition))
+                if (((Vector2)Orianna.GetBallPosition).Distance((Vector2)Targets.Target.ServerPosition)
+                    > ((Vector2)Orianna.GetBallPosition).Distance((Vector2)GameObjects.Player.ServerPosition))
                 {
                     if (Vars.E.IsReady() && Vars.Menu["spells"]["e"]["logical"].GetValue<MenuBool>().Value)
                     {

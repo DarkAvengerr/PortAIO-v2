@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Jinx
+namespace ExorAIO.Champions.Jinx
 {
     using LeagueSharp;
     using LeagueSharp.SDK;

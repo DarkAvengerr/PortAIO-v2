@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Darius
+namespace ExorAIO.Champions.Darius
 {
     using System;
     using System.Linq;

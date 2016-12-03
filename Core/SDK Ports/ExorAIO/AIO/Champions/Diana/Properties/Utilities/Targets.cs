@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Diana
+namespace ExorAIO.Champions.Diana
 {
     using System.Collections.Generic;
     using System.Linq;

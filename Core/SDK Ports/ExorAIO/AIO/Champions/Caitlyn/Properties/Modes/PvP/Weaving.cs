@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Caitlyn
+namespace ExorAIO.Champions.Caitlyn
 {
     using LeagueSharp;
 

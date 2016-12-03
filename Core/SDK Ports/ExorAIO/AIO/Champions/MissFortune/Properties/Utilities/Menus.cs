@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.MissFortune
+namespace ExorAIO.Champions.MissFortune
 {
     using System.Linq;
     using System.Windows.Forms;

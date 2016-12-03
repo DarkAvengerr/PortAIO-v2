@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Tryndamere
+namespace ExorAIO.Champions.Tryndamere
 {
     using ExorAIO.Utilities;
 

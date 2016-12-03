@@ -3,7 +3,7 @@
 
 using EloBuddy; 
 using LeagueSharp.SDK; 
- namespace ExorAIO.Champions.Karma
+namespace ExorAIO.Champions.Karma
 {
     using System;
     using System.Linq;
@@ -32,6 +32,7 @@ using LeagueSharp.SDK;
             switch (args.Type)
             {
                 case OrbwalkingType.BeforeAttack:
+                    args.Process = !GameObjects.EnemyHeroes.Any(h => h.Buffs.Any(b => b.Caster.IsMe && b.Name.Equals("KarmaSpiritBind")));
 
                     /// <summary>
                     ///     The 'Support Mode' Logic.
