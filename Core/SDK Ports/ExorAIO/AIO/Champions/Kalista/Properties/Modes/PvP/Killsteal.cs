@@ -37,7 +37,7 @@ using LeagueSharp.SDK;
                 foreach (var target in
                     GameObjects.EnemyHeroes.Where(
                         t =>
-                        !Invulnerable.Check(t) && !Bools.IsPerfectRendTarget(t) && t.IsValidTarget(Vars.Q.Range)
+                        !Invulnerable.Check(t) && !Kalista.IsPerfectRendTarget(t) && t.IsValidTarget(Vars.Q.Range)
                         && !t.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
                         && Vars.GetRealHealth(t) < (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.Q)))
                 {
@@ -62,7 +62,7 @@ using LeagueSharp.SDK;
                 if (
                     GameObjects.EnemyHeroes.Any(
                         t =>
-                        Bools.IsPerfectRendTarget(t)
+                        Kalista.IsPerfectRendTarget(t)
                         && Vars.GetRealHealth(t)
                         < (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.E)
                         + (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.E, DamageStage.Buff)))

@@ -28,7 +28,7 @@ using LeagueSharp.SDK;
             /// <summary>
             ///     The R Automatic Logic.
             /// </summary>
-            if (Vars.R.IsReady() && Bools.ShouldCleanse(GameObjects.Player)
+            if (Vars.R.IsReady() && Vars.ShouldCleanse(GameObjects.Player)
                 && Vars.Menu["spells"]["r"]["logical"].GetValue<MenuBool>().Value)
             {
                 Vars.R.Cast();

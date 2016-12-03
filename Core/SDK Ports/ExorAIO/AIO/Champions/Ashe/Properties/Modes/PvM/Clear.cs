@@ -25,7 +25,7 @@ using LeagueSharp.SDK;
         ///     Called on do-cast.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="args">The args.</param>
+        /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs" /> instance containing the event data.</param>
         public static void BuildingClear(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!(Variables.Orbwalker.GetTarget() is Obj_HQ) && !(Variables.Orbwalker.GetTarget() is Obj_AI_Turret)
@@ -62,11 +62,10 @@ using LeagueSharp.SDK;
             /// </summary>
             if (Vars.Q.IsReady() && Items.HasItem(3085) && GameObjects.Player.HasBuff("AsheQCastReady"))
             {
-                var target = (Obj_AI_Minion)Variables.Orbwalker.GetTarget();
                 /// <summary>
                 ///     The JungleClear Q Logic.
                 /// </summary>
-                if (Targets.JungleMinions.Contains(target)
+                if (Targets.JungleMinions.Any()
                     && GameObjects.Player.ManaPercent
                     > ManaManager.GetNeededMana(Vars.Q.Slot, Vars.Menu["spells"]["q"]["jungleclear"])
                     && Vars.Menu["spells"]["q"]["jungleclear"].GetValue<MenuSliderButton>().BValue)
@@ -77,7 +76,7 @@ using LeagueSharp.SDK;
                 /// <summary>
                 ///     The LaneClear Q Logic.
                 /// </summary>
-                else if (Targets.Minions.Contains(target)
+                else if (Targets.Minions.Any()
                          && GameObjects.Player.ManaPercent
                          > ManaManager.GetNeededMana(Vars.Q.Slot, Vars.Menu["spells"]["q"]["laneclear"])
                          && Vars.Menu["spells"]["q"]["laneclear"].GetValue<MenuSliderButton>().BValue)

@@ -27,11 +27,8 @@ using LeagueSharp.SDK;
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void Combo(EventArgs args)
         {
-            if (!Targets.Target.IsValidTarget() || Invulnerable.Check(Targets.Target, DamageType.Magical))
-            {
-                return;
-            }
-            if (Bools.HasSheenBuff() && Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange()))
+            if (Bools.HasSheenBuff() && Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
+                || !Targets.Target.IsValidTarget() || Invulnerable.Check(Targets.Target, DamageType.Magical, false))
             {
                 return;
             }
@@ -47,13 +44,12 @@ using LeagueSharp.SDK;
                     /// <summary>
                     ///     The Q Combo Logic.
                     /// </summary>
-                    if (Ryze.Stacks != 1
+                    if (Ryze.Stacks == 0
                         || GameObjects.Player.HealthPercent
                         > Vars.Menu["spells"]["q"]["shield"].GetValue<MenuSliderButton>().SValue
                         || !Vars.Menu["spells"]["q"]["shield"].GetValue<MenuSliderButton>().BValue)
                     {
-                        if (Vars.Q.IsReady() && Environment.TickCount - Vars.LastTick > 250
-                            && Targets.Target.IsValidTarget(Vars.Q.Range - 100f)
+                        if (Vars.Q.IsReady() && Targets.Target.IsValidTarget(Vars.Q.Range - 100f)
                             && Vars.Menu["spells"]["q"]["combo"].GetValue<MenuBool>().Value)
                         {
                             Vars.Q.Cast(Vars.Q.GetPrediction(Targets.Target).UnitPosition);
@@ -76,7 +72,6 @@ using LeagueSharp.SDK;
                         && Vars.Menu["spells"]["e"]["combo"].GetValue<MenuBool>().Value)
                     {
                         Vars.E.CastOnUnit(Targets.Target);
-                        Vars.LastTick = Environment.TickCount;
                     }
                     break;
                 default:

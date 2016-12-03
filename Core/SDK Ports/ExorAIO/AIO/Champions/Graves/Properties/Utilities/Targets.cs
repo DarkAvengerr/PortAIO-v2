@@ -37,7 +37,8 @@ using LeagueSharp.SDK;
         /// <summary>
         ///     The main hero target.
         /// </summary>
-        public static AIHeroClient Target => Variables.TargetSelector.GetTarget(Vars.R.Range, DamageType.Physical);
+        public static AIHeroClient Target
+            => Variables.TargetSelector.GetTarget(Vars.E.Range + Vars.R.Range, DamageType.Physical);
 
         #endregion
     }

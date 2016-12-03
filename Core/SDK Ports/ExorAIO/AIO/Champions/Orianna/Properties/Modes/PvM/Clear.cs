@@ -64,11 +64,6 @@ using LeagueSharp.SDK;
                 }
             }
 
-            if (Orianna.BallPosition == null)
-            {
-                return;
-            }
-
             /// <summary>
             ///     The W LaneClear Logics.
             /// </summary>
@@ -77,7 +72,7 @@ using LeagueSharp.SDK;
                 /// <summary>
                 ///     The JungleClear W Logic.
                 /// </summary>
-                if (Targets.JungleMinions.Any(m => m.Distance((Vector2)Orianna.BallPosition) < Vars.W.Range)
+                if (Targets.JungleMinions.Any(m => m.Distance((Vector2)Orianna.GetBallPosition()) < Vars.W.Range)
                     && GameObjects.Player.ManaPercent
                     > ManaManager.GetNeededMana(Vars.W.Slot, Vars.Menu["spells"]["w"]["jungleclear"])
                     && Vars.Menu["spells"]["w"]["jungleclear"].GetValue<MenuSliderButton>().BValue)
@@ -92,7 +87,8 @@ using LeagueSharp.SDK;
                          && GameObjects.Player.ManaPercent
                          > ManaManager.GetNeededMana(Vars.W.Slot, Vars.Menu["spells"]["w"]["laneclear"])
                          && Vars.Menu["spells"]["w"]["laneclear"].GetValue<MenuSliderButton>().BValue
-                         && Targets.Minions.Count(m => m.Distance((Vector2)Orianna.BallPosition) < Vars.W.Range) >= 3)
+                         && Targets.Minions.Count(m => m.Distance((Vector2)Orianna.GetBallPosition()) < Vars.W.Range)
+                         >= 3)
                 {
                     Vars.W.Cast();
                 }

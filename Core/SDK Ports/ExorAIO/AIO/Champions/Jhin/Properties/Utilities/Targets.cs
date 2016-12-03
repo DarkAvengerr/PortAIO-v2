@@ -43,7 +43,7 @@ using LeagueSharp.SDK;
                 GameObjects.EnemyHeroes.Where(
                     t =>
                     t.IsValidTarget(Vars.R.Range) && GameObjects.Player.IsFacing(t)
-                    && !Invulnerable.Check(t, DamageType.True, false)
+                    && !Invulnerable.Check(t, DamageType.Magical, false)
                     && Vars.Menu["spells"]["r"]["whitelist"][t.ChampionName.ToLower()].GetValue<MenuBool>().Value)
                     .ToList();
 

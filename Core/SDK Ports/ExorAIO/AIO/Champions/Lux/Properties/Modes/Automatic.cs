@@ -81,7 +81,7 @@ using LeagueSharp.SDK;
                     GameObjects.EnemyHeroes.Where(
                         t =>
                         Bools.IsImmobile(t) && t.IsValidTarget(Vars.Q.Range)
-                        && !Invulnerable.Check(t, DamageType.Magical)))
+                        && !Invulnerable.Check(t, DamageType.Magical, false)))
                 {
                     if (!Vars.Q.GetPrediction(target).CollisionObjects.Any())
                     {

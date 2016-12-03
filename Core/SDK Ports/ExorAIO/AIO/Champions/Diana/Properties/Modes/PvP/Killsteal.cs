@@ -36,7 +36,7 @@ using LeagueSharp.SDK;
                 foreach (var target in
                     GameObjects.EnemyHeroes.Where(
                         t =>
-                        t.IsValidTarget(Vars.Q.Range) && !Invulnerable.Check(t, DamageType.Magical)
+                        t.IsValidTarget(Vars.Q.Range) && !Invulnerable.Check(t, DamageType.Magical, false)
                         && Vars.GetRealHealth(t) < (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.Q)))
                 {
                     Vars.Q.Cast(Vars.Q.GetPrediction(target).CastPosition);
@@ -53,7 +53,7 @@ using LeagueSharp.SDK;
                     GameObjects.EnemyHeroes.Where(
                         t =>
                         t.IsValidTarget(Vars.R.Range) && !t.IsValidTarget(Vars.E.Range)
-                        && !Invulnerable.Check(t, DamageType.Magical)
+                        && !Invulnerable.Check(t, DamageType.Magical, false)
                         && Vars.GetRealHealth(t) < (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.R) * 2))
                 {
                     /*

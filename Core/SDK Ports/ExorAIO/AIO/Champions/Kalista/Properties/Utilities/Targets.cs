@@ -21,7 +21,7 @@ using LeagueSharp.SDK;
         /// <summary>
         ///     The valid harassable heroes.
         /// </summary>
-        public static List<AIHeroClient> Harass => GameObjects.EnemyHeroes.ToList().FindAll(Bools.IsPerfectRendTarget);
+        public static List<AIHeroClient> Harass => GameObjects.EnemyHeroes.ToList().FindAll(Kalista.IsPerfectRendTarget);
 
         /// <summary>
         ///     The jungle minion targets.

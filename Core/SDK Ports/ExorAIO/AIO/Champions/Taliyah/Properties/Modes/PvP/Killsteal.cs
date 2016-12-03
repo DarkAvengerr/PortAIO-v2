@@ -36,7 +36,7 @@ using LeagueSharp.SDK;
                 foreach (var target in
                     GameObjects.EnemyHeroes.Where(
                         t =>
-                        t.IsValidTarget(Vars.Q.Range) && !Invulnerable.Check(t, DamageType.Magical)
+                        t.IsValidTarget(Vars.Q.Range) && !Invulnerable.Check(t, DamageType.Magical, false)
                         && Vars.GetRealHealth(t)
                         < (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.Q)
                         * (Taliyah.TerrainObject != null ? 1 : 3)))

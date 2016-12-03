@@ -34,22 +34,6 @@ using LeagueSharp.SDK;
             }
 
             /// <summary>
-            ///     The Automatic Q Logic.
-            /// </summary>
-            if (Vars.Q.IsReady() && Vars.Menu["spells"]["q"]["logical"].GetValue<MenuBool>().Value)
-            {
-                foreach (var target in
-                    GameObjects.EnemyHeroes.Where(
-                        t =>
-                        Bools.IsImmobile(t) && !Invulnerable.Check(t) && t.IsValidTarget(Vars.Q.Range)
-                        && !Vars.AnyWall(GameObjects.Player.ServerPosition, t.ServerPosition)))
-                {
-                    Vars.Q.Cast(target.ServerPosition);
-                    return;
-                }
-            }
-
-            /// <summary>
             ///     The Automatic W Logic.
             /// </summary>
             if (Vars.W.IsReady() && Vars.Menu["spells"]["w"]["logical"].GetValue<MenuBool>().Value)
@@ -79,6 +63,11 @@ using LeagueSharp.SDK;
                 if (target != null)
                 {
                     Vars.R.Cast(Vars.R.GetPrediction(target).UnitPosition);
+
+                    if (Vars.E.IsReady() && Vars.Menu["miscellaneous"]["cancel"].GetValue<MenuBool>().Value)
+                    {
+                        Vars.E.Cast(Game.CursorPos);
+                    }
                 }
             }
         }

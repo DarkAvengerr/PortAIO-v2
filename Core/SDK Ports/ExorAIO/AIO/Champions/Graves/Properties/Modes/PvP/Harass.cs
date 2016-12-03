@@ -37,7 +37,9 @@ using LeagueSharp.SDK;
             if (Vars.Q.IsReady() && Targets.Target.IsValidTarget(Vars.Q.Range)
                 && GameObjects.Player.ManaPercent
                 > ManaManager.GetNeededMana(Vars.Q.Slot, Vars.Menu["spells"]["q"]["harass"])
-                && !Vars.AnyWall(GameObjects.Player.ServerPosition, Vars.Q.GetPrediction(Targets.Target).UnitPosition)
+                && !Vars.AnyWallInBetween(
+                    GameObjects.Player.ServerPosition,
+                    Vars.Q.GetPrediction(Targets.Target).UnitPosition)
                 && Vars.Menu["spells"]["q"]["harass"].GetValue<MenuSliderButton>().BValue)
             {
                 Vars.Q.Cast(Vars.Q.GetPrediction(Targets.Target).UnitPosition);

@@ -56,7 +56,7 @@ using LeagueSharp.SDK;
                     GameObjects.EnemyHeroes.Where(
                         t =>
                         Bools.IsImmobile(t) && t.IsValidTarget(Vars.W.Range)
-                        && !Invulnerable.Check(t, DamageType.Magical)))
+                        && !Invulnerable.Check(t, DamageType.Magical, false)))
                 {
                     Vars.W.Cast(target.ServerPosition);
                 }

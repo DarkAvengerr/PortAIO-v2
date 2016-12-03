@@ -6,6 +6,7 @@ using LeagueSharp.SDK;
  namespace ExorAIO.Champions.Karma
 {
     using System;
+    using System.Linq;
 
     using ExorAIO.Utilities;
 
@@ -25,7 +26,11 @@ using LeagueSharp.SDK;
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void Automatic(EventArgs args)
         {
-            if (GameObjects.Player.IsRecalling())
+            Variables.Orbwalker.AttackState = (!GameObjects.EnemyHeroes.Any(h => h.Buffs.Any(b => b.Caster.IsMe && b.Name.Equals("KarmaSpiritBind"))));
+
+            if (GameObjects.Player.IsRecalling() || GameObjects.Player.HasBuff("KarmaMantra") && GameObjects.Player.HealthPercent
+                <= Vars.Menu["spells"]["w"]["lifesaver"].GetValue<MenuSliderButton>().SValue
+                && Vars.Menu["spells"]["w"]["lifesaver"].GetValue<MenuSliderButton>().BValue)
             {
                 return;
             }

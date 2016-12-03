@@ -27,11 +27,10 @@ using LeagueSharp.SDK;
         ///     Called on do-cast.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="args">The args.</param>
+        /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs" /> instance containing the event data.</param>
         public static void BuildingClear(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!(Variables.Orbwalker.GetTarget() is Obj_HQ) && !(Variables.Orbwalker.GetTarget() is Obj_AI_Turret)
-                && !(Variables.Orbwalker.GetTarget() is Obj_BarracksDampener))
+            if (!(args.Target is Obj_HQ) && !(args.Target is Obj_AI_Turret) && !(args.Target is Obj_BarracksDampener))
             {
                 return;
             }
@@ -44,7 +43,7 @@ using LeagueSharp.SDK;
                 > ManaManager.GetNeededMana(Vars.E.Slot, Vars.Menu["spells"]["e"]["buildings"])
                 && Vars.Menu["spells"]["e"]["buildings"].GetValue<MenuSliderButton>().BValue)
             {
-                Vars.E.Cast(Game.CursorPos);
+                Vars.E.Cast(GameObjects.Player.ServerPosition.Extend(Game.CursorPos, GameObjects.Player.BoundingRadius));
             }
         }
 
@@ -70,7 +69,9 @@ using LeagueSharp.SDK;
                 if (Targets.JungleMinions.Any()
                     && GameObjects.Player.ManaPercent
                     > ManaManager.GetNeededMana(Vars.Q.Slot, Vars.Menu["spells"]["q"]["jungleclear"])
-                    && !Vars.AnyWall(GameObjects.Player.ServerPosition, Targets.JungleMinions[0].ServerPosition)
+                    && !Vars.AnyWallInBetween(
+                        GameObjects.Player.ServerPosition,
+                        Targets.JungleMinions[0].ServerPosition)
                     && Vars.Menu["spells"]["q"]["jungleclear"].GetValue<MenuSliderButton>().BValue)
                 {
                     Vars.Q.Cast(Targets.JungleMinions[0].ServerPosition);
@@ -82,7 +83,7 @@ using LeagueSharp.SDK;
                 if (Targets.Minions.Any()
                     && GameObjects.Player.ManaPercent
                     > ManaManager.GetNeededMana(Vars.Q.Slot, Vars.Menu["spells"]["q"]["laneclear"])
-                    && !Vars.AnyWall(
+                    && !Vars.AnyWallInBetween(
                         GameObjects.Player.ServerPosition,
                         (Vector3)Vars.Q.GetLineFarmLocation(Targets.Minions, Vars.Q.Width).Position)
                     && Vars.Menu["spells"]["q"]["laneclear"].GetValue<MenuSliderButton>().BValue)
@@ -96,7 +97,7 @@ using LeagueSharp.SDK;
         ///     Called on do-cast.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="args">The args.</param>
+        /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs" /> instance containing the event data.</param>
         public static void JungleClear(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!(Variables.Orbwalker.GetTarget() is Obj_AI_Minion)
@@ -113,7 +114,7 @@ using LeagueSharp.SDK;
                 > ManaManager.GetNeededMana(Vars.E.Slot, Vars.Menu["spells"]["e"]["jungleclear"])
                 && Vars.Menu["spells"]["e"]["jungleclear"].GetValue<MenuSliderButton>().BValue)
             {
-                Vars.E.Cast(Game.CursorPos);
+                Vars.E.Cast(GameObjects.Player.ServerPosition.Extend(Game.CursorPos, GameObjects.Player.BoundingRadius));
             }
         }
 

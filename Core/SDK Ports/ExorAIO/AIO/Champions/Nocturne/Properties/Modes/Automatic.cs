@@ -97,7 +97,7 @@ using LeagueSharp.SDK;
             switch (sender.Type)
             {
                 case GameObjectType.AIHeroClient:
-                    if (Invulnerable.Check(GameObjects.Player, DamageType.True, false))
+                    if (Invulnerable.Check(GameObjects.Player, DamageType.Magical, false))
                     {
                         return;
                     }

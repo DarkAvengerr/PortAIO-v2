@@ -89,7 +89,9 @@ using LeagueSharp.SDK;
                 /// </summary>
                 Vars.RMenu = new Menu("r", "Use R to:");
                 {
-                    Vars.RMenu.Add(new MenuSeparator("separator", "- You need to manually start the Ultimate. -"));
+                    Vars.RMenu.Add(new MenuSeparator("separator", "- You need to manually start the Ultimate -"));
+                    Vars.RMenu.Add(new MenuSeparator("separator2", "- The Ultimate is NOT Automatic -"));
+                    Vars.RMenu.Add(new MenuSeparator("separator3", "- While in Ultimate stance, press Spacebar to shoot -"));
                     Vars.RMenu.Add(new MenuBool("combo", "Combo", true));
                     Vars.RMenu.Add(new MenuBool("killsteal", "KillSteal", true));
                     Vars.RMenu.Add(new MenuBool("nearmouse", "Focus the enemy nearest to your cursor"));

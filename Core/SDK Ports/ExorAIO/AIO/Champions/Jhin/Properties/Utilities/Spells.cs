@@ -20,7 +20,7 @@ using LeagueSharp.SDK;
         /// </summary>
         public static void Initialize()
         {
-            Vars.Q = new Spell(SpellSlot.Q);
+            Vars.Q = new Spell(SpellSlot.Q, 600f);
             Vars.W = new Spell(SpellSlot.W, 2500f);
             Vars.E = new Spell(SpellSlot.E, 750f);
             Vars.R = new Spell(SpellSlot.R, 3500f);

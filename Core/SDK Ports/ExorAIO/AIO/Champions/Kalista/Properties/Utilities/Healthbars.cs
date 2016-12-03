@@ -37,31 +37,32 @@ using LeagueSharp.SDK;
                     ObjectManager.Get<Obj_AI_Base>()
                         .Where(
                             h =>
-                            h.IsValidTarget() && Bools.IsPerfectRendTarget(h)
+                            h.IsValidTarget() && Kalista.IsPerfectRendTarget(h)
                             && (h is AIHeroClient || Vars.JungleList.Contains(h.BaseSkinName)))
                         .ToList()
                         .ForEach(
                             unit =>
                                 {
+                                    var heroUnit = (AIHeroClient)unit;
                                     /// <summary>
                                     ///     Defines what HPBar Offsets it should display.
                                     /// </summary>
                                     var mobOffset =
-                                        Vars.JungleHpBarOffsetList.FirstOrDefault(
+                                        Drawings.JungleHpBarOffsetList.FirstOrDefault(
                                             x => x.BaseSkinName.Equals(unit.BaseSkinName));
 
                                     var width = Vars.JungleList.Contains(unit.BaseSkinName)
-                                                    ? mobOffset?.Width ?? Vars.SWidth
-                                                    : Vars.SWidth;
+                                                    ? mobOffset?.Width ?? Drawings.SWidth
+                                                    : Drawings.SWidth;
                                     var height = Vars.JungleList.Contains(unit.BaseSkinName)
-                                                     ? mobOffset?.Height ?? Vars.SHeight
-                                                     : Vars.SHeight;
+                                                     ? mobOffset?.Height ?? Drawings.SHeight
+                                                     : Drawings.SHeight;
                                     var xOffset = Vars.JungleList.Contains(unit.BaseSkinName)
-                                                      ? mobOffset?.XOffset ?? Vars.SxOffset((AIHeroClient)unit)
-                                                      : Vars.SxOffset((AIHeroClient)unit);
+                                                      ? mobOffset?.XOffset ?? Drawings.SxOffset(heroUnit)
+                                                      : Drawings.SxOffset(heroUnit);
                                     var yOffset = Vars.JungleList.Contains(unit.BaseSkinName)
-                                                      ? mobOffset?.YOffset ?? Vars.SyOffset((AIHeroClient)unit)
-                                                      : Vars.SyOffset((AIHeroClient)unit);
+                                                      ? mobOffset?.YOffset ?? Drawings.SyOffset(heroUnit)
+                                                      : Drawings.SyOffset(heroUnit);
                                     var barPos = unit.HPBarPosition;
                                     {
                                         barPos.X += xOffset;

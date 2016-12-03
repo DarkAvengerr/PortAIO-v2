@@ -39,7 +39,6 @@ using LeagueSharp.SDK;
                 {
                     Vars.QMenu.Add(new MenuBool("combo", "Combo", true));
                     Vars.QMenu.Add(new MenuBool("killsteal", "KillSteal", true));
-                    Vars.QMenu.Add(new MenuBool("logical", "Logical", true));
                     Vars.QMenu.Add(new MenuSliderButton("laneclear", "LaneClear / if Mana >= x%", 50, 0, 99, true));
                     Vars.QMenu.Add(new MenuSliderButton("jungleclear", "JungleClear / if Mana >= x%", 50, 0, 99, true));
                     Vars.QMenu.Add(new MenuSliderButton("harass", "Harass / if Mana >= x%", 50, 0, 99, true));
@@ -76,7 +75,6 @@ using LeagueSharp.SDK;
                 /// </summary>
                 Vars.RMenu = new Menu("r", "Use R to:");
                 {
-                    Vars.RMenu.Add(new MenuBool("combo", "Combo", true));
                     Vars.RMenu.Add(new MenuBool("killsteal", "KillSteal", true));
                     Vars.RMenu.Add(
                         new MenuSeparator(
@@ -88,11 +86,11 @@ using LeagueSharp.SDK;
                         /// <summary>
                         ///     Sets the menu for the R Whitelist.
                         /// </summary>
-                        Vars.WhiteList2Menu = new Menu("whitelist", "Ultimate: Whitelist Menu");
+                        Vars.WhiteListMenu = new Menu("whitelist", "Ultimate: Whitelist Menu");
                         {
                             foreach (var target in GameObjects.EnemyHeroes)
                             {
-                                Vars.WhiteList2Menu.Add(
+                                Vars.WhiteListMenu.Add(
                                     new MenuBool(
                                         target.ChampionName.ToLower(),
                                         $"Use against: {target.ChampionName}",
@@ -100,7 +98,7 @@ using LeagueSharp.SDK;
                             }
                         }
 
-                        Vars.RMenu.Add(Vars.WhiteList2Menu);
+                        Vars.RMenu.Add(Vars.WhiteListMenu);
                     }
                 }
 
@@ -108,6 +106,15 @@ using LeagueSharp.SDK;
             }
 
             Vars.Menu.Add(Vars.SpellsMenu);
+
+            /// <summary>
+            ///     Sets the miscellaneous menu.
+            /// </summary>
+            Vars.MiscMenu = new Menu("miscellaneous", "Miscellaneous");
+            {
+                Vars.MiscMenu.Add(new MenuBool("cancel", "Perform R Knockback cancel with E", true));
+            }
+            Vars.Menu.Add(Vars.MiscMenu);
 
             /// <summary>
             ///     Sets the drawings menu.

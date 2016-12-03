@@ -38,7 +38,7 @@ using LeagueSharp.SDK;
                         t =>
                         t.IsValidTarget(Vars.E.Range)
                         && Vars.GetRealHealth(t) < (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.E)
-                        && !Invulnerable.Check(t, DamageType.Magical)))
+                        && !Invulnerable.Check(t, DamageType.Magical, false)))
                 {
                     Vars.E.Cast();
                     return;
@@ -55,7 +55,7 @@ using LeagueSharp.SDK;
                         t =>
                         t.IsValidTarget(Vars.Q.Range)
                         && Vars.GetRealHealth(t) < (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.Q)
-                        && !Invulnerable.Check(t, DamageType.Magical)))
+                        && !Invulnerable.Check(t, DamageType.Magical, false)))
                 {
                     if (!Vars.Q.GetPrediction(target).CollisionObjects.Any())
                     {
@@ -75,7 +75,7 @@ using LeagueSharp.SDK;
                         t =>
                         t.IsValidTarget(Vars.R.Range)
                         && Vars.GetRealHealth(t) < (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.R)
-                        && !Invulnerable.Check(t, DamageType.Magical)))
+                        && !Invulnerable.Check(t, DamageType.Magical, false)))
                 {
                     Vars.R.Cast();
                 }

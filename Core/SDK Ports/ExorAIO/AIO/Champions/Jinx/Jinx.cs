@@ -33,63 +33,65 @@ using LeagueSharp.SDK;
             switch (args.Type)
             {
                 case OrbwalkingType.BeforeAttack:
+                    const float SplashRange = 160f;
                     var isUsingFishBones = GameObjects.Player.HasBuff("JinxQ");
 
-                    switch (Variables.Orbwalker.ActiveMode)
+                    if (Vars.Q.IsReady())
                     {
-                        case OrbwalkingMode.LastHit:
-                        case OrbwalkingMode.LaneClear:
-                            const float SplashRange = 160f;
-                            var minionTarget = args.Target as Obj_AI_Minion;
-                            var canLastHit = Vars.Menu["spells"]["q"]["lasthit"].GetValue<MenuSliderButton>().BValue
-                                             && GameObjects.Player.ManaPercent
-                                             > ManaManager.GetNeededMana(
-                                                 Vars.W.Slot,
-                                                 Vars.Menu["spells"]["q"]["lasthit"]);
+                        switch (Variables.Orbwalker.ActiveMode)
+                        {
+                            case OrbwalkingMode.LastHit:
+                            case OrbwalkingMode.LaneClear:
+                                var minionTarget = args.Target as Obj_AI_Minion;
+                                var canLastHit = Vars.Menu["spells"]["q"]["lasthit"].GetValue<MenuSliderButton>().BValue
+                                                 && GameObjects.Player.ManaPercent
+                                                 > ManaManager.GetNeededMana(
+                                                     Vars.W.Slot,
+                                                     Vars.Menu["spells"]["q"]["lasthit"]);
 
-                            var canLaneClear = Vars.Menu["spells"]["q"]["clear"].GetValue<MenuSliderButton>().BValue
-                                               && GameObjects.Player.ManaPercent
-                                               > ManaManager.GetNeededMana(
-                                                   Vars.W.Slot,
-                                                   Vars.Menu["spells"]["q"]["lasthit"]);
-
-                            if (Vars.Q.IsReady() && minionTarget != null)
-                            {
-                                var minionsInRange =
-                                    GameObjects.EnemyMinions.Count(m => m.Distance(minionTarget) < SplashRange);
-                                if (isUsingFishBones)
+                                var canLaneClear = Vars.Menu["spells"]["q"]["clear"].GetValue<MenuSliderButton>().BValue
+                                                   && GameObjects.Player.ManaPercent
+                                                   > ManaManager.GetNeededMana(
+                                                       Vars.W.Slot,
+                                                       Vars.Menu["spells"]["q"]["lasthit"]);
+                                if (minionTarget != null)
                                 {
-                                    if (minionsInRange < 3)
+                                    var minionsInRange =
+                                        GameObjects.EnemyMinions.Count(m => m.Distance(minionTarget) < SplashRange);
+                                    if (isUsingFishBones)
+                                    {
+                                        if (minionsInRange < 3)
+                                        {
+                                            Vars.Q.Cast();
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (minionsInRange >= 3
+                                            && (Variables.Orbwalker.ActiveMode == OrbwalkingMode.LastHit && canLastHit
+                                                || Variables.Orbwalker.ActiveMode == OrbwalkingMode.LaneClear
+                                                && canLaneClear))
+                                        {
+                                            Vars.Q.Cast();
+                                        }
+                                    }
+                                }
+                                break;
+
+                            case OrbwalkingMode.Combo:
+                                var target = args.Target as AIHeroClient;
+                                var minSplashRangeEnemies =
+                                    Vars.Menu["spells"]["q"]["combo"].GetValue<MenuSliderButton>().SValue;
+                                if (isUsingFishBones && target != null)
+                                {
+                                    if (GameObjects.Player.Distance(target) < Vars.PowPow.Range
+                                        && target.CountEnemyHeroesInRange(SplashRange) < minSplashRangeEnemies)
                                     {
                                         Vars.Q.Cast();
                                     }
                                 }
-                                else
-                                {
-                                    if (minionsInRange >= 3
-                                        && (Variables.Orbwalker.ActiveMode == OrbwalkingMode.LastHit && canLastHit
-                                            || Variables.Orbwalker.ActiveMode == OrbwalkingMode.LaneClear
-                                            && canLaneClear))
-                                    {
-                                        Vars.Q.Cast();
-                                    }
-                                }
-                            }
-                            break;
-
-                        case OrbwalkingMode.Combo:
-                            var target = Variables.Orbwalker.GetTarget() as AIHeroClient ?? Targets.Target;
-                            var minSplashRangeEnemies =
-                                Vars.Menu["spells"]["q"]["combo"].GetValue<MenuSliderButton>().SValue;
-                            if (isUsingFishBones)
-                            {
-                                if (GameObjects.Player.Distance(target) < Vars.PowPow.Range
-                                    && target.CountEnemyHeroesInRange(SplashRange) < minSplashRangeEnemies)
-                                {
-                                    Vars.Q.Cast();
-                                }
-                            }
-                            break;
+                                break;
+                        }
                     }
                     break;
             }

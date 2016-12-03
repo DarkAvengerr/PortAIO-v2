@@ -27,14 +27,11 @@ using LeagueSharp.SDK;
         ///     Called on do-cast.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="args">The args.</param>
+        /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs" /> instance containing the event data.</param>
         public static void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (sender.IsMe && AutoAttack.IsAutoAttack(args.SData.Name))
             {
-                /// <summary>
-                ///     Initializes the orbwalkingmodes.
-                /// </summary>
                 switch (Variables.Orbwalker.ActiveMode)
                 {
                     case OrbwalkingMode.Combo:
@@ -60,25 +57,19 @@ using LeagueSharp.SDK;
                 return;
             }
 
-            if (Vars.E.IsReady() && args.Sender.IsMelee && args.Sender.IsValidTarget(Vars.E.Range)
-                && args.SkillType == GapcloserType.Targeted
-                && Vars.Menu["spells"]["e"]["gapcloser"].GetValue<MenuBool>().Value)
-            {
-                if (args.Target.IsMe)
-                {
-                    Vars.E.Cast(GameObjects.Player.ServerPosition.Extend(args.Sender.ServerPosition, -475f));
-                }
-            }
-
-            if (Invulnerable.Check(args.Sender, DamageType.Magical, false))
-            {
-                return;
-            }
-
-            if (Vars.W.IsReady() && args.IsDirectedToPlayer && args.Sender.IsValidTarget(Vars.W.Range)
+            if (Vars.W.IsReady() && args.IsDirectedToPlayer
+                && !Invulnerable.Check(args.Sender, DamageType.Magical, false)
+                && args.Sender.IsValidTarget(Vars.W.Range)
                 && Vars.Menu["spells"]["w"]["gapcloser"].GetValue<MenuBool>().Value)
             {
                 Vars.W.Cast(args.End);
+            }
+
+            if (Vars.E.IsReady() && args.Sender.IsMelee && args.Sender.IsValidTarget(Vars.E.Range)
+                && args.SkillType == GapcloserType.Targeted && args.Target.IsMe
+                && Vars.Menu["spells"]["e"]["gapcloser"].GetValue<MenuBool>().Value)
+            {
+                Vars.E.Cast(GameObjects.Player.ServerPosition.Extend(args.Sender.ServerPosition, -475f));
             }
         }
 

@@ -47,14 +47,13 @@ using LeagueSharp.SDK;
                     var target =
                         GameObjects.EnemyHeroes.FirstOrDefault(
                             t =>
-                            t.InAutoAttackRange() && !Invulnerable.Check(t) && t.HasBuff("caitlynyordletrapinternal"));
+                            t.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange(t) + 650f)
+                            && !Invulnerable.Check(t) && t.HasBuff("caitlynyordletrapinternal"));
                     if (target != null)
                     {
-                        Variables.Orbwalker.ForceTarget = target;
-                        return;
+                        args.Process = false;
+                        Variables.Orbwalker.Attack(target);
                     }
-
-                    Variables.Orbwalker.ForceTarget = null;
                     break;
             }
         }
@@ -108,7 +107,7 @@ using LeagueSharp.SDK;
         ///     Called on do-cast.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="args">The args.</param>
+        /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs" /> instance containing the event data.</param>
         public static void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (sender.IsMe)
@@ -158,8 +157,7 @@ using LeagueSharp.SDK;
             {
                 if (!Vars.E.GetPrediction(args.Sender).CollisionObjects.Any())
                 {
-                    //Vars.E.Cast(args.Sender.ServerPosition);
-                    Vars.E.Cast(args.End);
+                    Vars.E.Cast(args.Sender.ServerPosition);
                 }
             }
 

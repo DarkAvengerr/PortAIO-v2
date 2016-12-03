@@ -8,6 +8,7 @@ using LeagueSharp.SDK;
     using ExorAIO.Utilities;
 
     using LeagueSharp;
+    using LeagueSharp.SDK;
     using LeagueSharp.SDK.UI;
     using LeagueSharp.SDK.Utils;
 
@@ -22,10 +23,11 @@ using LeagueSharp.SDK;
         ///     Called on do-cast.
         /// </summary>
         /// <param name="sender">The sender.</param>
-        /// <param name="args">The args.</param>
+        /// <param name="args">The <see cref="GameObjectProcessSpellCastEventArgs" /> instance containing the event data.</param>
         public static void Weaving(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!(args.Target is AIHeroClient) || Invulnerable.Check((AIHeroClient)args.Target))
+            var target = args.Target as AIHeroClient;
+            if (target == null || Invulnerable.Check(target))
             {
                 return;
             }
@@ -35,7 +37,7 @@ using LeagueSharp.SDK;
             /// </summary>
             if (Vars.E.IsReady() && Vars.Menu["spells"]["e"]["combo"].GetValue<MenuBool>().Value)
             {
-                Vars.E.Cast(Game.CursorPos);
+                Vars.E.Cast(GameObjects.Player.ServerPosition.Extend(Game.CursorPos, GameObjects.Player.BoundingRadius));
                 return;
             }
 
@@ -44,7 +46,7 @@ using LeagueSharp.SDK;
             /// </summary>
             if (Vars.W.IsReady() && Vars.Menu["spells"]["w"]["combo"].GetValue<MenuBool>().Value)
             {
-                Vars.W.Cast(Vars.W.GetPrediction(Targets.Target).CastPosition);
+                Vars.W.Cast(Vars.W.GetPrediction(target).CastPosition);
             }
         }
 

@@ -56,7 +56,9 @@ using LeagueSharp.SDK;
                         t =>
                         !Invulnerable.Check(t) && t.IsValidTarget(Vars.Q.Range)
                         && !t.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
-                        && !Vars.AnyWall(GameObjects.Player.ServerPosition, Vars.Q.GetPrediction(t).UnitPosition)
+                        && !Vars.AnyWallInBetween(
+                            GameObjects.Player.ServerPosition,
+                            Vars.Q.GetPrediction(t).UnitPosition)
                         && Vars.GetRealHealth(t) < (float)GameObjects.Player.GetSpellDamage(t, SpellSlot.Q)))
                 {
                     Vars.Q.Cast(Vars.Q.GetPrediction(target).UnitPosition);
@@ -81,6 +83,12 @@ using LeagueSharp.SDK;
                               t.IsValidTarget(Vars.R.Range) ? DamageStage.Default : DamageStage.Detonation)))
                 {
                     Vars.R.Cast(Vars.R.GetPrediction(target).UnitPosition);
+
+                    if (Vars.E.IsReady() && Vars.Menu["miscellaneous"]["cancel"].GetValue<MenuBool>().Value)
+                    {
+                        Vars.E.Cast(
+                            GameObjects.Player.ServerPosition.Extend(Game.CursorPos, GameObjects.Player.BoundingRadius));
+                    }
                 }
             }
         }

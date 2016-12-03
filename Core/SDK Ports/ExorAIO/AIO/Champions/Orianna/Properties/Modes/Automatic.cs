@@ -10,7 +10,6 @@ using LeagueSharp.SDK;
 
     using ExorAIO.Utilities;
 
-    using LeagueSharp;
     using LeagueSharp.SDK;
     using LeagueSharp.SDK.UI;
 
@@ -29,19 +28,7 @@ using LeagueSharp.SDK;
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void Automatic(EventArgs args)
         {
-            var ball =
-                ObjectManager.Get<Obj_AI_Minion>()
-                    .FirstOrDefault(m => Math.Abs(m.Health) > 0 && m.BaseSkinName.Equals("oriannaball"));
-            var ball3 =
-                GameObjects.AllyHeroes.FirstOrDefault(
-                    a => a.Buffs.Any(b => b.Caster.IsMe && b.Name.Equals("orianaghost")));
-
-            Orianna.BallPosition = ball?.ServerPosition
-                                   ?? (GameObjects.Player.HasBuff("orianaghostself")
-                                           ? GameObjects.Player.ServerPosition
-                                           : ball3?.ServerPosition);
-
-            if (Orianna.BallPosition == null)
+            if (GameObjects.Player.IsRecalling())
             {
                 return;
             }
@@ -49,9 +36,9 @@ using LeagueSharp.SDK;
             /// <summary>
             ///     The Automatic R Logic.
             /// </summary>
-            if (Vars.R.IsReady()
-                && GameObjects.EnemyHeroes.Count(
-                    t => t.IsValidTarget() && t.Distance((Vector2)Orianna.BallPosition) < Vars.R.Range - 25f)
+            if (Vars.R.IsReady() && GameObjects.EnemyHeroes.Count(
+                // ReSharper disable once PossibleInvalidOperationException
+                t => t.IsValidTarget() && t.Distance((Vector2)Orianna.GetBallPosition()) < Vars.R.Range - 60f)
                 >= Vars.Menu["spells"]["r"]["aoe"].GetValue<MenuSliderButton>().SValue
                 && Vars.Menu["spells"]["r"]["aoe"].GetValue<MenuSliderButton>().BValue)
             {

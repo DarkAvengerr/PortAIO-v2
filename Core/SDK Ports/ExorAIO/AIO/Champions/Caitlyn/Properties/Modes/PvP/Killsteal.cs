@@ -28,6 +28,11 @@ using LeagueSharp.SDK;
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void Killsteal(EventArgs args)
         {
+            if (GameObjects.Player.CountEnemyHeroesInRange(Vars.Q.Range) > 2)
+            {
+                return;
+            }
+
             /// <summary>
             ///     The KillSteal Q Logic.
             /// </summary>
@@ -41,7 +46,7 @@ using LeagueSharp.SDK;
                 {
                     if (Vars.GetRealHealth(target)
                         < (float)GameObjects.Player.GetSpellDamage(target, SpellSlot.Q)
-                        * (!Vars.Q.GetPrediction(target).CollisionObjects.Any() ? 1 : 0.67))
+                        * (Vars.Q.GetPrediction(target).CollisionObjects.Any() ? 0.67 : 1))
                     {
                         Vars.Q.Cast(Vars.Q.GetPrediction(target).UnitPosition);
                         return;

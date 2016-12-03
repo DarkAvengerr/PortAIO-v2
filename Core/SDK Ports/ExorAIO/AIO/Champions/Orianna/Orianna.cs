@@ -1,3 +1,5 @@
+// ReSharper disable PossibleInvalidOperationException
+
 
 #pragma warning disable 1587
 
@@ -23,16 +25,36 @@ using LeagueSharp.SDK;
     /// </summary>
     internal class Orianna
     {
-        #region Public Properties
+        #region Public Methods and Operators
 
         /// <summary>
         ///     Gets or sets the position of the Ball.
         /// </summary>
-        public static Vector3? BallPosition { get; set; } = Vector3.Zero;
+        public static Vector3 GetBallPosition()
+        {
+            var position = Vector3.Zero;
+            var possiblePosition1 =
+                ObjectManager.Get<Obj_AI_Minion>()
+                    .FirstOrDefault(m => Math.Abs(m.Health) > 0 && m.BaseSkinName.Equals("oriannaball"));
+            var possiblePosition2 =
+                GameObjects.AllyHeroes.FirstOrDefault(
+                    a => a.Buffs.Any(b => b.Caster.IsMe && b.Name.Equals("orianaghost")));
 
-        #endregion
+            if (possiblePosition1 != null)
+            {
+                position = possiblePosition1.ServerPosition;
+            }
+            else if (GameObjects.Player.HasBuff("orianaghostself"))
+            {
+                position = GameObjects.Player.ServerPosition;
+            }
+            else if (possiblePosition2 != null)
+            {
+                position = possiblePosition2.ServerPosition;
+            }
 
-        #region Public Methods and Operators
+            return position;
+        }
 
         /// <summary>
         ///     Called upon calling a spellcast.
@@ -41,18 +63,13 @@ using LeagueSharp.SDK;
         /// <param name="args">The <see cref="SpellbookCastSpellEventArgs" /> instance containing the event data.</param>
         public static void OnCastSpell(Spellbook sender, SpellbookCastSpellEventArgs args)
         {
-            if (BallPosition == null)
-            {
-                return;
-            }
-
             if (sender.Owner.IsMe && args.Slot == SpellSlot.R
                 && Vars.Menu["miscellaneous"]["blockr"].GetValue<MenuBool>().Value)
             {
                 if (
                     !GameObjects.EnemyHeroes.Any(
                         t =>
-                        t.IsValidTarget() && t.Distance((Vector2)BallPosition) < Vars.R.Range - 25
+                        t.IsValidTarget() && t.Distance((Vector2)GetBallPosition()) < Vars.R.Range - 25
                         && !Invulnerable.Check(t, DamageType.Magical, false)))
                 {
                     args.Process = false;
@@ -86,13 +103,12 @@ using LeagueSharp.SDK;
         /// <param name="args">The <see cref="Events.InterruptableTargetEventArgs" /> instance containing the event data.</param>
         public static void OnInterruptableTarget(object sender, Events.InterruptableTargetEventArgs args)
         {
-            if (BallPosition == null || GameObjects.Player.IsDead
-                || Invulnerable.Check(args.Sender, DamageType.Magical, false))
+            if (GameObjects.Player.IsDead || Invulnerable.Check(args.Sender, DamageType.Magical, false))
             {
                 return;
             }
 
-            if (Vars.R.IsReady() && ((Vector2)BallPosition).Distance(args.Sender.ServerPosition) < Vars.R.Range - 25
+            if (Vars.R.IsReady() && ((Vector2)GetBallPosition()).Distance(args.Sender.ServerPosition) < Vars.R.Range
                 && Vars.Menu["spells"]["r"]["interrupter"].GetValue<MenuBool>().Value)
             {
                 Vars.R.Cast();
@@ -112,11 +128,6 @@ using LeagueSharp.SDK;
                     m.BaseSkinName == sender.BaseSkinName
                     && GameObjects.JungleSmall.All(m2 => m2.BaseSkinName != sender.BaseSkinName)))
             {
-                if (args.SData.Name.Equals("GangplankE"))
-                {
-                    return;
-                }
-
                 if (sender.IsEnemy && args.Target != null
                     && GameObjects.AllyHeroes.Any(a => a.NetworkId == args.Target.NetworkId))
                 {

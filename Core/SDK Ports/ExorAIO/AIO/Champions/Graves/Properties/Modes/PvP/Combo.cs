@@ -27,19 +27,10 @@ using LeagueSharp.SDK;
         /// <param name="args">The <see cref="EventArgs" /> instance containing the event data.</param>
         public static void Combo(EventArgs args)
         {
-            if (Bools.HasSheenBuff() || !Targets.Target.IsValidTarget() || Invulnerable.Check(Targets.Target))
+            if ((Bools.HasSheenBuff() && Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange()))
+                || !Targets.Target.IsValidTarget() || Invulnerable.Check(Targets.Target))
             {
                 return;
-            }
-
-            /// <summary>
-            ///     The Q Combo Logic.
-            /// </summary>
-            if (Vars.Q.IsReady() && Targets.Target.IsValidTarget(Vars.Q.Range)
-                && !Vars.AnyWall(GameObjects.Player.ServerPosition, Vars.Q.GetPrediction(Targets.Target).UnitPosition)
-                && Vars.Menu["spells"]["q"]["combo"].GetValue<MenuBool>().Value)
-            {
-                Vars.Q.Cast(Vars.Q.GetPrediction(Targets.Target).UnitPosition);
             }
 
             /// <summary>
@@ -64,11 +55,15 @@ using LeagueSharp.SDK;
             }
 
             /// <summary>
-            ///     The R Combo Logic.
+            ///     The Q Combo Logic.
             /// </summary>
-            if (Vars.R.IsReady() && !Vars.Q.IsReady() && Vars.Menu["spells"]["r"]["combo"].GetValue<MenuBool>().Value)
+            if (Vars.Q.IsReady() && Targets.Target.IsValidTarget(Vars.Q.Range)
+                && !Vars.AnyWallInBetween(
+                    GameObjects.Player.ServerPosition,
+                    Vars.Q.GetPrediction(Targets.Target).UnitPosition)
+                && Vars.Menu["spells"]["q"]["combo"].GetValue<MenuBool>().Value)
             {
-                Vars.R.CastIfWillHit(Targets.Target, 2);
+                Vars.Q.Cast(Vars.Q.GetPrediction(Targets.Target).UnitPosition);
             }
         }
 
