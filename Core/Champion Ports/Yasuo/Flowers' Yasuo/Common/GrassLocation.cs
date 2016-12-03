@@ -13,5 +13,4 @@ using LeagueSharp.Common;
             Count = count;
         }
     }
-
 }

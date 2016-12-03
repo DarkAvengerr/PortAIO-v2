@@ -4,7 +4,6 @@ using LeagueSharp.Common;
 {
     using Spells;
     using System.Linq;
-    using LeagueSharp;
     using LeagueSharp.Common;
 
     internal class KillSteal : Logic
@@ -52,13 +51,13 @@ using LeagueSharp.Common;
                     if (Menu.Item("KillStealQ3", true).GetValue<bool>() && target.Distance(lastEPos) <= 220 &&
                         Q3.IsReady() && SpellManager.HaveQ3 && target.Health <= SpellManager.GetQDmg(target))
                     {
-                        LeagueSharp.Common.Utility.DelayAction.Add(10, () => Q3.Cast(Me.Position, true));
+                        Q3.Cast(Me.Position, true);
                     }
 
                     if (Menu.Item("KillStealQ", true).GetValue<bool>() && target.Distance(lastEPos) <= 220 && Q.IsReady() &&
                         !SpellManager.HaveQ3 && target.Health <= SpellManager.GetQDmg(target))
                     {
-                        LeagueSharp.Common.Utility.DelayAction.Add(10, () => Q.Cast(Me.Position, true));
+                        Q.Cast(Me.Position, true);
                     }
                 }
             }

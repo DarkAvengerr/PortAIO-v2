@@ -9,9 +9,12 @@ using LeagueSharp.Common;
     using LeagueSharp;
     using LeagueSharp.Common;
     using static Common.Common;
+    using SpellData = Evade.EvadeTargetManager.SpellData;
 
     internal class SpellManager : Logic
     {
+        public static readonly List<SpellData> Spells = new List<SpellData>();
+
         internal static void Init()
         {
             Q = new Spell(SpellSlot.Q, 475f);
@@ -25,6 +28,159 @@ using LeagueSharp.Common;
 
             Ignite = ObjectManager.Player.GetSpellSlot("summonerdot");
             Flash = ObjectManager.Player.GetSpellSlot("SummonerFlash");
+
+            Spells.Add(
+                new SpellData
+                    {ChampionName = "Ahri", SpellNames = new[] {"ahrifoxfiremissiletwo"}, Slot = SpellSlot.W});
+            Spells.Add(
+                new SpellData
+                { ChampionName = "Ahri", SpellNames = new[] { "ahritumblemissile" }, Slot = SpellSlot.R });
+            Spells.Add(
+                new SpellData { ChampionName = "Akali", SpellNames = new[] { "akalimota" }, Slot = SpellSlot.Q });
+            Spells.Add(
+                new SpellData { ChampionName = "Anivia", SpellNames = new[] { "frostbite" }, Slot = SpellSlot.E });
+            Spells.Add(
+                new SpellData { ChampionName = "Annie", SpellNames = new[] { "disintegrate" }, Slot = SpellSlot.Q });
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Brand",
+                    SpellNames = new[] { "brandconflagrationmissile" },
+                    Slot = SpellSlot.E
+                });
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Brand",
+                    SpellNames = new[] { "brandwildfire", "brandwildfiremissile" },
+                    Slot = SpellSlot.R
+                });
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Caitlyn",
+                    SpellNames = new[] { "caitlynaceintheholemissile" },
+                    Slot = SpellSlot.R
+                });
+            Spells.Add(
+                new SpellData
+                { ChampionName = "Cassiopeia", SpellNames = new[] { "cassiopeiatwinfang" }, Slot = SpellSlot.E });
+            Spells.Add(
+                new SpellData { ChampionName = "Elise", SpellNames = new[] { "elisehumanq" }, Slot = SpellSlot.Q });
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Ezreal",
+                    SpellNames = new[] { "ezrealarcaneshiftmissile" },
+                    Slot = SpellSlot.E
+                });
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "FiddleSticks",
+                    SpellNames = new[] { "fiddlesticksdarkwind", "fiddlesticksdarkwindmissile" },
+                    Slot = SpellSlot.E
+                });
+            Spells.Add(
+                new SpellData { ChampionName = "Gangplank", SpellNames = new[] { "parley" }, Slot = SpellSlot.Q });
+            Spells.Add(
+                new SpellData { ChampionName = "Janna", SpellNames = new[] { "sowthewind" }, Slot = SpellSlot.W });
+            Spells.Add(
+                new SpellData { ChampionName = "Kassadin", SpellNames = new[] { "nulllance" }, Slot = SpellSlot.Q });
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Katarina",
+                    SpellNames = new[] { "katarinaq", "katarinaqmis" },
+                    Slot = SpellSlot.Q
+                });
+            Spells.Add(
+                new SpellData
+                { ChampionName = "Kayle", SpellNames = new[] { "judicatorreckoning" }, Slot = SpellSlot.Q });
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Leblanc",
+                    SpellNames = new[] { "leblancchaosorb", "leblancchaosorbm" },
+                    Slot = SpellSlot.Q
+                });
+            Spells.Add(new SpellData { ChampionName = "Lulu", SpellNames = new[] { "luluw" }, Slot = SpellSlot.W });
+            Spells.Add(
+                new SpellData
+                { ChampionName = "Malphite", SpellNames = new[] { "seismicshard" }, Slot = SpellSlot.Q });
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "MissFortune",
+                    SpellNames = new[] { "missfortunericochetshot", "missFortunershotextra" },
+                    Slot = SpellSlot.Q
+                });
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Nami",
+                    SpellNames = new[] { "namiwenemy", "namiwmissileenemy" },
+                    Slot = SpellSlot.W
+                });
+            Spells.Add(
+                new SpellData { ChampionName = "Nunu", SpellNames = new[] { "iceblast" }, Slot = SpellSlot.E });
+            Spells.Add(
+                new SpellData { ChampionName = "Pantheon", SpellNames = new[] { "pantheonq" }, Slot = SpellSlot.Q });
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Ryze",
+                    SpellNames = new[] { "spellflux", "spellfluxmissile" },
+                    Slot = SpellSlot.E
+                });
+            Spells.Add(
+                new SpellData { ChampionName = "Shaco", SpellNames = new[] { "twoshivpoison" }, Slot = SpellSlot.E });
+            Spells.Add(
+                new SpellData { ChampionName = "Shen", SpellNames = new[] { "shenvorpalstar" }, Slot = SpellSlot.Q });
+            Spells.Add(
+                new SpellData { ChampionName = "Sona", SpellNames = new[] { "sonaqmissile" }, Slot = SpellSlot.Q });
+            Spells.Add(
+                new SpellData { ChampionName = "Swain", SpellNames = new[] { "swaintorment" }, Slot = SpellSlot.E });
+            Spells.Add(
+                new SpellData { ChampionName = "Syndra", SpellNames = new[] { "syndrar" }, Slot = SpellSlot.R });
+            Spells.Add(
+                new SpellData { ChampionName = "Taric", SpellNames = new[] { "dazzle" }, Slot = SpellSlot.E });
+            Spells.Add(
+                new SpellData { ChampionName = "Teemo", SpellNames = new[] { "blindingdart" }, Slot = SpellSlot.Q });
+            Spells.Add(
+                new SpellData
+                { ChampionName = "Tristana", SpellNames = new[] { "detonatingshot" }, Slot = SpellSlot.E });
+            Spells.Add(
+                new SpellData
+                { ChampionName = "TwistedFate", SpellNames = new[] { "bluecardattack" }, Slot = SpellSlot.W });
+            Spells.Add(
+                new SpellData
+                { ChampionName = "TwistedFate", SpellNames = new[] { "goldcardattack" }, Slot = SpellSlot.W });
+            Spells.Add(
+                new SpellData
+                { ChampionName = "TwistedFate", SpellNames = new[] { "redcardattack" }, Slot = SpellSlot.W });
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Urgot",
+                    SpellNames = new[] { "urgotheatseekinghomemissile" },
+                    Slot = SpellSlot.Q
+                });
+            Spells.Add(
+                new SpellData { ChampionName = "Vayne", SpellNames = new[] { "vaynecondemn" }, Slot = SpellSlot.E });
+            Spells.Add(
+                new SpellData
+                { ChampionName = "Veigar", SpellNames = new[] { "veigarprimordialburst" }, Slot = SpellSlot.R });
+            Spells.Add(
+                new SpellData
+                { ChampionName = "Viktor", SpellNames = new[] { "viktorpowertransfer" }, Slot = SpellSlot.Q });
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Vladimir",
+                    SpellNames = new[] { "vladimirtidesofbloodnuke" },
+                    Slot = SpellSlot.E
+                });
         }
 
         internal static bool HaveQ3 => Me.HasBuff("YasuoQ3W");

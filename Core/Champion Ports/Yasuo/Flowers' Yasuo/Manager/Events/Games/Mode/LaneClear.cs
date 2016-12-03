@@ -54,11 +54,11 @@ using LeagueSharp.Common;
                     }
                     else
                     {
-                        var qminions = MinionManager.GetMinions(lastEPos, 220);
+                        var qminions = MinionManager.GetMinions(Me.Position, 220);
 
-                        if (qminions.Count >= 2)
+                        if (qminions.Count >= 3)
                         {
-                            LeagueSharp.Common.Utility.DelayAction.Add(10, () => Q.Cast(Me.Position, true));
+                            Q.Cast(Me.Position, true);
                         }
                     }
                 }
@@ -76,13 +76,13 @@ using LeagueSharp.Common;
                             Q3.Cast(q3Farm.Position, true);
                         }
                     }
-                    else
+                    else if (lastEPos.DistanceToPlayer() <= 200)
                     {
-                        var q3minions = MinionManager.GetMinions(lastEPos, 220);
+                        var q3minions = MinionManager.GetMinions(Me.Position, 220);
 
-                        if (q3minions.Count >= 2)
+                        if (q3minions.Count >= 3)
                         {
-                            LeagueSharp.Common.Utility.DelayAction.Add(10, () => Q3.Cast(Me.Position, true));
+                            Q3.Cast(Me.Position, true);
                         }
                     }
                 }

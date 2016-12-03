@@ -15,5 +15,4 @@ using LeagueSharp.Common;
             Grass = grass;
         }
     }
-
 }

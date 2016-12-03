@@ -8,7 +8,6 @@ using LeagueSharp.Common;
     using LeagueSharp;
     using LeagueSharp.Common;
     using Color = System.Drawing.Color;
-    using Games.Mode;
 
     internal class DrawManager : Logic
     {
@@ -43,7 +42,7 @@ using LeagueSharp.Common;
 
                 if (Menu.Item("DrawSpots", true).GetValue<bool>())
                 {
-                    foreach (var pos in WallJump.WallJumpPos.Where(x => x.Distance(Me) <= 1200))
+                    foreach (var pos in WallJumpPos.Where(x => x.Distance(Me) <= 1200))
                     {
                         Render.Circle.DrawCircle(pos.To3D(), 150, Color.FromArgb(251, 209, 0), 1);
                     }

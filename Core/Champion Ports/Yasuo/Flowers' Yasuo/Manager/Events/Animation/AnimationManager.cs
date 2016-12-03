@@ -4,6 +4,7 @@ using LeagueSharp.Common;
 {
     using LeagueSharp;
     using LeagueSharp.Common;
+    using Orbwalking = Orbwalking;
 
     internal class AnimationManager : Logic
     {
@@ -15,6 +16,22 @@ using LeagueSharp.Common;
                 {
                     lastECast = Utils.TickCount;
                     isDashing = true;
+                }
+
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None)
+                {
+                    return;
+                }
+
+                if (Args.Animation == "1df607e5")
+                {
+                    Orbwalker.SetAttack(false);
+                    LeagueSharp.Common.Utility.DelayAction.Add(300 + Game.Ping, () =>
+                    {
+                        Orbwalking.ResetAutoAttackTimer();
+                        EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Me.Position.Extend(Game.CursorPos, +10));
+                        Orbwalker.SetAttack(true);
+                    });
                 }
             }
         }

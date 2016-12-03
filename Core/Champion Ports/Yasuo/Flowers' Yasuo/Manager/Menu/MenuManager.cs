@@ -5,6 +5,7 @@ using LeagueSharp.Common;
     using Evade;
     using SharpDX;
     using System.Linq;
+    using Spells;
     using LeagueSharp;
     using LeagueSharp.Common;
     using Orbwalking = Orbwalking;
@@ -101,6 +102,7 @@ using LeagueSharp.Common;
                 fleeMenu.AddItem(new MenuItem("FleeQ", "Use Q", true).SetValue(true));
                 fleeMenu.AddItem(new MenuItem("FleeQ3", "Use Q3", true).SetValue(true));
                 fleeMenu.AddItem(new MenuItem("FleeE", "Use E", true).SetValue(true));
+                fleeMenu.AddItem(new MenuItem("FleeWallJump", "Use E WallJump", true).SetValue(true));
             }
 
             var miscMenu = Menu.AddSubMenu(new Menu("Misc", "Misc"));
@@ -216,14 +218,14 @@ using LeagueSharp.Common;
                         evadeMenu.AddItem(new MenuItem("CAttackHpU", "-> If Hp <", true).SetValue(new Slider(40)));
 
                         foreach (var hero in
-                            HeroManager.Enemies.Where(i => EvadeTargetManager.Spells.Any(a => a.ChampionName == i.ChampionName)))
+                            HeroManager.Enemies.Where(i => SpellManager.Spells.Any(a => a.ChampionName == i.ChampionName)))
                         {
                             evadeMenu.AddSubMenu(new Menu("-> " + hero.ChampionName, "ET_" + hero.ChampionName));
                         }
 
                         foreach (
                             var spell in
-                            EvadeTargetManager.Spells.Where(
+                            SpellManager.Spells.Where(
                                 i => HeroManager.Enemies.Any(a => a.ChampionName == i.ChampionName)))
                         {
                             evadeMenu.SubMenu("ET_" + spell.ChampionName)
