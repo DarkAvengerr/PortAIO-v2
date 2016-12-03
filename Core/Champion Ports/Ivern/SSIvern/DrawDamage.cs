@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DrawDamage.cs.cs" company="SSIvern">
+// <copyright file="DrawDamage.cs" company="SSIvern">
 //      Copyright (c) SSIvern. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -10,8 +10,8 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 
-using EloBuddy; 
-using LeagueSharp.Common; 
+using EloBuddy;
+using LeagueSharp.Common;
 namespace SSIvern
 {
     internal class DrawDamage
@@ -53,15 +53,15 @@ namespace SSIvern
             {
                 var barPos = unit.HPBarPosition;
                 var damage = _damageToUnit(unit);
-                var percentHealthAfterDamage = Math.Max(0, unit.Health - damage)/unit.MaxHealth;
+                var percentHealthAfterDamage = Math.Max(0, unit.Health - damage) / unit.MaxHealth;
                 var yPos = barPos.Y + YOffset;
-                var xPosDamage = barPos.X + XOffset + Width*percentHealthAfterDamage;
-                var xPosCurrentHp = barPos.X + XOffset + Width*unit.Health/unit.MaxHealth;
+                var xPosDamage = barPos.X + XOffset + Width * percentHealthAfterDamage;
+                var xPosCurrentHp = barPos.X + XOffset + Width * unit.Health / unit.MaxHealth;
 
                 if (damage > unit.Health)
                 {
-                    Text.X = (int) barPos.X + XOffset;
-                    Text.Y = (int) barPos.Y + YOffset - 13;
+                    Text.X = (int)barPos.X + XOffset;
+                    Text.Y = (int)barPos.Y + YOffset - 13;
                     Text.text = "Killable: " + (unit.Health - damage);
                     Text.OnEndScene();
                 }
@@ -71,7 +71,7 @@ namespace SSIvern
                 if (Fill)
                 {
                     var differenceInHP = xPosCurrentHp - xPosDamage;
-                    var pos1 = barPos.X + 9 + 107*percentHealthAfterDamage;
+                    var pos1 = barPos.X + 9 + 107 * percentHealthAfterDamage;
 
                     for (var i = 0; i < differenceInHP; i++)
                         Drawing.DrawLine(pos1 + i, yPos, pos1 + i, yPos + Height, 1, FillColor);
