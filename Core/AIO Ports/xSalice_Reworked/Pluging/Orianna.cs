@@ -84,7 +84,7 @@ using LeagueSharp.Common;
                     {
                         foreach (var intiator in Initiator.InitatorList)
                         {
-                            if (intiator.HeroName == hero.CharData.BaseSkinName)
+                            if (intiator.HeroName == hero.BaseSkinName)
                             {
                                 initator.AddItem(new MenuItem(intiator.SpellName, intiator.SpellName, true)).SetValue(false);
                             }
@@ -107,7 +107,7 @@ using LeagueSharp.Common;
                     eMenu.SubMenu("shield").AddItem(new MenuItem("eAllyIfHP", "If HP < %", true).SetValue(new Slider(40)));
                     foreach (var ally in ObjectManager.Get<AIHeroClient>().Where(ally => ally.IsAlly))
                     {
-                        eMenu.SubMenu("shield").AddItem(new MenuItem("shield" + ally.CharData.BaseSkinName, ally.CharData.BaseSkinName, true).SetValue(true));
+                        eMenu.SubMenu("shield").AddItem(new MenuItem("shield" + ally.BaseSkinName, ally.BaseSkinName, true).SetValue(true));
                     }
 
                     misc.AddSubMenu(eMenu);
@@ -127,7 +127,7 @@ using LeagueSharp.Common;
                     rMenu.SubMenu("intR").AddItem(new MenuItem("AdditonalTargets", "Require Addition targets", true).SetValue(new Slider(1, 0, 4)));
                     foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.Team != Player.Team))
                     {
-                        rMenu.SubMenu("intR").AddItem(new MenuItem("intR" + enemy.CharData.BaseSkinName, enemy.CharData.BaseSkinName, true).SetValue(false));
+                        rMenu.SubMenu("intR").AddItem(new MenuItem("intR" + enemy.BaseSkinName, enemy.BaseSkinName, true).SetValue(false));
                     }
 
                     misc.AddSubMenu(rMenu);
@@ -250,14 +250,14 @@ using LeagueSharp.Common;
 
                 if (Menu.Item("UseRCombo", true).GetValue<bool>() && target != null && R.IsReady())
                 {
-                    if (Menu.Item("intR" + target.CharData.BaseSkinName, true) != null)
+                    if (Menu.Item("intR" + target.BaseSkinName, true) != null)
                     {
                         foreach (
                             var enemy in
                                 HeroManager.Enemies
                                     .Where(x => Player.Distance(x.Position) < 1500 && x.IsValidTarget() && x.IsEnemy && !x.IsDead))
                         {
-                            if (!enemy.IsDead && Menu.Item("intR" + enemy.CharData.BaseSkinName, true).GetValue<bool>())
+                            if (!enemy.IsDead && Menu.Item("intR" + enemy.BaseSkinName, true).GetValue<bool>())
                             {
                                 CastR(enemy, true);
                                 return;
@@ -735,7 +735,7 @@ using LeagueSharp.Common;
                             if (R.Cast(_currentBallPosition))
                             {
                                 LeagueSharp.Common.Utility.DelayAction.Add(
-                                    300 + Game.Ping / 2, () => Player.Spellbook.CastSpell(Flash, Player.Position.Extend(t.Position, 425f)));
+                                    300 + Game.Ping / 2, () => ObjectManager.Player.Spellbook.CastSpell(Flash, Player.Position.Extend(t.Position, 425f)));
                             }
                         }
                     }
@@ -744,7 +744,7 @@ using LeagueSharp.Common;
                         if (R.Cast(_currentBallPosition))
                         {
                             LeagueSharp.Common.Utility.DelayAction.Add(
-                                300 + Game.Ping / 2, () => Player.Spellbook.CastSpell(Flash, flashPos));
+                                300 + Game.Ping / 2, () => ObjectManager.Player.Spellbook.CastSpell(Flash, flashPos));
                         }
                     }
                 }
@@ -859,9 +859,9 @@ using LeagueSharp.Common;
                                         Player.Distance(x.Position) < E.Range && Player.Distance(unit.Position) < 1500 
                                         && !x.IsDead).OrderBy(x => x.Distance(args.End)))
                     {
-                        if (Menu.Item("shield" + ally.CharData.BaseSkinName, true) != null)
+                        if (Menu.Item("shield" + ally.BaseSkinName, true) != null)
                         {
-                            if (Menu.Item("shield" + ally.CharData.BaseSkinName, true).GetValue<bool>())
+                            if (Menu.Item("shield" + ally.BaseSkinName, true).GetValue<bool>())
                             {
                                 var hp = Menu.Item("eAllyIfHP", true).GetValue<Slider>().Value;
 

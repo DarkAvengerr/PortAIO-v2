@@ -3,7 +3,6 @@ using LeagueSharp.Common;
  namespace xSaliceResurrected_Rework.Pluging
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using LeagueSharp;
     using LeagueSharp.Common;

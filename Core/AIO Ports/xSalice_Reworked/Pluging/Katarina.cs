@@ -233,7 +233,7 @@ using LeagueSharp.Common;
                                 ObjectManager
                                     .Get<Obj_AI_Minion>()
                                     .FirstOrDefault(
-                                        x => x.CharData.BaseSkinName == "testcuberender" && x.Health > 1
+                                        x => x.BaseSkinName == "testcuberender" && x.Health > 1
                                         && x.IsValid && x.Distance(Player) <= E.Range
                                         && x.Distance(target) <= 400);
 
@@ -242,7 +242,7 @@ using LeagueSharp.Common;
                                 if (Menu.Item("UseWCombo", true).GetValue<bool>() &&
                                     Player.GetSpell(SpellSlot.W).IsReady())
                                 {
-                                    if (Player.Spellbook.CastSpell(SpellSlot.W))
+                                    if (ObjectManager.Player.Spellbook.CastSpell(SpellSlot.W))
                                     {
                                         LastCastW = Utils.TickCount;
                                     }
@@ -277,7 +277,7 @@ using LeagueSharp.Common;
                                 if (Menu.Item("UseWCombo", true).GetValue<bool>() && 
                                     Player.GetSpell(SpellSlot.W).IsReady())
                                 {
-                                    if (Player.Spellbook.CastSpell(SpellSlot.W))
+                                    if (ObjectManager.Player.Spellbook.CastSpell(SpellSlot.W))
                                     {
                                         LastCastW = Utils.TickCount;
                                     }
@@ -336,7 +336,7 @@ using LeagueSharp.Common;
                                     ObjectManager.Get<Obj_AI_Minion>()
                                         .FirstOrDefault(
                                             x =>
-                                                x.CharData.BaseSkinName == "testcuberender" && x.Health > 1 &&
+                                                x.BaseSkinName == "testcuberender" && x.Health > 1 &&
                                                 x.IsValid);
 
                                 if (Dagger != null && Dagger.Distance(Player) <= E.Range)
@@ -402,7 +402,7 @@ using LeagueSharp.Common;
                                     ObjectManager.Get<Obj_AI_Minion>()
                                         .FirstOrDefault(
                                             x =>
-                                                x.CharData.BaseSkinName == "testcuberender" && x.Health > 1 &&
+                                                x.BaseSkinName == "testcuberender" && x.Health > 1 &&
                                                 x.IsValid);
 
                                 if (Dagger != null && Dagger.Distance(Player) <= E.Range)
@@ -460,7 +460,7 @@ using LeagueSharp.Common;
                      (!E.IsReady() && target.IsValidTarget(E.Range))))
 
                 {
-                    if (Player.Spellbook.CastSpell(SpellSlot.W))
+                    if (ObjectManager.Player.Spellbook.CastSpell(SpellSlot.W))
                     {
                         LastCastW = Utils.TickCount;
                     }
@@ -489,7 +489,7 @@ using LeagueSharp.Common;
 
             var Dagger =
                 ObjectManager.Get<Obj_AI_Minion>()
-                    .FirstOrDefault(x => x.CharData.BaseSkinName == "testcuberender" && x.Health > 1 && x.IsValid);
+                    .FirstOrDefault(x => x.BaseSkinName == "testcuberender" && x.Health > 1 && x.IsValid);
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
 
             switch (Menu.Item("harassMode", true).GetValue<StringList>().SelectedIndex)
@@ -506,7 +506,7 @@ using LeagueSharp.Common;
                             ObjectManager
                                 .Get<Obj_AI_Minion>()
                                 .FirstOrDefault(
-                                    x => x.CharData.BaseSkinName == "testcuberender" && x.Health > 1
+                                    x => x.BaseSkinName == "testcuberender" && x.Health > 1
                                     && x.IsValid && x.Distance(Player) <= E.Range
                                     && x.Distance(target) <= 400);
 
@@ -515,7 +515,7 @@ using LeagueSharp.Common;
                             if (Menu.Item("UseWHarass", true).GetValue<bool>() &&
                                 Player.GetSpell(SpellSlot.W).IsReady())
                             {
-                                if (Player.Spellbook.CastSpell(SpellSlot.W))
+                                if (ObjectManager.Player.Spellbook.CastSpell(SpellSlot.W))
                                 {
                                     LastCastW = Utils.TickCount;
                                 }
@@ -541,7 +541,7 @@ using LeagueSharp.Common;
                             if (Menu.Item("UseWHarass", true).GetValue<bool>() &&
                                 Player.GetSpell(SpellSlot.W).IsReady())
                             {
-                                if (Player.Spellbook.CastSpell(SpellSlot.W))
+                                if (ObjectManager.Player.Spellbook.CastSpell(SpellSlot.W))
                                 {
                                     LastCastW = Utils.TickCount;
                                 }
@@ -589,7 +589,7 @@ using LeagueSharp.Common;
                             && Player.GetSpell(SpellSlot.W).IsReady() &&
                             target.IsValidTarget(300))
                         {
-                            Player.Spellbook.CastSpell(SpellSlot.W);
+                            ObjectManager.Player.Spellbook.CastSpell(SpellSlot.W);
                         }
                     }
                     break;
@@ -619,7 +619,7 @@ using LeagueSharp.Common;
                             && Player.GetSpell(SpellSlot.W).IsReady() &&
                             target.IsValidTarget(300))
                         {
-                            Player.Spellbook.CastSpell(SpellSlot.W);
+                            ObjectManager.Player.Spellbook.CastSpell(SpellSlot.W);
                         }
                     }
                     break;
@@ -682,7 +682,7 @@ using LeagueSharp.Common;
 
             var Dagger =
                 ObjectManager.Get<Obj_AI_Minion>()
-                    .FirstOrDefault(x => x.CharData.BaseSkinName == "testcuberender" && x.Health > 1 && x.IsValid);
+                    .FirstOrDefault(x => x.BaseSkinName == "testcuberender" && x.Health > 1 && x.IsValid);
 
             if (useQ && allMinionsQ.Count > 0 && Q.IsReady() && allMinionsQ[0].IsValidTarget(Q.Range))
             {
@@ -701,7 +701,7 @@ using LeagueSharp.Common;
                         {
                             foreach (var minion in allMinionsW)
                             {
-                                if (Player.Spellbook.CastSpell(SpellSlot.W))
+                                if (ObjectManager.Player.Spellbook.CastSpell(SpellSlot.W))
                                 {
                                     LastCastW = Utils.TickCount;
                                 }
@@ -723,7 +723,7 @@ using LeagueSharp.Common;
                     {
                         foreach (var minion in allMinionsW)
                         {
-                            if (Player.Spellbook.CastSpell(SpellSlot.W))
+                            if (ObjectManager.Player.Spellbook.CastSpell(SpellSlot.W))
                             {
                                 LastCastW = Utils.TickCount;
                             }
@@ -753,7 +753,7 @@ using LeagueSharp.Common;
 
             var Dagger =
                 ObjectManager.Get<Obj_AI_Minion>()
-                    .FirstOrDefault(x => x.CharData.BaseSkinName == "testcuberender" && x.Health > 1 && x.IsValid);
+                    .FirstOrDefault(x => x.BaseSkinName == "testcuberender" && x.Health > 1 && x.IsValid);
 
             if (useQ && allMinionsQ.Count > 0 && Q.IsReady() && allMinionsQ[0].IsValidTarget(Q.Range))
             {
@@ -769,7 +769,7 @@ using LeagueSharp.Common;
                 {
                     if (useW && Player.GetSpell(SpellSlot.W).IsReady())
                     {
-                        if (Player.Spellbook.CastSpell(SpellSlot.W))
+                        if (ObjectManager.Player.Spellbook.CastSpell(SpellSlot.W))
                         {
                             LastCastW = Utils.TickCount;
                         }
@@ -795,7 +795,7 @@ using LeagueSharp.Common;
                 {
                     if (allMinionsW.Count > 0)
                     {
-                        if (Player.Spellbook.CastSpell(SpellSlot.W))
+                        if (ObjectManager.Player.Spellbook.CastSpell(SpellSlot.W))
                         {
                             LastCastW = Utils.TickCount;
                         }

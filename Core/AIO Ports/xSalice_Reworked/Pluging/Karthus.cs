@@ -294,7 +294,7 @@ using LeagueSharp.Common;
                     {
                         if (Utils.TickCount - _lastNotification > 0)
                         {
-                            Notifications.AddNotification(enemy.CharData.BaseSkinName + " Is Killable!", 500);
+                            Notifications.AddNotification(enemy.BaseSkinName + " Is Killable!", 500);
                             _lastNotification = Utils.TickCount + 5000;
                         }
 

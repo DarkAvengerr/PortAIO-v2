@@ -70,7 +70,7 @@ using LeagueSharp.Common;
 
                 foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.Team != Player.Team))
                 {
-                    rMenu.SubMenu("Dont_R").AddItem(new MenuItem("Dont_R" + enemy.CharData.BaseSkinName, enemy.ChampionName, true).SetValue(false));
+                    rMenu.SubMenu("Dont_R").AddItem(new MenuItem("Dont_R" + enemy.BaseSkinName, enemy.ChampionName, true).SetValue(false));
                 }
 
                 Menu.AddSubMenu(rMenu);
@@ -173,10 +173,12 @@ using LeagueSharp.Common;
         private void Combo()
         {
             var qTarget = TargetSelector.GetTarget(650, TargetSelector.DamageType.Magical);
-            float dmg = 0;
+            var dmg = 0f;
 
             if (qTarget != null)
+            {
                 dmg += GetComboDamage(qTarget);
+            }
 
             var itemTarget = TargetSelector.GetTarget(750, TargetSelector.DamageType.Physical);
 
@@ -185,7 +187,9 @@ using LeagueSharp.Common;
                 ItemManager.Target = itemTarget;
 
                 if (dmg > itemTarget.Health - 50)
+                {
                     ItemManager.KillableTarget = true;
+                }
 
                 ItemManager.UseTargetted = true;
             }
@@ -336,7 +340,7 @@ using LeagueSharp.Common;
             else
             {
                 var grabbableObj = Get_Nearest_orb();
-                var wToggleState = Player.Spellbook.GetSpell(SpellSlot.W).ToggleState;
+                var wToggleState = ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState;
                 var allMinionsW = MinionManager.GetMinions(Player.ServerPosition, W.Range, MinionTypes.All, MinionTeam.NotAlly);
 
                 if (grabbableObj == null || allMinionsW.Count < 1)
@@ -402,31 +406,27 @@ using LeagueSharp.Common;
 
         private void Cast_R()
         {
-            var rTarget = TargetSelector.GetTarget(R.Level > 2 ? R.Range : 675, TargetSelector.DamageType.Magical);
-
-            if (rTarget == null)
-                return;
-
-            if (rTarget.HasBuffOfType(BuffType.Invulnerability))
-                return;
-
-            if (Menu.Item("Dont_R" + rTarget.ChampionName, true) == null)
-                return;
-
-            if (Menu.Item("Dont_R" + rTarget.ChampionName, true).GetValue<bool>())
-                return;
-
-            if (Menu.Item("R_Overkill_Check", true).GetValue<bool>())
+            foreach (
+                var target in
+                HeroManager.Enemies.Where(
+                    x =>
+                        x.IsValidTarget(R.Level > 2 ? R.Range : 675f) && !x.HasBuffOfType(BuffType.Invulnerability) &&
+                        Menu.Item("Dont_R" + x.ChampionName, true) != null &&
+                        !Menu.Item("Dont_R" + x.ChampionName, true).GetValue<bool>()))
             {
-                if (Player.GetSpellDamage(rTarget, SpellSlot.Q) - 25 > rTarget.Health)
+                if (Menu.Item("R_Overkill_Check", true).GetValue<bool>())
                 {
-                    return;
+                    if (Player.GetSpellDamage(target, SpellSlot.Q) - 25 > target.Health && Q.IsReady() &&
+                        target.IsValidTarget(Q.Range))
+                    {
+                        continue;
+                    }
                 }
-            }
 
-            if (Get_Ult_Dmg(rTarget) > rTarget.Health - 20 && rTarget.Distance(Player.Position) < R.Range)
-            {
-                R.Cast(rTarget);
+                if (Get_Ult_Dmg(target) > target.Health - 20 && target.Distance(Player.Position) < R.Range)
+                {
+                    R.CastOnUnit(target, true);
+                }
             }
         }
 
@@ -669,10 +669,7 @@ using LeagueSharp.Common;
 
         protected override void GameObject_OnCreate(GameObject sender, EventArgs args)
         {
-            if (!(sender is Obj_AI_Minion))
-                return;
-
-            if (sender.Name == "Seed" && sender.IsAlly)
+            if (sender.Name == "Seed" && sender.IsAlly && sender.Type == GameObjectType.obj_AI_Minion)
             {
                 var orb = (Obj_AI_Minion)sender;
 

@@ -61,7 +61,7 @@ using LeagueSharp.Common;
                     rMenu.AddSubMenu(new Menu("Don't use R on", "Dont_R"));
                     foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.Team != Player.Team))
                         rMenu.SubMenu("Dont_R")
-                            .AddItem(new MenuItem("Dont_R" + enemy.CharData.BaseSkinName, enemy.CharData.BaseSkinName, true).SetValue(false));
+                            .AddItem(new MenuItem("Dont_R" + enemy.BaseSkinName, enemy.BaseSkinName, true).SetValue(false));
 
                     spellMenu.AddSubMenu(rMenu);
                 }
@@ -255,9 +255,9 @@ using LeagueSharp.Common;
 
             foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range)))
             {
-                if (Menu.Item("Dont_R" + target.CharData.BaseSkinName, true) != null)
+                if (Menu.Item("Dont_R" + target.BaseSkinName, true) != null)
                 {
-                    if (!Menu.Item("Dont_R" + target.CharData.BaseSkinName, true).GetValue<bool>())
+                    if (!Menu.Item("Dont_R" + target.BaseSkinName, true).GetValue<bool>())
                     {
                         if (Get_R_Dmg(target) > target.Health && Player.Distance(target.Position) > minRange)
                         {
@@ -273,9 +273,9 @@ using LeagueSharp.Common;
         {
             foreach (var unit in HeroManager.Enemies.Where(x => x.IsValidTarget(20000) && !x.IsDead).OrderBy(x => x.Health))
             {
-                if (Menu.Item("Dont_R" + unit.CharData.BaseSkinName, true) != null)
+                if (Menu.Item("Dont_R" + unit.BaseSkinName, true) != null)
                 {
-                    if (!Menu.Item("Dont_R" + unit.CharData.BaseSkinName, true).GetValue<bool>())
+                    if (!Menu.Item("Dont_R" + unit.BaseSkinName, true).GetValue<bool>())
                     {
                         var health = unit.Health + unit.HPRegenRate * 3 + 25;
                         if (Get_R_Dmg(unit) > health)

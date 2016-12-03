@@ -14,17 +14,17 @@ using LeagueSharp.Common;
 
         public static bool Ignite_Ready()
         {
-            return IgniteSlot != SpellSlot.Unknown && Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready;
+            return IgniteSlot != SpellSlot.Unknown && ObjectManager.Player.Spellbook.CanUseSpell(IgniteSlot) == SpellState.Ready;
         }
 
         public static bool Flash_Ready()
         {
-            return FlashSlot != SpellSlot.Unknown && Player.Spellbook.CanUseSpell(FlashSlot) == SpellState.Ready;
+            return FlashSlot != SpellSlot.Unknown && ObjectManager.Player.Spellbook.CanUseSpell(FlashSlot) == SpellState.Ready;
         }
 
         public static void UseFlash(Vector3 pos)
         {
-            Player.Spellbook.CastSpell(FlashSlot, pos);
+            ObjectManager.Player.Spellbook.CastSpell(FlashSlot, pos);
         }
     }
 }

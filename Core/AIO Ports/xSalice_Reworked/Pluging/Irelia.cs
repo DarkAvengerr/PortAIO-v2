@@ -386,7 +386,7 @@ using LeagueSharp.Common;
 
         private void Cast_R()
         {
-            var target = TargetSelector.GetTarget(Player.Spellbook.GetSpell(SpellSlot.R).ToggleState == 1 ? Q.Range : R.Range,
+            var target = TargetSelector.GetTarget(ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).ToggleState == 1 ? Q.Range : R.Range,
                 TargetSelector.DamageType.Physical);
 
             if (target != null && R.IsReady())
@@ -524,7 +524,7 @@ using LeagueSharp.Common;
                     {
                         if (Utils.TickCount - _lastNotification > 0)
                         {
-                            Notifications.AddNotification(target.CharData.BaseSkinName + " Is Killable!", 500);
+                            Notifications.AddNotification(target.BaseSkinName + " Is Killable!", 500);
                             _lastNotification = Utils.TickCount + 5000;
                         }
                     }

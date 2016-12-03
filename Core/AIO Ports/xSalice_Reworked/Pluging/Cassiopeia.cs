@@ -4,7 +4,6 @@ using LeagueSharp.Common;
 {
     using Base;
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using LeagueSharp;
     using LeagueSharp.Common;
@@ -125,7 +124,7 @@ using LeagueSharp.Common;
                     foreach (var enemy in HeroManager.Enemies)
                     {
                         rMenu.SubMenu("Dont_R")
-                            .AddItem(new MenuItem("Dont_R" + enemy.CharData.BaseSkinName, enemy.CharData.BaseSkinName, true).SetValue(false));
+                            .AddItem(new MenuItem("Dont_R" + enemy.BaseSkinName, enemy.BaseSkinName, true).SetValue(false));
                     }
 
                     miscMenu.AddSubMenu(rMenu);
@@ -359,7 +358,7 @@ using LeagueSharp.Common;
                 return;
             }
 
-            Player.Spellbook.CastSpell(SpellSlot.R, vec);
+            ObjectManager.Player.Spellbook.CastSpell(SpellSlot.R, vec);
             _flashVec = vec;
             _lastFlash = Utils.TickCount;
         }
@@ -609,9 +608,9 @@ using LeagueSharp.Common;
             foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range))
                 .OrderByDescending(GetComboDamage))
             {
-                if (Menu.Item("Dont_R" + target.CharData.BaseSkinName, true) != null)
+                if (Menu.Item("Dont_R" + target.BaseSkinName, true) != null)
                 {
-                    if (!Menu.Item("Dont_R" + target.CharData.BaseSkinName, true).GetValue<bool>())
+                    if (!Menu.Item("Dont_R" + target.BaseSkinName, true).GetValue<bool>())
                     {
                         if (Menu.Item("overKillCheck", true).GetValue<bool>())
                         {
@@ -893,7 +892,7 @@ using LeagueSharp.Common;
                 {
                     if (Utils.TickCount - _lastNotification > 0)
                     {
-                        Notifications.AddNotification(x.CharData.BaseSkinName + " Flash Ult Killable", 5000);
+                        Notifications.AddNotification(x.BaseSkinName + " Flash Ult Killable", 5000);
                         _lastNotification = Utils.TickCount + 5000;
                     }
                 }

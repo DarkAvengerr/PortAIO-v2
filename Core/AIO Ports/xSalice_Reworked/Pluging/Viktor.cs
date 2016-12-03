@@ -56,7 +56,6 @@ using LeagueSharp.Common;
 
                 var eMenu = new Menu("EMenu", "EMenu");
                 {
-                    eMenu.AddItem(new MenuItem("rAlways", "Ult Always Combo", true).SetValue(new KeyBind("K".ToCharArray()[0], KeyBindType.Toggle)));
                     eMenu.AddItem(new MenuItem("Line_If_Enemy_Count", "Auto E If >= Enemy, 6 = Off", true).SetValue(new Slider(4, 1, 6)));
                     eMenu.AddItem(new MenuItem("Line_If_Enemy_Count_Combo", "E if >= In Combo, 6 = off", true).SetValue(new Slider(3, 1, 6)));
                     spellMenu.AddSubMenu(eMenu);
@@ -283,7 +282,7 @@ using LeagueSharp.Common;
                         HeroManager.Enemies
                             .Where(x => x.IsValidTarget(3500) && !x.IsDead && x.Health > 0).OrderByDescending(x => x.Distance(_rObj.Position)))
                 {
-                    Player.Spellbook.CastSpell(SpellSlot.R, target.ServerPosition);
+                    ObjectManager.Player.Spellbook.CastSpell(SpellSlot.R, target.ServerPosition);
                     _lastR = Utils.TickCount;
                 }
             }

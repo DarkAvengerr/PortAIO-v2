@@ -53,7 +53,7 @@ using LeagueSharp.Common;
                     var antigcmenu = eMenu.AddSubMenu(new Menu("Anti-Gapcloser", "antigapcloser"));
                     foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(h => h.IsEnemy))
                     {
-                        var championName = hero.CharData.BaseSkinName;
+                        var championName = hero.BaseSkinName;
                         antigcmenu.AddItem(new MenuItem("antigc" + championName, championName, true).SetValue(false));
                     }
                     spellMenu.AddSubMenu(eMenu);

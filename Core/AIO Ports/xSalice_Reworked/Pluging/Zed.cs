@@ -1110,17 +1110,17 @@ using LeagueSharp.Common;
 
             if (useQ)
             {
-                totalEnergy += Player.Spellbook.GetSpell(SpellSlot.Q).SData.Mana;
+                totalEnergy += ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).SData.Mana;
             }
 
             if (useW)
             {
-                totalEnergy += Player.Spellbook.GetSpell(SpellSlot.W).SData.Mana;
+                totalEnergy += ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).SData.Mana;
             }
 
             if (useE)
             {
-                totalEnergy += Player.Spellbook.GetSpell(SpellSlot.E).SData.Mana;
+                totalEnergy += ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).SData.Mana;
             }
 
             return energy >= totalEnergy;

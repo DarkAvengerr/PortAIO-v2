@@ -222,11 +222,11 @@ using LeagueSharp.Common;
         {
             var range = Player.HasBuff("CorkiMissileBarrageCounterBig") ? 1500 : 1300;
 
-            if (Index == 1 && Menu.Item("ComboR_Limit", true).GetValue<Slider>().Value < Player.Spellbook.GetSpell(SpellSlot.R).Ammo)
+            if (Index == 1 && Menu.Item("ComboR_Limit", true).GetValue<Slider>().Value < ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Ammo)
                 SpellCastManager.CastBasicSkillShot(R, range, TargetSelector.DamageType.Magical, HitChance.VeryHigh);
-            else if (Index == 2 && Menu.Item("HarassR_Limit", true).GetValue<Slider>().Value < Player.Spellbook.GetSpell(SpellSlot.R).Ammo)
+            else if (Index == 2 && Menu.Item("HarassR_Limit", true).GetValue<Slider>().Value < ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Ammo)
                 SpellCastManager.CastBasicSkillShot(R, range, TargetSelector.DamageType.Magical, HitChance.VeryHigh);
-            else if (Index == 3 && Menu.Item("LaneClearR_Limit", true).GetValue<Slider>().Value < Player.Spellbook.GetSpell(SpellSlot.R).Ammo)
+            else if (Index == 3 && Menu.Item("LaneClearR_Limit", true).GetValue<Slider>().Value < ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Ammo)
                 SpellCastManager.CastBasicFarm(R);
         }
 

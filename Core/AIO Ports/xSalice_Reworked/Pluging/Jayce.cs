@@ -15,12 +15,14 @@ using LeagueSharp.Common;
 
     internal class Jayce : Champion
     {
-        public static float Qcd, QcdEnd;
-        public static float Q1Cd, Q1CdEnd;
-        public static float Wcd, WcdEnd;
-        public static float W1Cd, W1CdEnd;
-        public static float Ecd, EcdEnd;
-        public static float E1Cd, E1CdEnd;
+        public static float Qcd;
+        private static float QcdEnd;
+        private static float Q1Cd, Q1CdEnd;
+        private static float Wcd, WcdEnd;
+        private static float W1Cd, W1CdEnd;
+        public static float Ecd;
+        private static float EcdEnd;
+        private static float E1Cd, E1CdEnd;
 
         public static bool IsMelee => !ObjectManager.Player.HasBuff("jaycestancegun");
 
@@ -473,7 +475,7 @@ using LeagueSharp.Common;
         private float GetQHumanizerDamage(Obj_AI_Base target)
         {
             return (float)Player.CalcDamage(target, Damage.DamageType.Physical,
-                                -25 + Player.Spellbook.GetSpell(SpellSlot.Q).Level * 45 +
+                                -25 + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level * 45 +
                                 1.0 * Player.FlatPhysicalDamageMod);
         }
 
@@ -481,7 +483,7 @@ using LeagueSharp.Common;
         {
             if (target == null)
                 return 0f;
-            double percentage = 5 + 3 * Player.Spellbook.GetSpell(SpellSlot.E).Level;
+            double percentage = 5 + 3 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level;
             return (float)Player.CalcDamage(target, Damage.DamageType.Magical,
                     target.MaxHealth / 100 * percentage + ObjectManager.Player.FlatPhysicalDamageMod);
         }
@@ -692,7 +694,7 @@ using LeagueSharp.Common;
                         var gateVector = Player.ServerPosition +
                                          Vector3.Normalize(Game.CursorPos - Player.ServerPosition)*50;
 
-                        if (mob.IsValidTarget(QExtend.Range))
+                        if (mob != null && mob.IsValidTarget(QExtend.Range))
                         {
                             E.Cast(gateVector);
                             QExtend.Cast(mob.Position);

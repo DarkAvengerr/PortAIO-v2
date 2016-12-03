@@ -4,8 +4,5 @@ using LeagueSharp.Common;
 {
     internal class Veigar
     {
-        public Veigar()
-        {
-        }
     }
 }
