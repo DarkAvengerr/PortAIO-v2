@@ -58,6 +58,7 @@ using LeagueSharp.Common;
 
         public static void UseItems(AIHeroClient target, Menu config, float comboDmg = 0f, bool cleanseSpell = false)
         {
+            return;
             if (config.Item("hyd").GetValue<bool>() && player.ChampionName != "Renekton")
             {
                 castHydra(target);
