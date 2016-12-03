@@ -219,7 +219,10 @@ namespace SPrediction
         public static void Initialize(Menu mainMenu, string prefMenuName = "SPRED")
         {
             if (blInitialized)
-                throw new Exception("SPrediction Already Initialized");
+            {
+                Console.WriteLine("SPrediction Already Initialized");
+                return;
+            }
 
             PathTracker.Initialize();
             Collision.Initialize();
