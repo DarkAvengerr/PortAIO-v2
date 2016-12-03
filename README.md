@@ -20,11 +20,11 @@ I'd like to welcome everyone to PortAIO v2, a complete reboot of PortAIO. We too
 ## - Frequently Asked Questions :
 1. What is a port? : A 'port' is converting a script from one community (in our case L#) and making it compatible with another community (in our case EB).
 
-2. Does PortAIO support all the champions? : As of 6.21 we support every champion up to Ivern.
+2. Does PortAIO support all the champions? : As of 6.23 we support every champion up to Ivern.
 
 3. Will PortAIO ever have BoL scripts? : No. Most likely not, most BoL Scripts are encrypted which increases the difficulty of it ever being ported.
 
-4. What is a dual-port? : The dual-port feature allows for you to change the port you are using for your champion/utility, as of 6.21 the dual-port feature supports nearly all champions (except kled & Ivern) and 4 utility scripts.
+4. What is a dual-port? : The dual-port feature allows for you to change the port you are using for your champion/utility, as of 6.23 the dual-port feature supports nearly all champions (except kled & Ivern) and 4 utility scripts.
 
 5. Why is PortAIO not on EB? : The rules forbid ported addons on their forums but when I started this project the rule wasn't present, what does that tell you?
 
