@@ -43,13 +43,13 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "OKTW", "Anivia#", "xSalice", "[SDK] ExorAIO" };
                     break;
                 case EloBuddy.Champion.Annie:
-                    champ = new string[] { "OKTW", "Korean Annie", "SharpyAIO", "Support is Easy", "EloFactory Annie", "Flowers' Annie", "OAnnie", "ReformedAIO" };
+                    champ = new string[] { "OKTW", "Korean Annie", "SharpyAIO", "Support is Easy", "EloFactory Annie", "Flowers' Annie", "OAnnie", "ReformedAIO", "mySeries" };
                     break;
                 case EloBuddy.Champion.Ashe:
                     champ = new string[] { "OKTW", "ProSeries", "ReformedAIO", "SharpShooter", "[SA] SurvivorSeries", "xSalice", "Marksman#", "[SDK] The Queen of the Ice", "[SDK] ChallengerSeriesAIO", "[SDK] Dicaste's Ashe", "[SDK] ExorAIO", "[SDK] Flowers' Series", "[SDK] xcsoft's Ashe", "Ashe#", "CarryAshe", "SNAshe", "ProjectGeass", "Hikicarry ADC", "Flowers' ADC Series", "SurvivorSeriesAIO" };
                     break;
                 case EloBuddy.Champion.AurelionSol:
-                    champ = new string[] { "ElAurelionSol", "SkyLv_Aurelion", "vAurelionSol", "Aurelion Sol As The Star Forger", "Flowers' AurelionSol", "Badao AurelionSol" };
+                    champ = new string[] { "ElAurelionSol", "SkyLv_Aurelion", "vAurelionSol", "Aurelion Sol As The Star Forger", "Flowers' AurelionSol", "Badao AurelionSol", "mySeries" };
                     break;
                 case EloBuddy.Champion.Azir:
                     champ = new string[] { "HeavenStrike Azir", "Creator of Elo", "SAutoCarry", "xSalice", "Azir by Kortatu", "AzirSharp", "Night Stalker Azir" };
@@ -82,7 +82,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "OKTW", "ElEasy", "SAutoCarry", "[SDK] ExorAIO", "[SDK] Flowers' Series", "Darius#", "KurisuDarius", "ODarius", "PerfectDarius", "sAIO" };
                     break;
                 case EloBuddy.Champion.Diana:
-                    champ = new string[] { "ElDiana", "D-Diana", "ReformedAIO", "[SDK] ExorAIO", "Diana MasterRace", "MoonDiana", "NechritoDiana", "[SDK] Tc_SDKexAIO", "Flowers' Diana", "ElDiana Revamped" };
+                    champ = new string[] { "ElDiana", "D-Diana", "ReformedAIO", "[SDK] ExorAIO", "Diana MasterRace", "MoonDiana", "NechritoDiana", "[SDK] Tc_SDKexAIO", "Flowers' Diana", "ElDiana Revamped", "mySeries" };
                     break;
                 case EloBuddy.Champion.DrMundo:
                     champ = new string[] { "Hestia's Mundo", "BrianSharp", "KappaSeries", "SAutoCarry", "SharpyAIO", "StonedSeriesAIO", "[SDK] ExorAIO", "[SDK] Valvrave#", "MundoSharpy" };
@@ -287,7 +287,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "UnderratedAIO", "xSalice", "ElRumble" };
                     break;
                 case EloBuddy.Champion.Ryze:
-                    champ = new string[] { "[SA] SurvivorSeries", "BrianSharp", "FreshBooster", "Sharpshooter", "StonedSeries AIO", "[SDK] ArcaneRyze", "[SDK] EvictRyze", "[SDK] ExorAIO", "[SDK] Flowers' Series", "BurstRyze", "HeavenStrikeRyze", "JustRyze", "Ryze#", "SluttyRyze", "TRUSt in my Ryze", "sAIO", "SurvivorSeriesAIO" };
+                    champ = new string[] { "[SA] SurvivorSeries", "BrianSharp", "FreshBooster", "Sharpshooter", "StonedSeries AIO", "[SDK] ArcaneRyze", "[SDK] EvictRyze", "[SDK] ExorAIO", "[SDK] Flowers' Series", "BurstRyze", "HeavenStrikeRyze", "JustRyze", "Ryze#", "SluttyRyze", "TRUSt in my Ryze", "sAIO", "SurvivorSeriesAIO", "mySeries" };
                     break;
                 case EloBuddy.Champion.Sejuani:
                     champ = new string[] { "ElSejuani", "UnderratedAIO" };
@@ -380,7 +380,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "ElVi", "xQx Vi" };
                     break;
                 case EloBuddy.Champion.Viktor:
-                    champ = new string[] { "TRUSt in my Viktor", "Hikicarry Viktor", "Perplexed Viktor", "SAutoCarry", "SFXChallenger", "Badao's Viktor", "xSalice", "[SDK] Flowers' Series", "[SDK] Flowers' Viktor", "[SDK] TRUSt in my Viktor", "King Lazer" };
+                    champ = new string[] { "TRUSt in my Viktor", "Hikicarry Viktor", "Perplexed Viktor", "SAutoCarry", "SFXChallenger", "Badao's Viktor", "xSalice", "[SDK] Flowers' Series", "[SDK] Flowers' Viktor", "[SDK] TRUSt in my Viktor", "King Lazer", "mySeries" };
                     break;
                 case EloBuddy.Champion.Vladimir:
                     champ = new string[] { "ElVladimir", "DZAIO", "SFXChallenger", "xSalice", "[SDK] The Rivers will Run Red", "[SDK] Flowers' Series", "[SDK] TroopAIO", "[SDK] Valvrave#" };

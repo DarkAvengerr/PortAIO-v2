@@ -428,6 +428,9 @@ namespace PortAIO
                         case 7: // ReformedAIO
                             ReformedAIO.Program.Main();
                             break;
+                        case 8: // MySeries
+                            myAnnie.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Ashe:
@@ -515,6 +518,9 @@ namespace PortAIO
                             break;
                         case 5: // Badao Aurelion
                             BadaoKingdom.Program.Main();
+                            break;
+                        case 6: // MySeries
+                            myAurelionSol.Program.Main();
                             break;
                     }
                     break;
@@ -882,6 +888,9 @@ namespace PortAIO
                             break;
                         case 9: // ElDiana Revamped
                             ElDianaRevamped.Program.Bootstrap();
+                            break;
+                        case 10: // MySeries
+                            myDiana.Program.Main();
                             break;
                     }
                     break;
@@ -2745,6 +2754,9 @@ namespace PortAIO
                         case 16: //SurvivorSeries AIO
                             SurvivorSeriesAIO.Program.Main();
                             break;
+                        case 17: // MySeries
+                            myRyze.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Sejuani:
@@ -3626,6 +3638,9 @@ namespace PortAIO
                             break;
                         case 10: // King Lazer
                             HamViktor.Program.Main();
+                            break;
+                        case 11: // MySeries
+                            myViktor.Program.Main();
                             break;
                     }
                     break;
