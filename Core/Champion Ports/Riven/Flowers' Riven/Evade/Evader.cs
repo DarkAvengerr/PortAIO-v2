@@ -225,14 +225,12 @@ using LeagueSharp.Common;
                 {
                     if (isBlink)
                     {
-                        if (Utils.TickCount - Program.LastWardJumpAttempt < 250 ||
-                            Program.IsSafeToBlink(target.ServerPosition.To2D(), Config.EvadingFirstTimeOffset, delay))
+                        if (Program.IsSafeToBlink(target.ServerPosition.To2D(), Config.EvadingFirstTimeOffset, delay))
                         {
                             goodTargets.Add(target);
                         }
 
-                        if (Utils.TickCount - Program.LastWardJumpAttempt < 250 ||
-                            Program.IsSafeToBlink(target.ServerPosition.To2D(), Config.EvadingSecondTimeOffset, delay))
+                        if (Program.IsSafeToBlink(target.ServerPosition.To2D(), Config.EvadingSecondTimeOffset, delay))
                         {
                             badTargets.Add(target);
                         }
@@ -243,14 +241,12 @@ using LeagueSharp.Common;
                         pathToTarget.Add(Program.PlayerPosition);
                         pathToTarget.Add(target.ServerPosition.To2D());
 
-                        if (Utils.TickCount - Program.LastWardJumpAttempt < 250 ||
-                            Program.IsSafePath(pathToTarget, Config.EvadingFirstTimeOffset, speed, delay).IsSafe)
+                        if (Program.IsSafePath(pathToTarget, Config.EvadingFirstTimeOffset, speed, delay).IsSafe)
                         {
                             goodTargets.Add(target);
                         }
 
-                        if (Utils.TickCount - Program.LastWardJumpAttempt < 250 ||
-                            Program.IsSafePath(pathToTarget, Config.EvadingSecondTimeOffset, speed, delay).IsSafe)
+                        if (Program.IsSafePath(pathToTarget, Config.EvadingSecondTimeOffset, speed, delay).IsSafe)
                         {
                             badTargets.Add(target);
                         }

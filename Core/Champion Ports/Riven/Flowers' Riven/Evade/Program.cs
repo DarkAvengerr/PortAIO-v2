@@ -33,7 +33,6 @@ using LeagueSharp.Common;
         private static bool _evading;
         public static bool NoSolutionFound;
         public static Vector2 EvadeToPoint;
-        public static int LastWardJumpAttempt;
         public static Vector2 PreviousTickPosition;
         public static Vector2 PlayerPosition;
         public static string PlayerChampionName;
@@ -348,7 +347,7 @@ using LeagueSharp.Common;
 
                         foreach (var m in ObjectManager.Get<Obj_AI_Minion>())
                         {
-                            if (m.CharData.BaseSkinName == "jarvanivstandard" && m.Team == skillshot.Unit.Team)
+                            if (m.BaseSkinName == "jarvanivstandard" && m.Team == skillshot.Unit.Team)
                             {                    
                                 var extendedE = new Skillshot(
                                     skillshot.DetectionType, skillshot.SpellData, skillshot.StartTick, skillshot.Start,
@@ -837,11 +836,6 @@ using LeagueSharp.Common;
 
                                     return;
                                 }
-                                if (Utils.TickCount - LastWardJumpAttempt < 250)
-                                {
-                                    NoSolutionFound = true;
-                                    return;
-                                }
                             }
                             else
                             {
@@ -947,12 +941,6 @@ using LeagueSharp.Common;
                                         }
                                     }
 
-                                    NoSolutionFound = true;
-                                    return;
-                                }
-
-                                if (Utils.TickCount - LastWardJumpAttempt < 250)
-                                {
                                     NoSolutionFound = true;
                                     return;
                                 }
