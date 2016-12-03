@@ -3,8 +3,9 @@ using System.Drawing;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
-using EloBuddy;
 
+using EloBuddy; 
+using LeagueSharp.Common; 
 namespace SharpShooter
 {
     internal class DamageIndicator

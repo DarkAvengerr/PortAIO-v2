@@ -7,7 +7,7 @@ using LeagueSharp;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace SergixBrand
+namespace SergixBrand
 {
     public class Damage
     {

@@ -5,7 +5,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Items.Cleansers
+namespace Activator.Items.Cleansers
 {
     class _3140 : CoreItem 
     {

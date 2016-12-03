@@ -14,7 +14,7 @@ using System.Collections.Generic;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Data
+namespace Activator.Data
 {
     public class Troydata
     {
@@ -31,6 +31,17 @@ using LeagueSharp.Common;
 
         static Troydata()
         {
+            Troys.Add(new Troydata
+            {
+                Name = "R_buf",
+                ChampionName = "Renekton",
+                Radius = 266f,
+                Slot = SpellSlot.R,
+                HitTypes = new[] { HitType.None },
+                PredictDmg = true,
+                Interval = 0.75
+            });
+
             Troys.Add(new Troydata
             {
                 Name = "R_buf",
@@ -95,17 +106,6 @@ using LeagueSharp.Common;
                 HitTypes = new [] { HitType.Danger, HitType.Ultimate, HitType.Initiator },
                 PredictDmg = true,
                 Interval = 0.5
-            });
-
-            Troys.Add(new Troydata
-            {
-                Name = "R_Cas",
-                ChampionName = "Nunu",
-                Radius = 650f,
-                Slot = SpellSlot.R,
-                HitTypes = new[] { HitType.CrowdControl },
-                PredictDmg = true,
-                Interval = 0.75
             });
 
             Troys.Add(new Troydata
@@ -321,13 +321,13 @@ using LeagueSharp.Common;
 
             Troys.Add(new Troydata
             {
-                Name = "Crowstorm",
+                Name = "Crowstorm_red",
                 ChampionName = "FiddleSticks",
                 Radius = 425f,
                 Slot = SpellSlot.R,
                 HitTypes =  new[] { HitType.Danger, HitType.Ultimate, HitType.ForceExhaust },
                 PredictDmg = true,
-                Interval = 1.0
+                Interval = 0.5
             });
 
             Troys.Add(new Troydata

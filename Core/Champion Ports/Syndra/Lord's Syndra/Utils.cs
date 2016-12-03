@@ -9,7 +9,7 @@ using SharpDX;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace LordsSyndra
+namespace LordsSyndra
 {
 
     public static class Utils

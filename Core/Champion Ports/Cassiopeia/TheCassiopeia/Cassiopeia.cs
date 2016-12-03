@@ -13,7 +13,7 @@ using Color = System.Drawing.Color;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace TheCassiopeia
+namespace TheCassiopeia
 {
     class Cassiopeia
     {
@@ -106,7 +106,8 @@ using LeagueSharp.Common;
 
             laneclearMenu.AddMItem("Min W targets", new Slider(4, 1, 10), (sender, args) => provider.GetSkill<CassW>().ClearMinHit = args.GetNewValue<Slider>().Value);
             laneclearMenu.ProcStoredValueChanged<Slider>();
-            //miscMenu.AddMItem("Make Poison Influence Target Selection", true, (sender, args) => provider.EnablePoisonTargetSelection = args.GetNewValue<bool>());
+            miscMenu.AddMItem("Poison Influences Target Selection", false, (sender, args) => provider.EnablePoisonTargetSelection = args.GetNewValue<bool>());
+            miscMenu.AddMItem("Lasthit > Harass with E in mixed mode", false, (sender, args) => provider.GetSkill<CassE>().LasthitOverHarass = args.GetNewValue<bool>());
             miscMenu.ProcStoredValueChanged<Slider>();
             miscMenu.ProcStoredValueChanged<bool>();
 

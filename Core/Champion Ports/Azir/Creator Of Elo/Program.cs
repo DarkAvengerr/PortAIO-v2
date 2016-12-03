@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Azir_Creator_of_Elo
+using LeagueSharp.Common; 
+namespace Azir_Creator_of_Elo
 {
     class Program
     {

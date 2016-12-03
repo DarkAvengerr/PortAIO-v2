@@ -4,7 +4,7 @@ using System.Linq;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace e.Motion_Katarina
+namespace e.Motion_Katarina
 {
     static class Config
     {
@@ -31,6 +31,12 @@ using LeagueSharp.Common;
             comboMenu.AddItem(new MenuItem("combo.e", "Use E").SetValue(true));
             comboMenu.AddItem(new MenuItem("combo.ealways", "Always use E").SetValue(false));
             comboMenu.AddItem(new MenuItem("combo.r", "Use R").SetValue(true));
+
+            //Harass-Menu
+            Menu harassMenu = new Menu("Harass", "harass");
+            harassMenu.AddItem(new MenuItem("harass.q", "Use Q").SetValue(true));
+            harassMenu.AddItem(new MenuItem("harass.w", "Use W").SetValue(true));
+            harassMenu.AddItem(new MenuItem("harass.e", "Use E").SetValue(false));
 
             //Killsteal-Menu
             Menu ksMenu = new Menu("Killsteal", "ks");
@@ -68,6 +74,7 @@ using LeagueSharp.Common;
             //Add all Menus to Root-Menu
             config.AddSubMenu(orbwalkerMenu);
             config.AddSubMenu(comboMenu);
+            config.AddSubMenu(harassMenu);
             config.AddSubMenu(ksMenu);
             config.AddSubMenu(lasthit);
             config.AddSubMenu(laneclear);

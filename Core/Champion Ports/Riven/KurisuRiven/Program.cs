@@ -1,7 +1,9 @@
-﻿using System;
+using System;
 using System.Reflection;
 using LeagueSharp.Common;
 
+using EloBuddy; 
+using LeagueSharp.Common; 
 namespace KurisuRiven
 {
     internal static class Program

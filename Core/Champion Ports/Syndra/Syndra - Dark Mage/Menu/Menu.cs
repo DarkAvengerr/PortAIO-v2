@@ -9,7 +9,7 @@ using Color = SharpDX.Color;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace DarkMage
+namespace DarkMage
 {
     public class Menu
     {

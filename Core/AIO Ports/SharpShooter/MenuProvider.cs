@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using System.Drawing;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SPrediction;
-using EloBuddy;
 
+using EloBuddy; 
+using LeagueSharp.Common; 
 namespace SharpShooter
 {
     /// <summary>
@@ -37,8 +37,7 @@ namespace SharpShooter
 
                 Champion.AddOrbwalker();
                 Champion.AddTargetSelector();
-                SPrediction.Prediction.Initialize(MenuInstance);
-                MenuInstance.SubMenu("SPRED").Item("PREDICTONLIST").SetValue(new StringList(new[] { "SPrediction", "Common Predicion" }, 1));                
+                
             }
             else
             {
@@ -317,6 +316,8 @@ namespace SharpShooter
                     AddItem("Use Q", enabled);
                 }
 
+
+
                 /// <summary>
                 ///     Combo 메뉴에 'Use W' 항목을 추가합니다..
                 /// </summary>
@@ -381,6 +382,11 @@ namespace SharpShooter
                 internal static bool UseW
                 {
                     get { return GetBoolValue("Use W"); }
+                }
+
+                internal static bool UseRedCardToMinion
+                {
+                    get { return GetBoolValue("Use Red Card to Minion"); }
                 }
 
                 /// <summary>
@@ -476,6 +482,15 @@ namespace SharpShooter
                 internal static void AddUseW(bool enabled = true)
                 {
                     AddItem("Use W", enabled);
+                }
+
+                /// <summary>
+                ///     Harass 메뉴에 'Use W' 항목을 추가합니다..
+                /// </summary>
+                /// <param name="enabled">항목의 초기값을 기입하십시오.</param>
+                internal static void AddUseRedCardHarass(bool enabled = true)
+                {
+                    AddItem("Use Red Card to Minion", enabled);
                 }
 
                 /// <summary>
@@ -1056,6 +1071,14 @@ namespace SharpShooter
                 }
 
                 /// <summary>
+                ///     'Use W' 항목의 값을 반환합니다.
+                /// </summary>Use Red Card If Enemy Immobile
+                internal static bool UseImmobileRedCard
+                {
+                    get { return GetBoolValue("Use Red Card If Enemy Immobile"); }
+                }
+
+                /// <summary>
                 ///     'Use Interrupter' 항목의 값을 가져옵니다.
                 /// </summary>
                 internal static bool UseInterrupter
@@ -1223,6 +1246,15 @@ namespace SharpShooter
                 internal static void AddUseAntiGapcloser(bool enabled = true)
                 {
                     AddItem("Use Anti-Gapcloser", enabled);
+                }
+
+                /// <summary>
+                ///     Combo 메뉴에 'Use Q' 항목을 추가합니다..
+                /// </summary>
+                /// <param name="enabled">항목의 초기값을 기입하십시오.</param>
+                internal static void AddUseImmobileRedCard(bool enabled = true)
+                {
+                    AddItem("Use Red Card If Enemy Immobile", enabled);
                 }
 
                 /// <summary>

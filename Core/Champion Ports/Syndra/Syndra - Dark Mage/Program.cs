@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace DarkMage
+namespace DarkMage
 {
     class Program
     {

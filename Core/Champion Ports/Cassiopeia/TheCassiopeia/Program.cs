@@ -8,7 +8,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace TheCassiopeia
+namespace TheCassiopeia
 {
     class Program
     {

@@ -11,7 +11,7 @@ using System.Drawing;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace LordsSyndra
+namespace LordsSyndra
 {
     public static class Program
     {
@@ -150,7 +150,7 @@ using LeagueSharp.Common;
             Menu.SubMenu("AutoKS").AddItem(new MenuItem("UseFK1", "Q+E Flash Kill").SetValue(false));
             Menu.SubMenu("AutoKS").AddSubMenu(new Menu("Use Flash Kill on", "FKT"));
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.Team != Player.Team))
-                Menu.SubMenu("AutoKS").SubMenu("FKT").AddItem(new MenuItem("FKT" + enemy.CharData.BaseSkinName, enemy.CharData.BaseSkinName).SetValue(true));
+                Menu.SubMenu("AutoKS").SubMenu("FKT").AddItem(new MenuItem("FKT" + enemy.BaseSkinName, enemy.BaseSkinName).SetValue(true));
             Menu.SubMenu("AutoKS").AddItem(new MenuItem("MaxE", "Max Enemies").SetValue(new Slider(2, 1, 5)));
             Menu.SubMenu("AutoKS").AddItem(new MenuItem("FKMANA", "Only Flash if mana > FC").SetValue(false));
 
@@ -183,7 +183,7 @@ using LeagueSharp.Common;
 
             Menu.SubMenu("Rsettings").AddSubMenu(new Menu("Don't use [R] on", "DontR"));
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.Team != Player.Team))
-                Menu.SubMenu("Rsettings").SubMenu("DontR").AddItem(new MenuItem("DontR" + enemy.CharData.BaseSkinName, enemy.CharData.BaseSkinName).SetValue(false));
+                Menu.SubMenu("Rsettings").SubMenu("DontR").AddItem(new MenuItem("DontR" + enemy.BaseSkinName, enemy.BaseSkinName).SetValue(false));
             Menu.SubMenu("Rsettings").AddSubMenu(new Menu("Buff Check (Don't Ult)", "DontRbuff"));
             Menu.SubMenu("Rsettings").SubMenu("DontRbuff").AddItem(new MenuItem("DontRbuffUndying", "Trynda's Ult").SetValue(true));
             Menu.SubMenu("Rsettings").SubMenu("DontRbuff").AddItem(new MenuItem("DontRbuffJudicator", "Kayle's Ult").SetValue(true));
@@ -195,7 +195,7 @@ using LeagueSharp.Common;
             Menu.SubMenu("Rsettings").SubMenu("DontRbuff").AddItem(new MenuItem("DontRbuffMorgana", "Morgana's Black Shield").SetValue(true));
             Menu.SubMenu("Rsettings").AddSubMenu(new Menu("OverKill target by %", "okR"));
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(enemy => enemy.Team != Player.Team))
-                Menu.SubMenu("Rsettings").SubMenu("okR").AddItem(new MenuItem("okR" + enemy.CharData.BaseSkinName, enemy.CharData.BaseSkinName).SetValue(new Slider(0)));
+                Menu.SubMenu("Rsettings").SubMenu("okR").AddItem(new MenuItem("okR" + enemy.BaseSkinName, enemy.BaseSkinName).SetValue(new Slider(0)));
 
             //Drawings
             Menu.AddSubMenu(new Menu("Draw Settings", "Drawing"));
@@ -247,12 +247,7 @@ using LeagueSharp.Common;
             
              else
              {
-                 xSLxOrbwalker.AddToMenu(orbwalkerMenu);
-                 comboKey = Menu.Item("Combo_Key");
-                 harassKey = Menu.Item("Harass_Key");
-                 laneclearKey = Menu.Item("LaneClear_Key");
-                 lanefreezeKey = Menu.Item("LaneFreeze_Key");
-                 Chat.Print("xSLx Orbwalker Loaded");
+                 
              }
          }
 
@@ -425,7 +420,7 @@ using LeagueSharp.Common;
             }
             foreach (var minion in allMinions.Where(a => a.Health <= Spells.Q.GetDamage(a) && a.IsEnemy && a.IsValid))
             {
-                if (UseQLaneClear && UseQLastHit && !Player.Spellbook.IsAutoAttacking && Spells.Q.IsReady())
+                if (UseQLaneClear && UseQLastHit && !ObjectManager.Player.Spellbook.IsAutoAttacking && Spells.Q.IsReady())
                 {
                     Spells.Q.Cast(minion);
                 }
@@ -434,7 +429,7 @@ using LeagueSharp.Common;
             //Use W LaneClear
             if (!UseWLaneClear)
             {
-                if (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1 && allMinions.Count >= 2)
+                if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState == 1 && allMinions.Count >= 2)
                 {
                     //WObject
                     var gObjectPos = Utils.GetGrabableObjectPos(false);
@@ -444,7 +439,7 @@ using LeagueSharp.Common;
                         Spells.W.Cast(gObjectPos);
                     }
                 }
-                else if (Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 1)
+                else if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 1)
                 {
                     var CanWMinions = Spells.Q.GetCircularFarmLocation(allMinions, Spells.W.Width);
                     if (CanWMinions.MinionsHit >= 2 && Spells.W.IsReady())
@@ -528,7 +523,7 @@ using LeagueSharp.Common;
             if (!Spells.E.IsReady() || !(Player.Distance(gapcloser.Sender, true) <= Math.Pow(Spells.QE.Range, 2)) ||
                 !gapcloser.Sender.IsValidTarget(Spells.QE.Range))
                 return;
-            if (Spells.E.IsReady() && Player.Spellbook.GetSpell(SpellSlot.E).SData.Mana <= Player.Mana)
+            if (Spells.E.IsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).SData.Mana <= Player.Mana)
             {
                 Spells.E.Cast(gapcloser.Sender);
             }
@@ -632,15 +627,15 @@ using LeagueSharp.Common;
 
 
                 //Flash Kill
-                var useFlash = Menu.Item("FKT" + enemy.CharData.BaseSkinName) != null &&
-                               Menu.Item("FKT" + enemy.CharData.BaseSkinName).GetValue<bool>();
-                var useR = Menu.Item("DontR" + enemy.CharData.BaseSkinName) != null &&
-                           Menu.Item("DontR" + enemy.CharData.BaseSkinName).GetValue<bool>() == false;
+                var useFlash = Menu.Item("FKT" + enemy.BaseSkinName) != null &&
+                               Menu.Item("FKT" + enemy.BaseSkinName).GetValue<bool>();
+                var useR = Menu.Item("DontR" + enemy.BaseSkinName) != null &&
+                           Menu.Item("DontR" + enemy.BaseSkinName).GetValue<bool>() == false;
                 var rflash = GetDamage.GetComboDamage(enemy, UseQKS, false, UseEKS, false) < enemy.Health;
                 var ePos = Spells.R.GetPrediction(enemy);
 
 
-                if ((Spells.FlashSlot == SpellSlot.Unknown && Player.Spellbook.CanUseSpell(Spells.FlashSlot) != SpellState.Ready) ||
+                if ((Spells.FlashSlot == SpellSlot.Unknown && ObjectManager.Player.Spellbook.CanUseSpell(Spells.FlashSlot) != SpellState.Ready) ||
                     !useFlash || !(Player.Distance(ePos.UnitPosition, true) <= Math.Pow(Spells.Q.Range + 25f + 395, 2)) ||
                     !(Player.Distance(ePos.UnitPosition, true) > Math.Pow(Spells.Q.Range + 25f + 200, 2)))
                     continue;
@@ -658,7 +653,7 @@ using LeagueSharp.Common;
                 if (Menu.Item("FKMANA").GetValue<bool>())
                 {
                     totmana = Spells.SpellList.Aggregate(
-                        totmana, (current, spell) => current + Player.Spellbook.GetSpell(spell.Slot).SData.Mana);
+                        totmana, (current, spell) => current + ObjectManager.Player.Spellbook.GetSpell(spell.Slot).SData.Mana);
                 }
                 if (totmana > Player.Mana && Menu.Item("FKMANA").GetValue<bool>() &&
                     Menu.Item("FKMANA").GetValue<bool>())
@@ -675,7 +670,7 @@ using LeagueSharp.Common;
                     if (useR)
                     {
                         //Use Ult after flash if can't be killed by QE
-                        Player.Spellbook.CastSpell(Spells.FlashSlot, flashPos);
+                        ObjectManager.Player.Spellbook.CastSpell(Spells.FlashSlot, flashPos);
                         Spells.UseSpells(false, false, false, UseRKS, false);
                         PlaySound.PlatSounds();
                     }
@@ -683,7 +678,7 @@ using LeagueSharp.Common;
                 else
                 {
                     //Q & E after flash
-                    Player.Spellbook.CastSpell(Spells.FlashSlot, flashPos);
+                    ObjectManager.Player.Spellbook.CastSpell(Spells.FlashSlot, flashPos);
                 }
                 Spells.FlashLastCast = Environment.TickCount;
             }

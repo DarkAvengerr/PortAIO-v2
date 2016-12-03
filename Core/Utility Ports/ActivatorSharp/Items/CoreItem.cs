@@ -18,7 +18,7 @@ using SharpDX;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Items
+namespace Activator.Items
 {
     public class CoreItem
     {

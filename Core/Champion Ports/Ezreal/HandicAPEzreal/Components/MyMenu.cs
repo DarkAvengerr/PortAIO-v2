@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace HandicapEzreal.Components
+namespace HandicapEzreal.Components
 {
     using System;
 
@@ -67,6 +67,12 @@ using LeagueSharp.Common;
                     {
                         nodeCombo.AddItem(new MenuItem("raoe", "R AoE").SetValue(true));
                         nodeCombo.AddItem(new MenuItem("rifcanhit", "R if can hit").SetValue(new Slider(3, 1, 5)));
+                    }
+
+                    if (spellSlotNameLower.Equals("w", StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        nodeCombo.AddItem(new MenuItem("waoe", "W AoE").SetValue(true));
+                        nodeCombo.AddItem(new MenuItem("wifcanhit", "W if can hit").SetValue(new Slider(2, 1, 5)));
                     }
                 }
 

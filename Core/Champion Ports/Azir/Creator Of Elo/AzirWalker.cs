@@ -8,8 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Azir_Free_elo_Machine
+using LeagueSharp.Common; 
+namespace Azir_Free_elo_Machine
 {
     class AzirWalker : Orbwalking.Orbwalker
     {

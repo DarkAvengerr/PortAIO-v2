@@ -8,7 +8,7 @@ using SebbyLib;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace OneKeyToWin_AIO_Sebby.Champions
+namespace OneKeyToWin_AIO_Sebby.Champions
 {
     class Ezreal : Base
     {
@@ -168,7 +168,7 @@ using LeagueSharp.Common;
             {
                 if (Config.Item("useR", true).GetValue<KeyBind>().Active)
                 {
-                    var t = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Physical);
+                    var t = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
                     if (t.IsValidTarget())
                         R.Cast(t, true, true);
                 }

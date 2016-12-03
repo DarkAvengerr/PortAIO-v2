@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace SephKhazix
+namespace SephKhazix
 {
     using System;
     using System.Drawing;

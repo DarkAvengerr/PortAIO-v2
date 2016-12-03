@@ -3,7 +3,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace e.Motion_Katarina
+namespace e.Motion_Katarina
 {
     static class Program
     {

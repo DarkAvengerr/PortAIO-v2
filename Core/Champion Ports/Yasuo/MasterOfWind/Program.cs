@@ -9,8 +9,8 @@ using SharpDX;
 using System.Drawing;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace MasterOfWind
+using LeagueSharp.Common; 
+namespace MasterOfWind
 {
     class Program : Modes
     {
@@ -150,22 +150,19 @@ using EloBuddy;
             if (menu.Item("Draw R Range").GetValue<bool>())
                 Render.Circle.DrawCircle(getPlayer().Position, 1200f, System.Drawing.Color.GreenYellow,3);
 
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = base.getMainComboDamage;
+            /*    LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = base.getMainComboDamage;
                 LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = dmgAfterComboItem.GetValue<bool>();
                 dmgAfterComboItem.ValueChanged += delegate(object sender, OnValueChangeEventArgs eventArgs)
                 {
                     LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
-                };
-            
+                };/
+            */
 
             //laneclear jungleclear
-            if(!base.selectedminion.IsDead)
-            Render.Circle.DrawCircle(base.selectedminion.Position, 100f, System.Drawing.Color.BlueViolet, 3);
-            if (!base.selectedminions.IsDead)
-            Render.Circle.DrawCircle(base.selectedminions.Position, 100f, System.Drawing.Color.PaleVioletRed, 3); 
+      
         }
         
-        public void load()
+        public void load(EventArgs args)
         {
             player = ObjectManager.Player;
             if (player.ChampionName != "Yasuo") return;
@@ -197,7 +194,9 @@ using EloBuddy;
         {
             Program p = new Program();
             p.load(p);
-            p.load();
+            p.load(new EventArgs());
         }
+
+
     }
 }

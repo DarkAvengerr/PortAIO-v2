@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace DevCassio
+namespace DevCassio
 {
     using System;
     using System.Collections.Generic;
@@ -11,6 +11,7 @@ using LeagueSharp.Common;
     using LeagueSharp.Common;
     using DevCommom;
     using SharpDX;
+    using SebbyLib;
 
     /*
      * ##### DevCassio Mods #####
@@ -30,9 +31,9 @@ using LeagueSharp.Common;
      * + R to Save Yourself, when MinHealth and Enemy IsFacing
      * + Auto Spell Level UP
      * + Play Legit Menu :)
-     * done harass e, last hit,jungle no du use e,check gap close. ,flash r,(temp sfx),e dmg fixed,assist r ok ,check mim R enemym,, flee, ks,block r with flash r.
+     * done harass e, last hit,jungle no du use e,check gap close. ,flash r,(temp sfx),e dmg fixed,assist r ok ,check mim R enemym,, flee, ks,block r with flash r.auto lvl
      * --------------------------------------------------------------------------------------------
-     *  +  aa + e fix, , auto lvl
+     *  +  aa + e fix, , better w for ranged, blorck r issue?
      *  
      */
 
@@ -40,7 +41,7 @@ using LeagueSharp.Common;
     {
         public static Items.Item Zhonya = new Items.Item(3157, 0);
         private static Menu Config;
-        private static Orbwalking.Orbwalker Orbwalker;
+        private static SebbyLib.Orbwalking.Orbwalker Orbwalker;
         private static readonly List<Spell> SpellList = new List<Spell>();
         private static AIHeroClient Player;
         private static Spell Q;
@@ -48,13 +49,17 @@ using LeagueSharp.Common;
         private static Spell E;
         private static Spell R;
         private static List<Obj_AI_Base> MinionList;
-        private static LevelUpManager levelUpManager;
+        /*private static LevelUpManager levelUpManager;*/
         private static SummonerSpellManager summonerSpellManager;
+        private static int lvl1, lvl2, lvl3, lvl4;
 
         private static long dtBurstComboStart;
         private static long dtLastQCast;
         private static long dtLastSaveYourself;
         private static long dtLastECast;
+
+        //public static Obj_AI_Minion LastAttackedminiMinion;
+        //public static float LastAttackedminiMinionTime;
         //private static bool mustDebugPredict = false;
 
         public static void Main()
@@ -72,7 +77,7 @@ using LeagueSharp.Common;
             }
 
             InitializeSpells();
-            InitializeLevelUpManager();
+            /*InitializeLevelUpManager();*/
             InitializeMainMenu();
             InitializeAttachEvents();
 
@@ -102,7 +107,7 @@ using LeagueSharp.Common;
             summonerSpellManager = new SummonerSpellManager();
         }
 
-        private static void InitializeLevelUpManager()
+        /*private static void InitializeLevelUpManager()
         {
             var priority1 = new[] { 2, 0, 2, 1, 2, 3, 2, 0, 2, 0, 3, 0, 0, 1, 1, 3, 1, 1 };
             var priority2 = new[] { 0, 2, 2, 1, 2, 3, 2, 0, 2, 0, 3, 0, 0, 1, 2, 3, 1, 1 };
@@ -112,7 +117,7 @@ using LeagueSharp.Common;
             levelUpManager.Add("E > Q > E > W ", priority1);
             levelUpManager.Add("Q > E > E > W ", priority2);
             levelUpManager.Add("Q > E > W > E ", priority3);
-        }
+        }*/
 
         private static void InitializeMainMenu()
         {
@@ -126,7 +131,7 @@ using LeagueSharp.Common;
 
             var orbMenu = Config.AddSubMenu(new Menu("Orbwalking", "Orbwalking"));
             {
-                Orbwalker = new Orbwalking.Orbwalker(orbMenu);
+                Orbwalker = new SebbyLib.Orbwalking.Orbwalker(orbMenu);
             }
 
             var comboMenu = Config.AddSubMenu(new Menu("Combo", "Combo").SetFontStyle(
@@ -175,6 +180,8 @@ using LeagueSharp.Common;
                     .AddItem(
                         new MenuItem("UseELastHitLaneClearNonPoisoned", "Use E LastHit on Non Poisoned creeps").SetValue(
                             false));
+                laneClearMenu.AddItem(new MenuItem("UseAaFarmLC", "Use AA In LaneClear").SetValue(true)).SetTooltip("Overwrite ALWAYS Use E For LastHit");
+                /*laneClearMenu.AddItem(new MenuItem("FLC", "FAST LaneClear").SetValue(true));*/
                 laneClearMenu
                     .AddItem(new MenuItem("LaneClearMinMana", "LaneClear Min Mana").SetValue(new Slider(25)));
             }
@@ -188,6 +195,12 @@ using LeagueSharp.Common;
             var lastHitMenu = Config.AddSubMenu(new Menu("LastHit", "LastHit"));
             {
                 lastHitMenu.AddItem(new MenuItem("UseELastHit", "Use E").SetValue(true));
+                lastHitMenu.AddItem(new MenuItem("UseAaFarm", "Use AA In LastHit").SetValue(true));
+                lastHitMenu
+                    .AddItem(new MenuItem("LastHitMinMana", "LastHit Min Mana").SetValue(new Slider(25)));
+                /*lastHitMenu.AddItem(new MenuItem("AutoE", "Auto E On Killable Minion").SetValue(true));
+                lastHitMenu
+                    .AddItem(new MenuItem("AutoEmana", "Auto E Mana").SetValue(new Slider(25)));*/
             }
 
             var ultMenu = Config.AddSubMenu(new Menu("Ultimate", "Ultimate").SetFontStyle(
@@ -213,7 +226,7 @@ using LeagueSharp.Common;
                     .AddItem(new MenuItem("RAntiGapcloserMinHealth", "R AntiGapcloser Min Health").SetValue(new Slider(60)));
             }
 
-            var miscMenu = Config.AddSubMenu(new Menu("Flee", "Flee"));
+            var miscMenu = Config.AddSubMenu(new Menu("Misc", "Misc"));
             {
                 /*miscMenu
                     .AddItem(new MenuItem("PacketCast", "No-Face Exploit (PacketCast)").SetValue(true))
@@ -231,6 +244,9 @@ using LeagueSharp.Common;
                 miscMenu
                     .AddItem(new MenuItem("FleeE", "Cast E While Flee").SetValue(false))
                     .SetTooltip("If You Have Rylai, Recommand On.");
+                miscMenu
+                    .AddItem(new MenuItem("StackTear", "Stack Tear").SetValue(false)).SetValue(new KeyBind(
+                            "O".ToCharArray()[0],KeyBindType.Toggle));
             }
 
             var KSMenu = Config.AddSubMenu(new Menu("KillSteal", "KillSteal"));
@@ -253,6 +269,16 @@ using LeagueSharp.Common;
                 legitMenu.AddItem(new MenuItem("DisableNFE", "Disable No-Face Exploit").SetValue(true));
                 legitMenu
                     .AddItem(new MenuItem("LegitCastDelay", "Cast E Delay").SetValue(new Slider(1000, 0, 2000)));
+            }
+
+            var AutoLevelerMenu = Config.AddSubMenu(new Menu("AutoLeveler Menu", "AutoLevelerMenu"));
+            { 
+                AutoLevelerMenu.AddItem(new MenuItem("AutoLevelUp", "AutoLevel Up Spells?").SetValue(true));
+                AutoLevelerMenu.AddItem(new MenuItem("AutoLevelUp1", "First: ").SetValue(new StringList(new[] { "Q", "W", "E", "R" }, 3)));
+                AutoLevelerMenu.AddItem(new MenuItem("AutoLevelUp2", "Second: ").SetValue(new StringList(new[] { "Q", "W", "E", "R" }, 0)));
+                AutoLevelerMenu.AddItem(new MenuItem("AutoLevelUp3", "Third: ").SetValue(new StringList(new[] { "Q", "W", "E", "R" }, 1)));
+                AutoLevelerMenu.AddItem(new MenuItem("AutoLevelUp4", "Fourth: ").SetValue(new StringList(new[] { "Q", "W", "E", "R" }, 2)));
+                AutoLevelerMenu.AddItem(new MenuItem("AutoLvlStartFrom", "AutoLeveler Start from Level: ").SetValue(new Slider(2, 6, 1)));
             }
 
             var skinMenu = Config.AddSubMenu(new Menu("Skins Menu", "SkinMenu"));
@@ -285,7 +311,7 @@ using LeagueSharp.Common;
                 drawingMenu.AddItem(new MenuItem("EDamage", "Show E Damage on HPBar").SetValue(true));
             }
 
-            levelUpManager.AddToMenu(ref Config);
+            /*levelUpManager.AddToMenu(ref Config);*/
 
             var creditMenu = Config.AddSubMenu(new Menu("Credits", "Credits"));
             creditMenu.AddItem(new MenuItem("ME: LOVETAIWAN♥", "ME: LOVETAIWAN♥")).SetFontStyle(
@@ -327,10 +353,12 @@ using LeagueSharp.Common;
         {
             Game.OnUpdate += Game_OnGameUpdate;
             Game.OnWndProc += Game_OnWndProc;
+            Obj_AI_Base.OnLevelUp += Obj_AI_Base_OnLevelUp;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
-            Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
+            SebbyLib.Orbwalking.BeforeAttack += BeforeAttack;
+            /*SebbyLib.Orbwalking.OnNonKillableMinion += OnNonKillableMinion;*/
             Drawing.OnDraw += OnDraw;
         }
 
@@ -368,28 +396,100 @@ using LeagueSharp.Common;
                 KS();
             }
 
+            if (Config.Item("StackTear").GetValue<KeyBind>().Active)
+            {
+                Stack();
+            }
             UseUltUnderTower();
-            levelUpManager.Update();
+            /*levelUpManager.Update();*/
+            if (Config.Item("AutoLevelUp").GetValue<bool>())
+            {
+                lvl1 = Config.Item("AutoLevelUp1").GetValue<StringList>().SelectedIndex;
+                lvl2 = Config.Item("AutoLevelUp2").GetValue<StringList>().SelectedIndex;
+                lvl3 = Config.Item("AutoLevelUp3").GetValue<StringList>().SelectedIndex;
+                lvl4 = Config.Item("AutoLevelUp4").GetValue<StringList>().SelectedIndex;
+            }
             switch (Orbwalker.ActiveMode)
             {
-                case Orbwalking.OrbwalkingMode.Combo:
+                case SebbyLib.Orbwalking.OrbwalkingMode.Combo:
                     Combo();
                     BurstCombo();
                     break;
-                case Orbwalking.OrbwalkingMode.Mixed:
+                case SebbyLib.Orbwalking.OrbwalkingMode.Mixed:
                     Harass();
-                    LastHit();
+                    /*LastHit();*/
                     break;
-                case Orbwalking.OrbwalkingMode.LaneClear:
+                case SebbyLib.Orbwalking.OrbwalkingMode.LaneClear:
                     WaveClear();
                     JungleClear();
                     LastHit();
                     break;
-                case Orbwalking.OrbwalkingMode.LastHit:
+                case SebbyLib.Orbwalking.OrbwalkingMode.LastHit:
                     LastHit();
                     break;
             }
         }
+
+        #region Auto LevelUp
+        private static void Obj_AI_Base_OnLevelUp(Obj_AI_Base sender, EventArgs args)
+        {
+            if (!sender.IsMe || !Config.Item("AutoLevelUp").GetValue<bool>() ||
+                (ObjectManager.Player.Level < Config.Item("AutoLvlStartFrom").GetValue<Slider>().Value))
+                return;
+            if ((lvl2 == lvl3) || (lvl2 == lvl4) || (lvl3 == lvl4))
+                return;
+            var delay = 700;
+            LeagueSharp.Common.Utility.DelayAction.Add(delay, () => LevelUp(lvl1));
+            LeagueSharp.Common.Utility.DelayAction.Add(delay + 50, () => LevelUp(lvl2));
+            LeagueSharp.Common.Utility.DelayAction.Add(delay + 100, () => LevelUp(lvl3));
+            LeagueSharp.Common.Utility.DelayAction.Add(delay + 150, () => LevelUp(lvl4));
+        }
+
+        private static void LevelUp(int indx)
+        {
+            if (ObjectManager.Player.Level < 4)
+            {
+                if ((indx == 0) && (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level == 0))
+                    ObjectManager.Player.Spellbook.LevelSpell(SpellSlot.Q);
+                if ((indx == 1) && (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Level == 0))
+                    ObjectManager.Player.Spellbook.LevelSpell(SpellSlot.W);
+                if ((indx == 2) && (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level == 0))
+                    ObjectManager.Player.Spellbook.LevelSpell(SpellSlot.E);
+            }
+            else
+            {
+                if (indx == 0)
+                    ObjectManager.Player.Spellbook.LevelSpell(SpellSlot.Q);
+                if (indx == 1)
+                    ObjectManager.Player.Spellbook.LevelSpell(SpellSlot.W);
+                if (indx == 2)
+                    ObjectManager.Player.Spellbook.LevelSpell(SpellSlot.E);
+                if (indx == 3)
+                    ObjectManager.Player.Spellbook.LevelSpell(SpellSlot.R);
+            }
+        }
+        #endregion
+
+        /*private static void OnNonKillableMinion(AttackableUnit sender)
+        {
+            if (Player.IsDead || Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Combo)
+            {
+                return;
+            }
+
+            if (!Config.Item("AutoE", true).GetValue<bool>() || !E.IsReady())
+            {
+                return;
+            }
+
+            var minion = (Obj_AI_Minion)sender;
+
+            if (minion != null && minion.IsValidTarget(E.Range) && minion.Health < Player.GetSpellDamage(minion, SpellSlot.E) &&
+                Player.CountEnemiesInRange(700) == 0 && Player.ManaPercent >= Config.Item("AutoEmana").GetValue<Slider>().Value)
+            {
+                E.Cast(minion);
+            }
+        }*/
 
         private static void FlashCombo()
         {
@@ -422,9 +522,9 @@ using LeagueSharp.Common;
                 }
             }
 
-            if (Orbwalking.CanMove(100))
+            if (SebbyLib.Orbwalking.CanMove(100))
             {
-                Orbwalking.MoveTo(Game.CursorPos, 80f);
+                SebbyLib.Orbwalking.MoveTo(Game.CursorPos, 80f);
 
                 Combo();
             }
@@ -441,7 +541,7 @@ using LeagueSharp.Common;
                 {
                     if (eTarget.IsValidTarget(R.Range) && eTarget.IsUnderEnemyTurret() && R.IsReady() && !eTarget.IsInvulnerable)
                     {
-                        R.Cast(eTarget.ServerPosition);
+                        R.Cast(eTarget.Position);
                     }
                 }
             }
@@ -449,7 +549,7 @@ using LeagueSharp.Common;
 
         private static void Flee()
         {
-            Orbwalking.MoveTo(Game.CursorPos);
+            SebbyLib.Orbwalking.MoveTo(Game.CursorPos);
             var eTarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
 
             if (eTarget == null)
@@ -459,15 +559,16 @@ using LeagueSharp.Common;
             var FleeW = Config.Item("FleeW").GetValue<bool>();
             if (FleeW && W.IsReady() && eTarget.IsValidTarget(W.Range) && !eTarget.IsValidTarget(225))
             {
-                W.Cast(eTarget.ServerPosition);
+                W.Cast(eTarget.Position);
             }
 
+            var castPred = Q.GetPrediction(eTarget, true, Q.Range);
             var FleeQ = Config.Item("FleeQ").GetValue<bool>();
             var FleeE = Config.Item("FleeE").GetValue<bool>();
 
             if (FleeQ && Q.IsReady())
             {
-                Q.Cast(eTarget.Position);
+                Q.Cast(castPred.CastPosition);
                 return;
             }
 
@@ -486,7 +587,7 @@ using LeagueSharp.Common;
                 foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range) && x.Health < Q.GetDamage(x) && !x.HasBuff("guardianangle") && !x.IsZombie))
                     if (Q.IsReady())
                     {
-                        Q.Cast(target.ServerPosition);
+                        Q.Cast(target.Position);
                     }
             }
             if (E.IsReady() && Config.Item("EkS").GetValue<bool>())
@@ -502,7 +603,7 @@ using LeagueSharp.Common;
                 foreach (var target in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range) && x.Health < R.GetDamage(x) && !x.HasBuff("guardianangle") && !x.IsZombie))
                     if (R.IsReady())
                     {
-                        R.Cast(target.ServerPosition);
+                        R.Cast(target.Position);
                     }
             }
         }
@@ -893,6 +994,7 @@ using LeagueSharp.Common;
             var UseELastHitLaneClearNonPoisoned = Config.Item("UseELastHitLaneClearNonPoisoned").GetValue<bool>();
             /*var packetCast = Config.Item("PacketCast").GetValue<bool>();*/
             var LaneClearMinMana = Config.Item("LaneClearMinMana").GetValue<Slider>().Value;
+            var orb = Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.LaneClear;
 
             if (Q.IsReady() && useQ && Player.GetManaPerc() >= LaneClearMinMana)
             {
@@ -901,7 +1003,7 @@ using LeagueSharp.Common;
 
                 if (allMinionsQNonPoisoned.Any())
                 {
-                    var farmNonPoisoned = Q.GetCircularFarmLocation(allMinionsQNonPoisoned.ToList(), Q.Width*0.8f);
+                    var farmNonPoisoned = Q.GetCircularFarmLocation(allMinionsQNonPoisoned.ToList(), Q.Width * 0.8f);
 
                     if (farmNonPoisoned.MinionsHit >= 3)
                     {
@@ -913,7 +1015,7 @@ using LeagueSharp.Common;
 
                 if (allMinionsQ.Any())
                 {
-                    var farmAll = Q.GetCircularFarmLocation(allMinionsQ, Q.Width*0.8f);
+                    var farmAll = Q.GetCircularFarmLocation(allMinionsQ, Q.Width * 0.8f);
 
                     if (farmAll.MinionsHit >= 2 || allMinionsQ.Count == 1)
                     {
@@ -925,14 +1027,14 @@ using LeagueSharp.Common;
             }
 
             if (W.IsReady() && useW && Player.GetManaPerc() >= LaneClearMinMana &&
-                Environment.TickCount > dtLastQCast + Q.Delay*1000)
+                Environment.TickCount > dtLastQCast + Q.Delay * 1000)
             {
                 var allMinionsW = MinionManager.GetMinions(Player.ServerPosition, W.Range + W.Width);
                 var allMinionsWNonPoisoned = allMinionsW.Where(x => !x.HasBuffOfType(BuffType.Poison));
 
                 if (allMinionsWNonPoisoned.Any())
                 {
-                    var farmNonPoisoned = W.GetCircularFarmLocation(allMinionsWNonPoisoned.ToList(), W.Width*0.8f);
+                    var farmNonPoisoned = W.GetCircularFarmLocation(allMinionsWNonPoisoned.ToList(), W.Width * 0.8f);
 
                     if (farmNonPoisoned.MinionsHit >= 3)
                     {
@@ -943,7 +1045,7 @@ using LeagueSharp.Common;
 
                 if (allMinionsW.Any())
                 {
-                    var farmAll = W.GetCircularFarmLocation(allMinionsW, W.Width*0.8f);
+                    var farmAll = W.GetCircularFarmLocation(allMinionsW, W.Width * 0.8f);
 
                     if (farmAll.MinionsHit >= 2 || allMinionsW.Count == 1)
                     {
@@ -952,7 +1054,7 @@ using LeagueSharp.Common;
                     }
                 }
             }
-            
+
             if (E.IsReady() && useE)
             {
                 MinionList = MinionManager.GetMinions(Player.ServerPosition, E.Range);
@@ -966,9 +1068,9 @@ using LeagueSharp.Common;
                     {
                         if (UseELastHitLaneClear)
                         {
-                            if (ObjectManager.Player.GetSpellDamage(minion, SpellSlot.E)*0.9 >
-                                HealthPrediction.GetHealthPrediction(minion,
-                                    (int) (E.Delay + (minion.Distance(ObjectManager.Player.Position)/E.Speed))))
+                            if (ObjectManager.Player.GetSpellDamage(minion, SpellSlot.E) * 0.9 >
+                                SebbyLib.HealthPrediction.GetHealthPrediction(minion,
+                                    (int)(E.Delay + (minion.Distance(ObjectManager.Player.Position) / E.Speed))))
                             {
                                 CastE(minion);
                             }
@@ -985,6 +1087,33 @@ using LeagueSharp.Common;
                     //}
                 }
             }
+            /*
+            var minions = Cache.GetMinions(Player.ServerPosition, E.Range);
+
+            int orbTarget = 0;
+            if (Orbwalker.GetTarget() != null)
+                orbTarget = Orbwalker.GetTarget().NetworkId;
+
+            if (UseELastHitLaneClear == true && orb && !SebbyLib.Orbwalking.CanAttack() && Player.ManaPercent > Config.Item("LaneClearMinMana", true).GetValue<Slider>().Value)
+            {
+                var LCP = Config.Item("FLC", true).GetValue<bool>();
+
+                foreach (var minion in minions.Where(minion => Orbwalker.InAutoAttackRange(minion) && orbTarget != minion.NetworkId))
+                {
+                    var hpPred = SebbyLib.HealthPrediction.GetHealthPrediction(minion, 300);
+                    var dmgMinion = minion.GetAutoAttackDamage(minion);
+                    var qDmg = E.GetDamage(minion);
+                    if (hpPred < qDmg)
+                    {
+                        if (hpPred > dmgMinion)
+                        {
+                            if (E.Cast(minion) == Spell.CastStates.SuccessfullyCasted)
+                                return;
+                        }
+                    }
+
+                }
+            }*/
         }
 
         private static void JungleClear()
@@ -1012,6 +1141,61 @@ using LeagueSharp.Common;
             }
         }
 
+        /*private static void LastHit2()
+        {
+            if (!E.IsReady())
+            {
+                return;
+            }
+            if (Config.Item("LastHitE", true).GetValue<bool>())
+            {
+                var minions =
+                    MinionManager.GetMinions(E.Range, MinionTypes.All, MinionTeam.NotAlly)
+                        .Where(
+                            m =>
+                                m.Health > 5 &&
+                                m.Health <
+                                (Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LastHit
+                                    ? E.GetDamage(m)
+                                    : E.GetDamage(m) * Config.Item("eLHDamage", true).GetValue<Slider>().Value / 100) &&
+                                E.CanCast(m) &&
+                                HealthPrediction.GetHealthPrediction(m, (int)(m.Distance(Player) / E.Speed * 1000)) > 0);
+                if (minions != null && LastAttackedminiMinion != null)
+                {
+                    foreach (var minion in
+                        minions.Where(
+                            m =>
+                                m.NetworkId != LastAttackedminiMinion.NetworkId ||
+                                (m.NetworkId == LastAttackedminiMinion.NetworkId &&
+                                 Utils.GameTimeTickCount - LastAttackedminiMinionTime > 700)))
+                    {
+                        if (minion.Team == GameObjectTeam.Neutral && minion.CountAlliesInRange(500) > 0 &&
+                            minion.NetworkId != LastAttackedminiMinion.NetworkId)
+                        {
+                            continue;
+                        }
+
+                        if (minion.Distance(Player) <= Player.AttackRange && !Orbwalking.CanAttack() &&
+                            Orbwalking.CanMove(100))
+                        {
+                            if (E.Cast(minion).IsCasted())
+                            {
+                                Orbwalking.MoveTo(Game.CursorPos, 80f);
+                            }
+                        }
+                        else if (minion.Distance(Player) > Player.AttackRange)
+                        {
+                            if (E.Cast(minion).IsCasted())
+                            {
+                                Orbwalking.MoveTo(Game.CursorPos, 80f);
+                            }
+                        }
+                    }
+                }
+            }
+        }*/
+
+
         private static void LastHit()
         {
             var castE = Config.Item("LastHitE").GetValue<bool>() && E.IsReady();
@@ -1024,7 +1208,7 @@ using LeagueSharp.Common;
                 foreach (var minion in minions)
                 {
                     if (
-                        HealthPrediction.GetHealthPrediction(minion,
+                        SebbyLib.HealthPrediction.GetHealthPrediction(minion,
                             (int)(E.Delay + minion.Distance(ObjectManager.Player.Position) / E.Speed)) <
                         ObjectManager.Player.GetSpellDamage(minion, SpellSlot.E))
                     {
@@ -1037,7 +1221,7 @@ using LeagueSharp.Common;
                 foreach (var minion in minions)
                 {
                     if (
-                        HealthPrediction.GetHealthPrediction(minion,
+                        SebbyLib.HealthPrediction.GetHealthPrediction(minion,
                             (int)(E.Delay + minion.Distance(ObjectManager.Player.Position) / E.Speed)) <
                         ObjectManager.Player.GetSpellDamage(minion, SpellSlot.E))
                     {
@@ -1045,6 +1229,30 @@ using LeagueSharp.Common;
                     }
                 }
             }
+
+                            /*if (!castE)
+                    return;
+
+                var minions2 = Cache.GetMinions(Player.ServerPosition, E.Range);
+                var orb = Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.LastHit;
+
+                int orbTarget = 0;
+                if (Orbwalker.GetTarget() != null)
+                    orbTarget = Orbwalker.GetTarget().NetworkId;
+
+                foreach (var minion in minions.Where(minion => orbTarget != minion.NetworkId && !Orbwalker.InAutoAttackRange(minion) && minion.Health < E.GetDamage(minion)))
+                {
+                    if (E.Cast(minion) == Spell.CastStates.SuccessfullyCasted)
+                        return;
+                }*/
+        }
+
+        private static void Stack()
+        {
+            if (Player.InFountain() ||(Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.None))
+                if (Items.HasItem(3004, Player) || Items.HasItem(3003, Player) || Items.HasItem(3070, Player) ||
+                    Items.HasItem(3073, Player) || Items.HasItem(3008, Player))
+                    Q.Cast(Player.ServerPosition);
         }
 
         private static void Game_OnWndProc(WndEventArgs args)
@@ -1101,21 +1309,65 @@ using LeagueSharp.Common;
 
                 if (Config.Item("BlockR").GetValue<bool>() && !menuItem.Active)
             {
-                if (HeroManager.Enemies.All(x => !x.IsValidTarget(R.Range) || !R.WillHit(x, args.StartPosition)) && args.Slot == SpellSlot.R)
+                if (!sender.Owner.IsMe || args.Slot != SpellSlot.R)
+                {
+                    return;
+                }
+
+                if (
+                    HeroManager.Enemies.Any(
+                        x => x.IsValidTarget(R.Range + R.Width - 150) && !x.HasBuffOfType(BuffType.Invulnerability)))
+                {
+                    return;
+                }
+
+                args.Process = false;
+                Chat.Print(string.Format("Ult Blocked"));
+                /*if (HeroManager.Enemies.All(x => !x.IsValidTarget(R.Range) || !R.WillHit(x, args.StartPosition)) && args.Slot == SpellSlot.R)
                 {
                     args.Process = false;
                     Chat.Print(string.Format("Ult Blocked"));
-                }
+                }*/
             }
         }
 
-        private static void Orbwalking_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
+        private static void BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
         {
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
+            if (Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Combo)
             {
                 args.Process = Config.Item("UseAACombo").GetValue<bool>();
 
                 var target = args.Target as Obj_AI_Base;
+
+                if (target != null)
+                {
+                    if (E.IsReady() && target.HasBuffOfType(BuffType.Poison) && target.IsValidTarget(E.Range))
+                    {
+                        args.Process = false;
+                    }
+                }
+            }
+
+            if (Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.LastHit)
+            {
+                args.Process = Config.Item("UseAaFarm").GetValue<bool>();
+
+                var target = args.Target as Obj_AI_Minion;
+
+                if (target != null)
+                {
+                    if (E.IsReady() && target.HasBuffOfType(BuffType.Poison) && target.IsValidTarget(E.Range))
+                    {
+                        args.Process = false;
+                    }
+                }
+            }
+
+            if (Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.LaneClear)
+            {
+                args.Process = Config.Item("UseAaFarmLC").GetValue<bool>();
+
+                var target = args.Target as Obj_AI_Minion;
 
                 if (target != null)
                 {
@@ -1308,7 +1560,7 @@ using LeagueSharp.Common;
 
             if (eTarget.IsValidTarget(R.Range) && R.IsReady())
             {
-                R.Cast(eTarget.ServerPosition);
+                R.Cast(eTarget.Position);
             }
         }
 

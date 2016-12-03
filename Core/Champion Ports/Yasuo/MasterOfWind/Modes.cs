@@ -7,8 +7,8 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace MasterOfWind
+using LeagueSharp.Common; 
+namespace MasterOfWind
 {
     class Modes
     {
@@ -149,7 +149,7 @@ using EloBuddy;
             //use w for flee?
             //load second q for flee?
             var eMinions = getMinionsOnRange(skills.getE());
-            EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, p.getPlayer().Position.Extend(Game.CursorPos, 150));
+          EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, p.getPlayer().Position.Extend(Game.CursorPos, 150));
             eFlee();
             if (useQ&&!skills.HaveQ3&&p.getPlayer().IsDashing())
             {
@@ -164,6 +164,7 @@ using EloBuddy;
         {
             var useETurret = p.getMenu().Item("E to turretF").GetValue<bool>();
             Obj_AI_Base minion = ObjectManager.Get<Obj_AI_Base>().Where(x => x.IsMinion && skills.getE().IsInRange(x) && !x.HasBuff("YasuoDashWrapper")).MinOrDefault(x => x.Distance(Game.CursorPos));
+            if(minion!=null)
             if (minion.Distance(Game.CursorPos) < ObjectManager.Player.Distance(Game.CursorPos)&& skills.EturretCheck(minion,useETurret))
            {
                 skills.eCast(minion);
@@ -173,9 +174,11 @@ using EloBuddy;
         public void eLogic(AIHeroClient target)
         {
             var useETurret = p.getMenu().Item("E to turretC").GetValue<bool>();
+            if(target!=null)
             if(!skills.getE().IsInRange(target))
             {
                 Obj_AI_Base minion = ObjectManager.Get<Obj_AI_Base>().Where(x => x.IsEnemy   && skills.getE().IsInRange(x) && !x.HasBuff("YasuoDashWrapper")).MinOrDefault(x => x.Distance(target));
+                if(minion!=null)
                 if (skills.EturretCheck(minion, useETurret))
                 if (minion.Distance(target) < ObjectManager.Player.Distance(target) && skills.EturretCheck(minion,useETurret))
                 {
@@ -197,7 +200,7 @@ using EloBuddy;
             var useW = p.getMenu().Item("DW").GetValue<bool>();
            // var useE = p.getMenu().Item("DE").GetValue<bool>();
          //   if (!(sender is Obj_SpellMissile) || !sender.IsValid)return;
-            var args = (Obj_SpellMissile)sender;
+      /*      var args = (Obj)sender;
             if (!args.SpellCaster.IsValid<AIHeroClient>() || args.SpellCaster.IsAlly)
             {
                 return;
@@ -212,7 +215,7 @@ using EloBuddy;
                     }
                 }
 
-            }
+            }*/
         }
         public float getMainComboDamage(Obj_AI_Base target)
         {
@@ -275,10 +278,12 @@ using EloBuddy;
             var useE = p.getMenu().Item("ELH").GetValue<bool>();
             var qMinions = getMinionsOnRange(skills.getQ());
             var eMinions = getMinionsOnRange(skills.getE());
+            if(qMinions!=null)
                 if (skills.getQ().IsKillable(qMinions) && useQ)
                 {
                     skills.qCast(qMinions);
                 }
+             if (eMinions != null)
                 if (skills.getE().IsKillable(eMinions) && useE)
                 {
                     skills.eCast(qMinions);

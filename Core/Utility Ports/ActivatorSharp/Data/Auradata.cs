@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Data
+namespace Activator.Data
 {
     public class Auradata
     {
@@ -31,8 +31,8 @@ using LeagueSharp.Common;
         public SpellSlot Slot { get; set; }
         public bool QssIgnore { get; set; }
 
-        public bool Included { get; set; }
-        public AIHeroClient Sender { get; set; }
+        public bool Reverse { get; set; }
+        public float Radius { get; set; }
 
         public static List<Auradata> BuffList = new List<Auradata>();
 
@@ -155,7 +155,7 @@ using LeagueSharp.Common;
                 Cleanse = false,
                 CleanseTimer = 0,
                 Slot = SpellSlot.Unknown,
-                Interval = .8
+                Interval = 0.8
             });
 
             BuffList.Add(new Auradata
@@ -239,7 +239,7 @@ using LeagueSharp.Common;
                 Cleanse = false,
                 CleanseTimer = 0,
                 Slot = SpellSlot.Q,
-                Interval = .8
+                Interval = 0.8
             });
 
             BuffList.Add(new Auradata()
@@ -253,7 +253,7 @@ using LeagueSharp.Common;
                 Cleanse = true,
                 CleanseTimer = 0,
                 Slot = SpellSlot.R,
-                Interval = .8
+                Interval = 0.8
             });
 
             BuffList.Add(new Auradata
@@ -267,7 +267,7 @@ using LeagueSharp.Common;
                 Cleanse = false,
                 CleanseTimer = 0,
                 Slot = SpellSlot.E,
-                Interval = .8
+                Interval = 0.8
             });
 
             BuffList.Add(new Auradata
@@ -385,7 +385,7 @@ using LeagueSharp.Common;
             BuffList.Add(new Auradata
             {
                 Champion = "Swain",
-                Name = "swaintorment",
+                Name = "swaintormentdot",
                 MenuName = "Swain Torment",
                 Evade = false,
                 DoT = true,
@@ -421,7 +421,7 @@ using LeagueSharp.Common;
                 Cleanse = false,
                 CleanseTimer = 0,
                 Slot = SpellSlot.Unknown,
-                Interval = .8
+                Interval = 0.8
             });
 
             BuffList.Add(new Auradata
@@ -430,12 +430,12 @@ using LeagueSharp.Common;
                 Name = "tristanaechargesound",
                 MenuName = "Tristana Explosive Charge",
                 Evade = false,
-                DoT = true, // not really a dot but can be cleansed
+                DoT = true,
                 EvadeTimer = 0,
                 Cleanse = false,
                 CleanseTimer = 0,
                 Slot = SpellSlot.E,
-                Interval = .8
+                Interval = 0.8
             });
 
             BuffList.Add(new Auradata
@@ -463,7 +463,7 @@ using LeagueSharp.Common;
                 Cleanse = false,
                 CleanseTimer = 0,
                 Slot = SpellSlot.W,
-                Interval = .8
+                Interval = 0.8
             });
 
             BuffList.Add(new Auradata
@@ -477,7 +477,7 @@ using LeagueSharp.Common;
                 Cleanse = false,
                 CleanseTimer = 0,
                 Slot = SpellSlot.Unknown,
-                Interval = .8
+                Interval = 0.8
             });
 
             BuffList.Add(new Auradata
@@ -550,11 +550,13 @@ using LeagueSharp.Common;
             {
                 Champion = "Wukong",
                 Name = "monkeykingspintowin",
-                Evade = false,
+                Evade = true,
                 DoT = true,
                 EvadeTimer = 0,
                 Cleanse = false,
                 CleanseTimer = 0,
+                Reverse = true,
+                Radius = 200f,
                 Slot = SpellSlot.R,
                 Interval = 1.0
             });
@@ -729,20 +731,6 @@ using LeagueSharp.Common;
 
             BuffList.Add(new Auradata
             {
-                Champion = "Zac",
-                Name = "zacr",
-                Evade = true,
-                DoT = true,
-                EvadeTimer = 150,
-                Cleanse = false,
-                CleanseTimer = 0,
-                Slot = SpellSlot.R,
-                Interval = 1.5
-
-            });
-
-            BuffList.Add(new Auradata
-            {
                 Champion = "Mordekaiser",
                 Name = "mordekaiserchildrenofthegrave",
                 MenuName = "Mordekaiser Children of the Grave",
@@ -765,19 +753,6 @@ using LeagueSharp.Common;
                 Cleanse = false,
                 CleanseTimer = 0,
                 Slot = SpellSlot.E,
-                Interval = 1.0
-            });
-
-            BuffList.Add(new Auradata
-            {
-                Champion = "Amumu",
-                Name = "auraofdespair",
-                Evade = false,
-                DoT = true,
-                EvadeTimer = 0,
-                Cleanse = false,
-                CleanseTimer = 0,
-                Slot = SpellSlot.W,
                 Interval = 1.0
             });
 
@@ -851,11 +826,12 @@ using LeagueSharp.Common;
                 Name = "fizzmarinerdoombomb",
                 MenuName = "Fizz Shark Bait",
                 Evade = false,
-                DoT = false,
+                DoT = true,
                 EvadeTimer = 0,
                 Cleanse = true,
                 CleanseTimer = 0,
-                Slot = SpellSlot.R
+                Slot = SpellSlot.R,
+                Interval = 1.5
             });
 
             BuffList.Add(new Auradata
@@ -865,7 +841,7 @@ using LeagueSharp.Common;
                 MenuName = "Morgana Soul Shackles",
                 Evade = true,
                 DoT = false,
-                EvadeTimer = 2600,
+                EvadeTimer = 3200,
                 Cleanse = true,
                 CleanseTimer = 1100,
                 Slot = SpellSlot.R,
@@ -890,12 +866,13 @@ using LeagueSharp.Common;
                 Champion = "Caitlyn",
                 Name = "caitlynaceinthehole",
                 MenuName = "Caitlyn Ace in the Hole",
-                Evade = true,
-                DoT = false,
+                Evade = false,
+                DoT = true,
                 EvadeTimer = 900,
                 Cleanse = false,
                 CleanseTimer = 0,
-                Slot = SpellSlot.R
+                Slot = SpellSlot.R,
+                Interval = 0.8
             });
 
             BuffList.Add(new Auradata
@@ -908,7 +885,8 @@ using LeagueSharp.Common;
                 EvadeTimer = 4500,
                 Cleanse = true,
                 CleanseTimer = 0,
-                Slot = SpellSlot.R
+                Slot = SpellSlot.R,
+                Interval = 4.4
             });
 
             BuffList.Add(new Auradata
@@ -1035,11 +1013,10 @@ using LeagueSharp.Common;
                 Name = "yasuorknockupcombo",
                 Evade = false,
                 DoT = true,
-                Cleanse = false,
-                CleanseTimer = 0,
+                Cleanse = true,
+                CleanseTimer = 100,
                 EvadeTimer = 0,
-                QssIgnore = true,
-                Slot = SpellSlot.Unknown
+                Slot = SpellSlot.R
             });
 
             BuffList.Add(new Auradata
@@ -1048,11 +1025,10 @@ using LeagueSharp.Common;
                 Name = "yasuorknockupcombotar",
                 Evade = false,
                 DoT = true,
-                Cleanse = false,
+                Cleanse = true,
                 CleanseTimer = 0,
                 EvadeTimer = 0,
-                QssIgnore = true,
-                Slot = SpellSlot.Unknown
+                Slot = SpellSlot.R
             });
 
             BuffList.Add(new Auradata
@@ -1129,6 +1105,8 @@ using LeagueSharp.Common;
                 EvadeTimer = 0,
                 QssIgnore = true,
                 Slot = SpellSlot.Unknown,
+                Reverse = true,
+                Radius = 200f,
                 Interval = 1.0
             });
 
@@ -1310,6 +1288,306 @@ using LeagueSharp.Common;
                 EvadeTimer = 0,
                 QssIgnore = true,
                 Slot = SpellSlot.Unknown
+            });
+
+            BuffList.Add(new Auradata
+            {
+                Champion = "DrMundo",
+                Name = "burningagony",
+                Evade = false,
+                DoT = true,
+                Cleanse = false,
+                CleanseTimer = 0,
+                EvadeTimer = 0,
+                Slot = SpellSlot.W,
+                Reverse = true,
+                Radius = 175f,
+                Interval = 0.8
+            });
+
+            BuffList.Add(new Auradata
+            {
+                Champion = "Amumu",
+                Name = "auraofdespair",
+                Evade = false,
+                DoT = true,
+                Cleanse = false,
+                CleanseTimer = 0,
+                EvadeTimer = 0,
+                Slot = SpellSlot.W,
+                Reverse = true,
+                Radius = 175f,
+                Interval = 0.8
+            });
+
+            BuffList.Add(new Auradata
+            {
+                Champion = "Ahri",
+                Name = "ahrifoxfire",
+                Evade = false,
+                DoT = true,
+                Cleanse = false,
+                CleanseTimer = 0,
+                EvadeTimer = 0,
+                Slot = SpellSlot.W,
+                Reverse = true,
+                Radius = 550f,
+                Interval = 0.8
+            });
+
+            BuffList.Add(new Auradata
+            {
+                Champion = "Diana",
+                Name = "dianaorbs",
+                Evade = false,
+                DoT = true,
+                Cleanse = false,
+                CleanseTimer = 0,
+                EvadeTimer = 0,
+                Slot = SpellSlot.W,
+                Reverse = true,
+                Radius = 200f,
+                Interval = 0.8
+            });
+
+            BuffList.Add(new Auradata
+            {
+                Champion = "Alistar",
+                Name = "alistare",
+                Evade = false,
+                DoT = true,
+                Cleanse = false,
+                CleanseTimer = 0,
+                EvadeTimer = 0,
+                Slot = SpellSlot.E,
+                Reverse = true,
+                Radius = 300f,
+                Interval = 0.8
+            });
+
+            BuffList.Add(new Auradata
+            {
+                Champion = "Garen",
+                Name = "garene",
+                Evade = false,
+                DoT = true,
+                Cleanse = false,
+                CleanseTimer = 0,
+                EvadeTimer = 0,
+                Slot = SpellSlot.E,
+                Reverse = true,
+                Radius = 300f,
+                Interval = 0.5
+            });
+
+            BuffList.Add(new Auradata
+            {
+                Champion = "Jax",
+                Name = "jaxevasion",
+                Evade = false,
+                DoT = true,
+                Cleanse = false,
+                CleanseTimer = 0,
+                EvadeTimer = 0,
+                Slot = SpellSlot.E,
+                Reverse = true,
+                Radius = 200f,
+                Interval = 0.5
+            });
+
+            BuffList.Add(new Auradata
+            {
+                Champion = "Jayce",
+                Name = "jaycestaticfield",
+                Evade = false,
+                DoT = true,
+                Cleanse = false,
+                CleanseTimer = 0,
+                EvadeTimer = 0,
+                Slot = SpellSlot.W,
+                Reverse = true,
+                Radius = 285f,
+                Interval = 0.5
+            });
+
+            BuffList.Add(new Auradata
+            {
+                Champion = "Karthus",
+                Name = "karthusdefile",
+                Evade = false,
+                DoT = true,
+                Cleanse = false,
+                CleanseTimer = 0,
+                EvadeTimer = 0,
+                Slot = SpellSlot.E,
+                Reverse = true,
+                Radius = 425f,
+                Interval = 0.8
+            });
+
+            BuffList.Add(new Auradata
+            {
+                Champion = "Leona",
+                Name = "leonasolarbarrier",
+                Evade = false,
+                DoT = true,
+                Cleanse = false,
+                CleanseTimer = 0,
+                EvadeTimer = 0,
+                Slot = SpellSlot.W,
+                Reverse = true,
+                Radius = 425f,
+                Interval = 1.1
+            });
+
+            BuffList.Add(new Auradata
+            {
+                Champion = "Pantheon",
+                Name = "panthesound",
+                Evade = false,
+                DoT = true,
+                Cleanse = false,
+                CleanseTimer = 0,
+                EvadeTimer = 0,
+                Slot = SpellSlot.E,
+                Reverse = true,
+                Radius = 300f,
+                Interval = 0.5
+            });
+
+            BuffList.Add(new Auradata
+            {
+                Champion = "Shyvana",
+                Name = "shyvanascorchedearth",
+                Evade = false,
+                DoT = true,
+                Cleanse = false,
+                CleanseTimer = 0,
+                EvadeTimer = 0,
+                Slot = SpellSlot.W,
+                Reverse = true,
+                Radius = 175f,
+                Interval = 0.5
+            });
+
+            BuffList.Add(new Auradata
+            {
+                Champion = "Shyvana",
+                Name = "shyvanascorchedearthdragon",
+                Evade = false,
+                DoT = true,
+                Cleanse = false,
+                CleanseTimer = 0,
+                EvadeTimer = 0,
+                Slot = SpellSlot.W,
+                Reverse = true,
+                Radius = 300f,
+                Interval = 0.5
+            });
+
+            BuffList.Add(new Auradata
+            {
+                Champion = "Shyvana",
+                Name = "swainmetamorphism",
+                Evade = false,
+                DoT = true,
+                Cleanse = false,
+                CleanseTimer = 0,
+                EvadeTimer = 0,
+                Slot = SpellSlot.R,
+                Reverse = true,
+                Radius = 600f,
+                Interval = 0.2
+            });
+
+            BuffList.Add(new Auradata
+            {
+                Champion = "Lissandra",
+                Name = "lissandrarself",
+                Evade = false,
+                DoT = true,
+                Cleanse = false,
+                CleanseTimer = 0,
+                EvadeTimer = 0,
+                Slot = SpellSlot.R,
+                Reverse = true,
+                Radius = 600f,
+                Interval = 0.8
+            });
+
+            BuffList.Add(new Auradata
+            {
+                Champion = "Kennen",
+                Name = "kennenlightningrush",
+                Evade = false,
+                DoT = true,
+                Cleanse = false,
+                CleanseTimer = 0,
+                EvadeTimer = 0,
+                Slot = SpellSlot.E,
+                Reverse = true,
+                Radius = 165f,
+                Interval = 0.8
+            });
+
+            BuffList.Add(new Auradata
+            {
+                Champion = "Kennen",
+                Name = "kennenshurikenstorm",
+                Evade = true,
+                DoT = true,
+                Cleanse = false,
+                CleanseTimer = 0,
+                EvadeTimer = 0,
+                Slot = SpellSlot.R,
+                Reverse = true,
+                Radius = 275,
+                Interval = 0.8
+            });
+
+            BuffList.Add(new Auradata
+            {
+                Champion = "Zac",
+                Name = "zacemove",
+                Evade = false,
+                DoT = true,
+                Cleanse = false,
+                CleanseTimer = 0,
+                EvadeTimer = 0,
+                Slot = SpellSlot.E,
+                Reverse = true,
+                Radius = 300,
+                Interval = 0.2
+            });
+
+            BuffList.Add(new Auradata
+            {
+                Champion = "Zac",
+                Name = "zacr",
+                Evade = true,
+                DoT = true,
+                Cleanse = false,
+                CleanseTimer = 0,
+                EvadeTimer = 0,
+                Slot = SpellSlot.R,
+                Reverse = true,
+                Radius = 300,
+                Interval = 0.8
+            });
+
+            BuffList.Add(new Auradata
+            {
+                Champion = "Nunu",
+                Name = "absolutezero",
+                Evade = false,
+                DoT = true,
+                Cleanse = false,
+                CleanseTimer = 0,
+                EvadeTimer = 0,
+                Slot = SpellSlot.R,
+                Reverse = true,
+                Radius = 600f,
+                Interval = 1.2
             });
         }
 

@@ -6,7 +6,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace SephKhazix
+namespace SephKhazix
 {
     class SmiteManager
     {

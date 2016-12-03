@@ -8,7 +8,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace SergixBrand
+namespace SergixBrand
 {
     class DrawDamage
     {

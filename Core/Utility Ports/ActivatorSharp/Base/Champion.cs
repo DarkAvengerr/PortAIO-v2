@@ -18,7 +18,7 @@ using Activator.Summoners;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Base
+namespace Activator.Base
 {
     public class Champion
     {
@@ -62,6 +62,11 @@ using LeagueSharp.Common;
         public Champion(AIHeroClient player, float incdmg)
         {
             Player = player;
+        }
+
+        public bool HeroNameMatch(string championname)
+        {
+            return Player.ChampionName.ToLower() == championname.ToLower();
         }
     }
 

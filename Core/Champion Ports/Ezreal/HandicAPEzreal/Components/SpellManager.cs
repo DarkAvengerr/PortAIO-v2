@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace HandicapEzreal.Components
+namespace HandicapEzreal.Components
 {
     using System;
     using System.Collections.Generic;
@@ -37,6 +37,9 @@ using LeagueSharp.Common;
             try
             {
                 this.LoadSpells(new List<ISpell>() { new SpellQ(), new SpellW(), new SpellR() });
+                Misc.SpellQ = new SpellQ();
+                Misc.SpellW = new SpellW();
+                Misc.SpellR = new SpellR();
             }
             catch (Exception e)
             {

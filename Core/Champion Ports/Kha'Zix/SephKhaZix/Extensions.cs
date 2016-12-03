@@ -7,7 +7,7 @@ using System;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace SephKhazix
+namespace SephKhazix
 {
     static class Extensions
     {
@@ -20,7 +20,7 @@ using LeagueSharp.Common;
 
         internal static bool IsValidMinion(this Obj_AI_Minion minion)
         {
-            return (minion != null && minion.IsValid && minion.IsVisible && minion.Team != Player.Team && minion.IsHPBarRendered && !minion.CharData.BaseSkinName.ToLower().Contains("ward"));
+            return (minion != null && minion.IsValid && minion.IsVisible && minion.Team != Player.Team && minion.IsHPBarRendered && !minion.BaseSkinName.ToLower().Contains("ward"));
         }
 
         internal static bool IsValidAlly(this Obj_AI_Base unit, float range = 50000)

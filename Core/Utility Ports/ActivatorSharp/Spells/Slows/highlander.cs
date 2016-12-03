@@ -5,7 +5,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Spells.Slows
+namespace Activator.Spells.Slows
 {
     class highlander : CoreSpell
     {

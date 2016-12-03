@@ -4,7 +4,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace TheCassiopeia.Commons.Items
+namespace TheCassiopeia.Commons.Items
 {
     class YoumusBlade : IActivateableItem
     {

@@ -9,7 +9,7 @@ using SharpDX;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace LordsSyndra
+namespace LordsSyndra
 {
     public static class Spells
     {
@@ -59,9 +59,9 @@ using LeagueSharp.Common;
             }
 
 
-            //            Chat.Print("wObject: " + OrbManager.WObject(false) + " Target " + wTarget.BaseSkinName + " toggle " + Player.Spellbook.GetSpell(SpellSlot.W).ToggleState + " isready: " + W.IsReady());
+            //            Chat.Print("wObject: " + OrbManager.WObject(false) + " Target " + wTarget.BaseSkinName + " toggle " + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState + " isready: " + W.IsReady());
             //Use W2
-            //            if (wTarget == null || Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 2 || !W.IsReady())
+            //            if (wTarget == null || ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState != 2 || !W.IsReady())
             //               return;
 
 
@@ -71,7 +71,7 @@ using LeagueSharp.Common;
 
                 //                W.UpdateSourcePosition(OrbManager.WObject(false).ServerPosition);
                 var pos = Spells.W.GetPrediction(wTarget, true);
-                //                Chat.Print("casting w " + Player.Spellbook.GetSpell(SpellSlot.W).ToggleState + " pred"+pos.Hitchance);
+                //                Chat.Print("casting w " + ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).ToggleState + " pred"+pos.Hitchance);
                 if (pos.Hitchance >= HitChance.High)
                     Spells.W.Cast(pos.CastPosition);
             }
@@ -175,8 +175,8 @@ using LeagueSharp.Common;
                 ObjectManager.Player.Distance(rTarget, true) <= Math.Pow(Spells.R.Range, 2) &&
                 Utils.BuffCheck(rTarget) && Utils.DetectCollision(rTarget))
             {
-                if (Program.Menu.Item("DontR" + rTarget.CharData.BaseSkinName) != null &&
-                    Program.Menu.Item("DontR" + rTarget.CharData.BaseSkinName).GetValue<bool>() == false &&
+                if (Program.Menu.Item("DontR" + rTarget.BaseSkinName) != null &&
+                    Program.Menu.Item("DontR" + rTarget.BaseSkinName).GetValue<bool>() == false &&
                     useRBool && GetDamage.overkillcheckv2(rTarget) <= rTarget.Health && ObjectManager.Player.HealthPercent >= 35)
                 {
                     Spells.R.CastOnUnit(rTarget);
@@ -197,8 +197,8 @@ using LeagueSharp.Common;
                                 Utils.BuffCheck(enemy)))
                 {
                     //R
-                    var useR = Program.Menu.Item("DontR" + enemy.CharData.BaseSkinName).GetValue<bool>() == false && useRBool;
-                    var okR = Program.Menu.Item("okR" + enemy.CharData.BaseSkinName).GetValue<Slider>().Value * .01 + 1;
+                    var useR = Program.Menu.Item("DontR" + enemy.BaseSkinName).GetValue<bool>() == false && useRBool;
+                    var okR = Program.Menu.Item("okR" + enemy.BaseSkinName).GetValue<Slider>().Value * .01 + 1;
                     if (Utils.DetectCollision(enemy) && useR && ObjectManager.Player.Distance(enemy, true) <= Math.Pow(Spells.R.Range, 2) &&
                         (GetDamage.GetRDamage(enemy)) > enemy.Health * okR &&
                         RCheck(enemy))
@@ -297,13 +297,12 @@ using LeagueSharp.Common;
         public static void Spellsdata()
         {
             Spells.Q = new Spell(SpellSlot.Q, 800);
-            Spells.Q.SetSkillshot(0.85f, 125f, float.MaxValue, false, SkillshotType.SkillshotCircle);
-
+            Spells.Q.SetSkillshot(0.5f, 130f, 2000f, false, SkillshotType.SkillshotCircle);
             Spells.W = new Spell(SpellSlot.W, 925);
             Spells.W.SetSkillshot(0.25f, 140f, 1600f, false, SkillshotType.SkillshotCircle);
 
             Spells.E = new Spell(SpellSlot.E, 700);
-            Spells.E.SetSkillshot(0.30f, (float)(45 * 0.5), 2500, false, SkillshotType.SkillshotCone);
+            Spells.E.SetSkillshot(0.25f, (float)(45 * 0.5), 2500f, false, SkillshotType.SkillshotCircle);
 
             Spells.R = new Spell(SpellSlot.R, 675);
             Spells.R.SetTargetted(0.5f, 1100f);
@@ -311,7 +310,7 @@ using LeagueSharp.Common;
             //QE = new Spell(SpellSlot.E, 1100);
             //QE.SetSkillshot(float.MaxValue, 55f, 2000f, false, SkillshotType.SkillshotCircle);
             Spells.QE = new Spell(SpellSlot.E, 1300);
-            Spells.QE.SetSkillshot(float.MaxValue, 65f, 8000f, false, SkillshotType.SkillshotLine);
+            Spells.QE.SetSkillshot(0.900f, 70f, 2100f, false, SkillshotType.SkillshotCircle);
 
 
             Spells.IgniteSlot = ObjectManager.Player.GetSpellSlot("SummonerDot");

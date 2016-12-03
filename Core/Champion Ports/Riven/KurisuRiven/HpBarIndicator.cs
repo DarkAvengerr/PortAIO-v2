@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using LeagueSharp;
 using SharpDX;
 using SharpDX.Direct3D9;
 using Color = System.Drawing.Color;
-using EloBuddy;
 
+using EloBuddy; 
+using LeagueSharp.Common; 
 namespace KurisuRiven
 {
     internal class HpBarIndicator

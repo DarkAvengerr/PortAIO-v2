@@ -1,8 +1,9 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
-using EloBuddy;
 
+using EloBuddy; 
+using LeagueSharp.Common; 
 namespace SharpShooter
 {
     internal class AutoQuit

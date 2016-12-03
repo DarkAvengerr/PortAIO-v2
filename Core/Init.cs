@@ -3009,6 +3009,9 @@ namespace PortAIO
                         case 10: // Lord's Syndra
                             LordsSyndra.Program.Main();
                             break;
+                        case 11: // SyndraRevamped
+                            SyndraRevamped.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.TahmKench:
@@ -3526,6 +3529,9 @@ namespace PortAIO
                         case 18: // Flowers' ADC Series
                             Flowers_ADC_Series.Program.Main();
                             break;
+                        case 19: // hi_im_gosy reborn
+                            hi_im_gosu_Reborn.Vayne.Main();
+                            break;
                     }
                     break;
                 case Champion.Veigar:
@@ -3862,6 +3868,9 @@ namespace PortAIO
                             break;
                         case 1: // Royal Ziggy
                             ZiggsRoyal.Program.Main();
+                            break;
+                        case 2: // OKTW
+                            OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
                             break;
                     }
                     break;

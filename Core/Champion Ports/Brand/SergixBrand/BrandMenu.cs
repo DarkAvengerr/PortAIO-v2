@@ -10,7 +10,7 @@ using Menu = LeagueSharp.Common.Menu;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace SergixBrand
+namespace SergixBrand
 {
     class BrandMenu : Menu
     {

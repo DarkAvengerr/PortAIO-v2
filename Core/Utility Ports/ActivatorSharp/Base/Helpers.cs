@@ -18,7 +18,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Base
+namespace Activator.Base
 {
     internal class Helpers
     {

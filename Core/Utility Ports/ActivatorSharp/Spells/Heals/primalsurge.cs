@@ -4,7 +4,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Spells.Heals
+namespace Activator.Spells.Heals
 {
     class primalsurge : CoreSpell
     {
@@ -21,7 +21,7 @@ using LeagueSharp.Common;
             if (!Menu.Item("use" + Name).GetValue<bool>() || !IsReady())
                 return;
 
-            if (Activator.Player.CharData.BaseSkinName != "Nidalee")
+            if (Activator.Player.BaseSkinName != "Nidalee")
                 return;
 
             if (Player.Mana/Player.MaxMana * 100 <

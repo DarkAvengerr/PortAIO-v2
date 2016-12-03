@@ -3,7 +3,7 @@ using SharpDX;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace e.Motion_Katarina
+namespace e.Motion_Katarina
 {
     public class Dagger
     {

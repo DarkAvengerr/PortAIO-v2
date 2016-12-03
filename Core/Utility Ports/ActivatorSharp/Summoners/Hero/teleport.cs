@@ -6,7 +6,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Summoners
+namespace Activator.Summoners
 {
     class teleport : CoreSum
     {

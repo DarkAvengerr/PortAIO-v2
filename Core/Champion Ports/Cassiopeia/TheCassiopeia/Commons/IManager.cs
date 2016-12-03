@@ -3,7 +3,7 @@ using TheCassiopeia.Commons.ComboSystem;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace TheCassiopeia.Commons
+namespace TheCassiopeia.Commons
 {
     interface IManager
     {

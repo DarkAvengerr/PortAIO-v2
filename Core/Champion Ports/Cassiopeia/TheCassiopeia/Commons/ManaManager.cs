@@ -5,7 +5,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace TheCassiopeia.Commons
+namespace TheCassiopeia.Commons
 {
     public static class ManaManager
     {

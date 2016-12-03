@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 using Azir_Free_elo_Machine;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Azir_Creator_of_Elo
+using LeagueSharp.Common; 
+namespace Azir_Creator_of_Elo
 {
     class Menu
     {

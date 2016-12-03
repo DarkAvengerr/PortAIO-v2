@@ -15,7 +15,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Data
+namespace Activator.Data
 {
     public class Smitedata
     {
@@ -57,7 +57,7 @@ using LeagueSharp.Common;
                         return false;
                     break;
                 case "Elise":
-                    if (Player.CharData.BaseSkinName != "elisespider")
+                    if (Player.BaseSkinName != "elisespider")
                     {
                         var r = new Spell(SpellSlot.R);
                         if (r.Instance.IsReady())
@@ -69,7 +69,7 @@ using LeagueSharp.Common;
                     }
                     break;
                 case "Nidalee":
-                    if (Player.CharData.BaseSkinName == "Nidalee")
+                    if (Player.BaseSkinName == "Nidalee")
                     {
                         var r = new Spell(SpellSlot.R);
                         if (r.Instance.IsReady())

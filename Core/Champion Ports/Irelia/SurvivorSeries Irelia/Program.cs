@@ -1,34 +1,31 @@
-/*
- *
- * Thanks to imsosharp for the Q to get closer to enemy if he's not in your Q Range (using minions to gapclose) [Code Snippet - Simple Champion, no need for 1289321 logics] 
- * 
- */
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="Program.cs.cs" company="SVIrelia">
+//      Copyright (c) SVIrelia. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
-using LeagueSharp.Data;
-using SharpDX;
 using SebbyLib;
-using ItemData = LeagueSharp.Common.Data.ItemData;
+using Color = SharpDX.Color;
 using Orbwalking = SebbyLib.Orbwalking;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace SVIrelia
+using LeagueSharp.Common; 
+namespace SVIrelia
 {
-    class Program
+    internal class Program
     {
         /// <summary>
-        /// Declarations
+        ///     Declarations
         /// </summary>
         public static Spell Q, W, E, R;
+
         public static Menu Menu;
-        public static SebbyLib.Orbwalking.Orbwalker Orbwalker;
+        public static Orbwalking.Orbwalker Orbwalker;
 
         public static Items.Item
             Sheen = new Items.Item(2057),
@@ -37,7 +34,7 @@ using EloBuddy;
             LichBane = new Items.Item(3100);
 
         /// <summary>
-        /// ObjectManager => Player
+        ///     ObjectManager => Player
         /// </summary>
         public static AIHeroClient Player
         {
@@ -45,15 +42,19 @@ using EloBuddy;
         }
 
         /// <summary>
-        /// Run Irelia script on gameload
+        ///     Run Irelia script on gameload
         /// </summary>
         /// <param name="args"></param>
         public static void Main()
         {
-            Game_OnGameLoad();
+            Irelia(new EventArgs());
         }
 
-        static void Game_OnGameLoad()
+        /// <summary>
+        ///     Main Module
+        /// </summary>
+        /// <param name="args"></param>
+        private static void Irelia(EventArgs args)
         {
             if (ObjectManager.Player.ChampionName != "Irelia")
                 return;
@@ -72,28 +73,26 @@ using EloBuddy;
         }
 
         /// <summary>
-        /// W Reset/Usage - Improved
+        ///     W Reset/Usage - Improved
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
         private static void WUsage(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (sender.IsMe && args.SData.IsAutoAttack() && args.Target is AIHeroClient &&
-                Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Combo && W.IsReady())
-            {
+                (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo) && W.IsReady())
                 W.Cast();
-            }
         }
 
         /// <summary>
-        /// Initialize Extens
+        ///     Initialize Extens
         /// </summary>
         public static void Init()
         {
             Menu = new Menu(":: SurvivorIrelia", "SurvivorIrelia", true);
             {
                 var orbwalkerMenu = Menu.AddSubMenu(new Menu("Orbwalker", "orbwalker"));
-                Orbwalker = new SebbyLib.Orbwalking.Orbwalker(orbwalkerMenu);
+                Orbwalker = new Orbwalking.Orbwalker(orbwalkerMenu);
                 var combomenu = new Menu(":: Combo Settings", "combosettings");
                 {
                     combomenu.AddItem(new MenuItem("q.combo", "Use (Q)")).SetValue(true);
@@ -122,7 +121,8 @@ using EloBuddy;
                         .SetValue(new Slider(2, 0, 10)));
                     laneclearmenu.AddItem(new MenuItem("LCE", "Use (E)").SetValue(false));
                     laneclearmenu.AddItem(
-                        new MenuItem("LaneClearManaManager", "LaneClear Mana Manager (%)").SetValue(new Slider(30, 0, 100)));
+                        new MenuItem("LaneClearManaManager", "LaneClear Mana Manager (%)").SetValue(new Slider(30, 0,
+                            100)));
                     Menu.AddSubMenu(laneclearmenu);
                 }
                 var jungleclearmenu = new Menu(":: Jungle Clear Settings", "jungleclearsettings");
@@ -131,7 +131,8 @@ using EloBuddy;
                     jungleclearmenu.AddItem(new MenuItem("JGCW", "Use (W)").SetValue(true));
                     jungleclearmenu.AddItem(new MenuItem("JGCE", "Use (E)").SetValue(false));
                     jungleclearmenu.AddItem(
-                        new MenuItem("JungleClearManaManager", "JungleClear Mana Manager (%)").SetValue(new Slider(30, 0, 100)));
+                        new MenuItem("JungleClearManaManager", "JungleClear Mana Manager (%)").SetValue(new Slider(30, 0,
+                            100)));
                     Menu.AddSubMenu(jungleclearmenu);
                 }
                 var harassmenu = new Menu(":: Harass Settings", "harasssettings");
@@ -148,26 +149,53 @@ using EloBuddy;
                     drawingmenu.AddItem(new MenuItem("DrawQ", "Draw (Q) Range").SetValue(true));
                     drawingmenu.AddItem(new MenuItem("DrawR", "Draw (R) Range").SetValue(true));
                     drawingmenu.AddItem(new MenuItem("DrawStunnable", "Draw Stunnable?").SetValue(true));
-                    drawingmenu.AddItem(new MenuItem("QMinionDrawHelper", "Draw Q Circle on Minion if killable?").SetValue(true));
+                    drawingmenu.AddItem(
+                        new MenuItem("QMinionDrawHelper", "Draw Q Circle on Minion if killable?").SetValue(true));
                     Menu.AddSubMenu(drawingmenu);
                 }
                 var miscmenu = new Menu(":: Misc Menu", "miscmenu");
                 {
-                    miscmenu.AddItem(new MenuItem("HitChance", "Hit Chance").SetValue(new StringList(new[] { "Medium", "High", "Very High" }, 1)));
+                    miscmenu.AddItem(
+                        new MenuItem("HitChance", "Hit Chance").SetValue(
+                            new StringList(new[] {"Medium", "High", "Very High"}, 1)));
                     miscmenu.AddItem(new MenuItem("KSCheck", "KS if Possible?").SetValue(true));
                     Menu.AddSubMenu(miscmenu);
                 }
 
+                #region Skin Changer
+
+                var SkinChangerMenu =
+                    Menu.AddSubMenu(new Menu(":: Skin Changer", "SkinChanger").SetFontStyle(FontStyle.Bold,
+                        Color.Chartreuse));
+                var SkinChanger =
+                    SkinChangerMenu.AddItem(
+                        new MenuItem("UseSkinChanger", ":: Use SkinChanger?").SetValue(true)
+                            .SetFontStyle(FontStyle.Bold, Color.Crimson));
+                var SkinID =
+                    SkinChangerMenu.AddItem(
+                        new MenuItem("SkinID", ":: Skin").SetValue(new Slider(6, 0, 6))
+                            .SetFontStyle(FontStyle.Bold, Color.Crimson));
+                SkinID.ValueChanged += (sender, eventArgs) =>
+                {
+                    if (!SkinChanger.GetValue<bool>())
+                        return;
+
+                    //Player.SetSkin(Player.BaseSkinName, eventArgs.GetNewValue<Slider>().Value);
+                };
+
+                #endregion
+
                 #region DrawHPDamage
-                var drawdamage = new Menu(":: Draw Damage", "drawdamage");
+
+                var drawdamage = drawingmenu.AddSubMenu(new Menu(":: Draw Damage", "drawdamage"));
                 {
                     var dmgAfterShave =
-                        new MenuItem("SurvivorAshe.DrawComboDamage", "Draw Damage on Enemy's HP Bar").SetValue(true);
+                        drawingmenu.AddItem(
+                            new MenuItem("SurvivorIrelia.DrawComboDamage", "Draw Damage on Enemy's HP Bar").SetValue(
+                                true));
                     var drawFill =
-                        new MenuItem("SurvivorAshe.DrawColour", "Fill Color", true).SetValue(
-                            new Circle(true, System.Drawing.Color.Chartreuse));
-                    drawdamage.AddItem(drawFill);
-                    drawdamage.AddItem(dmgAfterShave);
+                        drawingmenu.AddItem(new MenuItem("SurvivorIrelia.DrawColour", "Fill Color", true).SetValue(
+                            new Circle(true, System.Drawing.Color.Chartreuse)));
                     DrawDamage.DamageToUnit = CalculateDamage;
                     DrawDamage.Enabled = dmgAfterShave.GetValue<bool>();
                     DrawDamage.Fill = drawFill.GetValue<Circle>().Active;
@@ -184,13 +212,15 @@ using EloBuddy;
                         DrawDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
                     };
                 }
+
                 #endregion
+
                 Menu.AddToMainMenu();
             }
         }
 
         /// <summary>
-        /// CalculateDamage Amount
+        ///     CalculateDamage Amount
         /// </summary>
         /// <param name="enemy"></param>
         /// <returns></returns>
@@ -198,43 +228,35 @@ using EloBuddy;
         {
             float damage = 0;
 
-            if (Q.Instance.IsReady() && Player.Mana > Q.Instance.SData.Mana)
-            {
+            if (Q.Instance.IsReady() && (Player.Mana > Q.Instance.SData.Mana))
                 damage += Q.GetDamage(enemy) + GetSheenDamage(enemy);
-            }
-            if (W.Instance.IsReady() && Player.Mana > W.Instance.SData.Mana)
-            {
+            if (W.Instance.IsReady() && (Player.Mana > W.Instance.SData.Mana))
                 damage += W.GetDamage(enemy);
-            }
-            if (E.Instance.IsReady() && Player.Mana > E.Instance.SData.Mana)
-            {
+            if (E.Instance.IsReady() && (Player.Mana > E.Instance.SData.Mana))
                 damage += E.GetDamage(enemy);
-            }
             if (HasRBuff() || R.Instance.IsReady())
-            {
                 damage += R.GetDamage(enemy);
-            }
-            damage += (float)Player.GetAutoAttackDamage(enemy);
+            damage += (float) Player.GetAutoAttackDamage(enemy);
 
             return damage;
         }
 
         /// <summary>
-        /// OnUpdate Event
+        ///     OnUpdate Event
         /// </summary>
         /// <param name="args"></param>
         private static void OnUpdate(EventArgs args)
         {
             switch (Orbwalker.ActiveMode)
             {
-                    case SebbyLib.Orbwalking.OrbwalkingMode.Combo:
+                case Orbwalking.OrbwalkingMode.Combo:
                     Combo();
                     break;
-                    case SebbyLib.Orbwalking.OrbwalkingMode.LaneClear:
+                case Orbwalking.OrbwalkingMode.LaneClear:
                     JungleClear();
                     LaneClear();
                     break;
-                    case SebbyLib.Orbwalking.OrbwalkingMode.Mixed:
+                case Orbwalking.OrbwalkingMode.Mixed:
                     Harass();
                     break;
             }
@@ -250,52 +272,45 @@ using EloBuddy;
             var jgcw = Menu.Item("JGCW").GetValue<bool>();
             var jgce = Menu.Item("JGCE").GetValue<bool>();
 
-            var mob = MinionManager.GetMinions(Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
+            var mob =
+                MinionManager.GetMinions(Player.ServerPosition, Q.Range, MinionTypes.All, MinionTeam.Neutral,
+                    MinionOrderTypes.MaxHealth).FirstOrDefault();
             if (mob == null)
-            {
                 return;
-            }
 
             if (jgcq && Q.Instance.IsReady())
-            {
                 Q.CastOnUnit(mob);
-            }
             if (jgce && E.Instance.IsReady())
-            {
                 E.CastOnUnit(mob);
-            }
             if (jgcw && W.Instance.IsReady())
-            {
                 W.Cast();
-            }
         }
 
         /// <summary>
-        /// Drawings
+        ///     Drawings
         /// </summary>
         /// <param name="args"></param>
         private static void Drawing_OnDraw(EventArgs args)
         {
+            if (Player.IsDead)
+                return;
             if (Menu.Item("DrawAA").GetValue<bool>())
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, SebbyLib.Orbwalking.GetRealAutoAttackRange(null), System.Drawing.Color.BlueViolet);
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, Orbwalking.GetRealAutoAttackRange(null),
+                    System.Drawing.Color.BlueViolet);
             if (Menu.Item("DrawQ").GetValue<bool>())
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, Q.Range, System.Drawing.Color.Chartreuse);
-            if (Menu.Item("DrawR").GetValue<bool>() && R.Level > 0 && R.Instance.IsReady())
+            if (Menu.Item("DrawR").GetValue<bool>() && (R.Level > 0) && R.Instance.IsReady())
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, R.Range, System.Drawing.Color.DeepPink);
 
             if (Menu.Item("QMinionDrawHelper").GetValue<bool>())
-            {
                 foreach (
                     var creature in
                     ObjectManager.Get<Obj_AI_Minion>()
                         .Where(
                             x =>
                                 x.Name.ToLower().Contains("minion") && x.IsHPBarRendered && x.IsValidTarget(1000) &&
-                                x.Health < Q.GetDamage(x) + GetSheenDamage(x) && x.IsEnemy))
-                {
+                                (x.Health < Q.GetDamage(x) + GetSheenDamage(x)) && x.IsEnemy))
                     Render.Circle.DrawCircle(creature.Position, 35, System.Drawing.Color.Chartreuse);
-                }
-            }
 
             if (!Menu.Item("DrawStunnable").GetValue<bool>())
                 return;
@@ -305,28 +320,31 @@ using EloBuddy;
             {
                 var drawPos = Drawing.WorldToScreen(enemy.Position);
                 var textSize = Drawing.GetTextEntent(("Stunnable"), 15);
-                Drawing.DrawText(drawPos.X - textSize.Width / 2f, drawPos.Y, System.Drawing.Color.DeepPink, "Stunnable");
+                Drawing.DrawText(drawPos.X - textSize.Width/2f, drawPos.Y, System.Drawing.Color.DeepPink, "Stunnable");
             }
         }
 
         /// <summary>
-        /// Player has RBuff :?
+        ///     Player has RBuff :?
         /// </summary>
         /// <returns></returns>
         public static bool HasRBuff() => Player.HasBuff("ireliatranscendentbladesspell");
 
         /// <summary>
-        /// Stunnable?
+        ///     Stunnable?
         /// </summary>
-        /// <param name="unit"></param>
+        /// <param></param>
         /// <returns></returns>
+#pragma warning disable 1573
         public static bool Stunnable(AIHeroClient enemy)
+#pragma warning restore 1573
         {
+            if (enemy == null) throw new ArgumentNullException(nameof(enemy));
             return enemy.HealthPercent > Player.HealthPercent;
         }
 
         /// <summary>
-        /// Custom Made GetSheenDamage function -> Including all Sheen buildable items.
+        ///     Custom Made GetSheenDamage function -> Including all Sheen buildable items.
         /// </summary>
         /// <param name="target"></param>
         /// <returns></returns>
@@ -334,37 +352,32 @@ using EloBuddy;
         {
             float totalDamage = 0;
 
+            // Sheen
             if (Items.HasItem(3057, Player))
             {
                 if (Items.CanUseItem(3057))
-                {
                     totalDamage +=
-                        (float)Player.CalcDamage(target, Damage.DamageType.Physical, Player.TotalAttackDamage);
-                }
+                        (float) Player.CalcDamage(target, Damage.DamageType.Physical, Player.TotalAttackDamage);
             }
-            else if (Items.HasItem(3025, Player))
+            else if (Items.HasItem(3025, Player)) // Iceborn
             {
                 if (Items.CanUseItem(3025))
-                {
                     totalDamage +=
-                        (float)Player.CalcDamage(target, Damage.DamageType.Physical, Player.TotalAttackDamage);
-                }
+                        (float) Player.CalcDamage(target, Damage.DamageType.Physical, Player.TotalAttackDamage);
             }
-            else if (Items.HasItem(3078, Player))
+            else if (Items.HasItem(3078, Player)) // Trinity
             {
                 if (Items.CanUseItem(3078))
-                {
                     totalDamage +=
-                        (float)Player.CalcDamage(target, Damage.DamageType.Physical, Player.TotalAttackDamage * 2);
-                }
+                        (float) Player.CalcDamage(target, Damage.DamageType.Physical, Player.TotalAttackDamage*2);
             }
-            else if (Items.HasItem(3100, Player))
+            else if (Items.HasItem(3100, Player)) // Lich Bane
             {
-                if (LichBane.IsReady())
-                {
+                if (Items.CanUseItem(3100))
                     totalDamage +=
-                        (float)Player.CalcDamage(target, Damage.DamageType.Magical, (75 / Player.TotalAttackDamage * 100) + (50 / Player.TotalMagicalDamage * 100));
-                }
+                        (float)
+                        Player.CalcDamage(target, Damage.DamageType.Magical,
+                            75/Player.TotalAttackDamage*100 + 50/Player.TotalMagicalDamage*100);
             }
             return totalDamage;
         }
@@ -375,19 +388,19 @@ using EloBuddy;
             {
                 var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
 
-                if (target == null || !target.IsValidTarget())
+                if ((target == null) || !target.IsValidTarget())
                     return;
 
-                if (target.Health < Q.GetDamage(target) + GetSheenDamage(target) && Q.IsReady())
+                if ((target.Health < Q.GetDamage(target) + GetSheenDamage(target)) && Q.IsReady())
                     Q.CastOnUnit(target);
 
-                if (target.Health < E.GetDamage(target) && E.IsReady())
+                if ((target.Health < E.GetDamage(target)) && E.IsReady())
                     E.CastOnUnit(target);
             }
         }
 
         /// <summary>
-        /// Combo Mode
+        ///     Combo Mode
         /// </summary>
         public static void Combo()
         {
@@ -397,7 +410,7 @@ using EloBuddy;
             var useR = Menu.Item("r.combo").GetValue<bool>();
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
             //var targetextend = TargetSelector.GetTarget();
-            if (target == null || !target.IsValidTarget())
+            if ((target == null) || !target.IsValidTarget())
                 return;
 
             //Chat.Print("Q Damage: " + Q.GetDamage(target) + " Sheen Damage:" + GetSheenDamage(target));
@@ -417,12 +430,13 @@ using EloBuddy;
                 Q.CastOnUnit(target);
                 if (E.Instance.IsReady() && target.IsValidTarget(E.Range) && usee)
                     E.CastOnUnit(target);
-                if (W.Instance.IsReady() && usew && target.IsValidTarget(Player.AttackRange)) // Yes lads E.Range is intentionally here :gosh:
+                if (W.Instance.IsReady() && usew && target.IsValidTarget(Player.AttackRange))
+                    // Yes lads E.Range is intentionally here :gosh:
                     W.Cast();
                 if (target.IsValidTarget(R.Range) && useR)
                 {
                     var pred = R.GetPrediction(target);
-                    if (pred.Hitchance >= HitChance.High && HasRBuff())
+                    if ((pred.Hitchance >= HitChance.High) && HasRBuff())
                     {
                         if (OktwCommon.CollisionYasuo(Player.Position, pred.CastPosition))
                             return;
@@ -436,7 +450,8 @@ using EloBuddy;
                     Q.CastOnUnit(target);
                 if (E.Instance.IsReady() && usee && target.IsValidTarget(E.Range))
                     E.CastOnUnit(target);
-                if (W.Instance.IsReady() && usew && target.IsValidTarget(Player.AttackRange)) // Yes lads E.Range is intentionally here :gosh:
+                if (W.Instance.IsReady() && usew && target.IsValidTarget(Player.AttackRange))
+                    // Yes lads E.Range is intentionally here :gosh:
                     W.Cast();
                 if (R.Instance.IsReady() && useR && target.IsValidTarget(R.Range))
                 {
@@ -452,7 +467,7 @@ using EloBuddy;
         }
 
         /// <summary>
-        /// LaneClear Mode
+        ///     LaneClear Mode
         /// </summary>
         public static void LaneClear()
         {
@@ -463,34 +478,32 @@ using EloBuddy;
             var lce = Menu.Item("LCE").GetValue<bool>();
             var lcwslider = Menu.Item("LCWSlider").GetValue<Slider>().Value;
 
-            var minionq =
-                MinionManager.GetMinions(Q.Range)
-                    .FirstOrDefault(x => Q.GetDamage(x) + GetSheenDamage(x) > x.Health);
-
-            var minionwe = MinionManager.GetMinions(275);
-
-            if (minionq == null)
-                return;
-
             if (lcq && Q.Instance.IsReady())
             {
-                Q.CastOnUnit(minionq);
+                var minionq =
+                    MinionManager.GetMinions(Player.Position, Q.Range)
+                        .FirstOrDefault(x => Q.GetDamage(x) + GetSheenDamage(x) > x.Health);
+
+                if (minionq != null)
+                    Q.Cast(minionq);
             }
+
+            var minionwe = Cache.GetMinions(Player.Position, 275);
 
             if (minionwe == null)
                 return;
 
             foreach (var minion in minionwe)
             {
-                if (W.Instance.IsReady() && lcw && minion.HealthPercent > 5 && minionwe.Count > lcwslider)
+                if (W.Instance.IsReady() && lcw && (minion.HealthPercent > 5) && (minionwe.Count > lcwslider))
                     W.Cast();
-                if (E.Instance.IsReady() && lce && minion.Health < E.GetDamage(minion) && lce)
+                if (E.Instance.IsReady() && lce && (minion.Health < E.GetDamage(minion)) && lce)
                     E.CastOnUnit(minion);
             }
         }
 
         /// <summary>
-        /// Harass Mode
+        ///     Harass Mode
         /// </summary>
         public static void Harass()
         {
@@ -502,7 +515,7 @@ using EloBuddy;
 
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
 
-            if (target == null || !target.IsValidTarget())
+            if ((target == null) || !target.IsValidTarget())
                 return;
 
             if (Q.IsReady() && harassq)
@@ -520,13 +533,11 @@ using EloBuddy;
             }
 
             if (harasse && E.IsReady() && !Q.IsReady())
-            {
                 if (target.IsValidTarget(E.Range))
                 {
                     E.CastOnUnit(target);
                     Orbwalker.ForceTarget(target);
                 }
-            }
         }
     }
 }

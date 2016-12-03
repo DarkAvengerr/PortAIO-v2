@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
-using EloBuddy;
 
+using EloBuddy; 
+using LeagueSharp.Common; 
 namespace SharpShooter
 {
     internal static class ExtraExtensions
@@ -19,7 +20,7 @@ namespace SharpShooter
         internal static bool IsKillableAndValidTarget(this AIHeroClient target, double calculatedDamage,
             TargetSelector.DamageType damageType, float distance = float.MaxValue)
         {
-            if (target == null || !target.IsValidTarget(distance) || target.CharData.BaseSkinName == "gangplankbarrel")
+            if (target == null || !target.IsValidTarget(distance) || target.BaseSkinName == "gangplankbarrel")
                 return false;
 
             if (target.HasBuff("kindredrnodeathbuff"))
@@ -94,7 +95,7 @@ namespace SharpShooter
         {
             if (target == null || !target.IsValidTarget(distance) || target.Health <= 0 ||
                 target.HasBuffOfType(BuffType.SpellImmunity) || target.HasBuffOfType(BuffType.SpellShield) ||
-                target.CharData.BaseSkinName == "gangplankbarrel")
+                target.BaseSkinName == "gangplankbarrel")
                 return false;
 
             if (ObjectManager.Player.HasBuff("summonerexhaust"))
@@ -106,11 +107,11 @@ namespace SharpShooter
                 if (dragonSlayerBuff.Count >= 4)
                     calculatedDamage += dragonSlayerBuff.Count == 5 ? calculatedDamage * 0.30 : calculatedDamage * 0.15;
 
-                if (target.CharData.BaseSkinName.ToLowerInvariant().Contains("dragon"))
+                if (target.BaseSkinName.ToLowerInvariant().Contains("dragon"))
                     calculatedDamage *= 1 - dragonSlayerBuff.Count * 0.07;
             }
 
-            if (target.CharData.BaseSkinName.ToLowerInvariant().Contains("baron") &&
+            if (target.BaseSkinName.ToLowerInvariant().Contains("baron") &&
                 ObjectManager.Player.HasBuff("barontarget"))
                 calculatedDamage *= 0.5;
 
@@ -122,7 +123,7 @@ namespace SharpShooter
         internal static bool IsKillableAndValidTarget(this Obj_AI_Base target, double calculatedDamage,
             TargetSelector.DamageType damageType, float distance = float.MaxValue)
         {
-            if (target == null || !target.IsValidTarget(distance) || target.CharData.BaseSkinName == "gangplankbarrel")
+            if (target == null || !target.IsValidTarget(distance) || target.BaseSkinName == "gangplankbarrel")
                 return false;
 
             if (target.HasBuff("kindredrnodeathbuff"))
@@ -173,14 +174,14 @@ namespace SharpShooter
             if (ObjectManager.Player.HasBuff("summonerexhaust"))
                 calculatedDamage *= 0.6;
 
-            if (target.CharData.BaseSkinName == "Blitzcrank")
+            if (target.BaseSkinName == "Blitzcrank")
                 if (!target.HasBuff("manabarriercooldown"))
                     if (target.Health + target.HPRegenRate +
                         (damageType == TargetSelector.DamageType.Physical ? target.AttackShield : target.MagicShield) +
                         target.Mana * 0.6 + target.PARRegenRate < calculatedDamage)
                         return true;
 
-            if (target.CharData.BaseSkinName == "Garen")
+            if (target.BaseSkinName == "Garen")
                 if (target.HasBuff("GarenW"))
                     calculatedDamage *= 0.7;
 
@@ -195,11 +196,11 @@ namespace SharpShooter
                     if (dragonSlayerBuff.Count >= 4)
                         calculatedDamage += dragonSlayerBuff.Count == 5 ? calculatedDamage * 0.30 : calculatedDamage * 0.15;
 
-                    if (target.CharData.BaseSkinName.ToLowerInvariant().Contains("dragon"))
+                    if (target.BaseSkinName.ToLowerInvariant().Contains("dragon"))
                         calculatedDamage *= 1 - dragonSlayerBuff.Count * 0.07;
                 }
 
-            if (target.CharData.BaseSkinName.ToLowerInvariant().Contains("baron") &&
+            if (target.BaseSkinName.ToLowerInvariant().Contains("baron") &&
                 ObjectManager.Player.HasBuff("barontarget"))
                 calculatedDamage *= 0.5;
 

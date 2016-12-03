@@ -7,7 +7,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Summoners
+namespace Activator.Summoners
 {
     internal class smite : CoreSum
     {
@@ -103,7 +103,7 @@ using LeagueSharp.Common;
 
             foreach (var minion in MinionManager.GetMinions(900f, MinionTypes.All, MinionTeam.Neutral))
             {
-                var damage = Player.Spellbook.GetSpell(Activator.Smite).State == SpellState.Ready
+                var damage = ObjectManager.Player.Spellbook.GetSpell(Activator.Smite).State == SpellState.Ready
                     ? (float) Player.GetSummonerSpellDamage(minion, Damage.SummonerSpell.Smite)
                     : 0;
 
@@ -120,7 +120,7 @@ using LeagueSharp.Common;
 
                         if (damage >= minion.Health && IsReady())
                         {
-                            Player.Spellbook.CastSpell(Activator.Smite, minion);
+                            ObjectManager.Player.Spellbook.CastSpell(Activator.Smite, minion);
                         }
                     }
 
@@ -134,7 +134,7 @@ using LeagueSharp.Common;
                         }
 
                         if (damage >= minion.Health && IsReady())
-                            Player.Spellbook.CastSpell(Activator.Smite, minion);
+                            ObjectManager.Player.Spellbook.CastSpell(Activator.Smite, minion);
                     }
 
                     if (Helpers.IsEpicMinion(minion) && Menu.Item("smitesuper").GetValue<bool>())
@@ -147,7 +147,7 @@ using LeagueSharp.Common;
                         }
 
                         if (damage >= minion.Health && IsReady())
-                            Player.Spellbook.CastSpell(Activator.Smite, minion);
+                            ObjectManager.Player.Spellbook.CastSpell(Activator.Smite, minion);
                     }
                 }
             }
@@ -171,7 +171,7 @@ using LeagueSharp.Common;
                                         h.Player.IsValidTarget(500) && !h.Player.IsZombie &&
                                         h.Player.Health <= 20 + 8 * Player.Level))
                         {
-                            Player.Spellbook.CastSpell(Activator.Smite, hero.Player);
+                            ObjectManager.Player.Spellbook.CastSpell(Activator.Smite, hero.Player);
                         }
                     }
 
@@ -185,7 +185,7 @@ using LeagueSharp.Common;
                             var t = TargetSelector.GetTarget(700f, TargetSelector.DamageType.True);
                             if (t.IsValidTarget(500))
                             {
-                                Player.Spellbook.CastSpell(Activator.Smite, t);
+                                ObjectManager.Player.Spellbook.CastSpell(Activator.Smite, t);
                             }
                         }
                     }

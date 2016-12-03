@@ -7,7 +7,7 @@ using SebbyLib;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace OneKeyToWin_AIO_Sebby.Champions
+namespace OneKeyToWin_AIO_Sebby.Champions
 {
     class Brand : Base
     {
@@ -118,7 +118,7 @@ using LeagueSharp.Common;
 
         private void LogicQ()
         {
-            var t = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
+            var t = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
             if (t.IsValidTarget())
             {
                 if (OktwCommon.GetKsDamage(t, Q) + BonusDmg(t) + OktwCommon.GetEchoLudenDamage(t) > t.Health)
@@ -160,7 +160,7 @@ using LeagueSharp.Common;
 
         private void LogicW()
         {
-            var t = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
+            var t = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
             if (t.IsValidTarget())
             {
                 if (Program.Combo && Player.Mana > RMANA + WMANA)
@@ -196,7 +196,7 @@ using LeagueSharp.Common;
 
         private void LogicE()
         {
-            var t = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
+            var t = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
             if (t.IsValidTarget())
             {
                 if (Program.Combo && Player.Mana > RMANA + EMANA)

@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using LeagueSharp;
 using LeagueSharp.Common;
-using EloBuddy;
 
+using EloBuddy; 
+using LeagueSharp.Common; 
 namespace SharpShooter
 {
     internal class Initializer
@@ -11,20 +12,6 @@ namespace SharpShooter
         {
             Console.WriteLine("SharpShooter: HelloWorld!");
 
-            var now = DateTime.Now;
-            if (now.Month == 4 && now.Day == 1 && ObjectManager.Player.InFountain())
-            {
-                Chat.Print("Your license to use SharpShooter has expired. you can buy a license to use SharpShooter for 1 month for $200, 6 months for only $1000. if you want to renew your license, contact xcsoft");
-                LeagueSharp.Common.Utility.DelayAction.Add(10000, Load);
-                LeagueSharp.Common.Utility.DelayAction.Add(11000, () => Chat.Print("it was a joke. sorry."));
-                return;
-            }
-
-            Load();
-        }
-
-        private static void Load()
-        {
             MenuProvider.Initialize();
 
             if (PluginLoader.LoadPlugin(ObjectManager.Player.ChampionName))
@@ -35,6 +22,7 @@ namespace SharpShooter
                 Activator.Load();
             }
 
+            
             MenuProvider.SupportedChampions.AddItem("1. Ashe");
             MenuProvider.SupportedChampions.AddItem("2. Caitlyn");
             MenuProvider.SupportedChampions.AddItem("3. Corki");

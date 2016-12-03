@@ -9,8 +9,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Azir_Creator_of_Elo
+using LeagueSharp.Common; 
+namespace Azir_Creator_of_Elo
 {
     internal class AzirMain
     {
@@ -57,14 +57,15 @@ using EloBuddy;
 
         public AzirMain()
         {
+
             tittle = "[Azir]Azir Updated June 2016";
             version = "1.0.1.2";
-            OnLoad();
+            OnLoad(new EventArgs());
         }
 
         public AIHeroClient Hero => HeroManager.Player;
 
-        private void OnLoad()
+        private void OnLoad(EventArgs args)
         {
             if (Hero.ChampionName != "Azir") return;
 

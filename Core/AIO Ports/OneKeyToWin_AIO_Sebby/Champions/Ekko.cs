@@ -7,7 +7,7 @@ using SebbyLib;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace OneKeyToWin_AIO_Sebby.Champions
+namespace OneKeyToWin_AIO_Sebby.Champions
 {
     class Ekko : Base
     {

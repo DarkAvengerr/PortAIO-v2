@@ -7,7 +7,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace TheCassiopeia.Commons.ComboSystem
+namespace TheCassiopeia.Commons.ComboSystem
 {
     public class ComboProvider
     {

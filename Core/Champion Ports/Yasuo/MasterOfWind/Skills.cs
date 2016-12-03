@@ -8,8 +8,8 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace MasterOfWind
+using LeagueSharp.Common; 
+namespace MasterOfWind
 {
     class Skills 
     {

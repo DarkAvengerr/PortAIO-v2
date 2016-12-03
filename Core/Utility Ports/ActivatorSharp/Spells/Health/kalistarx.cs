@@ -6,7 +6,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Spells.Health
+namespace Activator.Spells.Health
 {
     internal class kalistarx : CoreSpell
     {

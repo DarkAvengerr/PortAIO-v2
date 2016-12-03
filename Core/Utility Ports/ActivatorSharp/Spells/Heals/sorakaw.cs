@@ -4,7 +4,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Spells.Heals
+namespace Activator.Spells.Heals
 {
     class sorakaw : CoreSpell
     {

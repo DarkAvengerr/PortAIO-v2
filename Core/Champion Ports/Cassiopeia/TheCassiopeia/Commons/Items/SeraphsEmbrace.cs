@@ -8,7 +8,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace TheCassiopeia.Commons.Items
+namespace TheCassiopeia.Commons.Items
 {
     class SeraphsEmbrace : IActivateableItem
     {
@@ -29,7 +29,7 @@ using LeagueSharp.Common;
                 {
                     if (args.Target != null && args.Target.IsValid && args.Target.IsMe)
                     {
-                        Use(sender.Owner as Obj_AI_Base);
+                        Use(sender.Owner);
                         return;
                     }
 

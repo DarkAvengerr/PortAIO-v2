@@ -1,17 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DrawDamage.cs.cs" company="SurvivorRyze">
+//      Copyright (c) SurvivorRyze. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
+using System;
+using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SharpDX;
-using Color = System.Drawing.Color;
-using EloBuddy;
 
+using EloBuddy; 
+using LeagueSharp.Common; 
 namespace SurvivorRyze
 {
-    class DrawDamage
+    internal class DrawDamage
     {
         public delegate float DamageToUnitDelegate(AIHeroClient hero);
 
@@ -36,33 +39,29 @@ namespace SurvivorRyze
             set
             {
                 if (_damageToUnit == null)
-                {
                     Drawing.OnDraw += Drawing_OnDraw;
-                }
                 _damageToUnit = value;
             }
         }
 
         private static void Drawing_OnDraw(EventArgs args)
         {
-            if (!Enabled || _damageToUnit == null)
-            {
+            if (!Enabled || (_damageToUnit == null))
                 return;
-            }
 
             foreach (var unit in HeroManager.Enemies.Where(h => h.IsValid && h.IsHPBarRendered))
             {
                 var barPos = unit.HPBarPosition;
                 var damage = _damageToUnit(unit);
-                var percentHealthAfterDamage = Math.Max(0, unit.Health - damage) / unit.MaxHealth;
+                var percentHealthAfterDamage = Math.Max(0, unit.Health - damage)/unit.MaxHealth;
                 var yPos = barPos.Y + YOffset;
-                var xPosDamage = barPos.X + XOffset + Width * percentHealthAfterDamage;
-                var xPosCurrentHp = barPos.X + XOffset + Width * unit.Health / unit.MaxHealth;
+                var xPosDamage = barPos.X + XOffset + Width*percentHealthAfterDamage;
+                var xPosCurrentHp = barPos.X + XOffset + Width*unit.Health/unit.MaxHealth;
 
                 if (damage > unit.Health)
                 {
-                    Text.X = (int)barPos.X + XOffset;
-                    Text.Y = (int)barPos.Y + YOffset - 13;
+                    Text.X = (int) barPos.X + XOffset;
+                    Text.Y = (int) barPos.Y + YOffset - 13;
                     Text.text = "Killable: " + (unit.Health - damage);
                     Text.OnEndScene();
                 }
@@ -71,13 +70,11 @@ namespace SurvivorRyze
 
                 if (Fill)
                 {
-                    float differenceInHP = xPosCurrentHp - xPosDamage;
-                    var pos1 = barPos.X + 9 + (107 * percentHealthAfterDamage);
+                    var differenceInHP = xPosCurrentHp - xPosDamage;
+                    var pos1 = barPos.X + 9 + 107*percentHealthAfterDamage;
 
-                    for (int i = 0; i < differenceInHP; i++)
-                    {
+                    for (var i = 0; i < differenceInHP; i++)
                         Drawing.DrawLine(pos1 + i, yPos, pos1 + i, yPos + Height, 1, FillColor);
-                    }
                 }
             }
         }

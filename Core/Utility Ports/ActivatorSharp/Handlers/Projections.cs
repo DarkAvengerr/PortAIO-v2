@@ -8,7 +8,7 @@ using Activator.Data;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Handlers
+namespace Activator.Handlers
 {
     public class HPInstance
     {
@@ -35,7 +35,6 @@ using LeagueSharp.Common;
         {
             GameObject.OnCreate += MissileClient_OnSpellMissileCreate;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnUnitSpellCast;
-            Obj_AI_Base.OnPlayAnimation += AIHeroClient_OnPlayAnimation;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnStealth;
         }
 
@@ -107,7 +106,7 @@ using LeagueSharp.Common;
 
             var dmg = AddDamage(hpred, hero, notes);
             var extendedEndtime = Activator.Origin.Item("lagtolerance").GetValue<Slider>().Value * 10;
-            LeagueSharp.Common.Utility.DelayAction.Add(expiry + extendedEndtime, () => RemoveDamage(dmg));
+            LeagueSharp.Common.Utility.DelayAction.Add(expiry + extendedEndtime, () => RemoveDamage(dmg, notes));
         }
 
         public static int AddDamage(HPInstance hpi, Base.Champion hero, string notes)
@@ -118,66 +117,68 @@ using LeagueSharp.Common;
             var aiHero = Activator.Allies().Find(x => x.Player.NetworkId == hero.Player.NetworkId);
             if (aiHero != null && !IncomeDamage.ContainsKey(id))
             {
-                bool checkmenu = false;
-
-                switch (hpi.HitType)
+                if (aiHero.Player.IsValidTarget(float.MaxValue, false) && !aiHero.Player.IsZombie)
                 {
-                    case HitType.Spell:
-                        aiHero.AbilityDamage += hpi.PredictedDmg;
-                        aiHero.HitTypes.Add(HitType.Spell);
-                        checkmenu = true;
-                        break;
-                    case HitType.Buff:
-                        aiHero.BuffDamage += hpi.PredictedDmg;
-                        aiHero.HitTypes.Add(HitType.Buff);
-                        break;
-                    case HitType.Troy:
-                        aiHero.TroyDamage += hpi.PredictedDmg;
-                        aiHero.HitTypes.Add(HitType.Troy);
-                        checkmenu = true;
-                        break;
-                    case HitType.Item:
-                        aiHero.ItemDamage += hpi.PredictedDmg;
-                        aiHero.HitTypes.Add(HitType.Spell);
-                        break;
-                    case HitType.TurretAttack:
-                        aiHero.TowerDamage += hpi.PredictedDmg;
-                        aiHero.HitTypes.Add(HitType.TurretAttack);
-                        break;
-                    case HitType.MinionAttack:
-                        aiHero.MinionDamage += hpi.PredictedDmg;
-                        aiHero.HitTypes.Add(HitType.MinionAttack);
-                        break;
-                    case HitType.AutoAttack:
-                        aiHero.AbilityDamage += hpi.PredictedDmg;
-                        aiHero.HitTypes.Add(HitType.AutoAttack);
-                        break;
-                    case HitType.Stealth:
-                        aiHero.HitTypes.Add(HitType.Stealth);
-                        checkmenu = true;
-                        break;
-                }
+                    bool checkmenu = false;
 
-                if (checkmenu && !string.IsNullOrEmpty(hpi.Name)) // QWER Only
-                {
-                    // add spell flags
-                    hero.HitTypes.AddRange(
-                        Lists.MenuTypes.Where(
-                            x => Activator.Origin.Item(
-                                hpi.Name.ToLower() + x.ToString().ToLower()).GetValue<bool>()));
-                }
+                    switch (hpi.HitType)
+                    {
+                        case HitType.Spell:
+                            aiHero.AbilityDamage += hpi.PredictedDmg;
+                            aiHero.HitTypes.Add(HitType.Spell);
+                            checkmenu = true;
+                            break;
+                        case HitType.Buff:
+                            aiHero.BuffDamage += hpi.PredictedDmg;
+                            aiHero.HitTypes.Add(HitType.Buff);
+                            if (notes == "aura.Evade")
+                                aiHero.HitTypes.Add(HitType.Ultimate);
+                            break;
+                        case HitType.Troy:
+                            aiHero.TroyDamage += hpi.PredictedDmg;
+                            aiHero.HitTypes.Add(HitType.Troy);
+                            aiHero.HitTypes.AddRange(hpi.Data.HitTypes);
+                            break;
+                        case HitType.Item:
+                            aiHero.ItemDamage += hpi.PredictedDmg;
+                            aiHero.HitTypes.Add(HitType.Spell);
+                            break;
+                        case HitType.TurretAttack:
+                            aiHero.TowerDamage += hpi.PredictedDmg;
+                            aiHero.HitTypes.Add(HitType.TurretAttack);
+                            break;
+                        case HitType.MinionAttack:
+                            aiHero.MinionDamage += hpi.PredictedDmg;
+                            aiHero.HitTypes.Add(HitType.MinionAttack);
+                            break;
+                        case HitType.AutoAttack:
+                            aiHero.AbilityDamage += hpi.PredictedDmg;
+                            aiHero.HitTypes.Add(HitType.AutoAttack);
+                            break;
+                        case HitType.Stealth:
+                            aiHero.HitTypes.Add(HitType.Stealth);
+                            break;
+                    }
 
-                if (hpi.HitType == HitType.Stealth)
-                    hpi.PredictedDmg = 0;
+                    if (checkmenu && !string.IsNullOrEmpty(hpi.Name)) // QWER Only
+                    {
+                        // add spell flags
+                        hero.HitTypes.AddRange(
+                            Lists.MenuTypes.Where(
+                                x => Activator.Origin.Item(
+                                    hpi.Name.ToLower() + x.ToString().ToLower()).GetValue<bool>()));
+                    }
 
-                if (Activator.Origin.Item("acdebug").GetValue<bool>())
-                {
-                    Console.WriteLine(hpi.TargetHero.ChampionName + " [added]: " + hpi.Name + " - " 
-                        + hpi.PredictedDmg + " / " + hpi.HitType + " / " + notes);
-                }
+                    if (hpi.HitType == HitType.Stealth)
+                        hpi.PredictedDmg = 0;
 
-                if (hero.Player.IsValidTarget(float.MaxValue, false))
-                {
+                    if (Activator.Origin.Item("acdebug").GetValue<bool>())
+                    {
+                        Console.WriteLine(
+                            hpi.TargetHero.ChampionName + " << [added]: " + hpi.Name + " - " 
+                                + hpi.PredictedDmg + " / " + hpi.HitType + " / " + notes);
+                    }
+
                     hpi.Id = id;
                     OnPredictDamage?.Invoke();
                     IncomeDamage.Add(id, hpi);
@@ -187,7 +188,7 @@ using LeagueSharp.Common;
             return id;
         }
 
-        public static void RemoveDamage(int id)
+        public static void RemoveDamage(int id, string notes)
         {
             var entry = IncomeDamage.Find(x => x.Key == id);
             if (IncomeDamage.ContainsKey(entry.Key))
@@ -208,11 +209,13 @@ using LeagueSharp.Common;
                         case HitType.Buff:
                             aiHero.BuffDamage -= hpi.PredictedDmg;
                             aiHero.HitTypes.Remove(HitType.Buff);
+                            if (notes == "aura.Evade")
+                                aiHero.HitTypes.Remove(HitType.Ultimate);
                             break;
                         case HitType.Troy:
                             aiHero.TroyDamage -= hpi.PredictedDmg;
                             aiHero.HitTypes.Remove(HitType.Troy);
-                            checkmenu = true;
+                            aiHero.HitTypes.RemoveAll(x => hpi.Data.HitTypes.Contains(x));
                             break;
                         case HitType.Item:
                             aiHero.ItemDamage -= hpi.PredictedDmg;
@@ -248,18 +251,19 @@ using LeagueSharp.Common;
 
                     if (Activator.Origin.Item("acdebug").GetValue<bool>())
                     {
-                        Console.WriteLine(hpi.TargetHero.ChampionName + " [removed]: " + hpi.Name + " - "
-                                          + hpi.PredictedDmg + " / " + hpi.HitType);
+                        Console.WriteLine(hpi.TargetHero.ChampionName + " >> [removed]: " + hpi.Name + " - " +
+                                          hpi.PredictedDmg + " / " + hpi.HitType + " / " + notes);
                     }
 
                     IncomeDamage.Remove(id);
                 }
                 else
                 {
-                    var nullHero = Activator.Heroes.FirstOrDefault(x => x.Player.NetworkId == hpi.TargetHero.NetworkId);
-                    if (nullHero != null)
+                    // died in combat feelsbadman
+                    var deadHero = Activator.Heroes.FirstOrDefault(x => x.Player.NetworkId == hpi.TargetHero.NetworkId);
+                    if (deadHero != null)
                     {
-                        Helpers.ResetIncomeDamage(nullHero);
+                        Helpers.ResetIncomeDamage(deadHero);
                     }
                 }
             }
@@ -346,7 +350,7 @@ using LeagueSharp.Common;
                 var clientdata = new Gamedata
                 {
                     SDataName = args.SData.Name.ToLower(),
-                    ChampionName = aiHero.CharData.BaseSkinName.ToLower(),
+                    ChampionName = aiHero.BaseSkinName.ToLower(),
                     Slot = args.Slot,
                     Radius = args.SData.LineWidth > 0
                         ? args.SData.LineWidth : (args.SData.CastRadiusSecondary > 0 
@@ -427,7 +431,7 @@ using LeagueSharp.Common;
                                     ObjectManager.Get<GameObject>()
                                         .FirstOrDefault(
                                             x =>
-                                                data.FromObject != null && x.Name.ToLower().Contains("red") &&
+                                                data.FromObject != null && // todo: actually get team
                                                 data.FromObject.Any(y => x.Name.Contains(y)));
                             }
 
@@ -459,7 +463,7 @@ using LeagueSharp.Common;
                                     ObjectManager.Get<GameObject>()
                                         .FirstOrDefault(
                                             x =>
-                                                data.FromObject != null && x.Name.ToLower().Contains("red") &&
+                                                data.FromObject != null && // todo: actually get team 
                                                 data.FromObject.Any(y => x.Name.Contains(y)));
                             }
 
@@ -620,7 +624,7 @@ using LeagueSharp.Common;
                         gplist.AddRange(ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 x =>
-                                    x.CharData.BaseSkinName == "gangplankbarrel" &&
+                                    x.BaseSkinName == "gangplankbarrel" &&
                                     x.Position.Distance(x.Position) <= 375 && x.IsHPBarRendered)
                             .OrderBy(y => y.Position.Distance(hero.Player.ServerPosition)));
 
@@ -634,7 +638,7 @@ using LeagueSharp.Common;
                                     dmg = dmg * 2;
                                 }
 
-                                PredictTheDamage(aiHero, hero, new Gamedata(), HitType.Spell, "enemy.GankplankBarrel", dmg);
+                                PredictTheDamage(attacker, hero, new Gamedata(), HitType.Spell, "enemy.GankplankBarrel", dmg);
                             }
                         }
                     }
@@ -736,47 +740,6 @@ using LeagueSharp.Common;
             #endregion    
         }
 
-        private static void AIHeroClient_OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
-        {
-            if (!(sender is AIHeroClient))
-                return;
-
-            var aiHero = (AIHeroClient) sender;
-
-            #region Jax
-
-            var data = Gamedata.CachedSpells.Find(x => x.SDataName.ToLower() == "jaxcounterstrike");
-            if (data != null)
-            {
-                if (aiHero.ChampionName == "Jax" && aiHero.IsEnemy)
-                {
-                    if (args.Animation == "Spell3")
-                    {
-                        LeagueSharp.Common.Utility.DelayAction.Add(Game.Ping + 100, () =>
-                        {
-                            if (aiHero.HasBuff("JaxCounterStrike"))
-                            {
-                                var buff = aiHero.GetBuff("JaxCounterStrike");
-                                var time = (int) ((buff.EndTime - buff.StartTime) * 1000);
-
-                                foreach (var hero in Activator.Allies())
-                                {
-                                    if (aiHero.Distance(hero.Player) <= 250)
-                                    {
-                                        PredictTheDamage(aiHero, hero, data, HitType.Spell, "enemy.JaxE", 0f, time);
-                                    }
-                                }
-                            }
-                        });
-                    }
-                }
-            }
-
-            #endregion
-
-            // more bro science soon ;)
-        }
-
         private static void Obj_AI_Base_OnStealth(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             #region Stealth
@@ -793,7 +756,7 @@ using LeagueSharp.Common;
                 {
                     if (entry.SDataName.ToLower() == args.SData.Name.ToLower())
                     {
-                        PredictTheDamage(sender, hero, new Gamedata(), HitType.Stealth, "process.OnStealth");
+                        PredictTheDamage(sender, hero, new Gamedata { SDataName = "Stealth" }, HitType.Stealth, "process.OnStealth");
                         break;
                     }
                 }

@@ -7,7 +7,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace e.Motion_Katarina
+namespace e.Motion_Katarina
 {
     static class Logic
     {
@@ -49,9 +49,13 @@ using LeagueSharp.Common;
                     break;
                 case Orbwalking.OrbwalkingMode.LaneClear:
                     LaneClear();
+                    JungleClear();
                     break;
                 case Orbwalking.OrbwalkingMode.LastHit:
                     Lasthit();
+                    break;
+                case Orbwalking.OrbwalkingMode.Mixed:
+                    Harass();
                     break;
             }
         }
@@ -61,7 +65,7 @@ using LeagueSharp.Common;
             Q = new Spell(SpellSlot.Q,625);
             W = new Spell(SpellSlot.W,200);
             E = new Spell(SpellSlot.E,725);
-            R = new Spell(SpellSlot.R);
+            R = new Spell(SpellSlot.R,550);
         }
 
         private static void Combo() //Still need to apply permutation - Probably Finished
@@ -95,6 +99,7 @@ using LeagueSharp.Common;
                     QLogic(true);
                     WLogic();
                     ELogic(enemy);
+
                 }
                 if(enemy.Distance(Player) < E.Range && E.GetDamage(enemy) >= enemy.Health)
                 {
@@ -135,7 +140,7 @@ using LeagueSharp.Common;
         private static void WLogic()
         {
             //Maybe needs some adjustment for Passive Resets
-            if (HeroManager.Enemies.Any(e => !e.IsDead && e.Distance(Player) <= 200))
+            if (HeroManager.Enemies.Any(e => !e.IsDead && e.Distance(Player) <= 275))
             {
                 W.Cast();
             }
@@ -166,14 +171,14 @@ using LeagueSharp.Common;
             }
             if(Config.GetBoolValue("combo.ealways"))
             {
-                E.Cast(target);
+                E.Cast(target.Position.Extend(Player.Position,-50));
             }
         }
 
         private static void RLogic()
         {
             AIHeroClient target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-            if (target != null && R.IsReady() && target.Distance(Player) < R.Range)
+            if (target != null && R.IsReady() && target.Distance(Player) < (E.IsReady() && Config.GetBoolValue("combo.e") ? E.Range : R.Range - 200))
             {
                 if (E.IsReady() && Config.GetBoolValue("combo.e"))
                 {
@@ -183,7 +188,7 @@ using LeagueSharp.Common;
                 {
                     W.Cast();
                 }
-                if ((!E.IsReady() || !Config.GetBoolValue("combo.e")) && (!W.IsReady() || !Config.GetBoolValue("combo.w")))
+                if ((!E.IsReady() || !Config.GetBoolValue("combo.e")) && (!W.IsReady() || !Config.GetBoolValue("combo.w")) && target.Distance(Player) <= R.Range)
                 {
                     R.Cast();
                 }
@@ -256,7 +261,7 @@ using LeagueSharp.Common;
             }
             if (Config.GetBoolValue("jungleclear.w") && W.IsReady())
             {
-                if (MinionManager.GetMinions(Player.Position, W.Range, MinionTypes.All, MinionTeam.Neutral).Count >= 1)
+                if (MinionManager.GetMinions(Player.Position, W.Range, MinionTypes.All, MinionTeam.Neutral).Any())
                 {
                     W.Cast();
                 }
@@ -268,6 +273,22 @@ using LeagueSharp.Common;
                 {
                     E.Cast(defaultMinion);
                 }
+            }
+        }
+
+        private static void Harass()
+        {
+            if (Config.GetBoolValue("harass.q"))
+            {
+                QLogic(true);
+            }
+            if (Config.GetBoolValue("harass.w"))
+            {
+                WLogic();
+            }
+            if (Config.GetBoolValue("harass.e"))
+            {
+                ELogic();
             }
         }
 

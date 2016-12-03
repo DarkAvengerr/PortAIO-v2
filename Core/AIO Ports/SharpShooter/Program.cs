@@ -1,6 +1,8 @@
-﻿using System;
+using System;
 using LeagueSharp.Common;
 
+using EloBuddy; 
+using LeagueSharp.Common; 
 namespace SharpShooter
 {
     internal class Program

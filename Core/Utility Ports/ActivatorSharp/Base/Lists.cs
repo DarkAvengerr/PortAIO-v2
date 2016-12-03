@@ -15,7 +15,7 @@ using System.Collections.Generic;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Base
+namespace Activator.Base
 {
     public class Lists
     {

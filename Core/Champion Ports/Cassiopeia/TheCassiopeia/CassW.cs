@@ -12,7 +12,7 @@ using Prediction = TheCassiopeia.Commons.Prediction.Prediction;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace TheCassiopeia
+namespace TheCassiopeia
 {
     class CassW : Skill
     {

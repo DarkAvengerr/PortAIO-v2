@@ -7,7 +7,7 @@ using TheCassiopeia.Commons.Summoners;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace TheCassiopeia.Commons
+namespace TheCassiopeia.Commons
 {
     public class SummonerManager : IManager
     {

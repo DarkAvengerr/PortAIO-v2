@@ -1,6 +1,8 @@
-﻿using System;
+using System;
 using System.Reflection.Emit;
 
+using EloBuddy; 
+using LeagueSharp.Common; 
 namespace SharpShooter
 {
     internal class DynamicInitializer

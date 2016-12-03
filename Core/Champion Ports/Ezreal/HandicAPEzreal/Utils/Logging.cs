@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace HandicapEzreal.Utils
+namespace HandicapEzreal.Utils
 {
     using System;
     using System.Collections.Generic;

@@ -7,7 +7,7 @@ using Color = System.Drawing.Color;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace TheCassiopeia.Commons
+namespace TheCassiopeia.Commons
 {
     /*
         Note: This class is from the xSalice Religion AIO!

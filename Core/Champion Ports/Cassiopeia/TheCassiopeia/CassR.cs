@@ -12,7 +12,7 @@ using Color = System.Drawing.Color;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace TheCassiopeia
+namespace TheCassiopeia
 {
     class CassR : Skill
     {

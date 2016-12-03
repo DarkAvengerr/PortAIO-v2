@@ -5,7 +5,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Items.Consumables
+namespace Activator.Items.Consumables
 {
     class _2043 : CoreItem
     {

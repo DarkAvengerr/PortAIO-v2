@@ -193,6 +193,9 @@ namespace OneKeyToWin_AIO_Sebby
                 case "Teemo":
                     new Champions.Teemo();
                     break;
+                case "Ziggs":
+                    new Champions.Ziggs();
+                    break;
             }
             #endregion
 

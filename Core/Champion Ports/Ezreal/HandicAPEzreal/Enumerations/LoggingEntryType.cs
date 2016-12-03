@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace HandicapEzreal.Enumerations
+namespace HandicapEzreal.Enumerations
 {
     /// <summary>
     ///     The entry type.

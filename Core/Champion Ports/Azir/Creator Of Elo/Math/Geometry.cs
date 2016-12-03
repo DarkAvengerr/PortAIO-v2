@@ -10,8 +10,8 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Azir_Free_elo_Machine.Math
+using LeagueSharp.Common; 
+namespace Azir_Free_elo_Machine.Math
 {
   public  struct Points
 {

@@ -17,7 +17,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Handlers
+namespace Activator.Handlers
 {
     public class Gametroys
     {
@@ -35,7 +35,7 @@ using LeagueSharp.Common;
 
             foreach (var troy in Gametroy.Troys)
             {
-                if (troy.Included && obj.Name.Contains(troy.Name))
+                if (troy.Included && obj.Name.ToLower().Contains(troy.Name.ToLower()))
                 {
                     troy.Obj = null;
                     troy.Start = 0;
@@ -52,7 +52,7 @@ using LeagueSharp.Common;
 
             foreach (var troy in Gametroy.Troys)
             {
-                if (obj.Name.Contains(troy.Name) && obj.IsValid<GameObject>())
+                if (obj.Name.ToLower().Contains(troy.Name.ToLower()))
                 {                    
                     troy.Obj = obj;
                     troy.Start = Utils.GameTimeTickCount;
@@ -67,11 +67,9 @@ using LeagueSharp.Common;
         {
             foreach (var hero in Activator.Allies())
             {
-                var troy = Gametroy.Troys.FirstOrDefault(x => x.Included);
+                var troy = Gametroy.Troys.Find(x => x.Included);
                 if (troy == null)
-                {
                     continue;
-                }
 
                 if (!troy.Obj.IsVisible || !troy.Obj.IsValid)
                 {
@@ -80,7 +78,7 @@ using LeagueSharp.Common;
 
                 foreach (var entry in Troydata.Troys.Where(x => x.Name.ToLower() == troy.Name.ToLower()))
                 {
-                    var owner = Activator.Heroes.FirstOrDefault(x => x.Player.ChampionName.ToLower() == entry.ChampionName.ToLower());
+                    var owner = Activator.Heroes.FirstOrDefault(x => x.HeroNameMatch(entry.ChampionName));
                     if (owner == null || !owner.Player.IsEnemy)
                     {
                         continue;
@@ -92,21 +90,21 @@ using LeagueSharp.Common;
                         data = new Gamedata { SDataName = troy.Obj.Name };
 
                     if (entry.ChampionName != null && entry.Slot != SpellSlot.Unknown)
-                        data = Gamedata.CachedSpells.Find(x => x.ChampionName.ToLower() == entry.ChampionName.ToLower());
-
+                    {
+                        data = Gamedata.CachedSpells.Where(x => x.Slot == entry.Slot).Find(x => x.HeroNameMatch(entry.ChampionName));
+                        data.HitTypes = entry.HitTypes;
+                    }
+                
                     if (hero.Player.Distance(troy.Obj.Position) <= entry.Radius + hero.Player.BoundingRadius)
                     {
                         // check delay (e.g fizz bait)
                         if (Utils.GameTimeTickCount - troy.Start >= entry.DelayFromStart)
                         {
-                            if (hero.Player.IsValidTarget(float.MaxValue, false) && !hero.Player.IsZombie)
+                            // limit the damage using an interval
+                            if (Utils.GameTimeTickCount - troy.Limiter >= entry.Interval * 1000)
                             {
-                                // limit the damage using an interval
-                                if (Utils.GameTimeTickCount - troy.Limiter >= entry.Interval * 1000)
-                                {
-                                    Projections.PredictTheDamage(owner.Player, hero, data, HitType.Troy, "troy.OnUpdate");
-                                    troy.Limiter = Utils.GameTimeTickCount;
-                                }
+                                Projections.PredictTheDamage(owner.Player, hero, data, HitType.Troy, "troy.OnUpdate");
+                                troy.Limiter = Utils.GameTimeTickCount;
                             }
                         }
                     }

@@ -10,8 +10,8 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Azir_Creator_of_Elo
+using LeagueSharp.Common; 
+namespace Azir_Creator_of_Elo
 {
     class Spells
     {

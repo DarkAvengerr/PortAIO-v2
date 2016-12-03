@@ -5,7 +5,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Items.Defensives
+namespace Activator.Items.Defensives
 {
     class _3143 : CoreItem
     {
@@ -33,7 +33,7 @@ using LeagueSharp.Common;
 
         public override void OnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
-            AIHeroClient attacker = gapcloser.Sender;
+            var attacker = gapcloser.Sender;
 
             if (!Menu.Item("use" + Name).GetValue<bool>() ||
                 !Menu.Item("enemygap" + Name).GetValue<bool>() || !IsReady())

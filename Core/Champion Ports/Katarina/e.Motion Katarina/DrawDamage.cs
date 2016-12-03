@@ -7,7 +7,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace e.Motion_Katarina
+namespace e.Motion_Katarina
 {
     //C+P from SupportExTragoZ
     //Credits go to him

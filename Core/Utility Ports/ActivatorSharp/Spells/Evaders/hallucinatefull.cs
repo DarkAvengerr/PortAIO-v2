@@ -3,7 +3,7 @@ using Activator.Base;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Spells.Evaders
+namespace Activator.Spells.Evaders
 {
     internal class hallucinatefull : CoreSpell
     {

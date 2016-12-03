@@ -8,7 +8,7 @@ using SebbyLib;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace OneKeyToWin_AIO_Sebby.Champions
+namespace OneKeyToWin_AIO_Sebby.Champions
 {
     class Caitlyn : Base
     {
@@ -26,7 +26,7 @@ using LeagueSharp.Common;
             Q = new Spell(SpellSlot.Q, 1250f);
             Q1 = new Spell(SpellSlot.Q, 1250f);
             W = new Spell(SpellSlot.W, 800f);
-            E = new Spell(SpellSlot.E, 770f);
+            E = new Spell(SpellSlot.E, 830f);
             R = new Spell(SpellSlot.R, 3000f);
 
             Q.SetSkillshot(0.65f, 60f, 2200f, false, SkillshotType.SkillshotLine);
@@ -49,6 +49,7 @@ using LeagueSharp.Common;
 
             Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("autoW", "Auto W on hard CC", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("telE", "Auto W teleport", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("forceW", "Force W before E", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("bushW", "Auto W bush after enemy enter", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("bushW2", "Auto W bush and turret if full ammo", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("Wspell", "W on special spell detection", true).SetValue(true));
@@ -90,7 +91,7 @@ using LeagueSharp.Common;
                 if (ObjectManager.Get<Obj_GeneralParticleEmitter>().Any(obj => obj.IsValid && obj.Position.Distance(args.EndPosition) < 300 && obj.Name.ToLower().Contains("yordleTrap_idle_green.troy".ToLower())))
                     args.Process = false;
             }
-            if (args.Slot == SpellSlot.E && Player.Mana > RMANA + WMANA)
+            if (args.Slot == SpellSlot.E && Player.Mana > RMANA + WMANA && Config.Item("forceW", true).GetValue<bool>() )
             {
                 W.Cast(Player.Position.Extend(args.EndPosition, Player.Distance(args.EndPosition) + 50));
                 LeagueSharp.Common.Utility.DelayAction.Add(10, () => E.Cast(args.EndPosition));
@@ -161,13 +162,20 @@ using LeagueSharp.Common;
 
             if (Program.LagFree(1) && E.IsReady() && SebbyLib.Orbwalking.CanMove(40))
                 LogicE();
-            if (Program.LagFree(2) && W.IsReady() && SebbyLib.Orbwalking.CanMove(40))
+            var orbT = Orbwalker.GetTarget() as AIHeroClient;
+            if (orbT != null)
+            {
+                if (Player.GetAutoAttackDamage(orbT) * 2 > orbT.Health)
+                    return;
+            }
+            if (Program.LagFree(2) && W.IsReady() )
                 LogicW();
             if (Program.LagFree(3) && Q.IsReady() && SebbyLib.Orbwalking.CanMove(40) && Config.Item("autoQ2", true).GetValue<bool>())
                 LogicQ();
             if (Program.LagFree(4) && R.IsReady() && Config.Item("autoR", true).GetValue<bool>() && !ObjectManager.Player.UnderTurret(true) && Game.Time - QCastTime > 1)
                 LogicR();
-            return;
+            
+
         }
 
         private void LogicR()
@@ -211,24 +219,14 @@ using LeagueSharp.Common;
 
         private void LogicW()
         {
+            
             if (Player.Mana > RMANA + WMANA)
             {
-                if (Program.Combo)
-                    return;
                 if (Config.Item("autoW", true).GetValue<bool>())
                 {
                     foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(W.Range) && !OktwCommon.CanMove(enemy) && !enemy.HasBuff("caitlynyordletrapinternal")))
                     {
-                        if (Utils.TickCount - W.LastCastAttemptT > 1000)
-                        {
-                            W.Cast(enemy);
-                            LastW = enemy;
-                        }
-                        else if (LastW.NetworkId != enemy.NetworkId)
-                        {
-                            W.Cast(enemy);
-                            LastW = enemy;
-                        }
+                        W.Cast(enemy);
                     }
                 }
 
@@ -238,6 +236,8 @@ using LeagueSharp.Common;
                     if (!trapPos.IsZero)
                         W.Cast(trapPos);
                 }
+                if (!SebbyLib.Orbwalking.CanMove(40))
+                    return;
                 if ((int)(Game.Time * 10) % 2 == 0 && Config.Item("bushW2", true).GetValue<bool>())
                 {
                     if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Ammo == new int[] { 0, 3, 3, 4, 4, 5 }[W.Level] && Player.CountEnemiesInRange(1000) == 0)

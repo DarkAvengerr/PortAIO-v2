@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Azir_Creator_of_Elo
+using LeagueSharp.Common; 
+namespace Azir_Creator_of_Elo
 {
     internal class AzirModes : Modes
     {

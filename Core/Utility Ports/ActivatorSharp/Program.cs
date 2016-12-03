@@ -27,7 +27,7 @@ using Activator.Summoners;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator
+namespace Activator
 {
     internal class Activator
     {
@@ -47,6 +47,12 @@ using LeagueSharp.Common;
 
         public static System.Version Version;
         public static List<Base.Champion> Heroes = new List<Base.Champion>();
+
+        public static void Main()
+        {
+            Version = Assembly.GetExecutingAssembly().GetName().Version;
+            Game_OnGameLoad();
+        }
 
         public static void Game_OnGameLoad()
         {
@@ -115,6 +121,7 @@ using LeagueSharp.Common;
                 var bbmenu = new Menu("Debug Tools", "bbmenu");
                 bbmenu.AddItem(new MenuItem("acdebug", "Debug Income Damage")).SetValue(false);
                 bbmenu.AddItem(new MenuItem("acdebug2", "Debug Item Priority")).SetValue(false);
+                bbmenu.AddItem(new MenuItem("acdebug3", "Debug QSS/Cleanse")).SetValue(false);
                 bbmenu.AddItem(new MenuItem("dumpdata", "Dump Spell Data")).SetValue(false);
                 zmenu.AddSubMenu(bbmenu);
 
@@ -239,7 +246,7 @@ using LeagueSharp.Common;
             {
                 case 6:
                     LeagueSharp.Common.Utility.DelayAction.Add(Rand.Next(250, 950) + Math.Max(30, Game.Ping),
-                        () => { Player.Spellbook.LevelSpell(SpellSlot.R); });
+                        () => { ObjectManager.Player.Spellbook.LevelSpell(SpellSlot.R); });
                     break;
             }
         }
@@ -409,7 +416,7 @@ using LeagueSharp.Common;
         {
             foreach (AIHeroClient i in ObjectManager.Get<AIHeroClient>().Where(h => h.Team != Player.Team))
             {
-                foreach (Troydata item in Troydata.Troys.Where(x => x.ChampionName == i.ChampionName))
+                foreach (Troydata item in Troydata.Troys.Where(x => x.ChampionName.ToLower() == i.ChampionName.ToLower()))
                 {
                     TroysInGame = true;
                     Gametroy.Troys.Add(new Gametroy(i.ChampionName, item.Slot, item.Name, 0, false));
@@ -420,17 +427,17 @@ using LeagueSharp.Common;
         private static void GetSpellsInGame()
         {
             foreach (AIHeroClient i in ObjectManager.Get<AIHeroClient>().Where(h => h.Team != Player.Team))
-                foreach (Gamedata item in Gamedata.Spells.Where(x => x.ChampionName == i.ChampionName.ToLower()))
+                foreach (Gamedata item in Gamedata.Spells.Where(x => x.ChampionName.ToLower() == i.ChampionName.ToLower()))
                     Gamedata.CachedSpells.Add(item);
 
-            foreach (var i in Smitedata.SpellList.Where(x => x.Name == Player.ChampionName))
+            foreach (var i in Smitedata.SpellList.Where(x => x.Name.ToLower() == Player.ChampionName.ToLower()))
                 Smitedata.CachedSpellList.Add(i);
         }
 
         private static void GetAurasInGame()
         {
             foreach (AIHeroClient i in ObjectManager.Get<AIHeroClient>().Where(h => h.Team != Player.Team))
-                foreach (Auradata aura in Auradata.BuffList.Where(x => x.Champion == i.ChampionName && x.Champion != null))
+                foreach (Auradata aura in Auradata.BuffList.Where(x => x.Champion != null && x.Champion.ToLower() == i.ChampionName.ToLower()))
                     Auradata.CachedAuras.Add(aura);
 
             foreach (Auradata generalaura in Auradata.BuffList.Where(x => string.IsNullOrEmpty(x.Champion)))
@@ -459,7 +466,7 @@ using LeagueSharp.Common;
 
             foreach (var summoner in Lists.Summoners)
             {
-                var p = new Priority { ItemId = 0, Position = summoner.Priority, Type = summoner};
+                var p = new Priority { ItemId = 0, Position = summoner.Priority, Type = summoner };
 
                 if (!Lists.Priorities.ContainsKey(summoner.Name))
                      Lists.Priorities.Add(summoner.Name, p);

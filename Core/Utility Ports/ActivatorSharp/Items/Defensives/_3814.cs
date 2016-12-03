@@ -5,7 +5,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Items.Defensives
+namespace Activator.Items.Defensives
 {
     class _3814 : CoreItem 
     {

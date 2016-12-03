@@ -4,7 +4,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Spells.Evaders
+namespace Activator.Spells.Evaders
 {
     class lissandrar : CoreSpell
     {

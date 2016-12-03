@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Drawing;
 using LeagueSharp;
 using LeagueSharp.Common;
-using EloBuddy;
 
+using EloBuddy; 
+using LeagueSharp.Common; 
 namespace SharpShooter
 {
     internal class LasthitIndicator

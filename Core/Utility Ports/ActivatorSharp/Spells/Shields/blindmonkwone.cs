@@ -5,7 +5,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Spells.Shields
+namespace Activator.Spells.Shields
 {
     class blindmonkwone : CoreSpell
     {

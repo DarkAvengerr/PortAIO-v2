@@ -17,7 +17,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Summoners
+namespace Activator.Summoners
 {
     public class CoreSum
     {
@@ -105,7 +105,7 @@ using LeagueSharp.Common;
 
                     if (Player.GetSpell(Slot).State == SpellState.Ready)
                     {
-                        Player.Spellbook.CastSpell(Slot);
+                        ObjectManager.Player.Spellbook.CastSpell(Slot);
                         Activator.LastUsedTimeStamp = Utils.GameTimeTickCount;
                         Activator.LastUsedDuration = Duration;
                     }
@@ -118,7 +118,7 @@ using LeagueSharp.Common;
 
                     if (Player.GetSpell(Slot).State == SpellState.Ready)
                     {
-                        Player.Spellbook.CastSpell(Slot);
+                        ObjectManager.Player.Spellbook.CastSpell(Slot);
                         Activator.LastUsedTimeStamp = Utils.GameTimeTickCount;
                         Activator.LastUsedDuration = Duration;
                     }
@@ -149,7 +149,7 @@ using LeagueSharp.Common;
 
                     if (Player.GetSpell(Slot).State == SpellState.Ready)
                     {
-                        Player.Spellbook.CastSpell(Slot, target);
+                        ObjectManager.Player.Spellbook.CastSpell(Slot, target);
                         Activator.LastUsedTimeStamp = Utils.GameTimeTickCount;
                         Activator.LastUsedDuration = Duration;
                     }
@@ -162,7 +162,7 @@ using LeagueSharp.Common;
 
                     if (Player.GetSpell(Slot).State == SpellState.Ready)
                     {
-                        Player.Spellbook.CastSpell(Slot, target);
+                        ObjectManager.Player.Spellbook.CastSpell(Slot, target);
                         Activator.LastUsedTimeStamp = Utils.GameTimeTickCount;
                         Activator.LastUsedDuration = Duration;
                     }

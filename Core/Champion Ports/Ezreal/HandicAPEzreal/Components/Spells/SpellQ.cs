@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace HandicapEzreal.Components.Spells
+namespace HandicapEzreal.Components.Spells
 {
     using System;
     using System.Linq;
@@ -71,16 +71,11 @@ using LeagueSharp.Common;
         {
             try
             {
-                if (this.SpellObject == null)
-                {
-                    return;
-                }
-
                 var target = Misc.GetTarget(this.Range, this.DamageType);
                 if (target != null)
                 {
                     var prediction = this.SpellObject.GetPrediction(target);
-                    if (prediction.Hitchance >= HitChance.VeryHigh)
+                    if (prediction.Hitchance >= HitChance.VeryHigh || prediction.Hitchance == HitChance.Immobile || !target.CanMove)
                     {
                         this.SpellObject.Cast(target);
                     }
@@ -135,8 +130,7 @@ using LeagueSharp.Common;
                 }
                 else
                 {
-                    if (Vector3.Distance(minion.ServerPosition, ObjectManager.Player.ServerPosition)
-                        > Orbwalking.GetRealAutoAttackRange(ObjectManager.Player)
+                    if (minion.Distance(ObjectManager.Player) > Misc.EzrealAutoAttackRange
                         && ObjectManager.Player.Distance(minion) <= this.Range)
                     {
                         this.SpellObject.Cast(minion);

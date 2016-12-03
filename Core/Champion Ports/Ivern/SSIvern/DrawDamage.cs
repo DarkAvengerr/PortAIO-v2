@@ -1,3 +1,9 @@
+// --------------------------------------------------------------------------------------------------------------------
+// <copyright file="DrawDamage.cs.cs" company="SSIvern">
+//      Copyright (c) SSIvern. All rights reserved.
+// </copyright>
+// --------------------------------------------------------------------------------------------------------------------
+
 using System;
 using System.Drawing;
 using System.Linq;
@@ -6,7 +12,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace SSIvern
+namespace SSIvern
 {
     internal class DrawDamage
     {

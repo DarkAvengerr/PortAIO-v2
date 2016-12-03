@@ -8,7 +8,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace LordsSyndra
+namespace LordsSyndra
 {
     public static class GetDamage
     {
@@ -18,8 +18,8 @@ using LeagueSharp.Common;
                 return 0f;
             var damage = 0d;
             var combomana = 0d;
-            var useR = Program.Menu.Item("DontR" + enemy.CharData.BaseSkinName) != null &&
-                       Program.Menu.Item("DontR" + enemy.CharData.BaseSkinName).GetValue<bool>() == false;
+            var useR = Program.Menu.Item("DontR" + enemy.BaseSkinName) != null &&
+                       Program.Menu.Item("DontR" + enemy.BaseSkinName).GetValue<bool>() == false;
 
             //Add R Damage
             if (Spells.R.IsReady() && UseR && useR)

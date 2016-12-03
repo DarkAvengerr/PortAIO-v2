@@ -5,7 +5,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Items.Offensives
+namespace Activator.Items.Offensives
 {
     class _3042 : CoreItem
     {
@@ -42,7 +42,7 @@ using LeagueSharp.Common;
                     var manamune = Player.GetSpellSlot("Muramana");
                     if (manamune != SpellSlot.Unknown && !Player.HasBuff("Muramana"))
                     {
-                        Player.Spellbook.CastSpell(manamune);
+                        ObjectManager.Player.Spellbook.CastSpell(manamune);
                         LeagueSharp.Common.Utility.DelayAction.Add(500, () => muramana = false);
                     }
                 }
@@ -53,7 +53,7 @@ using LeagueSharp.Common;
                 var manamune = Player.GetSpellSlot("Muramana");
                 if (manamune != SpellSlot.Unknown && Player.HasBuff("Muramana"))
                 {
-                    Player.Spellbook.CastSpell(manamune);
+                    ObjectManager.Player.Spellbook.CastSpell(manamune);
                 }
             }
         }

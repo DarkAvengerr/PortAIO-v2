@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using LeagueSharp;
-using EloBuddy;
 
+using EloBuddy; 
+using LeagueSharp.Common; 
 namespace SharpShooter
 {
     internal class PluginLoader

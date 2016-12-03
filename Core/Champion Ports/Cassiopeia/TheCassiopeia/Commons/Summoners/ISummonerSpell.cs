@@ -2,7 +2,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace TheCassiopeia.Commons.Summoners
+namespace TheCassiopeia.Commons.Summoners
 {
     public interface ISummonerSpell
     {

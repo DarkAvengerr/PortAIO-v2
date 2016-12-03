@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using LeagueSharp;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Azir_Free_elo_Machine
+using LeagueSharp.Common; 
+namespace Azir_Free_elo_Machine
 {
     class GapcloserObj
     {

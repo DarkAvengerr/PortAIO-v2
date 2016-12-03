@@ -7,7 +7,7 @@ using System.Linq;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace SephKhazix
+namespace SephKhazix
 {
     class Helper
     {

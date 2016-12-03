@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace SephKhazix
+namespace SephKhazix
 {
     using System;
     using System.Collections.Generic;
@@ -7043,11 +7043,11 @@ using LeagueSharp.Common;
         {
             double result = source.TotalAttackDamage;
             var k = 1d;
-            if (source.CharData.BaseSkinName == "Kalista")
+            if (source.BaseSkinName == "Kalista")
             {
                 k = 0.9d;
             }
-            if (source.CharData.BaseSkinName == "Kled" &&
+            if (source.BaseSkinName == "Kled" &&
                 ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Name == "KledRiderQ")
             {
                 k = 0.8d;
@@ -7463,7 +7463,7 @@ using LeagueSharp.Common;
                 if (target is Obj_AI_Minion)
                 {
                     amount *= 1.25;
-                    if (target.CharData.BaseSkinName.EndsWith("MinionSiege"))
+                    if (target.BaseSkinName.EndsWith("MinionSiege"))
                     {
                         amount *= 0.7;
                     }
@@ -7724,13 +7724,13 @@ using LeagueSharp.Common;
             if (source is Obj_AI_Turret)
             {
                 //Siege minions receive 70% damage from turrets
-                if (SiegeMinionList.Contains(target.CharData.BaseSkinName))
+                if (SiegeMinionList.Contains(target.BaseSkinName))
                 {
                     amount *= 0.7d;
                 }
 
                 //Normal minions take 114% more damage from towers.
-                else if (NormalMinionList.Contains(target.CharData.BaseSkinName))
+                else if (NormalMinionList.Contains(target.BaseSkinName))
                 {
                     amount *= 1.14285714285714d;
                 }

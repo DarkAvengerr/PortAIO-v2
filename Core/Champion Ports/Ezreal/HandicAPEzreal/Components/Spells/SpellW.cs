@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace HandicapEzreal.Components.Spells
+namespace HandicapEzreal.Components.Spells
 {
     using System;
     using System.Linq;
@@ -66,18 +66,18 @@ using LeagueSharp.Common;
         {
             try
             {
-                if (this.SpellObject == null)
-                {
-                    return;
-                }
-
                 var target = Misc.GetTarget(this.Range, this.DamageType);
                 if (target != null)
                 {
                     var prediction = this.SpellObject.GetPrediction(target);
-                    if (prediction.Hitchance >= HitChance.VeryHigh)
+                    if (prediction.Hitchance >= HitChance.VeryHigh || prediction.Hitchance == HitChance.Immobile || !target.CanMove)
                     {
                         this.SpellObject.Cast(target);
+                    }
+
+                    if (MyMenu.RootMenu.Item("waoe").IsActive())
+                    {
+                        this.SpellObject.CastIfWillHit(target, MyMenu.RootMenu.Item("wifcanhit").GetValue<Slider>().Value);
                     }
                 }
             }

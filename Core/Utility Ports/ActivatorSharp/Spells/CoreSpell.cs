@@ -18,7 +18,7 @@ using SharpDX;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Activator.Spells
+namespace Activator.Spells
 {
     public class CoreSpell
     {
@@ -151,10 +151,10 @@ using LeagueSharp.Common;
                 if (!Player.IsRecalling() &&
                     !Player.HasBuffOfType(BuffType.Invisibility) &&
                     !Player.HasBuffOfType(BuffType.Invulnerability) &&
-                    !Player.Spellbook.IsChanneling &&
+                    !ObjectManager.Player.Spellbook.IsChanneling &&
                     !Player.IsChannelingImportantSpell())
                 {
-                    if (Player.Spellbook.CastSpell(Player.GetSpellSlot(Name), LowTarget))
+                    if (ObjectManager.Player.Spellbook.CastSpell(Player.GetSpellSlot(Name), LowTarget))
                     {
                         Activator.LastUsedTimeStamp = Utils.GameTimeTickCount;
                         Activator.LastUsedDuration = 100;
@@ -181,13 +181,13 @@ using LeagueSharp.Common;
                 if (Utils.GameTimeTickCount - Activator.LastUsedTimeStamp > Activator.LastUsedDuration)
                 {
                     if (!Player.IsRecalling() &&
-                        !Player.Spellbook.IsChanneling &&
+                        !ObjectManager.Player.Spellbook.IsChanneling &&
                         !Player.IsChannelingImportantSpell() &&
-                        !Player.Spellbook.IsCastingSpell)
+                        !ObjectManager.Player.Spellbook.IsCastingSpell)
                     {
                         if (!Player.HasBuffOfType(BuffType.Invisibility) && !Player.HasBuffOfType(BuffType.Invulnerability))
                         {
-                            if (Player.Spellbook.CastSpell(Player.GetSpellSlot(Name)))
+                            if (ObjectManager.Player.Spellbook.CastSpell(Player.GetSpellSlot(Name)))
                             {
                                 Activator.LastUsedTimeStamp = Utils.GameTimeTickCount;
                                 Activator.LastUsedDuration = 100;
@@ -216,15 +216,15 @@ using LeagueSharp.Common;
                 if (Utils.GameTimeTickCount - Activator.LastUsedTimeStamp > Activator.LastUsedDuration)
                 {
                     if (!Player.IsRecalling() &&
-                        !Player.Spellbook.IsChanneling &&
+                        !ObjectManager.Player.Spellbook.IsChanneling &&
                         !Player.IsChannelingImportantSpell() &&
-                        !Player.Spellbook.IsCastingSpell)
+                        !ObjectManager.Player.Spellbook.IsCastingSpell)
                     {
                         if (Player.Distance(targetpos) <= Range)
                         {
                             if (!Player.HasBuffOfType(BuffType.Invisibility) && !Player.HasBuffOfType(BuffType.Invulnerability))
                             {
-                                if (Player.Spellbook.CastSpell(Player.GetSpellSlot(Name), targetpos))
+                                if (ObjectManager.Player.Spellbook.CastSpell(Player.GetSpellSlot(Name), targetpos))
                                 {
                                     Activator.LastUsedTimeStamp = Utils.GameTimeTickCount;
                                     Activator.LastUsedDuration = 100;
@@ -254,15 +254,15 @@ using LeagueSharp.Common;
                 if (Utils.GameTimeTickCount - Activator.LastUsedTimeStamp > Activator.LastUsedDuration)
                 {
                     if (!Player.IsRecalling() &&
-                        !Player.Spellbook.IsChanneling &&
+                        !ObjectManager.Player.Spellbook.IsChanneling &&
                         !Player.IsChannelingImportantSpell() &&
-                        !Player.Spellbook.IsCastingSpell)
+                        !ObjectManager.Player.Spellbook.IsCastingSpell)
                     {
                         if (Player.Distance(target.Position) <= Range)
                         {
                             if (!Player.HasBuffOfType(BuffType.Invisibility) && !Player.HasBuffOfType(BuffType.Invulnerability))
                             {
-                                if (Player.Spellbook.CastSpell(Player.GetSpellSlot(Name), target))
+                                if (ObjectManager.Player.Spellbook.CastSpell(Player.GetSpellSlot(Name), target))
                                 {
                                     Activator.LastUsedTimeStamp = Utils.GameTimeTickCount;
                                     Activator.LastUsedDuration = 100;

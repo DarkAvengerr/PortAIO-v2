@@ -34,7 +34,7 @@ using SharpDX;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace TheCassiopeia.Commons.Prediction
+namespace TheCassiopeia.Commons.Prediction
 {
     public enum HitChance
     {

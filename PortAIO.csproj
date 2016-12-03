@@ -63,7 +63,7 @@
     </Reference>
     <Reference Include="EloBuddy.Sandbox, Version=1.0.6084.32288, Culture=neutral, PublicKeyToken=d671ef5d8e7e69a5, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\Danny\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.Sandbox.dll</HintPath>
+      <HintPath>..\..\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.Sandbox.dll</HintPath>
     </Reference>
     <Reference Include="EloBuddy.SDK">
       <HintPath>..\..\AppData\Roaming\EloBuddy\Addons\Libraries\EloBuddy.SDK.dll</HintPath>
@@ -84,7 +84,7 @@
     </Reference>
     <Reference Include="SharpDX.XInput, Version=2.6.3.0, Culture=neutral, PublicKeyToken=2306ab36a61019a8, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\Danny\AppData\Roaming\EloBuddy\Addons\Libraries\SharpDX.XInput.dll</HintPath>
+      <HintPath>..\..\AppData\Roaming\EloBuddy\Addons\Libraries\SharpDX.XInput.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -550,6 +550,7 @@
     <Compile Include="Core\AIO Ports\OneKeyToWin_AIO_Sebby\Champions\Vayne.cs" />
     <Compile Include="Core\AIO Ports\OneKeyToWin_AIO_Sebby\Champions\Velkoz.cs" />
     <Compile Include="Core\AIO Ports\OneKeyToWin_AIO_Sebby\Champions\Xerath.cs" />
+    <Compile Include="Core\AIO Ports\OneKeyToWin_AIO_Sebby\Champions\Ziggs.cs" />
     <Compile Include="Core\AIO Ports\OneKeyToWin_AIO_Sebby\Core\ChampionStuff.cs" />
     <Compile Include="Core\AIO Ports\OneKeyToWin_AIO_Sebby\Core\PredictionAio.cs" />
     <Compile Include="Core\AIO Ports\OneKeyToWin_AIO_Sebby\Resource1.Designer.cs">
@@ -878,6 +879,43 @@
     <Compile Include="Core\AIO Ports\sAIO\Core\DrawDamage.cs" />
     <Compile Include="Core\AIO Ports\sAIO\Core\Helper.cs" />
     <Compile Include="Core\AIO Ports\sAIO\Program.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Activator.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\AutoQuit.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\DamageIndicator.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\DamageIndicatorForJungle.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\DynamicInitializer.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\ExtraExtensions.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Initializer.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\LasthitIndicator.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\MenuProvider.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\OrbwalkerTargetIndicator.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\PluginLoader.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\Ashe.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\Blitzcrank.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\Caitlyn.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\Corki.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\Draven.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\Ezreal.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\Graves.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\Illaoi.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\Jinx.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\Kalista.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\Karthus.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\Kindred.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\KogMaw.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\Lucian.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\Lulu.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\MissFortune.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\Ryze.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\Sivir.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\Teemo.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\Tristana.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\TwistedFate.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\Twitch.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\Varus.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\Vayne.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Plugins\_Riven.cs" />
+    <Compile Include="Core\AIO Ports\SharpShooter\Program.cs" />
     <Compile Include="Core\AIO Ports\SurvivorSeriesAIO\Champions\Ashe\Ashe.cs" />
     <Compile Include="Core\AIO Ports\SurvivorSeriesAIO\Champions\Brand\Brand.cs" />
     <Compile Include="Core\AIO Ports\SurvivorSeriesAIO\Champions\Irelia\Irelia.cs" />
@@ -1173,6 +1211,8 @@
     <Compile Include="Core\Champion Ports\Ezreal\HandicAPEzreal\Components\Spells\SpellQ.cs" />
     <Compile Include="Core\Champion Ports\Ezreal\HandicAPEzreal\Components\Spells\SpellR.cs" />
     <Compile Include="Core\Champion Ports\Ezreal\HandicAPEzreal\Components\Spells\SpellW.cs" />
+    <Compile Include="Core\Champion Ports\Ezreal\HandicAPEzreal\Damages\DrawDamage.cs" />
+    <Compile Include="Core\Champion Ports\Ezreal\HandicAPEzreal\Damages\RealDamages.cs" />
     <Compile Include="Core\Champion Ports\Ezreal\HandicAPEzreal\Enumerations\LoggingEntryType.cs" />
     <Compile Include="Core\Champion Ports\Ezreal\HandicAPEzreal\Program.cs" />
     <Compile Include="Core\Champion Ports\Ezreal\HandicAPEzreal\Utils\Logging.cs" />
@@ -1250,6 +1290,7 @@
     <Compile Include="Core\Champion Ports\Katarina\e.Motion Katarina\DaggerManager.cs" />
     <Compile Include="Core\Champion Ports\Katarina\e.Motion Katarina\DrawDamage.cs" />
     <Compile Include="Core\Champion Ports\Katarina\e.Motion Katarina\Logic.cs" />
+    <Compile Include="Core\Champion Ports\Katarina\e.Motion Katarina\Program.cs" />
     <Compile Include="Core\Champion Ports\Katarina\ElKatarinaDecentralized\Components\MyMenu.cs" />
     <Compile Include="Core\Champion Ports\Katarina\ElKatarinaDecentralized\Components\SpellManager.cs" />
     <Compile Include="Core\Champion Ports\Katarina\ElKatarinaDecentralized\Components\Spells\ISpell.cs" />
@@ -1418,7 +1459,6 @@
     <Compile Include="Core\Champion Ports\Syndra\Lord%27s Syndra\Drawings.cs" />
     <Compile Include="Core\Champion Ports\Syndra\Lord%27s Syndra\GetDamage.cs" />
     <Compile Include="Core\Champion Ports\Syndra\Lord%27s Syndra\OrbManager.cs" />
-    <Compile Include="Core\Champion Ports\Syndra\Lord%27s Syndra\OrbWalker.cs" />
     <Compile Include="Core\Champion Ports\Syndra\Lord%27s Syndra\PlaySound.cs" />
     <Compile Include="Core\Champion Ports\Syndra\Lord%27s Syndra\Program.cs" />
     <Compile Include="Core\Champion Ports\Syndra\Lord%27s Syndra\Spells.cs" />
@@ -1434,6 +1474,10 @@
     <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\Program.cs" />
     <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\Spells.cs" />
     <Compile Include="Core\Champion Ports\Syndra\Syndra - Dark Mage\SyndraCore.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Syndra Revamped\AssassinManager.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Syndra Revamped\ManaBarIndicator.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Syndra Revamped\OrbManager.cs" />
+    <Compile Include="Core\Champion Ports\Syndra\Syndra Revamped\Program.cs" />
     <Compile Include="Core\Champion Ports\Taliyah\Hinata%27s Taliyah\Champions\Taliyah.cs" />
     <Compile Include="Core\Champion Ports\Taliyah\Hinata%27s Taliyah\Extensions\Menus.cs" />
     <Compile Include="Core\Champion Ports\Taliyah\Hinata%27s Taliyah\Extensions\Spells.cs" />
@@ -1493,6 +1537,8 @@
     <Compile Include="Core\Champion Ports\Varus\ElVarusRevamped\Program.cs" />
     <Compile Include="Core\Champion Ports\Varus\ElVarusRevamped\Utils\Logging.cs" />
     <Compile Include="Core\Champion Ports\Varus\ElVarusRevamped\Utils\Misc.cs" />
+    <Compile Include="Core\Champion Ports\Vayne\hi im gosu Reborn\Distance.cs" />
+    <Compile Include="Core\Champion Ports\Vayne\hi im gosu Reborn\Program.cs" />
     <Compile Include="Core\Champion Ports\Viktor\[2HAM Viktor] King Lazer\Champions\Viktor.cs" />
     <Compile Include="Core\Champion Ports\Viktor\[2HAM Viktor] King Lazer\Extensions\DrawingDamage.cs" />
     <Compile Include="Core\Champion Ports\Viktor\[2HAM Viktor] King Lazer\Extensions\Menus.cs" />
@@ -1740,17 +1786,6 @@
     <Compile Include="Core\AIO Ports\SFXChallenger\SFXTargetSelector\TargetSelector.cs" />
     <Compile Include="Core\AIO Ports\SFXChallenger\SFXTargetSelector\Weights.cs" />
     <Compile Include="Core\AIO Ports\SFXChallenger\Wrappers\Spell.cs" />
-    <Compile Include="Core\AIO Ports\SharpShooter\Activator.cs" />
-    <Compile Include="Core\AIO Ports\SharpShooter\AutoQuit.cs" />
-    <Compile Include="Core\AIO Ports\SharpShooter\DamageIndicator.cs" />
-    <Compile Include="Core\AIO Ports\SharpShooter\DamageIndicatorForJungle.cs" />
-    <Compile Include="Core\AIO Ports\SharpShooter\DynamicInitializer.cs" />
-    <Compile Include="Core\AIO Ports\SharpShooter\ExtraExtensions.cs" />
-    <Compile Include="Core\AIO Ports\SharpShooter\Initializer.cs" />
-    <Compile Include="Core\AIO Ports\SharpShooter\LasthitIndicator.cs" />
-    <Compile Include="Core\AIO Ports\SharpShooter\MenuProvider.cs" />
-    <Compile Include="Core\AIO Ports\SharpShooter\OrbwalkerTargetIndicator.cs" />
-    <Compile Include="Core\AIO Ports\SharpShooter\PluginLoader.cs" />
     <Compile Include="Core\AIO Ports\Support Is Easy\Evade\Collision.cs" />
     <Compile Include="Core\AIO Ports\Support Is Easy\Evade\Config.cs" />
     <Compile Include="Core\AIO Ports\Support Is Easy\Evade\EvadeSpellData.cs" />
@@ -1956,7 +1991,6 @@
     <Compile Include="Core\Champion Ports\Annie\SharpyAIO Annie\Annie.cs" />
     <Compile Include="Core\Champion Ports\Annie\Support is Easy\Annie.cs" />
     <Compile Include="Core\Champion Ports\Ashe\ProSeries Ashe\Ashe.cs" />
-    <Compile Include="Core\Champion Ports\Ashe\SharpShooter\Ashe.cs" />
     <Compile Include="Core\Champion Ports\Ashe\SurvivorSeries\DrawDamage.cs" />
     <Compile Include="Core\Champion Ports\Ashe\SurvivorSeries\Program.cs" />
     <Compile Include="Core\Champion Ports\Aurelion Sol\SkyLv_Aurelion\CustomLib.cs" />
@@ -1987,7 +2021,6 @@
     <Compile Include="Core\Champion Ports\Blitzcrank\FreshBooster Blitzcrank\Blitzcrank.cs" />
     <Compile Include="Core\Champion Ports\Blitzcrank\Kurisu Blitzcrank\Program.cs" />
     <Compile Include="Core\Champion Ports\Blitzcrank\SAutoCarry\Blitzcrank.cs" />
-    <Compile Include="Core\Champion Ports\Blitzcrank\SharpShooter\Blitzcrank.cs" />
     <Compile Include="Core\Champion Ports\Blitzcrank\ShineAIO Blitzcrank\Blitzcrank.cs" />
     <Compile Include="Core\Champion Ports\Blitzcrank\Support is Easy\Blitzcrank.cs" />
     <Compile Include="Core\Champion Ports\Blitzcrank\vSeries Blitzcrank\Blitzcrank.cs" />
@@ -1998,7 +2031,6 @@
     <Compile Include="Core\Champion Ports\Brand\yol0 Brand\Program.cs" />
     <Compile Include="Core\Champion Ports\Braum\FreshBooster Braum\Braum.cs" />
     <Compile Include="Core\Champion Ports\Braum\Support is Easy\Braum.cs" />
-    <Compile Include="Core\Champion Ports\Caitlyn\SharpShooter\Caitlyn.cs" />
     <Compile Include="Core\Champion Ports\Cassiopeia\SFXChallenger\Cassiopeia.cs" />
     <Compile Include="Core\Champion Ports\Cassiopeia\SharpyAIO Cassiopeia\Cassiopeia.cs" />
     <Compile Include="Core\Champion Ports\Cho%27Gath\Windwalker Cho\Program.cs" />
@@ -2007,7 +2039,6 @@
     <Compile Include="Core\Champion Ports\Corki\hikiMarksman Corki\Corki.cs" />
     <Compile Include="Core\Champion Ports\Corki\ProSeries Corki\Corki.cs" />
     <Compile Include="Core\Champion Ports\Corki\SAutoCarry\Corki.cs" />
-    <Compile Include="Core\Champion Ports\Corki\SharpShooter\Corki.cs" />
     <Compile Include="Core\Champion Ports\Darius\ElEasy\Darius.cs" />
     <Compile Include="Core\Champion Ports\Darius\SAutoCarry\Darius.cs" />
     <Compile Include="Core\Champion Ports\Diana\D-Diana\AssassinManager.cs" />
@@ -2018,7 +2049,6 @@
     <Compile Include="Core\Champion Ports\Dr. Mundo\SharpyAIO DrMundo\DrMundo.cs" />
     <Compile Include="Core\Champion Ports\Dr. Mundo\StonedSeries DrMundo\DrMundo.cs" />
     <Compile Include="Core\Champion Ports\Draven\hikiMarksman Draven\Draven.cs" />
-    <Compile Include="Core\Champion Ports\Draven\SharpShooter\Draven.cs" />
     <Compile Include="Core\Champion Ports\Ekko\EloFactory\Program.cs" />
     <Compile Include="Core\Champion Ports\Elise\D-Elise\Program.cs" />
     <Compile Include="Core\Champion Ports\Elise\EliseGod\Orbwalking.cs" />
@@ -2038,7 +2068,6 @@
     <Compile Include="Core\Champion Ports\Ezreal\iSeriesReborn Ezreal\Skills\EzrealW.cs" />
     <Compile Include="Core\Champion Ports\Ezreal\ProSeries Ezreal\Ezreal.cs" />
     <Compile Include="Core\Champion Ports\Ezreal\SFXChallenger\Ezreal.cs" />
-    <Compile Include="Core\Champion Ports\Ezreal\SharpShooter\Ezreal.cs" />
     <Compile Include="Core\Champion Ports\Ezreal\ShineAIO Ezreal\Ezreal.cs" />
     <Compile Include="Core\Champion Ports\Fiddlesticks\Support is Easy\Fiddlesticks.cs" />
     <Compile Include="Core\Champion Ports\Fiddlesticks\vSeries Fiddlesticks\Fiddlesticks.cs" />
@@ -2107,12 +2136,10 @@
     <Compile Include="Core\Champion Ports\Graves\KurisuGraves\HpBarIndicator.cs" />
     <Compile Include="Core\Champion Ports\Graves\KurisuGraves\Program.cs" />
     <Compile Include="Core\Champion Ports\Graves\SFXChallenger\Graves.cs" />
-    <Compile Include="Core\Champion Ports\Graves\SharpShooter\Graves.cs" />
     <Compile Include="Core\Champion Ports\Hecarim\SharpyAIO Hecarim\Hecarim.cs" />
     <Compile Include="Core\Champion Ports\Heimerdinger\TheDonger\Donger.cs" />
     <Compile Include="Core\Champion Ports\Heimerdinger\TheDonger\DongerMenu.cs" />
     <Compile Include="Core\Champion Ports\Heimerdinger\TheDonger\DrawDamage.cs" />
-    <Compile Include="Core\Champion Ports\Illaoi\SharpShooter\Illaoi.cs" />
     <Compile Include="Core\Champion Ports\Irelia\IreliaToTheChallenger\Program.cs" />
     <Compile Include="Core\Champion Ports\Janna\FreshBooster Janna\Janna.cs" />
     <Compile Include="Core\Champion Ports\Janna\Support is Easy\Janna.cs" />
@@ -2156,7 +2183,6 @@
     <Compile Include="Core\Champion Ports\Jinx\iSeriesReborn Jinx\Skills\JinxR.cs" />
     <Compile Include="Core\Champion Ports\Jinx\iSeriesReborn Jinx\Skills\JinxW.cs" />
     <Compile Include="Core\Champion Ports\Jinx\ProSeries Jinx\Jinx.cs" />
-    <Compile Include="Core\Champion Ports\Jinx\SharpShooter\Jinx.cs" />
     <Compile Include="Core\Champion Ports\Kalista\DZAIO Kalista\Kalista.cs" />
     <Compile Include="Core\Champion Ports\Kalista\DZAIO Kalista\KalistaHelper.cs" />
     <Compile Include="Core\Champion Ports\Kalista\DZAIO Kalista\Modules\KalistaEDeath.cs" />
@@ -2213,18 +2239,15 @@
     <Compile Include="Core\Champion Ports\Kalista\iSeriesReborn Kalista\Skills\KalistaQ.cs" />
     <Compile Include="Core\Champion Ports\Kalista\SAutoCarry\Kalista.cs" />
     <Compile Include="Core\Champion Ports\Kalista\SFXChallenger\Kalista.cs" />
-    <Compile Include="Core\Champion Ports\Kalista\SharpShooter\Kalista.cs" />
     <Compile Include="Core\Champion Ports\Karma\KarmaXD\Extensions\DamageIndicator.cs" />
     <Compile Include="Core\Champion Ports\Karma\KarmaXD\Extensions\SpellDatabase.cs" />
     <Compile Include="Core\Champion Ports\Karma\KarmaXD\Program.cs" />
     <Compile Include="Core\Champion Ports\Karma\Support is Easy\Karma.cs" />
     <Compile Include="Core\Champion Ports\Karma\vSeries Karma\Karma.cs" />
-    <Compile Include="Core\Champion Ports\Karthus\SharpShooter\Karthus.cs" />
     <Compile Include="Core\Champion Ports\Kassadin\SharpyAIO Kassadin\Kassadin.cs" />
     <Compile Include="Core\Champion Ports\Kassadin\Slutty Kassadin\Helper.cs" />
     <Compile Include="Core\Champion Ports\Kassadin\Slutty Kassadin\Kassadin.cs" />
     <Compile Include="Core\Champion Ports\Kassadin\Slutty Kassadin\MenuConfig.cs" />
-    <Compile Include="Core\Champion Ports\Katarina\e.Motion Katarina\Program.cs" />
     <Compile Include="Core\Champion Ports\Katarina\ElEasy\Katarina.cs" />
     <Compile Include="Core\Champion Ports\Katarina\ElSmartKatarina\DrawDamage.cs" />
     <Compile Include="Core\Champion Ports\Katarina\ElSmartKatarina\Program.cs" />
@@ -2236,7 +2259,6 @@
     <Compile Include="Core\Champion Ports\Kha%27Zix\KhazixSharpElite\KhazixSharp.cs" />
     <Compile Include="Core\Champion Ports\Kha%27Zix\KhazixSharpElite\Program.cs" />
     <Compile Include="Core\Champion Ports\Kha%27Zix\KhazixSharpElite\SummonerItems.cs" />
-    <Compile Include="Core\Champion Ports\Kindred\SharpShooter\Kindred.cs" />
     <Compile Include="Core\Champion Ports\Kog%27Maw\D-Kogmaw\Program.cs" />
     <Compile Include="Core\Champion Ports\Kog%27Maw\iSeriesReborn KogMaw\KogHooks.cs" />
     <Compile Include="Core\Champion Ports\Kog%27Maw\iSeriesReborn KogMaw\KogMaw.cs" />
@@ -2249,7 +2271,6 @@
     <Compile Include="Core\Champion Ports\Kog%27Maw\iSeriesReborn KogMaw\Skills\KogW.cs" />
     <Compile Include="Core\Champion Ports\Kog%27Maw\ProSeries Kog%27Maw\KogMaw.cs" />
     <Compile Include="Core\Champion Ports\Kog%27Maw\SFXChallenger\KogMaw.cs" />
-    <Compile Include="Core\Champion Ports\Kog%27Maw\SharpShooter\KogMaw.cs" />
     <Compile Include="Core\Champion Ports\LeBlanc\FreshBooster Leblanc\Leblanc.cs" />
     <Compile Include="Core\Champion Ports\LeBlanc\LCS Leblanc\Extensions\DamageCalculator.cs" />
     <Compile Include="Core\Champion Ports\LeBlanc\LCS Leblanc\Extensions\DamageIndicator.cs" />
@@ -2346,9 +2367,7 @@
     <Compile Include="Core\Champion Ports\Lucian\Korean Lucian\SemiAutomaticE.cs" />
     <Compile Include="Core\Champion Ports\Lucian\Korean Lucian\Spells.cs" />
     <Compile Include="Core\Champion Ports\Lucian\SAutoCarry\Lucian.cs" />
-    <Compile Include="Core\Champion Ports\Lucian\SharpShooter\Lucian.cs" />
     <Compile Include="Core\Champion Ports\Lulu\HeavenStrike\Program.cs" />
-    <Compile Include="Core\Champion Ports\Lulu\SharpShooter\Lulu.cs" />
     <Compile Include="Core\Champion Ports\Lulu\Support is Easy\Lulu.cs" />
     <Compile Include="Core\Champion Ports\Lux\M00NLUX\DamageIndicator.cs" />
     <Compile Include="Core\Champion Ports\Lux\M1D 0R F33D Lux\Lux.cs" />
@@ -2369,7 +2388,6 @@
     <Compile Include="Core\Champion Ports\Miss Fortune\D-MissF\Program.cs" />
     <Compile Include="Core\Champion Ports\Miss Fortune\SAutoCarry\MissFortune.cs" />
     <Compile Include="Core\Champion Ports\Miss Fortune\SFXChallenger\MissFortune.cs" />
-    <Compile Include="Core\Champion Ports\Miss Fortune\SharpShooter\MissFortune.cs" />
     <Compile Include="Core\Champion Ports\Morgana\FreshBooster Morgana\Morgana.cs" />
     <Compile Include="Core\Champion Ports\Morgana\ShineAIO Morgana\Morgana.cs" />
     <Compile Include="Core\Champion Ports\Morgana\Support is Easy\Morgana.cs" />
@@ -2467,7 +2485,6 @@
     <Compile Include="Core\Champion Ports\Riven\SAutoCarry\Riven.cs" />
     <Compile Include="Core\Champion Ports\Ryze\BrianSharp\Ryze.cs" />
     <Compile Include="Core\Champion Ports\Ryze\FreshBooster Ryze\Ryze.cs" />
-    <Compile Include="Core\Champion Ports\Ryze\SharpShooter\Ryze.cs" />
     <Compile Include="Core\Champion Ports\Ryze\StonedSeries Ryze\Ryze.cs" />
     <Compile Include="Core\Champion Ports\Shaco\MoonChewysShaco\ChewyMoonShaco.cs" />
     <Compile Include="Core\Champion Ports\Shaco\MoonChewysShaco\DangerDB.cs" />
@@ -2498,7 +2515,6 @@
     <Compile Include="Core\Champion Ports\Sivir\hikiMarksman Sivir\Sivir.cs" />
     <Compile Include="Core\Champion Ports\Sivir\ProSeries Sivir\Sivir.cs" />
     <Compile Include="Core\Champion Ports\Sivir\SFXChallenger\Sivir.cs" />
-    <Compile Include="Core\Champion Ports\Sivir\SharpShooter\Sivir.cs" />
     <Compile Include="Core\Champion Ports\Sivir\ShineAIO Sivir\Sivir.cs" />
     <Compile Include="Core\Champion Ports\Skarner\kSkarner\kSkarner.cs" />
     <Compile Include="Core\Champion Ports\Skarner\kSkarner\Program.cs" />
@@ -2571,7 +2587,6 @@
     <Compile Include="Core\Champion Ports\Taric\PippyTaric\Program.cs" />
     <Compile Include="Core\Champion Ports\Taric\Support is Easy\Taric.cs" />
     <Compile Include="Core\Champion Ports\Taric\vSeries Taric\Taric.cs" />
-    <Compile Include="Core\Champion Ports\Teemo\SharpShooter\Teemo.cs" />
     <Compile Include="Core\Champion Ports\Thresh\FreshBooster Thresh\Thresh.cs" />
     <Compile Include="Core\Champion Ports\Thresh\Support Is Easy\Thresh.cs" />
     <Compile Include="Core\Champion Ports\Thresh\vSeries Thresh\Thresh.cs" />
@@ -2586,7 +2601,6 @@
     <Compile Include="Core\Champion Ports\Tristana\PewPewTristana\HpBarIndicator.cs" />
     <Compile Include="Core\Champion Ports\Tristana\PewPewTristana\Program.cs" />
     <Compile Include="Core\Champion Ports\Tristana\ProSeries Tristana\Tristana.cs" />
-    <Compile Include="Core\Champion Ports\Tristana\SharpShooter\Tristana.cs" />
     <Compile Include="Core\Champion Ports\Trundle\DZAIO Trundle\Modules\TrundleQKS.cs" />
     <Compile Include="Core\Champion Ports\Trundle\DZAIO Trundle\Trundle.cs" />
     <Compile Include="Core\Champion Ports\Trundle\vSeries Trundle\Trundle.cs" />
@@ -2595,7 +2609,6 @@
     <Compile Include="Core\Champion Ports\TwistedFate\EloFactory TwistedFate\Program.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\SAutoCarry\TwistedFate.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\SFXChallenger\TwistedFate.cs" />
-    <Compile Include="Core\Champion Ports\TwistedFate\SharpShooter\TwistedFate.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Twisted Fate - Danz\Program.cs" />
     <Compile Include="Core\Champion Ports\Twitch\iSeriesReborn Twitch\Modules\TwitchEKS.cs" />
     <Compile Include="Core\Champion Ports\Twitch\iSeriesReborn Twitch\Modules\TwitchESteal.cs" />
@@ -2607,13 +2620,11 @@
     <Compile Include="Core\Champion Ports\Twitch\iTwitch 2.0\Program.cs" />
     <Compile Include="Core\Champion Ports\Twitch\iTwitch 2.0\Twitch.cs" />
     <Compile Include="Core\Champion Ports\Twitch\SAutoCarry\Twitch.cs" />
-    <Compile Include="Core\Champion Ports\Twitch\SharpShooter\Twitch.cs" />
     <Compile Include="Core\Champion Ports\Udyr\D-Udyr\Program.cs" />
     <Compile Include="Core\Champion Ports\Udyr\EloFactory\Program.cs" />
     <Compile Include="Core\Champion Ports\Udyr\LCS Udyr\Helper.cs" />
     <Compile Include="Core\Champion Ports\Udyr\LCS Udyr\Program.cs" />
     <Compile Include="Core\Champion Ports\Varus\SFXChallenger\Varus.cs" />
-    <Compile Include="Core\Champion Ports\Varus\SharpShooter\Varus.cs" />
     <Compile Include="Core\Champion Ports\Vayne\hikiMarksman Vayne\Vayne.cs" />
     <Compile Include="Core\Champion Ports\Vayne\iSeriesReborn Vayne\Modules\VayneAutoE.cs" />
     <Compile Include="Core\Champion Ports\Vayne\iSeriesReborn Vayne\Modules\VayneFocus2W.cs" />
@@ -2624,7 +2635,6 @@
     <Compile Include="Core\Champion Ports\Vayne\iSeriesReborn Vayne\Utility\VayneUtility.cs" />
     <Compile Include="Core\Champion Ports\Vayne\iSeriesReborn Vayne\Vayne.cs" />
     <Compile Include="Core\Champion Ports\Vayne\SAutoCarry\Vayne.cs" />
-    <Compile Include="Core\Champion Ports\Vayne\SharpShooter\Vayne.cs" />
     <Compile Include="Core\Champion Ports\Veigar\DZAIO Veigar\Modules\VeigarAutoQ.cs" />
     <Compile Include="Core\Champion Ports\Veigar\DZAIO Veigar\Modules\VeigarAutoRKS.cs" />
     <Compile Include="Core\Champion Ports\Veigar\DZAIO Veigar\Modules\VeigarAutoW.cs" />
@@ -3543,7 +3553,6 @@
     <Compile Include="Core\Library Ports\TreeSharp\Switch.cs" />
     <Compile Include="Core\Library Ports\TreeSharp\Wait.cs" />
     <Compile Include="Core\Misc.cs" />
-    <Compile Include="Core\AIO Ports\SharpShooter\Program.cs" />
     <Compile Include="Core\Champion Ports\Leona\ElEasy\Leona.cs" />
     <Compile Include="Core\Champion Ports\Malphite\ElEasy\Malphite.cs" />
     <Compile Include="Core\Champion Ports\Nasus\ElEasy\Nasus.cs" />

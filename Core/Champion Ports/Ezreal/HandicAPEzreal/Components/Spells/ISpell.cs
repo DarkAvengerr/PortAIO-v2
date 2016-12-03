@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace HandicapEzreal.Components.Spells
+namespace HandicapEzreal.Components.Spells
 {
     using System;
     using System.ComponentModel;
