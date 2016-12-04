@@ -18,7 +18,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace RethoughtLib.Bootstraps.Interfaces
+namespace RethoughtLib.Bootstraps.Interfaces
 {
     public interface IBootstrap
     {

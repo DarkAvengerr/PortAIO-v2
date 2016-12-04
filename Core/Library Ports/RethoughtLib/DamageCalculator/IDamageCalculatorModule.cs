@@ -18,7 +18,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace RethoughtLib.DamageCalculator
+namespace RethoughtLib.DamageCalculator
 {
     public interface IDamageCalculatorModule : IDamageCalculator
     {

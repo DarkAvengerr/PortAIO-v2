@@ -18,7 +18,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace RethoughtLib.LogicProvider
+namespace RethoughtLib.LogicProvider
 {
     #region Using Directives
 
@@ -197,9 +197,6 @@ using LeagueSharp.Common;
         /// </param>
         private void OnTarget(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!(sender is Obj_AI_Turret)) return;
-
-            //if (args.Target != null) this.turretTarget[sender.NetworkId] = args.Target;
         }
 
         /// <summary>

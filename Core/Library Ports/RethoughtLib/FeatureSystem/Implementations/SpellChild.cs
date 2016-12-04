@@ -18,7 +18,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace RethoughtLib.FeatureSystem.Implementations
+namespace RethoughtLib.FeatureSystem.Implementations
 {
     #region Using Directives
 

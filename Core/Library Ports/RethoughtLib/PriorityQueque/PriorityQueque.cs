@@ -18,7 +18,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace RethoughtLib.PriorityQueque
+namespace RethoughtLib.PriorityQueque
 {
     #region Using Directives
 

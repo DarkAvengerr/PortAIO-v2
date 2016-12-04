@@ -18,7 +18,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace RethoughtLib.Menu.Interfaces
+namespace RethoughtLib.Menu.Interfaces
 {
     #region Using Directives
 

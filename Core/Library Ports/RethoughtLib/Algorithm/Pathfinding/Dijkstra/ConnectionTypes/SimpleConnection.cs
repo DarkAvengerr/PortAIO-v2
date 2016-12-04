@@ -18,7 +18,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace RethoughtLib.Algorithm.Pathfinding.Dijkstra.ConnectionTypes
+namespace RethoughtLib.Algorithm.Pathfinding.Dijkstra.ConnectionTypes
 {
     public class SimpleEdge<T> : EdgeBase<T>
     {

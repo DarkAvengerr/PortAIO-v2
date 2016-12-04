@@ -18,7 +18,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace RethoughtLib.Algorithm.Pathfinding
+namespace RethoughtLib.Algorithm.Pathfinding
 {
     #region Using Directives
 

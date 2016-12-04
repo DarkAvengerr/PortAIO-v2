@@ -18,7 +18,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace RethoughtLib.Algorithm.Pathfinding.AStar.Enums
+namespace RethoughtLib.Algorithm.Pathfinding.AStar.Enums
 {
     public enum PathFinderNodeState
     {

@@ -18,7 +18,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace RethoughtLib.Orbwalker.Implementations
+namespace RethoughtLib.Orbwalker.Implementations
 {
     #region Using Directives
 

@@ -56,18 +56,18 @@ using LeagueSharp.Common;
 
         protected sealed override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
-            Menu.AddItem(new MenuItem(Name + "EInterrupt", "Interrupt").SetValue(true));
+            Menu.AddItem(new MenuItem("EInterrupt", "Interrupt").SetValue(true));
 
-            Menu.AddItem(new MenuItem(Name + "EGapcloser", "Anti-Gapcloser").SetValue(true));
+            Menu.AddItem(new MenuItem("EGapcloser", "Anti-Gapcloser").SetValue(true));
 
-            Menu.AddItem(new MenuItem(Name + "EKillable", "Use Only If Killable By Combo").SetValue(true));
+            Menu.AddItem(new MenuItem("EKillable", "Use Only If Killable By Combo").SetValue(true));
 
-            Menu.AddItem(new MenuItem(Name + "ERange", "E Range").SetValue(new Slider(300, 350)));
+            Menu.AddItem(new MenuItem("ERange", "E Range").SetValue(new Slider(300, 350)));
 
             Menu.AddItem(
-                new MenuItem(Name + "MinTargets", "Min Targets In Range").SetValue(new Slider(2, 0, 5)));
+                new MenuItem("MinTargets", "Min Targets In Range").SetValue(new Slider(2, 0, 5)));
 
-            Menu.AddItem(new MenuItem(Name + "EMana", "Mana %").SetValue(new Slider(45, 0, 100)));
+            Menu.AddItem(new MenuItem("EMana", "Mana %").SetValue(new Slider(45, 0, 100)));
 
             logic = new LogicAll();
         }

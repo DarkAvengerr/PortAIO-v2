@@ -53,14 +53,14 @@ using LeagueSharp.Common;
         protected sealed override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
             Menu.AddItem(
-                new MenuItem(Name + "FleeKey", "Flee Key").SetValue(new KeyBind('A', KeyBindType.Press)));
+                new MenuItem("FleeKey", "Flee Key").SetValue(new KeyBind('A', KeyBindType.Press)));
 
-            Menu.AddItem(new MenuItem(Name + "FleeMinion", "Flee To Minions").SetValue(true));
+            Menu.AddItem(new MenuItem("FleeMinion", "Flee To Minions").SetValue(true));
 
-            Menu.AddItem(new MenuItem(Name + "FleeMob", "Flee To Mobs").SetValue(true));
+            Menu.AddItem(new MenuItem("FleeMob", "Flee To Mobs").SetValue(true));
 
             Menu.AddItem(
-                new MenuItem(Name + "FleeVector", "Flee To Vector").SetValue(true)
+                new MenuItem( "FleeVector", "Flee To Vector").SetValue(true)
                     .SetTooltip("Flee's To Jungle Camps"));
 
             fleeLogic = new FleeLogic();

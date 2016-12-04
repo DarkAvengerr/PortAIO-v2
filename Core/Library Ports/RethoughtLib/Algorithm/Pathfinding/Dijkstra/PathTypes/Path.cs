@@ -18,7 +18,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace RethoughtLib.Algorithm.Pathfinding.Dijkstra.PathTypes
+namespace RethoughtLib.Algorithm.Pathfinding.Dijkstra.PathTypes
 {
     #region Using Directives
 

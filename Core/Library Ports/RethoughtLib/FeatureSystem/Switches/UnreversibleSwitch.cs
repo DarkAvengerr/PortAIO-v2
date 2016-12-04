@@ -18,7 +18,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace RethoughtLib.FeatureSystem.Switches
+namespace RethoughtLib.FeatureSystem.Switches
 {
     #region Using Directives
 

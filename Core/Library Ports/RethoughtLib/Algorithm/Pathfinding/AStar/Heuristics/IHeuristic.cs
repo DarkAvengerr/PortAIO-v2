@@ -18,7 +18,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace RethoughtLib.Algorithm.Pathfinding.AStar.Heuristics
+namespace RethoughtLib.Algorithm.Pathfinding.AStar.Heuristics
 {
     public interface IHeuristic
     {

@@ -18,7 +18,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace RethoughtLib.Design
+namespace RethoughtLib.Design
 {
     public class Offset<T>
         where T : struct

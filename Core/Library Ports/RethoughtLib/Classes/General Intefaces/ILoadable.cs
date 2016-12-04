@@ -18,7 +18,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace RethoughtLib.Classes.General_Intefaces
+namespace RethoughtLib.Classes.General_Intefaces
 {
     public interface ILoadable
     {

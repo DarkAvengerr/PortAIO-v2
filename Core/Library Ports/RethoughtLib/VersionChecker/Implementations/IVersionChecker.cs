@@ -18,7 +18,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace RethoughtLib.VersionChecker.Implementations
+namespace RethoughtLib.VersionChecker.Implementations
 {
     #region Using Directives
 

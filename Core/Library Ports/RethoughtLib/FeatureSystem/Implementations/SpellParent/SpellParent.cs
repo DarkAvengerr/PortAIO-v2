@@ -18,7 +18,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace RethoughtLib.FeatureSystem.Implementations.SpellParent
+namespace RethoughtLib.FeatureSystem.Implementations.SpellParent
 {
     #region Using Directives
 

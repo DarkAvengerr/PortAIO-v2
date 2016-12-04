@@ -18,7 +18,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace RethoughtLib.Algorithm.Pathfinding.AStar
+namespace RethoughtLib.Algorithm.Pathfinding.AStar
 {
     public class AStarEdge<TNode> : EdgeBase<TNode>
     {

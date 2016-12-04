@@ -18,7 +18,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace RethoughtLib.Classes.LeagueSharpAssembly
+namespace RethoughtLib.Classes.LeagueSharpAssembly
 {
     public abstract class LeagueSharpAssembly
     {

@@ -18,7 +18,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace RethoughtLib.Bootstraps.Abstract_Classes
+namespace RethoughtLib.Bootstraps.Abstract_Classes
 {
     #region Using Directives
 

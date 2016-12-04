@@ -18,7 +18,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace RethoughtLib.Algorithm.Graphs
+namespace RethoughtLib.Algorithm.Graphs
 {
     #region Using Directives
 

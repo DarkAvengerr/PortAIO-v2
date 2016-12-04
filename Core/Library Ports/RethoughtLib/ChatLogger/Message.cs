@@ -18,7 +18,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace RethoughtLib.ChatLogger
+namespace RethoughtLib.ChatLogger
 {
     #region Using Directives
 
