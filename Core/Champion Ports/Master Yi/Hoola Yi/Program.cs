@@ -63,6 +63,7 @@ namespace HoolaMasterYi
             Game.OnUpdate += Game_OnUpdate;
             Game.OnUpdate += DetectSpell;
             Drawing.OnEndScene += Drawing_OnEndScene;
+            Obj_AI_Base.OnProcessSpellCast += OnSpellCast;
             Obj_AI_Base.OnSpellCast += OnSpellCast;
             Obj_AI_Base.OnPlayAnimation += OnPlay;
             Spellbook.OnCastSpell += OnCast;
