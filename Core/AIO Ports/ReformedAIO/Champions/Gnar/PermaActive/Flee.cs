@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Gnar.PermaActive
+namespace ReformedAIO.Champions.Gnar.PermaActive
 {
     using System;
     using System.Linq;

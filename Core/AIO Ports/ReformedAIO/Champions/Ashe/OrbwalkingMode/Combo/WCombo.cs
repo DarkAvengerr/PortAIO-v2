@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Combo
+namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Combo
 {
     #region Using Directives
 
@@ -49,7 +49,7 @@ using LeagueSharp.Common;
         private void OnUpdate(EventArgs args)
         {
             if (!Variable.Spells[SpellSlot.W].IsReady()
-                || Variable.Player.Spellbook.IsAutoAttacking)
+                || ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
                 return;
             }

@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Library.Get_Information.HeroInfo
+namespace ReformedAIO.Library.Get_Information.HeroInfo
 {
     using System;
     using System.Linq;

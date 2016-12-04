@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Annie.Utility
+namespace ReformedAIO.Champions.Annie.Utility
 {
     using System;
 
@@ -15,7 +15,7 @@ using LeagueSharp.Common;
 
         public void OnUpdate(EventArgs args)
         {
-            //ObjectManager.//Player.SetSkin(ObjectManager.Player.CharData.BaseSkinName, Menu.Item("Skin").GetValue<StringList>().SelectedIndex);
+            //ObjectManager.//Player.SetSkin(ObjectManager.Player.BaseSkinName, Menu.Item("Skin").GetValue<StringList>().SelectedIndex);
         }
 
         protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
@@ -42,7 +42,7 @@ using LeagueSharp.Common;
         {
             base.OnDisable(sender, eventArgs);
             Game.OnUpdate -= OnUpdate;
-            //ObjectManager.//Player.SetSkin(ObjectManager.Player.CharData.BaseSkinName, ObjectManager.Player.SkinId);
+            //ObjectManager.//Player.SetSkin(ObjectManager.Player.BaseSkinName, ObjectManager.Player.SkinId);
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs eventArgs)

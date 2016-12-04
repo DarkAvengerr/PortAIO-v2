@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO
+namespace ReformedAIO
 {
     #region Using Directives
 
@@ -17,6 +17,7 @@ using LeagueSharp.Common;
     using ReformedAIO.Champions.Gragas;
     using ReformedAIO.Champions.Lucian;
     using ReformedAIO.Champions.Olaf;
+    using ReformedAIO.Champions.Vayne;
     using ReformedAIO.Champions.Yasuo;
 
     using RethoughtLib.Bootstraps.Abstract_Classes;
@@ -40,6 +41,7 @@ using LeagueSharp.Common;
                 new EzrealLoader(),
                 new LucianLoader(),
                 new OlafLoader(),
+                new VayneLoader(),
                 new YasuoLoader()
             });
 

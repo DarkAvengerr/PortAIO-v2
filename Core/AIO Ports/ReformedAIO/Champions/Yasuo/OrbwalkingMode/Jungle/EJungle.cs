@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Jungle
+namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Jungle
 {
     using System;
     using System.Linq;

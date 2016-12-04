@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.LaneClear
+namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.LaneClear
 {
     using System;
     using System.Linq;

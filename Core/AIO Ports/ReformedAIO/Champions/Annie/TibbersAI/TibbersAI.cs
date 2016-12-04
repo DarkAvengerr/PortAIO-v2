@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Annie.TibbersAI
+namespace ReformedAIO.Champions.Annie.TibbersAI
 {
     using System;
     using System.Linq;

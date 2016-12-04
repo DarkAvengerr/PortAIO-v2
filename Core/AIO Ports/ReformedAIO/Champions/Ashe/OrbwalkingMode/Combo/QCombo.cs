@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Combo
+namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Combo
 {
     #region Using Directives
 
@@ -72,7 +72,7 @@ using LeagueSharp.Common;
         {
             var target = HeroManager.Enemies.Where(Orbwalking.InAutoAttackRange).FirstOrDefault();
 
-            if (target == null || !target.IsValid || (Menu.Item("AAQ").GetValue<bool>() && Variable.Player.Spellbook.IsAutoAttacking)) return;
+            if (target == null || !target.IsValid || (Menu.Item("AAQ").GetValue<bool>() && ObjectManager.Player.Spellbook.IsAutoAttacking)) return;
 
             Variable.Spells[SpellSlot.Q].Cast();
 

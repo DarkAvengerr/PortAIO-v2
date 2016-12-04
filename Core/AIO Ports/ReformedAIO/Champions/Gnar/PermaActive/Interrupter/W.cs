@@ -1,7 +1,7 @@
 using System;
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Gnar.PermaActive.Interrupter
+namespace ReformedAIO.Champions.Gnar.PermaActive.Interrupter
 {
     using System;
     using System.Linq;

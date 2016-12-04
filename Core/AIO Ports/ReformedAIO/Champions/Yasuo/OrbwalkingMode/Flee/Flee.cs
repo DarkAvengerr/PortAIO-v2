@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Flee
+namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Flee
 {
     using System;
     using System.Linq;

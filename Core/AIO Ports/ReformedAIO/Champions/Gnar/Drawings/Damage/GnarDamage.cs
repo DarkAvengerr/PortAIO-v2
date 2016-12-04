@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Gnar.Drawings.Damage
+namespace ReformedAIO.Champions.Gnar.Drawings.Damage
 {
     using System;
     using System.Linq;

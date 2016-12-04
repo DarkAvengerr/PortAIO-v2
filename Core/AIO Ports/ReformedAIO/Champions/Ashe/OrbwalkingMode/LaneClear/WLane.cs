@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.LaneClear
+namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.LaneClear
 {
     #region Using Directives
 

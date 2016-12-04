@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Misaya
+namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Misaya
 {
     #region Using Directives
 

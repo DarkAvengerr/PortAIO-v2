@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Diana
+namespace ReformedAIO.Champions.Diana
 {
     #region Using Directives
 

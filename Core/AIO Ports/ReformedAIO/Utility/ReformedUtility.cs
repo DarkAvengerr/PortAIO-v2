@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Utility
+namespace ReformedAIO.Utility
 {
     using System.Collections.Generic;
     using System.Drawing;

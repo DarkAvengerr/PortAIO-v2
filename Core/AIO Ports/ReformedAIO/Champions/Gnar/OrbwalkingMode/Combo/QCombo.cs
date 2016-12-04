@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Gnar.OrbwalkingMode.Combo
+namespace ReformedAIO.Champions.Gnar.OrbwalkingMode.Combo
 {
     #region
 

@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.JungleClear
+namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.JungleClear
 {
     #region Using Directives
 
@@ -47,7 +47,7 @@ using LeagueSharp.Common;
 
         private void OnUpdate(EventArgs args)
         {
-            if (!Variable.Spells[SpellSlot.Q].IsReady() || Variable.Player.Spellbook.IsAutoAttacking) return;
+            if (!Variable.Spells[SpellSlot.Q].IsReady() || ObjectManager.Player.Spellbook.IsAutoAttacking) return;
 
             RangersFocus();
         }

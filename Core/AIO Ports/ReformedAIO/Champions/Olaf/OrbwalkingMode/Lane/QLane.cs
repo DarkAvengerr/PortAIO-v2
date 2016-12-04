@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Olaf.OrbwalkingMode.Lane
+namespace ReformedAIO.Champions.Olaf.OrbwalkingMode.Lane
 {
     using System;
     using System.Linq;

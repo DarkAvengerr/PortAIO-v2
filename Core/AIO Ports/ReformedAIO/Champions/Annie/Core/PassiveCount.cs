@@ -2,7 +2,7 @@ using System.Linq;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Annie.Core
+namespace ReformedAIO.Champions.Annie.Core
 {
     using LeagueSharp;
 

@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Diana.Killsteal
+namespace ReformedAIO.Champions.Diana.Killsteal
 {
     #region Using Directives
 

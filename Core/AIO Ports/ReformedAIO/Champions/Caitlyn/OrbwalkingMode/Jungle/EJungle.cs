@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Jungle
+namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Jungle
 {
     using System;
     using System.Linq;
@@ -46,7 +46,7 @@ using LeagueSharp.Common;
         {
             var mobs = MinionManager.GetMinions(eSpell.Spell.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
 
-            if (mobs == null || !CheckGuardians() || mobs.Health < ObjectManager.Player.GetAutoAttackDamage(mobs) * 3 || mobs.CharData.BaseSkinName == "Baron") return;
+            if (mobs == null || !CheckGuardians() || mobs.Health < ObjectManager.Player.GetAutoAttackDamage(mobs) * 3 || mobs.BaseSkinName == "Baron") return;
 
             var qPrediction = eSpell.Spell.GetPrediction(mobs);
 

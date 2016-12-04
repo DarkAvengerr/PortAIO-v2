@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Library.SpellParent
+namespace ReformedAIO.Library.SpellParent
 {
     using System;
     using System.Collections.Generic;

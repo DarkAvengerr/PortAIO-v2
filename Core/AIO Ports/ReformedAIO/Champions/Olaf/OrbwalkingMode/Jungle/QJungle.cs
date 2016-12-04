@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Olaf.OrbwalkingMode.Jungle
+namespace ReformedAIO.Champions.Olaf.OrbwalkingMode.Jungle
 {
     using System;
     using System.Collections.Generic;

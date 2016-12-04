@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Annie.Stack
+namespace ReformedAIO.Champions.Annie.Stack
 {
     using System;
     using System.Linq;

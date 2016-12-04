@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Mixed
+namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Mixed
 {
     #region Using Directives
 
@@ -49,7 +49,7 @@ using LeagueSharp.Common;
 
         private void OnUpdate(EventArgs args)
         {
-            if (!Variable.Spells[SpellSlot.W].IsReady() || Variable.Player.Spellbook.IsAutoAttacking) return;
+            if (!Variable.Spells[SpellSlot.W].IsReady() || ObjectManager.Player.Spellbook.IsAutoAttacking) return;
 
             Volley();
         }

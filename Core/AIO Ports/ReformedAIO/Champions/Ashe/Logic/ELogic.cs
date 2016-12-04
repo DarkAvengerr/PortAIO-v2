@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Ashe.Logic
+namespace ReformedAIO.Champions.Ashe.Logic
 {
     #region Using Directives
 
@@ -71,7 +71,7 @@ using LeagueSharp.Common;
 
         public int GetEAmmo()
         {
-            return Variable.Player.Spellbook.GetSpell(SpellSlot.E).Ammo;
+            return ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Ammo;
         }
 
         #endregion

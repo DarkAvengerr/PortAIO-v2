@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Yasuo
+namespace ReformedAIO.Champions.Yasuo
 {
     using System.Collections.Generic;
     using System.Drawing;

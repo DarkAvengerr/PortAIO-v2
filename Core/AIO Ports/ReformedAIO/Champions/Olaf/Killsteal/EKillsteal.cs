@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Olaf.Killsteal
+namespace ReformedAIO.Champions.Olaf.Killsteal
 {
     using System;
 

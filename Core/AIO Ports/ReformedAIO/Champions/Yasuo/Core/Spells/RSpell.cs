@@ -1,8 +1,9 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Yasuo.Core.Spells
+namespace ReformedAIO.Champions.Yasuo.Core.Spells
 {
     using System;
+    using System.Linq;
 
     using LeagueSharp;
     using LeagueSharp.Common;
@@ -19,6 +20,20 @@ using LeagueSharp.Common;
         public float GetDamage(Obj_AI_Base target)
         {
             return Spell.GetDamage(target);
+        }
+
+        public bool IsAirbone(Obj_AI_Base unit) => unit.HasBuffOfType(BuffType.Knockup) || unit.HasBuffOfType(BuffType.Knockback);
+
+        public float RemainingAirboneTime(Obj_AI_Base unit)
+        {
+            float result = 0;
+
+            foreach (var buff in unit.Buffs.Where(buff => buff.Type == BuffType.Knockback || buff.Type == BuffType.Knockup))
+            {
+                result = buff.EndTime - Game.Time;
+            }
+
+            return result * 1000;
         }
 
         protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)

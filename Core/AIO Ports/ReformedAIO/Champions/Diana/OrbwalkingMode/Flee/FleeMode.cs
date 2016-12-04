@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Flee
+namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Flee
 {
     #region Using Directives
 
@@ -60,7 +60,7 @@ using LeagueSharp.Common;
             Menu.AddItem(new MenuItem("FleeMob", "Flee To Mobs").SetValue(true));
 
             Menu.AddItem(
-                new MenuItem( "FleeVector", "Flee To Vector").SetValue(true)
+                new MenuItem("FleeVector", "Flee To Vector").SetValue(true)
                     .SetTooltip("Flee's To Jungle Camps"));
 
             fleeLogic = new FleeLogic();

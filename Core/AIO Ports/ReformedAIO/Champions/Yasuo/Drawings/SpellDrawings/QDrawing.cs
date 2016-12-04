@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Yasuo.Drawings.SpellDrawings
+namespace ReformedAIO.Champions.Yasuo.Drawings.SpellDrawings
 {
     using System;
     using System.Drawing;

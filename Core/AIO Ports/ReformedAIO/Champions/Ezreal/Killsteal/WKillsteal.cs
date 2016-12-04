@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Ezreal.Killsteal
+namespace ReformedAIO.Champions.Ezreal.Killsteal
 {
     using System;
 

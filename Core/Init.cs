@@ -3506,6 +3506,9 @@ namespace PortAIO
                         case 19: // hi_im_gosy reborn
                             hi_im_gosu_Reborn.Vayne.Main();
                             break;
+                        case 20: // ReformedAIO
+                            ReformedAIO.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Veigar:

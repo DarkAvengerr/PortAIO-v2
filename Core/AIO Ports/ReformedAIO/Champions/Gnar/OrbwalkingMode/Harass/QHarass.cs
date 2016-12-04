@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Gnar.OrbwalkingMode.Harass
+namespace ReformedAIO.Champions.Gnar.OrbwalkingMode.Harass
 {
     using System;
     using System.Collections.Generic;

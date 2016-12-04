@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Annie.OrbwalkingMode.Lasthit
+namespace ReformedAIO.Champions.Annie.OrbwalkingMode.Lasthit
 {
     using System;
     using System.Linq;

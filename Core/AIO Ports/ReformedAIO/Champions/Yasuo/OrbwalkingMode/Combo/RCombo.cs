@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Combo
+namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Combo
 {
     using System;
     using System.Linq;
@@ -13,6 +13,7 @@ using LeagueSharp.Common;
 
     using Yasuo.Core.Spells;
 
+    using RethoughtLib.Extensions;
     using RethoughtLib.FeatureSystem.Implementations;
 
     internal sealed class RCombo : OrbwalkingChild
@@ -42,11 +43,10 @@ using LeagueSharp.Common;
                 return;
             }
             
-            var validtargets = Target.HasBuffOfType(BuffType.Knockback) || Target.HasBuffOfType(BuffType.Knockup);
-
-            if (validtargets)
+          
+            if (spell.IsAirbone(Target) && spell.RemainingAirboneTime(Target) < 5)
             {
-                LeagueSharp.Common.Utility.DelayAction.Add(Menu.Item("cDelay").GetValue<Slider>().Value, ()=> spell.Spell.Cast());
+                spell.Spell.Cast();
             }
         }
 

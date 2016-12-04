@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Lane
+namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Lane
 {
     #region Using Directives
 

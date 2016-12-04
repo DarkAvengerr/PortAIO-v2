@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Ezreal.Core.Damage
+namespace ReformedAIO.Champions.Ezreal.Core.Damage
 {
     using LeagueSharp;
     using LeagueSharp.Common;

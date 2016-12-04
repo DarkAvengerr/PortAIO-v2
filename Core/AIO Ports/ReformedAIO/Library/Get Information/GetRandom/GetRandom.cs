@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Library.Get_Information.GetRandom
+namespace ReformedAIO.Library.Get_Information.GetRandom
 {
     using System;
 

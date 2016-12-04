@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Library.Dash_Handler
+namespace ReformedAIO.Library.Dash_Handler
 {
     using LeagueSharp;
     using LeagueSharp.Common;

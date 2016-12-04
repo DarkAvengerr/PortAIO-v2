@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Olaf
+namespace ReformedAIO.Champions.Olaf
 {
     using System.Collections.Generic;
     using System.Drawing;

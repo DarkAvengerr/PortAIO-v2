@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Ashe.Core
+namespace ReformedAIO.Champions.Ashe.Core
 {
     using System;
 

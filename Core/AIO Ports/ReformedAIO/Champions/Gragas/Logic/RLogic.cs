@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Gragas.Logic
+namespace ReformedAIO.Champions.Gragas.Logic
 {
     #region Using Directives
 

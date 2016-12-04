@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Ezreal.Utility
+namespace ReformedAIO.Champions.Ezreal.Utility
 {
     using System;
 
@@ -15,13 +15,13 @@ using LeagueSharp.Common;
 
         public void OnUpdate(EventArgs args)
         {
-            //ObjectManager.//Player.SetSkin(ObjectManager.Player.CharData.BaseSkinName, Menu.Item("Skin").GetValue<StringList>().SelectedIndex);
+            //ObjectManager.//Player.SetSkin(ObjectManager.Player.BaseSkinName, Menu.Item("Skin").GetValue<StringList>().SelectedIndex);
         }
 
         protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
             base.OnLoad(sender, eventArgs);
-            var a = ObjectManager.Player.CharData.BaseSkinName;
+            var a = ObjectManager.Player.BaseSkinName;
 
             Menu.AddItem(new MenuItem("Skin", "Skin")).SetValue(new StringList(new[]
                                                                                    {
@@ -34,7 +34,7 @@ using LeagueSharp.Common;
         {
             base.OnDisable(sender, eventArgs);
             Game.OnUpdate -= OnUpdate;
-            //ObjectManager.//Player.SetSkin(ObjectManager.Player.CharData.BaseSkinName, ObjectManager.Player.SkinId);
+            //ObjectManager.//Player.SetSkin(ObjectManager.Player.BaseSkinName, ObjectManager.Player.SkinId);
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs eventArgs)

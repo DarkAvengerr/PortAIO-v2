@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Annie.Core.Damage
+namespace ReformedAIO.Champions.Annie.Core.Damage
 {
     using LeagueSharp;
    

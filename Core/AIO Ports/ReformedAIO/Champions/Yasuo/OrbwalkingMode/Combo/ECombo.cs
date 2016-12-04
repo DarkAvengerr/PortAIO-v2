@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Combo
+namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Combo
 {
     using System;
     using System.Collections.Generic;

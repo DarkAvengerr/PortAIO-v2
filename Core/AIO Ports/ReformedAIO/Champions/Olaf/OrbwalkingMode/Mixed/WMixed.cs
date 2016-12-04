@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Olaf.OrbwalkingMode.Mixed
+namespace ReformedAIO.Champions.Olaf.OrbwalkingMode.Mixed
 {
     using System;
 

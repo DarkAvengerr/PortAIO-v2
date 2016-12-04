@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Olaf.Core.Damage
+namespace ReformedAIO.Champions.Olaf.Core.Damage
 {
     using LeagueSharp;
     using LeagueSharp.Common;

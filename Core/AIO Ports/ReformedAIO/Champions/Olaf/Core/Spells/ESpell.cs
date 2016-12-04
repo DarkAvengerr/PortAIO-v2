@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Olaf.Core.Spells
+namespace ReformedAIO.Champions.Olaf.Core.Spells
 {
     using LeagueSharp;
     using LeagueSharp.Common;

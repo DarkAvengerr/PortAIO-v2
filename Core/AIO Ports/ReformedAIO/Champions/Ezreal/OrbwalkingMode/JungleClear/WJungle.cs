@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Ezreal.OrbwalkingMode.JungleClear
+namespace ReformedAIO.Champions.Ezreal.OrbwalkingMode.JungleClear
 {
     using System;
     using System.Linq;

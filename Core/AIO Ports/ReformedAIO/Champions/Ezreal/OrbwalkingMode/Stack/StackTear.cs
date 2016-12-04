@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Ezreal.OrbwalkingMode.Stack
+namespace ReformedAIO.Champions.Ezreal.OrbwalkingMode.Stack
 {
     using System;
     using System.Linq;

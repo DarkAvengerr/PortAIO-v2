@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Lasthit
+namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Lasthit
 {
     using System;
     using System.Collections.Generic;

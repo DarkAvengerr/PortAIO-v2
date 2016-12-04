@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Library.WallExtension
+namespace ReformedAIO.Library.WallExtension
 {
     using LeagueSharp;
     using LeagueSharp.Common;

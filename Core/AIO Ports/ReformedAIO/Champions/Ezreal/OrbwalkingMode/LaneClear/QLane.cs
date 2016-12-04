@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Ezreal.OrbwalkingMode.LaneClear
+namespace ReformedAIO.Champions.Ezreal.OrbwalkingMode.LaneClear
 {
     using System;
     using System.Linq;

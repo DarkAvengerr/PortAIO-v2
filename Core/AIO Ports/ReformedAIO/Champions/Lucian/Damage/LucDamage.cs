@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian.Damage
+namespace ReformedAIO.Champions.Lucian.Damage
 {
     using LeagueSharp;
     using LeagueSharp.Common;

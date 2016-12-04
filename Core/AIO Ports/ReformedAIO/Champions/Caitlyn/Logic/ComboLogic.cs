@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Caitlyn.Logic
+namespace ReformedAIO.Champions.Caitlyn.Logic
 {
     using LeagueSharp;
     using LeagueSharp.Common;

@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Annie.OrbwalkingMode.Laneclear
+namespace ReformedAIO.Champions.Annie.OrbwalkingMode.Laneclear
 {
     using System;
     using System.Collections.Generic;

@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Gnar
+namespace ReformedAIO.Champions.Gnar
 {
     using System.Collections.Generic;
     using System.Drawing;
@@ -19,7 +19,6 @@ using LeagueSharp.Common;
     using PermaActive.Killsteal;
 
     using ReformedAIO.Champions.Gnar.PermaActive.Interrupter;
-    using ReformedAIO.Champions.Gnar.Utility;
 
     using RethoughtLib.Bootstraps.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Abstract_Classes;

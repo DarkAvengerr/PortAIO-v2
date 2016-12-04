@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Jungleclear
+namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Jungleclear
 {
     #region Using Directives
 

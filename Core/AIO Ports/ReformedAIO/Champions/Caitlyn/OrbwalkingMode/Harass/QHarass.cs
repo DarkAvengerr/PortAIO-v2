@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Harass
+namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Harass
 {
     using System;
 

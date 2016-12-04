@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Annie.Core.Spells
+namespace ReformedAIO.Champions.Annie.Core.Spells
 {
     using LeagueSharp;
     using LeagueSharp.Common;

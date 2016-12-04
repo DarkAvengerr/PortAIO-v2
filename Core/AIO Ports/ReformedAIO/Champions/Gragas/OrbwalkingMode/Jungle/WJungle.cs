@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Jungle
+namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Jungle
 {
     #region Using Directives
 
@@ -50,7 +50,7 @@ using LeagueSharp.Common;
         {
             var mobs = MinionManager.GetMinions(350, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
 
-            if (mobs == null || !mobs.IsValid || Variable.Player.Spellbook.IsAutoAttacking || mobs.HealthPercent < 15) return;
+            if (mobs == null || !mobs.IsValid || ObjectManager.Player.Spellbook.IsAutoAttacking || mobs.HealthPercent < 15) return;
 
             Variable.Spells[SpellSlot.W].Cast();
         }

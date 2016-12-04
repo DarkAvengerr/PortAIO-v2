@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Ezreal
+namespace ReformedAIO.Champions.Ezreal
 {
     using System.Collections.Generic;
     using System.Drawing;

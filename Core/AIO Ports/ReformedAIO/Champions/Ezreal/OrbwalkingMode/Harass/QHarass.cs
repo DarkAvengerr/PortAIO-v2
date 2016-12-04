@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Ezreal.OrbwalkingMode.Harass
+namespace ReformedAIO.Champions.Ezreal.OrbwalkingMode.Harass
 {
     using System;
 

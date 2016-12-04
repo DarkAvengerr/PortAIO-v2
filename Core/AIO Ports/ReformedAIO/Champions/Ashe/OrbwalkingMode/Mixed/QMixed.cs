@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Mixed
+namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Mixed
 {
     #region Using Directives
 
@@ -71,7 +71,7 @@ using LeagueSharp.Common;
 
             if (target == null || !target.IsValid) return;
 
-            if (Menu.Item("AAQ").GetValue<bool>() && Variable.Player.Spellbook.IsAutoAttacking) return;
+            if (Menu.Item("AAQ").GetValue<bool>() && ObjectManager.Player.Spellbook.IsAutoAttacking) return;
 
             Variable.Spells[SpellSlot.Q].Cast();
 

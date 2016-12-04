@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Yasuo.Drawings.Damage
+namespace ReformedAIO.Champions.Yasuo.Drawings.Damage
 {
     using System;
     using System.Linq;

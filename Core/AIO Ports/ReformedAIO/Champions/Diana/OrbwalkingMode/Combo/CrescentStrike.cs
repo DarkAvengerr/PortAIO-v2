@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
+namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Combo
 {
     #region Using Directives
 

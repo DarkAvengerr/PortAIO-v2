@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Yasuo.Stack
+namespace ReformedAIO.Champions.Yasuo.Stack
 {
     using System;
     using System.Collections.Generic;

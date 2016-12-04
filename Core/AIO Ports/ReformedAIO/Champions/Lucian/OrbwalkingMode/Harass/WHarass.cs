@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Harass
+namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Harass
 {
     using System.Linq;
 

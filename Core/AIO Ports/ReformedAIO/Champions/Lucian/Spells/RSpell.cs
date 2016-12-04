@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian.Spells
+namespace ReformedAIO.Champions.Lucian.Spells
 {
     using LeagueSharp;
     using LeagueSharp.Common;

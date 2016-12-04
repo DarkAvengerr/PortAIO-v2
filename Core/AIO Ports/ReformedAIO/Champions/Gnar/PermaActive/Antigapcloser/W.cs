@@ -1,15 +1,6 @@
-using System;
-using System.Linq;
-
-using LeagueSharp.Common;
-
-using ReformedAIO.Champions.Gnar.Core;
-
-using RethoughtLib.FeatureSystem.Implementations;
-
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Gnar.PermaActive.Antigapcloser
+namespace ReformedAIO.Champions.Gnar.PermaActive.Antigapcloser
 {
     using System;
     using System.Linq;

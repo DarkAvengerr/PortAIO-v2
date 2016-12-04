@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Annie
+namespace ReformedAIO.Champions.Annie
 {
     using System.Collections.Generic;
     using System.Drawing;

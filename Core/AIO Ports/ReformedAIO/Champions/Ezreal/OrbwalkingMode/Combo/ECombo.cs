@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Ezreal.OrbwalkingMode.Combo
+namespace ReformedAIO.Champions.Ezreal.OrbwalkingMode.Combo
 {
     using System;
     using System.Linq;

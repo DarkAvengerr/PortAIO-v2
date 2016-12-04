@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Lucian
+namespace ReformedAIO.Champions.Lucian
 {
     using System.Collections.Generic;
     using System.Drawing;

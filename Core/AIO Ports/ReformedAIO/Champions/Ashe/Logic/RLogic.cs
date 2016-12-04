@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Ashe.Logic
+namespace ReformedAIO.Champions.Ashe.Logic
 {
     #region Using Directives
 

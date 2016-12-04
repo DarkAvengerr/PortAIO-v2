@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Ezreal.Core.Spells
+namespace ReformedAIO.Champions.Ezreal.Core.Spells
 {
     using LeagueSharp;
     using LeagueSharp.Common;

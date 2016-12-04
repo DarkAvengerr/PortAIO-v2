@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ReformedAIO.Champions.Yasuo.Core.Spells
+namespace ReformedAIO.Champions.Yasuo.Core.Spells
 {
     using System;
 
