@@ -335,12 +335,7 @@ using EloBuddy;
             }
 
             // Patented Advanced Algorithms D321987
-            var killableTarget =
-                HeroManager.Enemies.Where(x => x.IsValidTarget(2000))
-                    .FirstOrDefault(
-                        x =>
-                        this.Player.GetSpellDamage(x, SpellSlot.R) * 2 > x.Health
-                        && (!this.Orbwalker.InAutoAttackRange(x) || this.Player.CountEnemiesInRange(this.E.Range) > 2));
+            var killableTarget = HeroManager.Enemies.Where(x => x.IsValidTarget(2000)).FirstOrDefault(x => this.Player.GetSpellDamage(x, SpellSlot.R) * 2 > x.Health);
 
             if (killableTarget != null)
             {
