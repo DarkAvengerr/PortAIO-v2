@@ -1306,6 +1306,8 @@
     <Compile Include="Core\Champion Ports\Ekko\Ekko - Master of Time\Program.cs" />
     <Compile Include="Core\Champion Ports\Ekko\Ekko - Master of Time\riskCheck.cs" />
     <Compile Include="Core\Champion Ports\Ekko\Ekko - Master of Time\Spells.cs" />
+    <Compile Include="Core\Champion Ports\Elise\SenseEliseReborn\HPBarlndicator.cs" />
+    <Compile Include="Core\Champion Ports\Elise\SenseEliseReborn\Program.cs" />
     <Compile Include="Core\Champion Ports\Ezreal\HandicAPEzreal\Components\MyMenu.cs" />
     <Compile Include="Core\Champion Ports\Ezreal\HandicAPEzreal\Components\SpellManager.cs" />
     <Compile Include="Core\Champion Ports\Ezreal\HandicAPEzreal\Components\Spells\ISpell.cs" />

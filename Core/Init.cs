@@ -997,7 +997,9 @@ namespace PortAIO
                         case 6: // BadaoElise
                             BadaoKingdom.Program.Main();
                             break;
-
+                        case 7: // SenseEliseReborn
+                            Sense_EliseReborn.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Evelynn:

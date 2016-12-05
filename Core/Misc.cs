@@ -94,7 +94,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "OKTW", "EloFactory Ekko", "xSalice", "Ekko Master of Time", "Ekko The Boy Who Shattered Time", "EkkoGod", "ElEkko", "HikiCarry Ekko", "TheEkko" };
                     break;
                 case EloBuddy.Champion.Elise:
-                    champ = new string[] { "GFUEL Elise", "D-Elise", "EliseGod", "Hikigaya Elise", "Sense Elise", "SephElise", "BadaoElise" };
+                    champ = new string[] { "GFUEL Elise", "D-Elise", "EliseGod", "Hikigaya Elise", "Sense Elise", "SephElise", "BadaoElise", "SenseElise_Reborn" };
                     break;
                 case EloBuddy.Champion.Evelynn:
                     champ = new string[] { "Evelynn#", "OKTW", "UnderratedAIO", "[SDK] ExorAIO", "[SDK] TroopAIO", "JustEvelynn", "SkyLv Evelynn" };
