@@ -218,7 +218,7 @@ using EloBuddy;
                     MovingPlayer(Game.CursorPos);
                     if (_E.IsReady())
                         _E.CastOnUnit(Player, true);
-                    if (_Q.IsReady() && QTarget != null && _Q.GetPrediction(QTarget).Hitchance >= HitChance.Low)
+                    if (_Q.IsReady() && QTarget != null && _Q.GetPrediction(QTarget).Hitchance >= HitChance.High)
                         _Q.CastIfHitchanceEquals(QTarget, _Q.GetPrediction(QTarget).Hitchance, true);
                 }
 
