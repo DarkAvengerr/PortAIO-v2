@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Program.cs.cs" company="SVIrelia">
+// <copyright file="Program.cs" company="SVIrelia">
 //      Copyright (c) SVIrelia. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -36,10 +36,7 @@ namespace SVIrelia
         /// <summary>
         ///     ObjectManager => Player
         /// </summary>
-        public static AIHeroClient Player
-        {
-            get { return ObjectManager.Player; }
-        }
+        public static AIHeroClient Player => ObjectManager.Player;
 
         /// <summary>
         ///     Run Irelia script on gameload
@@ -425,7 +422,8 @@ namespace SVIrelia
                 }
             }*/
 
-            if (target.IsValidTarget(Q.Range) && !target.IsValidTarget(Player.AttackRange) && Q.IsReady() && useq)
+            if (target.IsValidTarget(Q.Range) && (target.Distance(Player.ServerPosition) > E.Range) && Q.IsReady() &&
+                useq)
             {
                 Q.CastOnUnit(target);
                 if (E.Instance.IsReady() && target.IsValidTarget(E.Range) && usee)
@@ -446,8 +444,6 @@ namespace SVIrelia
             }
             else if (target.IsValidTarget(E.Range))
             {
-                if (Q.Instance.IsReady() && useq)
-                    Q.CastOnUnit(target);
                 if (E.Instance.IsReady() && usee && target.IsValidTarget(E.Range))
                     E.CastOnUnit(target);
                 if (W.Instance.IsReady() && usew && target.IsValidTarget(Player.AttackRange))
@@ -463,6 +459,8 @@ namespace SVIrelia
                         R.Cast(pred.CastPosition);
                     }
                 }
+                if ((target.Distance(Player.ServerPosition) > E.Range) && useq && target.IsValidTarget(Q.Range))
+                    Q.CastOnUnit(target);
             }
         }
 
@@ -482,7 +480,7 @@ namespace SVIrelia
             {
                 var minionq =
                     MinionManager.GetMinions(Player.Position, Q.Range)
-                        .FirstOrDefault(x => Q.GetDamage(x) + GetSheenDamage(x) > x.Health);
+                        .FirstOrDefault(x => Q.GetDamage(x) + GetSheenDamage(x) > x.Health + 30);
 
                 if (minionq != null)
                     Q.Cast(minionq);
@@ -497,7 +495,7 @@ namespace SVIrelia
             {
                 if (W.Instance.IsReady() && lcw && (minion.HealthPercent > 5) && (minionwe.Count > lcwslider))
                     W.Cast();
-                if (E.Instance.IsReady() && lce && (minion.Health < E.GetDamage(minion)) && lce)
+                if (E.Instance.IsReady() && lce && (minion.Health < E.GetDamage(minion)))
                     E.CastOnUnit(minion);
             }
         }

@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DrawDamage.cs.cs" company="SVIrelia">
+// <copyright file="DrawDamage.cs" company="SVIrelia">
 //      Copyright (c) SVIrelia. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
