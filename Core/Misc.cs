@@ -461,6 +461,7 @@ namespace PortAIO.Dual_Port
             utility.AddItem(new MenuItem("ControlSharp", "Enable ControlSharp?").SetValue(false));
             utility.AddItem(new MenuItem("UniversalRecallTracker", "Enable UniversalRecallTracker?").SetValue(false));
             utility.AddItem(new MenuItem("UniversalMinimapHack", "Enable UniversalMinimapHack?").SetValue(false));
+            utility.AddItem(new MenuItem("StandaloneOrbwalker", "Enable StandaloneOrbwalker?").SetValue(false));
             menu.AddSubMenu(utility);
 
             var autoPlay = new Menu("Auto Play", "PortAIOAUTOPLAY");

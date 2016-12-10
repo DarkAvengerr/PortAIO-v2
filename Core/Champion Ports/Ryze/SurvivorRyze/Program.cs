@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="Program.cs.cs" company="SurvivorRyze">
+// <copyright file="Program.cs" company="SurvivorRyze">
 //      Copyright (c) SurvivorRyze. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
@@ -62,7 +62,12 @@ namespace SurvivorRyze
             ComboMenu.AddItem(new MenuItem("CUseQ", "Cast Q").SetValue(true));
             ComboMenu.AddItem(new MenuItem("CUseW", "Cast W").SetValue(true));
             ComboMenu.AddItem(new MenuItem("CUseE", "Cast E").SetValue(true));
-            ComboMenu.AddItem(new MenuItem("CBlockAA", "Block AA in Combo Mode").SetValue(true));
+            ComboMenu.AddItem(
+                new MenuItem("SmartAABlock", "Smart AA Blocking").SetValue(true)
+                    .SetTooltip("Turn this on and it'll AA in Combo only until you get level 6 after that it'll stop."));
+            ComboMenu.AddItem(
+                new MenuItem("CBlockAA", "Block AA in Combo Mode").SetValue(true)
+                    .SetTooltip("Turn this on, if Smart AA Blocking is OFF"));
             ComboMenu.AddItem(
                 new MenuItem("Combo2TimesMana", "Champion needs to have mana for atleast 2 times (Q/W/E)?").SetValue(
                         false)
@@ -304,7 +309,15 @@ namespace SurvivorRyze
 
         private static void AABlock()
         {
-            Orbwalker.SetAttack(!Menu.Item("CBlockAA").GetValue<bool>());
+            if (Menu.Item("SmartAABlock").GetValue<bool>())
+            {
+                if (Player.Level >= 6)
+                    Orbwalker.SetAttack(false);
+            }
+            else
+            {
+                Orbwalker.SetAttack(!Menu.Item("CBlockAA").GetValue<bool>());
+            }
             //SebbyLib.OktwCommon.blockAttack = Menu.Item("CBlockAA").GetValue<bool>();
         }
 
@@ -610,7 +623,7 @@ namespace SurvivorRyze
             };
             var poutput2 = SebbyLib.Prediction.Prediction.GetPrediction(predInput2);
 
-            if ((QR.Speed != float.MaxValue) && OktwCommon.CollisionYasuo(Player.ServerPosition, poutput2.CastPosition))
+            if (OktwCommon.CollisionYasuo(Player.ServerPosition, poutput2.CastPosition))
                 return;
 
             if (Menu.Item("HitChance").GetValue<StringList>().SelectedIndex == 0)
@@ -887,14 +900,14 @@ namespace SurvivorRyze
             if (Player.ManaPercent > Menu.Item("LaneHitManaManager").GetValue<Slider>().Value)
             {
                 var specialQ =
-                    MinionManager.GetMinions(Q.Range)
+                    Cache.GetMinions(Player.Position, Q.Range)
                         .OrderBy(x => x.Distance(Player.Position));
                 if (Q.IsReady() && useQ)
                     foreach (var omfgabriel in specialQ)
                         if (omfgabriel.Health < QGetRealDamage(omfgabriel))
                             Q.Cast(omfgabriel);
-                var allMinionsQ = MinionManager.GetMinions(Q.Range);
-                var allMinionsE = MinionManager.GetMinions(E.Range);
+                var allMinionsQ = Cache.GetMinions(Player.Position, Q.Range);
+                var allMinionsE = Cache.GetMinions(Player.Position, E.Range);
                 if (Q.IsReady() && useQ)
                 {
                     if (allMinionsQ.Count > 0)
@@ -930,13 +943,13 @@ namespace SurvivorRyze
                 if (Player.ManaPercent > Menu.Item("LaneClearManaManager").GetValue<Slider>().Value)
                 {
                     var ryzeebuffed =
-                        MinionManager.GetMinions(Player.Position, Q.Range)
+                        Cache.GetMinions(Player.Position, Q.Range)
                             .Find(x => x.HasBuff("RyzeE") && x.IsValidTarget(Q.Range));
                     var ryzenotebuffed =
-                        MinionManager.GetMinions(Player.Position, Q.Range)
+                        Cache.GetMinions(Player.Position, Q.Range)
                             .Find(x => !x.HasBuff("RyzeE") && x.IsValidTarget(Q.Range));
-                    var allMinionsQ = MinionManager.GetMinions(Q.Range);
-                    var allMinions = MinionManager.GetMinions(E.Range);
+                    var allMinionsQ = Cache.GetMinions(Player.Position, Q.Range);
+                    var allMinions = Cache.GetMinions(Player.Position, E.Range);
                     if (Q.IsReady() && !E.IsReady())
                         if (allMinionsQ.Count > 0)
                             foreach (var minion in allMinionsQ)

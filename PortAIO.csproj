@@ -6265,6 +6265,7 @@
     <Compile Include="Core\Utility Ports\SFXUtility\Library\Utils.cs" />
     <Compile Include="Core\Utility Ports\SFXUtility\Program.cs" />
     <Compile Include="Core\Utility Ports\SFXUtility\SFXUtility.cs" />
+    <Compile Include="Core\Utility Ports\StandaloneOrbwalker\Program.cs" />
     <Compile Include="Core\Utility Ports\TrackerSharp\GankAlerter.cs" />
     <Compile Include="Core\Utility Ports\TrackerSharp\HbTracker.cs" />
     <Compile Include="Core\Utility Ports\TrackerSharp\Program.cs" />

@@ -204,6 +204,11 @@ namespace PortAIO
             {
                 UniversalMinimapHack.Program.Main();
             }
+
+            if (Misc.menu.Item("StandaloneOrbwalker").GetValue<bool>())
+            {
+                Standalone_Orbwalker.Program.Main();
+            }
         }
 
         public static void LoadChampion()
