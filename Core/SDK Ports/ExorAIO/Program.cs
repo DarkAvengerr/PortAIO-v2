@@ -20,7 +20,6 @@ namespace ExorAIO
             ///     Loads the Bootstrap.
             /// </summary>
             Bootstrap.Init();
-
             /// <summary>
             ///     Loads the AIO.
             /// </summary>

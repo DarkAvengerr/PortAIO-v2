@@ -84,7 +84,8 @@ namespace ExorAIO.Champions.Orianna
             if (Vars.Q.IsReady() && Targets.Target.IsValidTarget(Vars.Q.Range)
                 && Vars.Menu["spells"]["q"]["combo"].GetValue<MenuBool>().Value)
             {
-                if (((Vector2)Orianna.GetBallPosition).Distance((Vector2)Targets.Target.ServerPosition)
+                if ((Vector2)Orianna.GetBallPosition != (Vector2)GameObjects.Player.ServerPosition &&
+                    ((Vector2)Orianna.GetBallPosition).Distance((Vector2)Targets.Target.ServerPosition)
                     > ((Vector2)Orianna.GetBallPosition).Distance((Vector2)GameObjects.Player.ServerPosition))
                 {
                     if (Vars.E.IsReady() && Vars.Menu["spells"]["e"]["logical"].GetValue<MenuBool>().Value)

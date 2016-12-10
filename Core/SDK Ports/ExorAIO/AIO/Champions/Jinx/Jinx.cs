@@ -77,20 +77,6 @@ namespace ExorAIO.Champions.Jinx
                                     }
                                 }
                                 break;
-
-                            case OrbwalkingMode.Combo:
-                                var target = args.Target as AIHeroClient;
-                                var minSplashRangeEnemies =
-                                    Vars.Menu["spells"]["q"]["combo"].GetValue<MenuSliderButton>().SValue;
-                                if (isUsingFishBones && target != null)
-                                {
-                                    if (GameObjects.Player.Distance(target) < Vars.PowPow.Range
-                                        && target.CountEnemyHeroesInRange(SplashRange) < minSplashRangeEnemies)
-                                    {
-                                        Vars.Q.Cast();
-                                    }
-                                }
-                                break;
                         }
                     }
                     break;

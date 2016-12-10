@@ -49,6 +49,14 @@ namespace ExorAIO.Champions.Jinx
                         Vars.Q.Cast();
                     }
                 }
+                else
+                {
+                    if (GameObjects.Player.Distance(target) < Vars.PowPow.Range
+                        && target.CountEnemyHeroesInRange(SplashRange) < minSplashRangeEnemies)
+                    {
+                        Vars.Q.Cast();
+                    }
+                }
             }
 
             if (Bools.HasSheenBuff() && Targets.Target.IsValidTarget(GameObjects.Player.GetRealAutoAttackRange())
