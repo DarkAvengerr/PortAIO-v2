@@ -1,6 +1,6 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace NechritoRiven.Event.Misc
+using LeagueSharp.Common; 
+namespace NechritoRiven.Event.Misc
 {
     #region
 
@@ -12,8 +12,12 @@ using EloBuddy;
 
     internal class Skinchanger : Core
     {
+        #region Public Methods and Operators
+
         public static void Update(EventArgs args)
         {
         }
+
+        #endregion
     }
 }

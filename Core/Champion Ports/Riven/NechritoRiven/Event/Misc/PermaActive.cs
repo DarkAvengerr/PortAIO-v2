@@ -1,6 +1,6 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace NechritoRiven.Event.Misc
+using LeagueSharp.Common; 
+namespace NechritoRiven.Event.Misc
 {
     #region
 
@@ -53,10 +53,10 @@ using EloBuddy;
             switch (Orbwalker.ActiveMode)
             {
                 case Orbwalking.OrbwalkingMode.Combo:
-                    ComboMode.Combo();
+                    Combos.Combo();
                     break;
                 case Orbwalking.OrbwalkingMode.Burst:
-                    BurstMode.Burst();
+                    Combos.Burst();
                     break;
                 case Orbwalking.OrbwalkingMode.Flee:
                     FleeMode.Flee();

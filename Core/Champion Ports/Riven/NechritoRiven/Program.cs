@@ -1,6 +1,6 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace NechritoRiven
+using LeagueSharp.Common; 
+namespace NechritoRiven
 {
     #region
 
@@ -17,10 +17,10 @@ using EloBuddy;
 
         public static void Main()
         {
-            OnLoad();
+            OnLoad(new EventArgs());
         }
 
-        private static void OnLoad()
+        private static void OnLoad(EventArgs args)
         {
             if (ObjectManager.Player.ChampionName != "Riven")
             {

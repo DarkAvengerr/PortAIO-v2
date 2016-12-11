@@ -1,6 +1,6 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace NechritoRiven.Draw
+using LeagueSharp.Common; 
+namespace NechritoRiven.Draw
 {
     #region
 

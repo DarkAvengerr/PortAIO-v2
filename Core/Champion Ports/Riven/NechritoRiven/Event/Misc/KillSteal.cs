@@ -1,6 +1,6 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace NechritoRiven.Event.Misc
+using LeagueSharp.Common; 
+namespace NechritoRiven.Event.Misc
 {
     #region
 
@@ -45,11 +45,6 @@ using EloBuddy;
                 }
             }
 
-            if (target.Health < Spells.Q.GetDamage(target) && Spells.Q.IsReady() && Qstack != 3)
-            {
-                Spells.Q.Cast(target.Position);
-            }
-
             if (!Spells.Ignite.IsReady() || !MenuConfig.Ignite)
             {
                 return;
@@ -57,7 +52,7 @@ using EloBuddy;
 
             if (target.IsValidTarget(600f) && Dmg.IgniteDamage(target) >= target.Health)
             {
-                Player.Spellbook.CastSpell(Spells.Ignite, target);
+                ObjectManager.Player.Spellbook.CastSpell(Spells.Ignite, target);
             }
         }
 

@@ -1,6 +1,6 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace NechritoRiven.Core
+using LeagueSharp.Common; 
+namespace NechritoRiven.Core
 {
     #region
 

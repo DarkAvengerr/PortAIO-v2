@@ -1,6 +1,6 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace NechritoRiven.Event.Animation
+using LeagueSharp.Common; 
+namespace NechritoRiven.Event.Animation
 {
     #region
 
@@ -10,7 +10,7 @@ using EloBuddy;
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using NechritoRiven.Core;
+    using Core;
 
     using Orbwalking = Orbwalking;
 
@@ -19,10 +19,20 @@ using EloBuddy;
     internal class Animation : Core
     {
         #region Public Methods and Operators
+        private static bool NoStunsActive => !ObjectManager.Player.HasBuffOfType(BuffType.Stun)
+                                           && !ObjectManager.Player.HasBuffOfType(BuffType.Snare)
+                                           && !ObjectManager.Player.HasBuffOfType(BuffType.Knockback)
+                                           && !ObjectManager.Player.HasBuffOfType(BuffType.Knockup);
 
-        private static AIHeroClient Target => TargetSelector.GetTarget(ObjectManager.Player.AttackRange + 50, TargetSelector.DamageType.Physical);
+        private static bool ExtraDelay => (Target != null && Target.IsMoving)
+                                        || (Mob != null && Mob.IsMoving)
+                                        || IsGameObject;
 
-        private static Obj_AI_Minion Mob => (Obj_AI_Minion)MinionManager.GetMinions(ObjectManager.Player.AttackRange + 50, MinionTypes.All, MinionTeam.Neutral).FirstOrDefault();
+        private static AIHeroClient Target => TargetSelector.GetTarget(ObjectManager.Player.AttackRange + 50,
+            TargetSelector.DamageType.Physical);
+
+        private static Obj_AI_Minion Mob => (Obj_AI_Minion)MinionManager.GetMinions(ObjectManager.Player.AttackRange + 50,
+            MinionTypes.All, MinionTeam.Neutral).FirstOrDefault();
 
         public static void OnPlay(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
         {
@@ -64,7 +74,7 @@ using EloBuddy;
                         LeagueSharp.Common.Utility.DelayAction.Add(ResetDelay(MenuConfig.Qld), Reset);
 
                         Console.WriteLine("Q3 Delay: " 
-                         + ResetDelay( MenuConfig.Qld)
+                         + ResetDelay(MenuConfig.Qld)
                          + Environment.NewLine + ">----END----<");
                     }
                     break;
@@ -80,38 +90,37 @@ using EloBuddy;
             switch (MenuConfig.EmoteList.SelectedIndex)
             {
                 case 0:
-                    Chat.Say("/l");
+                    EloBuddy.Player.DoEmote(Emote.Laugh);
+                    //Chat.Say("/l");
                     break;
                 case 1:
-                    Chat.Say("/t");
+                    EloBuddy.Player.DoEmote(Emote.Taunt);
+                    //Chat.Say("/t");
                     break;
                 case 2:
-                    Chat.Say("/j");
+                    EloBuddy.Player.DoEmote(Emote.Joke);
+                    //Chat.Say("/j");
                     break;
                 case 3:
-                    Chat.Say("/d");
+                    EloBuddy.Player.DoEmote(Emote.Dance);
+                    //Chat.Say("/d");
                     break;
             }
         }
 
         private static int ResetDelay(int qDelay)
         {
-            if (MenuConfig.CancelPing)
+            if (MenuConfig.CancelPing || ExtraDelay)
             {
                 return qDelay + Game.Ping / 2;
             }
-
-            if ((Target != null && Target.IsMoving) || (Mob != null && Mob.IsMoving) || IsGameObject)
-            {
-                return (int)(qDelay * 1.15);
-            }
-
             return qDelay;
         }
         
         private static void Reset()
         {
             Emotes();
+            Orbwalking.LastAATick = 0;
             Orbwalking.ResetAutoAttackTimer();
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
         }
@@ -123,13 +132,8 @@ using EloBuddy;
             {
                 return false;
             }
-
-            return !ObjectManager.Player.HasBuffOfType(BuffType.Stun)
-                && !ObjectManager.Player.HasBuffOfType(BuffType.Snare) 
-                && !ObjectManager.Player.HasBuffOfType(BuffType.Knockback)
-                && !ObjectManager.Player.HasBuffOfType(BuffType.Knockup);
+            return NoStunsActive;
         }
-
         #endregion
     }
 }

@@ -1,6 +1,6 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace NechritoRiven.Event.OrbwalkingModes
+using LeagueSharp.Common; 
+namespace NechritoRiven.Event.OrbwalkingModes
 {
     #region
 

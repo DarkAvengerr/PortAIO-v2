@@ -1,6 +1,6 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace NechritoRiven.Event.Interrupters_Etc
+using LeagueSharp.Common; 
+namespace NechritoRiven.Event.Interrupters_Etc
 {
     #region
 

@@ -1568,8 +1568,7 @@
     <Compile Include="Core\Champion Ports\Riven\NechritoRiven\Event\Misc\PermaActive.cs" />
     <Compile Include="Core\Champion Ports\Riven\NechritoRiven\Event\Misc\Skinchanger.cs" />
     <Compile Include="Core\Champion Ports\Riven\NechritoRiven\Event\OrbwalkingModes\AfterAuto.cs" />
-    <Compile Include="Core\Champion Ports\Riven\NechritoRiven\Event\OrbwalkingModes\BurstMode.cs" />
-    <Compile Include="Core\Champion Ports\Riven\NechritoRiven\Event\OrbwalkingModes\ComboMode.cs" />
+    <Compile Include="Core\Champion Ports\Riven\NechritoRiven\Event\OrbwalkingModes\Combos.cs" />
     <Compile Include="Core\Champion Ports\Riven\NechritoRiven\Event\OrbwalkingModes\FastHarassMode.cs" />
     <Compile Include="Core\Champion Ports\Riven\NechritoRiven\Event\OrbwalkingModes\FleeMode.cs" />
     <Compile Include="Core\Champion Ports\Riven\NechritoRiven\Event\OrbwalkingModes\JungleClearMode.cs" />

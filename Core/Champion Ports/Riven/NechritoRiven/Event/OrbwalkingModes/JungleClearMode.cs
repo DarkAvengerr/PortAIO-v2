@@ -1,6 +1,6 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace NechritoRiven.Event.OrbwalkingModes
+using LeagueSharp.Common; 
+namespace NechritoRiven.Event.OrbwalkingModes
 {
     #region
 
@@ -29,7 +29,7 @@ using EloBuddy;
                 if (!m.IsValid
                     || !Spells.E.IsReady() 
                     || !MenuConfig.JnglE 
-                    || Player.Spellbook.IsAutoAttacking)
+                    || ObjectManager.Player.Spellbook.IsAutoAttacking)
                 {
                     return;
                 }

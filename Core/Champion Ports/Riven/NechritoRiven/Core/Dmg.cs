@@ -1,6 +1,6 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace NechritoRiven.Core
+using LeagueSharp.Common; 
+namespace NechritoRiven.Core
 {
     #region
 
@@ -42,7 +42,7 @@ using EloBuddy;
                 damage += Spells.R.GetDamage(enemy) + attackDmg;
             }
 
-            if (!Player.Spellbook.IsAutoAttacking)
+            if (!ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
                 damage += attackDmg;
             }
@@ -52,7 +52,7 @@ using EloBuddy;
 
         public static float IgniteDamage(AIHeroClient target)
         {
-            if (Spells.Ignite == SpellSlot.Unknown || Player.Spellbook.CanUseSpell(Spells.Ignite) != SpellState.Ready)
+            if (Spells.Ignite == SpellSlot.Unknown || ObjectManager.Player.Spellbook.CanUseSpell(Spells.Ignite) != SpellState.Ready)
             {
                 return 0f;
             }

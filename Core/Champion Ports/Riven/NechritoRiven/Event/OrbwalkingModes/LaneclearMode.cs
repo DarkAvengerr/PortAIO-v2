@@ -1,6 +1,6 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace NechritoRiven.Event.OrbwalkingModes
+using LeagueSharp.Common; 
+namespace NechritoRiven.Event.OrbwalkingModes
 {
     #region
 
@@ -19,7 +19,7 @@ using EloBuddy;
         {
             var minions = MinionManager.GetMinions(Player.AttackRange + 380);
 
-            if (minions == null || Player.Spellbook.IsAutoAttacking || (MenuConfig.LaneEnemy && ObjectManager.Player.CountEnemiesInRange(1500) > 0))
+            if (minions == null || ObjectManager.Player.Spellbook.IsAutoAttacking || (MenuConfig.LaneEnemy && ObjectManager.Player.CountEnemiesInRange(1500) > 0))
             {
                 return;
             }
@@ -48,7 +48,7 @@ using EloBuddy;
 
                else if (Spells.W.IsReady()
                     && MenuConfig.LaneW 
-                    && !Player.Spellbook.IsAutoAttacking
+                    && !ObjectManager.Player.Spellbook.IsAutoAttacking
                     && !(m.Health > Spells.W.GetDamage(m))
                     && BackgroundData.InRange(m))
                 {

@@ -1,6 +1,6 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace NechritoRiven.Core
+using LeagueSharp.Common; 
+namespace NechritoRiven.Core
 {
     #region
 
@@ -78,6 +78,8 @@ using EloBuddy;
                 ? 3748 
                  : 0;
 
+        private static bool CanUseItem => Items.CanUseItem(Item) && Item != 0;
+
         public static bool R1 { get; set; }
 
 
@@ -100,7 +102,7 @@ using EloBuddy;
 
             if (canQ)
             {
-                if (Items.CanUseItem(Item) && Item != 0 && Qstack == 3)
+                if (CanUseItem && Qstack == 3)
                 {
                     Items.UseItem(Item);
                     LeagueSharp.Common.Utility.DelayAction.Add(1, () => Spells.Q.Cast(Unit.Position));
@@ -115,7 +117,7 @@ using EloBuddy;
             {
                 Spells.W.Cast();
 
-                if (doublecastQ && Spells.Q.IsReady() && Qstack == 1)
+                if (doublecastQ && Spells.Q.IsReady() && Qstack == 1 && MenuConfig.Doublecast)
                 {
                     var delay = Spells.R.IsReady() ? 190 : 90;
 
@@ -154,8 +156,8 @@ using EloBuddy;
             var target = TargetSelector.GetSelectedTarget();
 
             Spells.W.Cast();
-            LeagueSharp.Common.Utility.DelayAction.Add(10, () => Player.Spellbook.CastSpell(Spells.Flash, target.Position));
-            LeagueSharp.Common.Utility.DelayAction.Add(30, ()=> DoubleCastQ(target));
+            LeagueSharp.Common.Utility.DelayAction.Add(10, () => ObjectManager.Player.Spellbook.CastSpell(Spells.Flash, target.Position));
+            LeagueSharp.Common.Utility.DelayAction.Add(15, ()=> DoubleCastQ(target));
         }
 
         public static void CastW(Obj_AI_Base x)
