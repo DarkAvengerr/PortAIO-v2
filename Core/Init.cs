@@ -3519,6 +3519,9 @@ namespace PortAIO
                         case 20: // ReformedAIO
                             ReformedAIO.Program.Main();
                             break;
+                        case 21: // Lord's Vayne
+                            Lord_s_Vayne.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Veigar:
