@@ -110,7 +110,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
                 if (Player.HealthPercent < 60)
                 {
-                    double dmg = OktwCommon.GetIncomingDamage(Player, 1);
+                    double dmg = OktwCommon.GetIncomingDamage(Player);
                     var enemys = Player.CountEnemiesInRange(700);
                     if (Player.Health - dmg < enemys * Player.Level * 20)
                         R.Cast(poutput.CastPosition);

@@ -117,7 +117,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 if (dmg == 0)
                     continue;
 
-                if (ally.Health - dmg <  ally.Level * 10)
+                if (ally.Health - dmg <  ally.Level * 12)
                     R.CastOnUnit(ally);
             }
         }
@@ -175,7 +175,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
         private void LogicE()
         {
-            if(Program.Combo && Player.Mana > WMANA + EMANA && Player.CountEnemiesInRange(700) > 0)
+            if(Program.Combo && Player.CountEnemiesInRange(700) > 0)
                 E.Cast();
             else if (Program.Harass && Config.Item("harassE", true).GetValue<bool>() && Player.Mana > WMANA + EMANA + QMANA && Player.CountEnemiesInRange(500) > 0)
                 E.Cast();

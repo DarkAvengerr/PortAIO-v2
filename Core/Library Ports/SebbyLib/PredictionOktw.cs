@@ -126,7 +126,7 @@ namespace SebbyLib.Prediction
 
         internal float RealRadius
         {
-            get { return UseBoundingRadius ? Radius : Radius; }
+            get { return UseBoundingRadius ? Radius + Unit.BoundingRadius   : Radius; }
         }
     }
 
@@ -285,6 +285,7 @@ namespace SebbyLib.Prediction
                 var wallPoint = GetWallPoint(result.CastPosition, moveOutWall);
                 if (!wallPoint.IsZero)
                 {
+                    result.Hitchance = HitChance.VeryHigh;
                     result.CastPosition = wallPoint.Extend(result.CastPosition, moveOutWall);
                     OktwCommon.debug("PRED: Near WALL");
                 }
@@ -416,7 +417,7 @@ namespace SebbyLib.Prediction
 
             // SHORT CLICK DETECTION ///////////////////////////////////////////////////////////////////////////////////
 
-            if (distanceUnitToWaypoint > 0 && distanceUnitToWaypoint < 100)
+            if (distanceUnitToWaypoint > 0 && distanceUnitToWaypoint < 50 + input.Radius)
             {
                 OktwCommon.debug("PRED: SHORT CLICK DETECTION");
                 result.Hitchance = HitChance.Medium;

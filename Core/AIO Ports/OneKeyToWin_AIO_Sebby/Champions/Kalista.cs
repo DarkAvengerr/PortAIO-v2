@@ -139,7 +139,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
         {
             if (E.IsReady() && Player.HealthPercent < 50 && Config.Item("Edead", true).GetValue<bool>() )
             {
-                double dmg = OktwCommon.GetIncomingDamage(Player, 0.5F);
+                double dmg = OktwCommon.GetIncomingDamage(Player);
                 if (dmg > 0)
                 {
                     if (Player.Health - dmg < Player.CountEnemiesInRange(700) * Player.Level * 5)
@@ -153,7 +153,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             {
                 if (R.IsReady() && AllyR != null && AllyR.IsVisible && AllyR.HealthPercent < 50 && AllyR.Distance(Player.Position) < R.Range)
                 {
-                    double dmg = OktwCommon.GetIncomingDamage(AllyR, 1);
+                    double dmg = OktwCommon.GetIncomingDamage(AllyR);
                     if (dmg > 0)
                     {
                         if (AllyR.Health - dmg < AllyR.CountEnemiesInRange(700) * AllyR.Level * 10)

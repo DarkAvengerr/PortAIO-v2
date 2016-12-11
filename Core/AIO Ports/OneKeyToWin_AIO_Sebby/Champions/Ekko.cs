@@ -102,7 +102,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                     }
                 }
 
-                double dmg = OktwCommon.GetIncomingDamage(Player, 1);
+                double dmg = OktwCommon.GetIncomingDamage(Player);
 
                 if (dmg > 0)
                 {

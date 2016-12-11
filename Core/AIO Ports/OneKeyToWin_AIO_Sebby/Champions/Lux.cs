@@ -24,11 +24,11 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             E = new Spell(SpellSlot.E, 1075);
             R = new Spell(SpellSlot.R, 3000);
 
-            Q1.SetSkillshot(0.25f, 70f, 1200f, true, SkillshotType.SkillshotLine);
-            Q.SetSkillshot(0.25f, 70f, 1200f, false, SkillshotType.SkillshotLine);
+            Q1.SetSkillshot(0.25f, 80f, 1200f, true, SkillshotType.SkillshotLine);
+            Q.SetSkillshot(0.25f, 80f, 1200f, false, SkillshotType.SkillshotLine);
             W.SetSkillshot(0.25f, 110f, 1200f, false, SkillshotType.SkillshotLine);
             E.SetSkillshot(0.3f, 250f, 1050f, false, SkillshotType.SkillshotCircle);
-            R.SetSkillshot(1f, 110f, float.MaxValue, false, SkillshotType.SkillshotLine);
+            R.SetSkillshot(1.35f, 190f, float.MaxValue, false, SkillshotType.SkillshotLine);
             Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("noti", "Show notification", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("qRange", "Q range", true).SetValue(false));
             Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("wRange", "W range", true).SetValue(false));
@@ -62,6 +62,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             }
 
             Config.SubMenu(Player.ChampionName).SubMenu("R config").AddItem(new MenuItem("autoR", "Auto R", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("R config").AddItem(new MenuItem("passiveR", "Include R passive damage", true).SetValue(false));
             Config.SubMenu(Player.ChampionName).SubMenu("R config").AddItem(new MenuItem("Rcc", "R fast KS combo", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("R config").AddItem(new MenuItem("RaoeCount", "R x enemies in combo [0 == off]", true).SetValue(new Slider(3, 5, 0)));
             Config.SubMenu(Player.ChampionName).SubMenu("R config").AddItem(new MenuItem("hitchanceR", "Hit Chance R", true).SetValue(new Slider(2, 3, 0)));
@@ -267,7 +268,6 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             {
                 foreach (var target in HeroManager.Enemies.Where(target => target.IsValidTarget(R.Range) && target.CountAlliesInRange(600) < 2 && OktwCommon.ValidUlt(target)))
                 {
-                    float predictedHealth = target.Health + target.HPRegenRate * 2;
                     float Rdmg = OktwCommon.GetKsDamage(target, R);
 
                     if (Items.HasItem(3155, target))
@@ -280,20 +280,15 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                         Rdmg = Rdmg - 400;
                     }
 
-                    if (target.HasBuff("luxilluminatingfraulein"))
+                    if (Config.Item("passiveR", true).GetValue<bool>())
                     {
-                        Rdmg +=  (float)Player.CalcDamage(target, Damage.DamageType.Magical,10 + (8 * Player.Level) + 0.2 * Player.FlatMagicDamageMod);
-                    }
-
-                    if (Player.HasBuff("itemmagicshankcharge"))
-                    {
-                        if (Player.GetBuff("itemmagicshankcharge").Count == 100)
-                        {
+                        if (target.HasBuff("luxilluminatingfraulein"))
+                            Rdmg += (float)Player.CalcDamage(target, Damage.DamageType.Magical, 10 + (8 * Player.Level) + 0.2 * Player.FlatMagicDamageMod);
+                        
+                        if (Player.HasBuff("itemmagicshankcharge") && Player.GetBuff("itemmagicshankcharge").Count == 100)
                             Rdmg += (float)Player.CalcDamage(target, Damage.DamageType.Magical, 100 + 0.1 * Player.FlatMagicDamageMod);
-                        }
                     }
-
-                    if (Rdmg > predictedHealth )
+                    if (Rdmg > target.Health)
                     {
                         castR(target);
                         Program.debug("R normal");
@@ -306,7 +301,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                         {
                             var eDmg = E.GetDamage(target);
                             
-                            if (eDmg > predictedHealth)
+                            if (eDmg > target.Health)
                                 return;
                             else
                                 dmgCombo += eDmg;
@@ -315,7 +310,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                         if (target.IsValidTarget(800))
                             dmgCombo += BonusDmg(target);
 
-                        if (dmgCombo > predictedHealth)
+                        if (dmgCombo > target.Health)
                         {
                             R.CastIfWillHit(target, 2);
                             R.Cast(target);
@@ -485,13 +480,14 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
             if (Config.Item("rRangeMini", true).GetValue<bool>())
             {
-                if (R.IsReady())
+                if (Config.Item("onlyRdy", true).GetValue<bool>())
+                {
+                    if(R.IsReady())
+                        LeagueSharp.Common.Utility.DrawCircle(Player.Position, R.Range, System.Drawing.Color.Aqua, 1, 20, true);
+                }
+                else
                     LeagueSharp.Common.Utility.DrawCircle(Player.Position, R.Range, System.Drawing.Color.Aqua, 1, 20, true);
             }
-            else
-                LeagueSharp.Common.Utility.DrawCircle(Player.Position, R.Range, System.Drawing.Color.Aqua, 1, 20, true);
-
-
         }
 
         private void Drawing_OnDraw(EventArgs args)
