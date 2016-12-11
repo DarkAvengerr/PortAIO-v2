@@ -1649,8 +1649,14 @@
     <Compile Include="Core\Champion Ports\Varus\ElVarusRevamped\Program.cs" />
     <Compile Include="Core\Champion Ports\Varus\ElVarusRevamped\Utils\Logging.cs" />
     <Compile Include="Core\Champion Ports\Varus\ElVarusRevamped\Utils\Misc.cs" />
+    <Compile Include="Core\Champion Ports\Vayne\hi im gosu Reborn\Condemn.cs" />
     <Compile Include="Core\Champion Ports\Vayne\hi im gosu Reborn\Distance.cs" />
+    <Compile Include="Core\Champion Ports\Vayne\hi im gosu Reborn\Geometry.cs" />
+    <Compile Include="Core\Champion Ports\Vayne\hi im gosu Reborn\MyCache.cs" />
+    <Compile Include="Core\Champion Ports\Vayne\hi im gosu Reborn\Parada.cs" />
     <Compile Include="Core\Champion Ports\Vayne\hi im gosu Reborn\Program.cs" />
+    <Compile Include="Core\Champion Ports\Vayne\hi im gosu Reborn\QLogic.cs" />
+    <Compile Include="Core\Champion Ports\Vayne\hi im gosu Reborn\QMode.cs" />
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Condemn\Flowers.cs" />
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Condemn\Gosu.cs" />
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Condemn\Lords.cs" />

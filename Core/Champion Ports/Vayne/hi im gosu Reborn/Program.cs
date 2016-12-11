@@ -6,6 +6,8 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
+using SebbyLib;
+
 
 #endregion
 
@@ -16,19 +18,25 @@ namespace hi_im_gosu_Reborn
     public class Vayne
     {
         public static Spell E;
+        public static Spell E2;
         public static Spell Q;
+        public static Spell W;
         public static Spell R;
+
+
 
 
         public static Vector3 TumblePosition = Vector3.Zero;
 
 
-        public static Orbwalking.Orbwalker orbwalker;
+        public static SebbyLib.Orbwalking.Orbwalker orbwalker;
 
+        private static string News = "Added New Custom Orbwalker for better cs'ing and movement";
 
         public static Menu menu;
 
         public static Dictionary<string, SpellSlot> spellData;
+        public static Items.Item zzrot = new Items.Item(3512, 400);
 
         public static AIHeroClient tar;
         public const string ChampName = "Vayne";
@@ -44,42 +52,59 @@ namespace hi_im_gosu_Reborn
         public static Menu botrk;
         public static Menu qss;
 
+        //private static Obj_AI_Base target;
         /* Asuna VayneHunter Copypasta */
         public static readonly Vector2 MidPos = new Vector2(6707.485f, 8802.744f);
 
         public static readonly Vector2 DragPos = new Vector2(11514, 4462);
 
         public static float LastMoveC;
-
-        public static void TumbleHandler()
+        //private static Obj_AI_Base target;
+        public static bool CheckTarget(Obj_AI_Base target, float range = float.MaxValue)
         {
-            if (Player.Distance(MidPos) >= Player.Distance(DragPos))
+            if (target == null)
             {
-                if (Player.Position.X < 12000 || Player.Position.X > 12070 || Player.Position.Y < 4800 ||
-                Player.Position.Y > 4872)
-                {
-                    MoveToLimited(new Vector2(12050, 4827).To3D());
-                }
-                else
-                {
-                    MoveToLimited(new Vector2(12050, 4827).To3D());
-                    Q.Cast(DragPos, true);
-                }
+                return false;
             }
-            else
+
+            if (target.DistanceToPlayer() > range)
             {
-                if (Player.Position.X < 6908 || Player.Position.X > 6978 || Player.Position.Y < 8917 ||
-                Player.Position.Y > 8989)
-                {
-                    MoveToLimited(new Vector2(6958, 8944).To3D());
-                }
-                else
-                {
-                    MoveToLimited(new Vector2(6958, 8944).To3D());
-                    Q.Cast(MidPos, true);
-                }
+                return false;
             }
+
+            if (target.HasBuff("KindredRNoDeathBuff"))
+            {
+                return false;
+            }
+
+            if (target.HasBuff("UndyingRage") && target.GetBuff("UndyingRage").EndTime - Game.Time > 0.3)
+            {
+                return false;
+            }
+
+            if (target.HasBuff("JudicatorIntervention"))
+            {
+                return false;
+            }
+
+            if (target.HasBuff("ChronoShift") && target.GetBuff("ChronoShift").EndTime - Game.Time > 0.3)
+            {
+                return false;
+            }
+
+            if (target.HasBuff("ShroudofDarkness"))
+            {
+                return false;
+            }
+
+            if (target.HasBuff("SivirShield"))
+            {
+                return false;
+            }
+
+            return !target.HasBuff("FioraW");
         }
+       
 
         public static void MoveToLimited(Vector3 where)
         {
@@ -118,23 +143,29 @@ namespace hi_im_gosu_Reborn
             }
         }*/
 
-       /* public static void DrawPointer(Vector3 start, Vector3 end, float len)
-        {
-            var line = new Geometry.Polygon.Line(start, end, len);
-
-            var endNext = end.Extend(new Vector3(1, 0, 0), 100).To2D()
-                .RotateAroundPoint(start.To2D(), 90 * (float)Math.PI / 180);
-            var endNext2 = end.Extend(new Vector3(1, 0, 0), 100).To2D()
-                .RotateAroundPoint(start.To2D(), -90 * (float)Math.PI / 180);
-            var line2 = new Geometry.Polygon.Line(end.To2D(), endNext, 50);
-            var line3 = new Geometry.Polygon.Line(end.To2D(), endNext2, 50);
-
-            line2.Draw(System.Drawing.Color.Crimson);
-            line3.Draw(System.Drawing.Color.Crimson);
-            line.Draw(System.Drawing.Color.Crimson);
-        }*/
+        /* public static void DrawPointer(Vector3 start, Vector3 end, float len)
+         {
+             var line = new Geometry.Polygon.Line(start, end, len);
+             var endNext = end.Extend(new Vector3(1, 0, 0), 100).To2D()
+                 .RotateAroundPoint(start.To2D(), 90 * (float)Math.PI / 180);
+             var endNext2 = end.Extend(new Vector3(1, 0, 0), 100).To2D()
+                 .RotateAroundPoint(start.To2D(), -90 * (float)Math.PI / 180);
+             var line2 = new Geometry.Polygon.Line(end.To2D(), endNext, 50);
+             var line3 = new Geometry.Polygon.Line(end.To2D(), endNext2, 50);
+             line2.Draw(System.Drawing.Color.Crimson);
+             line3.Draw(System.Drawing.Color.Crimson);
+             line.Draw(System.Drawing.Color.Crimson);
+         }*/
         public static void Game_OnGameLoad(EventArgs args)
         {
+            Q = new Spell(SpellSlot.Q, 300f);
+            W = new Spell(SpellSlot.W);
+            E2 = new Spell(
+               SpellSlot.E,(uint)(650 + ObjectManager.Player.BoundingRadius));
+            E = new Spell(SpellSlot.E, 550f);
+            E.SetTargetted(0.25f, 1600f);
+            R = new Spell(SpellSlot.R);
+
             Player = ObjectManager.Player;
             //Utils.PrintMessage("Vayne loaded");
             if (Player.ChampionName != ChampName) return;
@@ -143,7 +174,7 @@ namespace hi_im_gosu_Reborn
             menu = new Menu("Gosu", "Gosu", true);
             //Orbwalker
             menu.AddSubMenu(new Menu("Orbwalker", "Orbwalker"));
-            orbwalker = new Orbwalking.Orbwalker(menu.SubMenu("Orbwalker"));
+            orbwalker = new SebbyLib.Orbwalking.Orbwalker(menu.SubMenu("Orbwalker"));
             //TS
             var TargetSelectorMenu = new Menu("Target Selector", "Target Selector");
             TargetSelector.AddToMenu(TargetSelectorMenu);
@@ -160,21 +191,25 @@ namespace hi_im_gosu_Reborn
             qmenu.AddItem(new MenuItem("UseQJ", "Use Q Farm").SetValue(true));
             qmenu.AddItem(new MenuItem("Junglemana", "Minimum Mana to Use Q Farm").SetValue(new Slider(60, 1, 100)));
             qmenu.AddItem(new MenuItem("AntiMQ", "Use Anti - Melee [Q]").SetValue(true));
-            qmenu.AddItem(new MenuItem("DrawQ", "Draw Q Arrow").SetValue(true));
+           // qmenu.AddItem(new MenuItem("FastQ", "Fast Q").SetValue(true).SetValue(new KeyBind("Q".ToCharArray()[0], KeyBindType.Press)));
+            qmenu.AddItem(new MenuItem("FocusTwoW", "Focus 2 W Stacks").SetValue(true));
+            //qmenu.AddItem(new MenuItem("DrawQ", "Draw Q Arrow").SetValue(true));
+
 
             emenu = menu.AddSubMenu(new Menu("Condemn", "Condemn"));
             emenu.AddItem(new MenuItem("UseEC", "Use E Combo").SetValue(true));
             emenu.AddItem(new MenuItem("he", "Use E Harass").SetValue(true));
-            emenu.AddItem(
-                new MenuItem("UseET", "Use E (Toggle)").SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Toggle)));
+            emenu.AddItem(new MenuItem("UseET", "Use E (Toggle)").SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Toggle)));
+            emenu.AddItem(new MenuItem("zzrot", "[Beta] ZZrot Condemn").SetValue(new KeyBind("I".ToCharArray()[0], KeyBindType.Toggle))).Permashow(true, "Vayne | ZZRot Toggle", Color.Aqua);
+           // emenu.AddItem(new MenuItem("FlashE", "Flash E").SetValue(true).SetValue(new KeyBind("Y".ToCharArray()[0], KeyBindType.Press)));
 
-           
+
             //emenu.AddItem(new MenuItem("Gap_E", "Use E To Gabcloser").SetValue(true));
             // emenu.AddItem(new MenuItem("GapD", "Anti GapCloser Delay").SetValue(new Slider(0, 0, 1000)).SetTooltip("Sets a delay before the Condemn for Antigapcloser is casted."));
+            emenu.AddItem(new MenuItem("EMode", "Use E Mode:", true).SetValue(new StringList(new[] { "Lord's", "Gosu", "Flowers", "VHR", "Marksman", "Sharpshooter", "OKTW", "Shine", "PRADASMART", "PRADAPERFECT", "OLDPRADA", "PRADALEGACY" })));
             emenu.AddItem(new MenuItem("PushDistance", "E Push Distance").SetValue(new Slider(415, 475, 300)));
-            emenu.AddItem(
-                new MenuItem("UseEaa", "Use E after auto").SetValue(
-                    new KeyBind("G".ToCharArray()[0], KeyBindType.Toggle)));
+            emenu.AddItem(new MenuItem("EHitchance", "E Hitchance").SetValue(new Slider(50, 1, 100)).SetTooltip("Only use this for Prada Condemn Methods"));
+            emenu.AddItem(new MenuItem("UseEaa", "Use E after auto").SetValue(new KeyBind("M".ToCharArray()[0], KeyBindType.Press)));
 
 
 
@@ -238,7 +273,8 @@ namespace hi_im_gosu_Reborn
 
             Q = new Spell(SpellSlot.Q, 0f);
             R = new Spell(SpellSlot.R, float.MaxValue);
-            E = new Spell(SpellSlot.E, float.MaxValue);
+            E = new Spell(SpellSlot.E, 650f);
+            E.SetTargetted(0.25f, 1600f);
 
             var cde = ObjectManager.Player.Spellbook.GetSpell(ObjectManager.Player.GetSpellSlot("SummonerBoost"));
             if (cde != null)
@@ -252,17 +288,20 @@ namespace hi_im_gosu_Reborn
             E.SetTargetted(0.25f, 2200f);
             Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
             Game.OnUpdate += Game_OnGameUpdate;
-            Orbwalking.AfterAttack += Orbwalking_AfterAttack;
+            SebbyLib.Orbwalking.AfterAttack += Orbwalking_AfterAttack;
+            SebbyLib.Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
+            Obj_AI_Base.OnPlayAnimation += OnPlay;
             GameObject.OnCreate += OnCreate;
             //  Drawing.OnDraw += DrawingOnOnDraw;
 
 
             //Chat.Print("<font color='#881df2'>Blm95 Vayne Reborn by LordZEDith</font> Loaded.");
             Chat.Print("<font size='30'>hi_im_gosu Reborn</font> <font color='#b756c5'>by LordZEDith</font>");
-            Chat.Print(
-                "<font color='#f2f21d'>Do you like it???  </font> <font color='#ff1900'>Drop 1 Upvote in Database </font>");
+            Chat.Print("<font color='#b756c5'>NEWS: </font>" + News);
+            //Chat.Print(
+            // "<font color='#f2f21d'>Do you like it???  </font> <font color='#ff1900'>Drop 1 Upvote in Database </font>");
             //  Chat.Print(
             //  "<font color='#f2f21d'>Buy me cigars </font> <font color='#ff1900'>ssssssssssmith@hotmail.com</font> (10) S");
             menu.AddToMainMenu();
@@ -351,6 +390,7 @@ namespace hi_im_gosu_Reborn
                                         if (qmenu.Item("AntiMQ").GetValue<bool>())
                                             if (Q.IsReady())
                                                 Q.Cast(ObjectManager.Player.Position.Extend(hero.Position, -Q.Range));
+
         }
 
         public static void Usepotion()
@@ -438,22 +478,30 @@ namespace hi_im_gosu_Reborn
                      MinionOrderTypes.MaxHealth).FirstOrDefault();
              var Minions = MinionManager.GetMinions(Player.Position.Extend(Game.CursorPos, Q.Range), Player.AttackRange, MinionTypes.All);
              var useQ = qmenu.Item("UseQJ").GetValue<bool>();
-
              int countMinions = 0;
              foreach (var minions in Minions.Where(minion => minion.Health < Player.GetAutoAttackDamage(minion) || minion.Health < Q.GetDamage(minion)))
              {
                  countMinions++;
              }
-
              if (countMinions >= 2 && useQ && Q.IsReady() && Minions != null)
                  Q.Cast(Player.Position.Extend(Game.CursorPos, Q.Range/2));
-
              if (useQ && Q.IsReady() && Orbwalking.InAutoAttackRange(mob) && mob != null)
              {
                  Q.Cast(Game.CursorPos);
              }
          }*/
-
+        public static void OnPlay(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
+        {
+            if (sender.IsMe)
+            {
+                switch (args.Animation)
+                {
+                    case "Spell1a":
+                   EloBuddy.Player.DoEmote(Emote.Dance);
+                        break;
+                }
+            }
+        }
 
         public static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
@@ -486,9 +534,11 @@ namespace hi_im_gosu_Reborn
 
                 if (countMinions >= 2 && useQ && Q.IsReady() && Minions != null) Q.Cast(Player.Position.Extend(Game.CursorPos, Q.Range / 2));
 
-                if (useQ && Q.IsReady() && Orbwalking.InAutoAttackRange(mob) && mob != null)
+                if (useQ && Q.IsReady() && SebbyLib.Orbwalking.InAutoAttackRange(mob) && mob != null)
                 {
                     Q.Cast(Game.CursorPos);
+                    EloBuddy.Player.DoEmote(Emote.Dance);
+
                 }
             }
 
@@ -501,11 +551,23 @@ namespace hi_im_gosu_Reborn
             {
                 if (Q.IsReady())
                 {
+
                     Q.Cast(Game.CursorPos);
+                    EloBuddy.Player.DoEmote(Emote.Dance);
+
                 }
 
-                Orbwalking.Orbwalk(TargetSelector.GetTarget(625, TargetSelector.DamageType.Physical), Game.CursorPos);
+
+               SebbyLib.Orbwalking.Orbwalk(TargetSelector.GetTarget(625, TargetSelector.DamageType.Physical), Game.CursorPos);
             }
+
+           // Condemn.FlashE();
+
+            if (menu.Item("zzrot").GetValue<KeyBind>().Active)
+            {
+                Condemn.RotE();
+            }
+
 
             if (orbwalker.ActiveMode.ToString() == "Combo")
             {
@@ -556,22 +618,29 @@ namespace hi_im_gosu_Reborn
                     if ((disafter < 630 * 630) && disafter > 150 * 150)
                     {
                         Q.Cast(Game.CursorPos);
+                        EloBuddy.Player.DoEmote(Emote.Dance);
+
                     }
 
                     if (Vector3.DistanceSquared(tar.Position, ObjectManager.Player.Position) > 630 * 630
                         && disafter < 630 * 630)
                     {
                         Q.Cast(Game.CursorPos);
+                        EloBuddy.Player.DoEmote(Emote.Dance);
+
                     }
                 }
                 else
                 {
                     Q.Cast(Game.CursorPos);
+                    EloBuddy.Player.DoEmote(Emote.Dance);
+
+
                 }
                 //Q.Cast(Game.CursorPos);
             }
         }
-        public static void Orbwalking_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
+        public static void Orbwalking_BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
         {
             if (args.Unit.IsMe)
             {
@@ -599,6 +668,7 @@ namespace hi_im_gosu_Reborn
             return new Vector3(new Vector2((float)(A.X / distance)), (float)(A.Y / distance));
         }
 
+
         public static void Game_OnGameUpdate(EventArgs args)
         {
             if (menu.Item("useR").GetValue<bool>() && R.IsReady()
@@ -608,16 +678,12 @@ namespace hi_im_gosu_Reborn
                 R.Cast();
             }
 
-            Usepotion();
-
-            if (menu.Item("walltumble").GetValue<KeyBind>().Active)
-            {
-                TumbleHandler();
-            }
+            Usepotion(); 
 
             if (menu.Item("aaqaa").GetValue<KeyBind>().Active)
             {
-                Orbwalking.Orbwalk(TargetSelector.GetTarget(625, TargetSelector.DamageType.Physical), Game.CursorPos);
+               SebbyLib.Orbwalking.Orbwalk(TargetSelector.GetTarget(625, TargetSelector.DamageType.Physical), Game.CursorPos);
+              
             }
 
             if (Itemsmenu.Item("QSS").GetValue<bool>())
@@ -642,29 +708,394 @@ namespace hi_im_gosu_Reborn
                 }
             }
 
-
-            if (!E.IsReady()) return; //||
+            //||
             //(orbwalker.ActiveMode.ToString() != "Combo" || !menu.Item("UseEC").GetValue<bool>()) &&
             //!menu.Item("UseET").GetValue<KeyBind>().Active)) return;
             if ((orbwalker.ActiveMode.ToString() == "Combo" && emenu.Item("UseEC").GetValue<bool>()) || (orbwalker.ActiveMode.ToString() == "Mixed" && emenu.Item("he").GetValue<bool>()) || emenu.Item("UseET").GetValue<KeyBind>().Active)
-                foreach (var hero in from hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsValidTarget(550f))
-                                     let prediction = E.GetPrediction(hero)
-                                     where NavMesh.GetCollisionFlags(
-                                         prediction.UnitPosition.To2D()
-                                             .Extend(ObjectManager.Player.ServerPosition.To2D(),
-                                                 -emenu.Item("PushDistance").GetValue<Slider>().Value)
-                                             .To3D())
-                                         .HasFlag(CollisionFlags.Wall) || NavMesh.GetCollisionFlags(
-                                             prediction.UnitPosition.To2D()
-                                                 .Extend(ObjectManager.Player.ServerPosition.To2D(),
-                                                     -(emenu.Item("PushDistance").GetValue<Slider>().Value / 2))
-                                                 .To3D())
-                                             .HasFlag(CollisionFlags.Wall)
-                                     select hero)
+            {
+                switch (emenu.Item("EMode", true).GetValue<StringList>().SelectedIndex)
                 {
-                    E.Cast(hero);
+                    case 0:
+                        {
+                            Condemn.Run();
+                        }
+                        break;
+                    case 1:
+                        {
+                            foreach (var hero in from hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsValidTarget(550f))
+                                                 let prediction = E.GetPrediction(hero)
+                                                 where NavMesh.GetCollisionFlags(
+                                                     prediction.UnitPosition.To2D()
+                                                         .Extend(ObjectManager.Player.ServerPosition.To2D(),
+                                                             -emenu.Item("PushDistance").GetValue<Slider>().Value)
+                                                         .To3D())
+                                                     .HasFlag(CollisionFlags.Wall) || NavMesh.GetCollisionFlags(
+                                                         prediction.UnitPosition.To2D()
+                                                             .Extend(ObjectManager.Player.ServerPosition.To2D(),
+                                                                 -(emenu.Item("PushDistance").GetValue<Slider>().Value / 2))
+                                                             .To3D())
+                                                         .HasFlag(CollisionFlags.Wall)
+                                                 select hero)
+                            {
+                                E.CastOnUnit(hero);
+                            }
+                        }
+                        break;
+                    case 2:
+                        {
+                            var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
+                            var EPred = E.GetPrediction(target);
+                            var PD = emenu.Item("PushDistance").GetValue<Slider>().Value;
+                            var PP = EPred.UnitPosition.Extend(ObjectManager.Player.Position, -PD);
+
+                            for (int i = 1; i < PD; i += (int)target.BoundingRadius)
+                            {
+                                var VL = EPred.UnitPosition.Extend(ObjectManager.Player.Position, -i);
+                                var J4 = ObjectManager.Get<Obj_AI_Base>()
+                                    .Any(f => f.Distance(PP) <= target.BoundingRadius && f.Name.ToLower() == "beacon");
+                                var CF = NavMesh.GetCollisionFlags(VL);
+
+                                if (CF.HasFlag(CollisionFlags.Wall) || CF.HasFlag(CollisionFlags.Building) || J4)
+                                {
+                                    if (CheckTarget(target, E.Range))
+                                    {
+                                        E.CastOnUnit(target);
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case 3:
+                        {
+                            var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
+                            var pushDistance = emenu.Item("PushDistance").GetValue<Slider>().Value;
+                            var Prediction = E.GetPrediction(target);
+                            var endPosition = Prediction.UnitPosition.Extend
+                                (ObjectManager.Player.ServerPosition, -pushDistance);
+
+                            if (Prediction.Hitchance >= HitChance.VeryHigh)
+                            {
+                                if (endPosition.IsWall())
+                                {
+                                    var condemnRectangle = new LeagueSharp.Common.Geometry.Polygon.Rectangle(target.ServerPosition.To2D(),
+                                        endPosition.To2D(), target.BoundingRadius);
+
+                                    if (
+                                        condemnRectangle.Points.Count(
+                                            point =>
+                                                NavMesh.GetCollisionFlags(point.X, point.Y)
+                                                    .HasFlag(CollisionFlags.Wall)) >=
+                                        condemnRectangle.Points.Count * (20 / 100f))
+                                    {
+                                        if (CheckTarget(target, E.Range))
+                                        {
+                                            E.CastOnUnit(target);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    var step = pushDistance / 5f;
+                                    for (float i = 0; i < pushDistance; i += step)
+                                    {
+                                        var endPositionEx = Prediction.UnitPosition.Extend(ObjectManager.Player.ServerPosition, -i);
+                                        if (endPositionEx.IsWall())
+                                        {
+                                            var condemnRectangle =
+                                                new LeagueSharp.Common.Geometry.Polygon.Rectangle(target.ServerPosition.To2D(),
+                                                    endPosition.To2D(), target.BoundingRadius);
+
+                                            if (
+                                                condemnRectangle.Points.Count(
+                                                    point =>
+                                                        NavMesh.GetCollisionFlags(point.X, point.Y)
+                                                            .HasFlag(CollisionFlags.Wall)) >=
+                                                condemnRectangle.Points.Count * (20 / 100f))
+                                            {
+                                                if (CheckTarget(target, E.Range))
+                                                {
+                                                    E.CastOnUnit(target);
+                                                }
+                                            }
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+
+                    case 4:
+                        {
+                            var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
+                            for (var i = 1; i < 8; i++)
+                            {
+                                var targetBehind = target.Position +
+                                                   Vector3.Normalize(target.ServerPosition - ObjectManager.Player.Position) * i * 50;
+
+                                if (targetBehind.IsWall() && target.IsValidTarget(E.Range))
+                                {
+                                    if (CheckTarget(target, E.Range))
+                                    {
+                                        E.CastOnUnit(target);
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case 5:
+                        {
+                            var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
+                            var prediction = E.GetPrediction(target);
+
+                            if (prediction.Hitchance >= HitChance.High)
+                            {
+                                var finalPosition = prediction.UnitPosition.Extend(ObjectManager.Player.Position, -400);
+
+                                if (finalPosition.IsWall())
+                                {
+                                    E.CastOnUnit(target);
+                                    return;
+                                }
+
+                                for (var i = 1; i < 400; i += 50)
+                                {
+                                    var loc3 = prediction.UnitPosition.Extend(ObjectManager.Player.Position, -i);
+
+                                    if (loc3.IsWall())
+                                    {
+                                        if (CheckTarget(target, E.Range))
+                                        {
+                                            E.CastOnUnit(target);
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case 6:
+                        {
+                            var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
+                            var prepos = E.GetPrediction(target);
+                            float pushDistance = 470;
+                            var radius = 250;
+                            var start2 = target.ServerPosition;
+                            var end2 = prepos.CastPosition.Extend(ObjectManager.Player.ServerPosition, -pushDistance);
+                            var start = start2.To2D();
+                            var end = end2.To2D();
+                            var dir = (end - start).Normalized();
+                            var pDir = dir.Perpendicular();
+                            var rightEndPos = end + pDir * radius;
+                            var leftEndPos = end - pDir * radius;
+                            var rEndPos = new Vector3(rightEndPos.X, rightEndPos.Y, ObjectManager.Player.Position.Z);
+                            var lEndPos = new Vector3(leftEndPos.X, leftEndPos.Y, ObjectManager.Player.Position.Z);
+                            var step = start2.Distance(rEndPos) / 10;
+
+                            for (var i = 0; i < 10; i++)
+                            {
+                                var pr = start2.Extend(rEndPos, step * i);
+                                var pl = start2.Extend(lEndPos, step * i);
+
+                                if (pr.IsWall() && pl.IsWall())
+                                {
+                                    if (CheckTarget(target, E.Range))
+                                    {
+                                        E.CastOnUnit(target);
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case 7:
+                        foreach (var target in HeroManager.Enemies.Where(h => h.IsValidTarget(E.Range)))
+                        {
+
+                            var pushDistance = emenu.Item("PushDistance").GetValue<Slider>().Value;
+                            var targetPosition = E.GetPrediction(target).UnitPosition;
+                            var pushDirection = (targetPosition - ObjectManager.Player.ServerPosition).Normalized();
+                            float checkDistance = pushDistance / 40f;
+                            for (int i = 0; i < 40; i++)
+                            {
+                                Vector3 finalPosition = targetPosition + (pushDirection * checkDistance * i);
+                                var collFlags = NavMesh.GetCollisionFlags(finalPosition);
+                                if (collFlags.HasFlag(CollisionFlags.Wall) || collFlags.HasFlag(CollisionFlags.Building)) //not sure about building, I think its turrets, nexus etc
+                                {
+                                    E.CastOnUnit(target);
+                                }
+                            }
+
+
+                        }
+                        break;
+                    case 8:
+                        {
+                            var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
+                            var pP = Player.ServerPosition;
+                            var p = target.ServerPosition;
+                            var pD = Vayne.emenu.Item("PushDistance").GetValue<Slider>().Value;
+                           // var mode = Vayne.emenu.Item("EMode", true).GetValue<StringList>().SelectedIndex;
+                            if ((p.Extend(pP, -pD).IsCollisionable() || p.Extend(pP, -pD / 2f).IsCollisionable() ||
+                 p.Extend(pP, -pD / 3f).IsCollisionable()))
+                            {
+                                if (!target.CanMove ||
+                                    (target.Spellbook.IsAutoAttacking))
+                                {
+                                    E.CastOnUnit(target);
+                                }
+
+                                var enemiesCount = ObjectManager.Player.CountEnemiesInRange(1200);
+                                if (enemiesCount > 1 && enemiesCount <= 3)
+                                {
+                                    var prediction = Vayne.E.GetPrediction(target);
+                                    for (var i = 15; i < pD; i += 75)
+                                    {
+                                        var posFlags = NavMesh.GetCollisionFlags(
+                                            prediction.UnitPosition.To2D()
+                                                .Extend(
+                                                    pP.To2D(),
+                                                    -i)
+                                                .To3D());
+                                        if (posFlags.HasFlag(CollisionFlags.Wall) || posFlags.HasFlag(CollisionFlags.Building))
+                                        {
+                                            E.CastOnUnit(target);
+                                        }
+
+                                        else
+                                        {
+                                            var hitchance = emenu.Item("EHitchance").GetValue<Slider>().Value;
+                                            var angle = 0.20 * hitchance;
+                                            const float travelDistance = 0.5f;
+                                            var alpha = new Vector2((float)(p.X + travelDistance * Math.Cos(Math.PI / 180 * angle)),
+                                                (float)(p.X + travelDistance * Math.Sin(Math.PI / 180 * angle)));
+                                            var beta = new Vector2((float)(p.X - travelDistance * Math.Cos(Math.PI / 180 * angle)),
+                                                (float)(p.X - travelDistance * Math.Sin(Math.PI / 180 * angle)));
+
+                                            for (var j = 15; j < pD; j += 100)
+                                            {
+                                                if (pP.To2D().Extend(alpha,
+                                                        j)
+                                                    .To3D().IsCollisionable() && pP.To2D().Extend(beta, j).To3D().IsCollisionable())
+                                                { E.CastOnUnit(target); }
+                                            }
+
+                                        }
+                                    }
+                                }
+
+
+
+
+                            }
+                            break;
+                        }
+                    case 9:
+                        {
+                            var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
+                            var pP = Player.ServerPosition;
+                            var p = target.ServerPosition;
+                            var pD = Vayne.emenu.Item("PushDistance").GetValue<Slider>().Value;
+                          //  var mode = Vayne.emenu.Item("EMode", true).GetValue<StringList>().SelectedIndex;
+                            if (
+                (p.Extend(pP, -pD).IsCollisionable() || p.Extend(pP, -pD / 2f).IsCollisionable() ||
+                 p.Extend(pP, -pD / 3f).IsCollisionable()))
+                            {
+                                if (!target.CanMove ||
+                                    (target.Spellbook.IsAutoAttacking))
+                                {
+                                    E.CastOnUnit(target);
+                                }
+                                var hitchance = emenu.Item("EHitchance").GetValue<Slider>().Value;
+                                var angle = 0.20 * hitchance;
+                                const float travelDistance = 0.5f;
+                                var alpha = new Vector2((float)(p.X + travelDistance * Math.Cos(Math.PI / 180 * angle)),
+                                    (float)(p.X + travelDistance * Math.Sin(Math.PI / 180 * angle)));
+                                var beta = new Vector2((float)(p.X - travelDistance * Math.Cos(Math.PI / 180 * angle)),
+                                    (float)(p.X - travelDistance * Math.Sin(Math.PI / 180 * angle)));
+
+                                for (var i = 15; i < pD; i += 100)
+                                {
+                                    if (pP.To2D().Extend(alpha,
+                                            i)
+                                        .To3D().IsCollisionable() && pP.To2D().Extend(beta, i).To3D().IsCollisionable())
+                                    {
+                                        E.CastOnUnit(target);
+                                    }
+                                }
+                                
+                            }
+                        }
+                        break;
+                    case 10:
+                        {
+                            var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
+                            var pP = Player.ServerPosition;
+                            var p = target.ServerPosition;
+                            var pD = Vayne.emenu.Item("PushDistance").GetValue<Slider>().Value;
+                           // var mode = Vayne.emenu.Item("EMode", true).GetValue<StringList>().SelectedIndex;
+                            if (!target.CanMove ||
+                                    (target.Spellbook.IsAutoAttacking))
+                            {
+                                E.CastOnUnit(target);
+                            }
+
+                            var hitchance = emenu.Item("EHitchance").GetValue<Slider>().Value;
+                            var angle = 0.20 * hitchance;
+                                const float travelDistance = 0.5f;
+                                var alpha = new Vector2((float)(p.X + travelDistance * Math.Cos(Math.PI / 180 * angle)),
+                                    (float)(p.X + travelDistance * Math.Sin(Math.PI / 180 * angle)));
+                                var beta = new Vector2((float)(p.X - travelDistance * Math.Cos(Math.PI / 180 * angle)),
+                                    (float)(p.X - travelDistance * Math.Sin(Math.PI / 180 * angle)));
+
+                                for (var i = 15; i < pD; i += 100)
+                                {
+                                    if (pP.To2D().Extend(alpha,
+                                            i)
+                                        .To3D().IsCollisionable() || pP.To2D().Extend(beta, i).To3D().IsCollisionable())
+                                {
+                                    E.CastOnUnit(target);
+                                }
+                            }
+                                
+                            
+                        }
+                        break;
+                    case 11:
+                        {
+                            var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
+                            var pP = Player.ServerPosition;
+                            var p = target.ServerPosition;
+                            var pD = Vayne.emenu.Item("PushDistance").GetValue<Slider>().Value;
+                           // var mode = Vayne.emenu.Item("EMode", true).GetValue<StringList>().SelectedIndex;
+                            var prediction = Vayne.E.GetPrediction(target);
+                            for (var i = 15; i < pD; i += 75)
+                            {
+                                var posCF = NavMesh.GetCollisionFlags(
+                                    prediction.UnitPosition.To2D()
+                                        .Extend(
+                                            pP.To2D(),
+                                            -i)
+                                        .To3D());
+                                if (posCF.HasFlag(CollisionFlags.Wall) || posCF.HasFlag(CollisionFlags.Building))
+                                {
+                                    
+                                        E.CastOnUnit(target);
+                                    
+                                }
+                            }
+                            
+                        }
+                        break;
                 }
+            }
         }
     }
 }
 
+
+                
+           
+               
