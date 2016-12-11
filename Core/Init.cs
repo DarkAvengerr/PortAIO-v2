@@ -1988,6 +1988,9 @@ namespace PortAIO
                         case 8: // TCSDKexAIO
                             Tc_SDKexAIO.PlaySharp.Main();
                             break;
+                        case 9: // LeeSin EloClimber
+                            LeeSin_EloClimber.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Leona:

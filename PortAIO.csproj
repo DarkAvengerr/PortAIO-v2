@@ -1482,6 +1482,16 @@
     <Compile Include="Core\Champion Ports\LeBlanc\LeBlanc II\Modes\ModePerma.cs" />
     <Compile Include="Core\Champion Ports\LeBlanc\LeBlanc II\Modes\ModeSettings.cs" />
     <Compile Include="Core\Champion Ports\LeBlanc\LeBlanc II\Program.cs" />
+    <Compile Include="Core\Champion Ports\Lee Sin\LeeSin EloClimber\Combo.cs" />
+    <Compile Include="Core\Champion Ports\Lee Sin\LeeSin EloClimber\Insec.cs" />
+    <Compile Include="Core\Champion Ports\Lee Sin\LeeSin EloClimber\Jungle.cs" />
+    <Compile Include="Core\Champion Ports\Lee Sin\LeeSin EloClimber\LaneClear.cs" />
+    <Compile Include="Core\Champion Ports\Lee Sin\LeeSin EloClimber\LeeSin.cs" />
+    <Compile Include="Core\Champion Ports\Lee Sin\LeeSin EloClimber\MenuManager.cs" />
+    <Compile Include="Core\Champion Ports\Lee Sin\LeeSin EloClimber\myPred.cs" />
+    <Compile Include="Core\Champion Ports\Lee Sin\LeeSin EloClimber\Program.cs" />
+    <Compile Include="Core\Champion Ports\Lee Sin\LeeSin EloClimber\Smite.cs" />
+    <Compile Include="Core\Champion Ports\Lee Sin\LeeSin EloClimber\WardJump.cs" />
     <Compile Include="Core\Champion Ports\Leona\Kuroko%27s Leona\Champions\Leona.cs" />
     <Compile Include="Core\Champion Ports\Leona\Kuroko%27s Leona\Extensions\Menus.cs" />
     <Compile Include="Core\Champion Ports\Leona\Kuroko%27s Leona\Extensions\Predictions.cs" />
