@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Flowers_Nidalee.Prediction
+namespace Flowers_Nidalee.Prediction
 {
     using LeagueSharp;
     using LeagueSharp.Common;

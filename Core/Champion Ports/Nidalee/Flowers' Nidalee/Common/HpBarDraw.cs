@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Flowers_Nidalee.Common
+namespace Flowers_Nidalee.Common
 {
     using LeagueSharp;
     using SharpDX;

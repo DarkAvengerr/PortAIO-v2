@@ -2383,7 +2383,7 @@ namespace PortAIO
                             D_Nidalee.Program.Game_OnGameLoad();
                             break;
                         case 4: // Flowers' Nidalee
-                            Flowers_Nidalee.Program.OnGameLoad();
+                            Flowers_Nidalee.Program.Main();
                             break;
                         case 5: // Nidalee the Beastial Huntress
                             NidaleeTheBestialHuntress.Program.Main();
