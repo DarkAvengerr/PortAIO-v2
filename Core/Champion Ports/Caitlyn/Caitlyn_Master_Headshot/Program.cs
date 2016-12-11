@@ -11,7 +11,7 @@ using Color = System.Drawing.Color;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Caitlyn_Master_Headshot
+namespace Caitlyn_Master_Headshot
 {
     class Program
     {
@@ -29,7 +29,7 @@ using LeagueSharp.Common;
         // Loader
         public static void Main()
         {
-            OnLoad(new EventArgs());
+            OnLoad(new EventArgs()); 
         }
 
         private static void OnLoad(EventArgs args)
