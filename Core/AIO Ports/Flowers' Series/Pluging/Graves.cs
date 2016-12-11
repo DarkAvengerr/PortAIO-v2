@@ -1,22 +1,19 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Flowers_ADC_Series.Pluging
+namespace Flowers_ADC_Series.Pluging
 {
-    using Common;
+    using ADCCOMMON;
     using System;
     using System.Linq;
     using LeagueSharp;
     using LeagueSharp.Common;
-    using SharpDX;
     using Color = System.Drawing.Color;
-    using Orbwalking = Orbwalking;
-    using static Common.Common;
+    using Orbwalking = ADCCOMMON.Orbwalking;
 
     internal class Graves : Logic
     {
         private bool canE;
-        private readonly float SearchERange;
-        private readonly Menu Menu = Championmenu;
+        private readonly float SearchERange = 875f;
 
         public Graves()
         {
@@ -29,79 +26,103 @@ using LeagueSharp.Common;
             W.SetSkillshot(0.25f, 250f, 1000f, false, SkillshotType.SkillshotCircle);
             R.SetSkillshot(0.25f, 100f, 2100f, false, SkillshotType.SkillshotLine);
 
-            SearchERange = E.Range + Orbwalking.GetRealAutoAttackRange(Me) - 100;
-
-            var ComboMenu = Menu.AddSubMenu(new Menu("Combo", "Combo"));
+            var comboMenu = Menu.AddSubMenu(new Menu("Combo", "Combo"));
             {
-                ComboMenu.AddItem(new MenuItem("ComboQ", "Use Q", true).SetValue(true));
-                ComboMenu.AddItem(new MenuItem("ComboW", "Use W", true).SetValue(true));
-                ComboMenu.AddItem(new MenuItem("ComboE", "Use E", true).SetValue(true));
-                ComboMenu.AddItem(new MenuItem("ComboEAA", "Use E| Reset Attack", true).SetValue(true));
-                ComboMenu.AddItem(new MenuItem("ComboECheck", "Use E| Safe Check", true).SetValue(true));
-                ComboMenu.AddItem(new MenuItem("ComboR", "Use R", true).SetValue(false));
-                ComboMenu.AddItem(
+                comboMenu.AddItem(new MenuItem("ComboQ", "Use Q", true).SetValue(true));
+                comboMenu.AddItem(new MenuItem("ComboW", "Use W", true).SetValue(true));
+                comboMenu.AddItem(new MenuItem("ComboE", "Use E", true).SetValue(true));
+                comboMenu.AddItem(new MenuItem("ComboEAA", "Use E| Reset Attack", true).SetValue(true));
+                comboMenu.AddItem(new MenuItem("ComboECheck", "Use E| Safe Check", true).SetValue(true));
+                comboMenu.AddItem(new MenuItem("ComboR", "Use R", true).SetValue(false));
+                comboMenu.AddItem(
                     new MenuItem("ComboRCount", "Use R| Min Hit Count >= x", true).SetValue(new Slider(4, 1, 5)));
             }
 
-            var HarassMenu = Menu.AddSubMenu(new Menu("Harass", "Harass"));
+            var harassMenu = Menu.AddSubMenu(new Menu("Harass", "Harass"));
             {
-                HarassMenu.AddItem(new MenuItem("HarassQ", "Use Q", true).SetValue(true));
-                HarassMenu.AddItem(
+                harassMenu.AddItem(new MenuItem("HarassQ", "Use Q", true).SetValue(true));
+                harassMenu.AddItem(
                     new MenuItem("HarassMana", "When Player ManaPercent >= x%", true).SetValue(new Slider(60)));
             }
 
-            var LaneClearMenu = Menu.AddSubMenu(new Menu("LaneClear", "LaneClear"));
+            var clearMenu = Menu.AddSubMenu(new Menu("Clear", "Clear"));
             {
-                LaneClearMenu.AddItem(new MenuItem("LaneClearQ", "Use Q", true).SetValue(true));
-                LaneClearMenu.AddItem(
-                    new MenuItem("LaneClearQCount", "Use Q| Min Hit Count >= x", true).SetValue(new Slider(3, 1, 5)));
-                LaneClearMenu.AddItem(
-                    new MenuItem("LaneClearMana", "When Player ManaPercent >= x%", true).SetValue(new Slider(60)));
+                var laneClearMenu = clearMenu.AddSubMenu(new Menu("LaneClear", "LaneClear"));
+                {
+                    laneClearMenu.AddItem(new MenuItem("LaneClearQ", "Use Q", true).SetValue(true));
+                    laneClearMenu.AddItem(
+                        new MenuItem("LaneClearQCount", "Use Q| Min Hit Count >= x", true).SetValue(new Slider(3, 1, 5)));
+                    laneClearMenu.AddItem(
+                        new MenuItem("LaneClearMana", "When Player ManaPercent >= x%", true).SetValue(new Slider(60)));
+                }
+
+                var jungleClearMenu = clearMenu.AddSubMenu(new Menu("JungleClear", "JungleClear"));
+                {
+                    jungleClearMenu.AddItem(new MenuItem("JungleClearQ", "Use Q", true).SetValue(true));
+                    jungleClearMenu.AddItem(new MenuItem("JungleClearE", "Use E", true).SetValue(true));
+                    jungleClearMenu.AddItem(
+                        new MenuItem("JungleClearMana", "When Player ManaPercent >= x%", true).SetValue(new Slider(20)));
+                }
+
+                clearMenu.AddItem(new MenuItem("asdqweqwe", " ", true));
+                ManaManager.AddSpellFarm(clearMenu);
             }
 
-            var JungleClearMenu = Menu.AddSubMenu(new Menu("JungleClear", "JungleClear"));
+            var killStealMenu = Menu.AddSubMenu(new Menu("KillSteal", "KillSteal"));
             {
-                JungleClearMenu.AddItem(new MenuItem("JungleClearQ", "Use Q", true).SetValue(true));
-                JungleClearMenu.AddItem(new MenuItem("JungleClearE", "Use E", true).SetValue(true));
-                JungleClearMenu.AddItem(
-                    new MenuItem("JungleClearMana", "When Player ManaPercent >= x%", true).SetValue(new Slider(20)));
-            }
-
-            var KillStealMenu = Menu.AddSubMenu(new Menu("KillSteal", "KillSteal"));
-            {
-                KillStealMenu.AddItem(new MenuItem("KillStealQ", "KillSteal Q", true).SetValue(true));
-                KillStealMenu.AddItem(new MenuItem("KillStealW", "KillSteal W", true).SetValue(true));
-                KillStealMenu.AddItem(new MenuItem("KillStealR", "KillSteal R", true).SetValue(true));
+                killStealMenu.AddItem(new MenuItem("KillStealQ", "KillSteal Q", true).SetValue(true));
+                killStealMenu.AddItem(new MenuItem("KillStealW", "KillSteal W", true).SetValue(true));
+                killStealMenu.AddItem(new MenuItem("KillStealR", "KillSteal R", true).SetValue(true));
                 foreach (var target in HeroManager.Enemies)
                 {
-                    KillStealMenu.AddItem(new MenuItem("KillStealR" + target.ChampionName.ToLower(),
+                    killStealMenu.AddItem(new MenuItem("KillStealR" + target.ChampionName.ToLower(),
                         "Kill: " + target.ChampionName, true).SetValue(true));
                 }
             }
 
-            var BurstMenu = Menu.AddSubMenu(new Menu("Burst", "Burst"));
+            var burstMenu = Menu.AddSubMenu(new Menu("Burst", "Burst"));
             {
-                BurstMenu.AddItem(new MenuItem("BurstKeys", "Burst Key -> Please Check The Orbwalker Key!", true));
-                BurstMenu.AddItem(new MenuItem("Bursttarget", "Burst Target -> Left Click to Lock!", true));
-                BurstMenu.AddItem(new MenuItem("Burstranges",
+                burstMenu.AddItem(new MenuItem("BurstKeys", "Burst Key -> Please Check The Orbwalker Key!", true));
+                burstMenu.AddItem(new MenuItem("Bursttarget", "Burst Target -> Left Click to Lock!", true));
+                burstMenu.AddItem(new MenuItem("Burstranges",
                     "How to Burst -> Lock the target and then just press Burst Key!", true));
-                BurstMenu.AddItem(new MenuItem("BurstER", "Burst Mode -> Enabled E->R?", true).SetValue(false))
+                burstMenu.AddItem(new MenuItem("BurstER", "Burst Mode -> Enabled E->R?", true).SetValue(false))
                     .SetTooltip("if you dont enabled is RE Burst Mode");
             }
             
-            var MiscMenu = Menu.AddSubMenu(new Menu("Misc", "Misc"));
+            var miscMenu = Menu.AddSubMenu(new Menu("Misc", "Misc"));
             {
-                MiscMenu.AddItem(new MenuItem("GapW", "Use W| Anti GapCloser", true).SetValue(true));
+                miscMenu.AddItem(new MenuItem("GapW", "Use W| Anti GapCloser", true).SetValue(true));
             }
 
-            var DrawMenu = Menu.AddSubMenu(new Menu("Drawings", "Drawings"));
+
+            var utilityMenu = Menu.AddSubMenu(new Menu("Utility", "Utility"));
             {
-                DrawMenu.AddItem(new MenuItem("DrawQ", "Draw Q Range", true).SetValue(false));
-                DrawMenu.AddItem(new MenuItem("DrawW", "Draw W Range", true).SetValue(false));
-                DrawMenu.AddItem(new MenuItem("DrawE", "Draw E Range", true).SetValue(false));
-                DrawMenu.AddItem(new MenuItem("DrawR", "Draw R Range", true).SetValue(false));
-                DrawMenu.AddItem(new MenuItem("DrawBurst", "Draw Burst Range", true).SetValue(false));
-                DrawMenu.AddItem(new MenuItem("DrawDamage", "Draw ComboDamage", true).SetValue(true));
+                var skinMenu = utilityMenu.AddSubMenu(new Menu("Skin Change", "Skin Change"));
+                {
+                    SkinManager.AddToMenu(skinMenu);
+                }
+
+                var autoLevelMenu = utilityMenu.AddSubMenu(new Menu("Auto Levels", "Auto Levels"));
+                {
+                    LevelsManager.AddToMenu(autoLevelMenu);
+                }
+
+                var itemsMenu = utilityMenu.AddSubMenu(new Menu("Items", "Items"));
+                {
+                    ItemsManager.AddToMenu(itemsMenu);
+                }
+            }
+
+            var drawMenu = Menu.AddSubMenu(new Menu("Drawings", "Drawings"));
+            {
+                drawMenu.AddItem(new MenuItem("DrawQ", "Draw Q Range", true).SetValue(false));
+                drawMenu.AddItem(new MenuItem("DrawW", "Draw W Range", true).SetValue(false));
+                drawMenu.AddItem(new MenuItem("DrawE", "Draw E Range", true).SetValue(false));
+                drawMenu.AddItem(new MenuItem("DrawR", "Draw R Range", true).SetValue(false));
+                drawMenu.AddItem(new MenuItem("DrawBurst", "Draw Burst Range", true).SetValue(false));
+                ManaManager.AddDrawFarm(drawMenu);
+                DamageIndicator.AddToMenu(drawMenu);
             }
 
             Obj_AI_Base.OnPlayAnimation += OnPlayAnimation;
@@ -124,7 +145,7 @@ using LeagueSharp.Common;
                 Orbwalking.ResetAutoAttackTimer();
                 canE = false;
 
-                if (Menu.Item("BurstER", true).GetValue<bool>() && TargetSelector.GetSelectedTarget() != null && R.IsReady())
+                if (Menu.GetBool("BurstER") && TargetSelector.GetSelectedTarget() != null && R.IsReady())
                 {
                     var target = TargetSelector.GetSelectedTarget();
 
@@ -136,7 +157,7 @@ using LeagueSharp.Common;
             }
 
             if ((Args.Animation == "Spell4" || Args.Animation == "785121b3") && TargetSelector.GetSelectedTarget() != null && 
-                !Menu.Item("BurstER", true).GetValue<bool>() && E.IsReady())
+                !Menu.GetBool("BurstER") && E.IsReady())
             {
                 E.Cast(TargetSelector.GetSelectedTarget().Position, true);
             }
@@ -158,7 +179,7 @@ using LeagueSharp.Common;
 
         private void OnUpdate(EventArgs Args)
         {
-            if (Me.IsDead)
+            if (Me.IsDead || Me.IsRecalling())
             {
                 return;
             }
@@ -177,6 +198,7 @@ using LeagueSharp.Common;
                     Harass();
                     break;
                 case Orbwalking.OrbwalkingMode.LaneClear:
+                    FarmHarass();
                     LaneClear();
                     JungleClear();
                     break;
@@ -185,39 +207,32 @@ using LeagueSharp.Common;
 
         private void KillSteal()
         {
-            if (Menu.Item("KillStealQ", true).GetValue<bool>() && Q.IsReady())
+            if (Menu.GetBool("KillStealQ") && Q.IsReady())
             {
-                foreach (
-                    var target in
-                    HeroManager.Enemies.Where(
-                        x => x.IsValidTarget(Q.Range) && CheckTargetSureCanKill(x) && x.Health < Q.GetDamage(x)))
+                foreach (var target in HeroManager.Enemies.Where(x => x.Check(Q.Range) && x.Health < Q.GetDamage(x)))
                 {
-                    Q.CastTo(target);
+                    SpellManager.PredCast(Q, target);
                 }
             }
 
-            if (Menu.Item("KillStealW", true).GetValue<bool>() && W.IsReady())
+            if (Menu.GetBool("KillStealW") && W.IsReady())
             {
-                foreach (
-                    var target in
-                    HeroManager.Enemies.Where(
-                        x => x.IsValidTarget(W.Range) && CheckTargetSureCanKill(x) && x.Health < W.GetDamage(x)))
+                foreach (var target in HeroManager.Enemies.Where(x => x.Check(W.Range) && x.Health < W.GetDamage(x)))
                 {
-                    W.CastTo(target);
+                    SpellManager.PredCast(W, target);
                 }
             }
 
-            if (Menu.Item("KillStealR", true).GetValue<bool>() && R.IsReady())
+            if (Menu.GetBool("KillStealR") && R.IsReady())
             {
                 foreach (
                     var target in
                     HeroManager.Enemies.Where(
-                        x => x.IsValidTarget(R.Range) && CheckTargetSureCanKill(x) && 
-                        Menu.Item("KillStealR" + x.ChampionName.ToLower(), true).GetValue<bool>()
-                        && x.Health < R.GetDamage(x) &&
+                        x => x.Check(R.Range) && 
+                        Menu.GetBool("KillStealR" + x.ChampionName.ToLower()) && x.Health < R.GetDamage(x) &&
                         x.DistanceToPlayer() > Orbwalking.GetRealAutoAttackRange(Me) + E.Range - 100))
                 {
-                    R.CastTo(target);
+                    SpellManager.PredCast(R, target);
                 }
             }
         }
@@ -226,13 +241,13 @@ using LeagueSharp.Common;
         {
             var target = TargetSelector.GetSelectedTarget();
 
-            if (CheckTarget(target, 800f))
+            if (target.Check(800f))
             {
                 var pos = Me.Position.Extend(target.Position, E.Range);
 
                 if (R.IsReady())
                 {
-                    if (!Menu.Item("BurstER", true).GetValue<bool>())
+                    if (!Menu.GetBool("BurstER"))
                     {
                         if (E.IsReady() && target.IsValidTarget(600f))
                         {
@@ -254,14 +269,14 @@ using LeagueSharp.Common;
                 {
                     if (Q.IsReady() && target.IsValidTarget(Q.Range))
                     {
-                        Q.CastTo(target);
+                        SpellManager.PredCast(Q, target);
                     }
 
                     if (W.IsReady() && target.IsValidTarget(W.Range) &&
                              (target.DistanceToPlayer() <= target.AttackRange + 70 ||
                               (target.DistanceToPlayer() >= Orbwalking.GetRealAutoAttackRange(Me) + 80)))
                     {
-                        W.CastTo(target);
+                        SpellManager.PredCast(W, target);
                     }
 
                     if (E.IsReady() && !R.IsReady())
@@ -276,56 +291,58 @@ using LeagueSharp.Common;
         {
             var target = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Physical);
 
-            if (CheckTarget(target, R.Range))
+            if (target.Check(R.Range))
             {
-                if (Menu.Item("ComboQ", true).GetValue<bool>() && Q.IsReady() && target.IsValidTarget(Q.Range))
+                if (Menu.GetBool("ComboQ") && Q.IsReady() && target.IsValidTarget(Q.Range))
                 {
-                    Q.CastTo(target);
+                    SpellManager.PredCast(Q, target);
                 }
 
-                if (Menu.Item("ComboE", true).GetValue<bool>() && E.IsReady() && target.IsValidTarget(SearchERange))
+                if (Menu.GetBool("ComboE") && E.IsReady() && target.IsValidTarget(SearchERange))
                 {
                     ELogic(target);
                 }
 
-                if (Menu.Item("ComboW", true).GetValue<bool>() && W.IsReady() && target.IsValidTarget(W.Range) &&
+                if (Menu.GetBool("ComboW") && W.IsReady() && target.IsValidTarget(W.Range) &&
                     (target.DistanceToPlayer() <= target.AttackRange + 70 ||
                      (target.DistanceToPlayer() >= Orbwalking.GetRealAutoAttackRange(Me) + 80)))
                 {
-                    W.CastTo(target);
+                    SpellManager.PredCast(W, target);
                 }
 
-                if (Menu.Item("ComboR", true).GetValue<bool>() && R.IsReady() && !Q.IsReady() 
-                    && target.IsValidTarget(R.Range))
+                if (Menu.GetBool("ComboR") && R.IsReady() && target.IsValidTarget(R.Range))
                 {
-                    R.CastIfWillHit(target, Menu.Item("ComboRCount", true).GetValue<Slider>().Value);
+                    R.CastIfWillHit(target, Menu.GetSlider("ComboRCount"));
                 }
             }
         }
 
         private void Harass()
         {
-            if (Me.UnderTurret(true))
-            {
-                return;
-            }
-
-            if (Me.ManaPercent >= Menu.Item("HarassMana", true).GetValue<Slider>().Value)
+            if (ManaManager.HasEnoughMana(Menu.GetSlider("HarassMana")))
             {
                 var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
 
-                if (Menu.Item("HarassQ", true).GetValue<bool>() && Q.IsReady() && CheckTarget(target, Q.Range))
+                if (Menu.GetBool("HarassQ") && Q.IsReady() && target.Check(Q.Range))
                 {
-                    Q.CastTo(target);
+                    SpellManager.PredCast(Q, target);
                 }
+            }
+        }
+
+        private void FarmHarass()
+        {
+            if (ManaManager.SpellHarass)
+            {
+                Harass();
             }
         }
 
         private void LaneClear()
         {
-            if (Me.ManaPercent >= Menu.Item("LaneClearMana", true).GetValue<Slider>().Value)
+            if (ManaManager.HasEnoughMana(Menu.GetSlider("LaneClearMana")) && ManaManager.SpellFarm)
             {
-                if (Menu.Item("LaneClearQ", true).GetValue<bool>() && Q.IsReady())
+                if (Menu.GetBool("LaneClearQ") && Q.IsReady())
                 {
                     var Minions = MinionManager.GetMinions(Me.Position, Q.Range);
 
@@ -335,7 +352,7 @@ using LeagueSharp.Common;
                             MinionManager.GetBestLineFarmLocation(Minions.Select(x => x.Position.To2D()).ToList(),
                                 Q.Width, Q.Range);
 
-                        if (QFarm.MinionsHit >= Menu.Item("LaneClearQCount", true).GetValue<Slider>().Value)
+                        if (QFarm.MinionsHit >= Menu.GetSlider("LaneClearQCount"))
                         {
                             Q.Cast(QFarm.Position);
                         }
@@ -346,13 +363,12 @@ using LeagueSharp.Common;
 
         private void JungleClear()
         {
-            if (Me.ManaPercent >= Menu.Item("JungleClearMana", true).GetValue<Slider>().Value)
+            if (ManaManager.HasEnoughMana(Menu.GetSlider("JungleClearMana")) && ManaManager.SpellFarm)
             {
-                if (Menu.Item("JungleClearQ", true).GetValue<bool>() && Q.IsReady())
+                if (Menu.GetBool("JungleClearQ") && Q.IsReady())
                 {
-                    var mobs =
-                        MinionManager.GetMinions(Me.Position, Q.Range, MinionTypes.All, MinionTeam.Neutral,
-                            MinionOrderTypes.MaxHealth).Where(x => !x.Name.ToLower().Contains("mini"));
+                    var mobs = MinionManager.GetMinions(Me.Position, Q.Range, MinionTypes.All, MinionTeam.Neutral,
+                        MinionOrderTypes.MaxHealth);
 
                     if (mobs.Any())
                     {
@@ -395,7 +411,7 @@ using LeagueSharp.Common;
 
                     if (target != null && !target.IsDead && !target.IsZombie)
                     {
-                        if (Menu.Item("ComboEAA", true).GetValue<bool>() && E.IsReady())
+                        if (Menu.GetBool("ComboEAA") && E.IsReady())
                         {
                             ELogic(target);
                         }
@@ -408,9 +424,9 @@ using LeagueSharp.Common;
 
                     if (target != null && !target.IsDead)
                     {
-                        if (Me.ManaPercent >= Menu.Item("JungleClearMana", true).GetValue<Slider>().Value)
+                        if (ManaManager.HasEnoughMana(Menu.GetSlider("JungleClearMana")) && ManaManager.SpellFarm)
                         {
-                            if (Menu.Item("JungleClearE", true).GetValue<bool>() && E.IsReady())
+                            if (Menu.GetBool("JungleClearE") && E.IsReady())
                             {
                                 var mobs =
                                     MinionManager.GetMinions(Me.Position, W.Range, MinionTypes.All, MinionTeam.Neutral,
@@ -432,8 +448,7 @@ using LeagueSharp.Common;
 
         private void OnEnemyGapcloser(ActiveGapcloser Args)
         {
-            if (Menu.Item("GapW", true).GetValue<bool>() && W.IsReady() && 
-                Args.Sender.IsValidTarget(W.Range) && Args.End.DistanceToPlayer() <= 200)
+            if (Menu.GetBool("GapW") && W.IsReady() && Args.Sender.IsValidTarget(W.Range) && Args.End.DistanceToPlayer() <= 200)
             {
                 W.Cast(Args.End);
             }
@@ -443,39 +458,29 @@ using LeagueSharp.Common;
         {
             if (!Me.IsDead && !Shop.IsOpen && !MenuGUI.IsChatOpen  )
             {
-                if (Menu.Item("DrawQ", true).GetValue<bool>() && Q.IsReady())
+                if (Menu.GetBool("DrawQ") && Q.IsReady())
                 {
                     Render.Circle.DrawCircle(Me.Position, Q.Range, Color.Green, 1);
                 }
 
-                if (Menu.Item("DrawW", true).GetValue<bool>() && W.IsReady())
+                if (Menu.GetBool("DrawW") && W.IsReady())
                 {
                     Render.Circle.DrawCircle(Me.Position, W.Range, Color.FromArgb(9, 253, 242), 1);
                 }
 
-                if (Menu.Item("DrawE", true).GetValue<bool>() && E.IsReady())
+                if (Menu.GetBool("DrawE") && E.IsReady())
                 {
                     Render.Circle.DrawCircle(Me.Position, E.Range, Color.FromArgb(188, 6, 248), 1);
                 }
 
-                if (Menu.Item("DrawR", true).GetValue<bool>() && R.IsReady())
+                if (Menu.GetBool("DrawR") && R.IsReady())
                 {
                     Render.Circle.DrawCircle(Me.Position, R.Range, Color.FromArgb(19, 130, 234), 1);
                 }
 
-                if (Menu.Item("DrawBurst", true).GetValue<bool>())
+                if (Menu.GetBool("DrawBurst"))
                 {
                     Render.Circle.DrawCircle(Me.Position, Orbwalking.GetRealAutoAttackRange(Me), Color.FromArgb(90, 255, 255), 1);
-                }
-
-                if (Menu.Item("DrawDamage", true).GetValue<bool>())
-                {
-                    foreach (
-                        var x in HeroManager.Enemies.Where(e => e.IsValidTarget() && !e.IsDead && !e.IsZombie))
-                    {
-                        HpBarDraw.Unit = x;
-                        HpBarDraw.DrawDmg((float)ComboDamage(x), new ColorBGRA(255, 204, 0, 170));
-                    }
                 }
             }
         }
@@ -495,7 +500,7 @@ using LeagueSharp.Common;
                 canE = false;
             }
 
-            if (Menu.Item("ComboECheck", true).GetValue<bool>())
+            if (Menu.GetBool("ComboECheck"))
             {
                 if (ePosition.CountEnemiesInRange(350f) >= 3)
                 {
@@ -562,7 +567,7 @@ using LeagueSharp.Common;
 
             if (canE)
             {
-                E.Cast(ePosition, true);
+                E.Cast(Game.CursorPos, true);
                 canE = false;
             }
         }

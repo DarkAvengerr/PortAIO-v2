@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Flowers_ADC_Series.Common
+namespace ADCCOMMON
 {
     using System;
     using System.Collections.Generic;
@@ -9,17 +9,17 @@ using LeagueSharp.Common;
     using LeagueSharp.Common;
     using SharpDX;
 
-    public class SebbyLibCache
+    public class MinionCache // Credit By Sebby
     {
-        private static readonly List<Obj_AI_Base> AllMinionsObj = new List<Obj_AI_Base>();
-        public static readonly List<Obj_AI_Base> MinionsListEnemy = new List<Obj_AI_Base>();
-        private static readonly List<Obj_AI_Base> MinionsListAlly = new List<Obj_AI_Base>();
-        private static readonly List<Obj_AI_Base> MinionsListNeutral = new List<Obj_AI_Base>();
+        public static List<Obj_AI_Base> AllMinionsObj = new List<Obj_AI_Base>();
+        public static List<Obj_AI_Base> MinionsListEnemy = new List<Obj_AI_Base>();
+        public static List<Obj_AI_Base> MinionsListAlly = new List<Obj_AI_Base>();
+        public static List<Obj_AI_Base> MinionsListNeutral = new List<Obj_AI_Base>();
         public static List<Obj_AI_Turret> TurretList = ObjectManager.Get<Obj_AI_Turret>().ToList();
         public static List<Obj_HQ> NexusList = ObjectManager.Get<Obj_HQ>().ToList();
         public static List<Obj_BarracksDampener> InhiList = ObjectManager.Get<Obj_BarracksDampener>().ToList();
 
-        static SebbyLibCache()
+        static MinionCache()
         {
             foreach (var minion in ObjectManager.Get<Obj_AI_Minion>().Where(minion => minion.IsValid))
             {
@@ -58,7 +58,7 @@ using LeagueSharp.Common;
             }
         }
 
-        private static void AddMinionObject(Obj_AI_Minion minion)
+        private static void AddMinionObject(Obj_AI_Base minion)
         {
             if (minion.MaxHealth >= 225)
             {
@@ -66,11 +66,11 @@ using LeagueSharp.Common;
                 {
                     MinionsListNeutral.Add(minion);
                 }
-                else if (minion.MaxMana == 0 && minion.MaxHealth >= 250)
+                else if (minion.MaxMana == 0 && minion.MaxHealth >= 300)
                 {
                     if (minion.Team == GameObjectTeam.Unknown)
                     {
-                        return;
+
                     }
 
                     if (minion.Team != ObjectManager.Player.Team)
@@ -91,42 +91,44 @@ using LeagueSharp.Common;
             switch (team)
             {
                 case MinionTeam.Enemy:
-                {
-                    return MinionsListEnemy.FindAll(minion => CanReturn(minion, from, range));
-                }
+                    {
+                        return MinionsListEnemy.FindAll(minion => CanReturn(minion, from, range));
+                    }
                 case MinionTeam.Ally:
-                {
-                    return MinionsListAlly.FindAll(minion => CanReturn(minion, from, range));
-                }
+                    {
+                        return MinionsListAlly.FindAll(minion => CanReturn(minion, from, range));
+                    }
                 case MinionTeam.Neutral:
-                {
-                    return
-                        MinionsListNeutral.Where(minion => CanReturn(minion, from, range))
-                            .OrderByDescending(minion => minion.MaxHealth)
-                            .ToList();
-                }
+                    {
+                        return
+                            MinionsListNeutral.Where(minion => CanReturn(minion, from, range))
+                                .OrderByDescending(minion => minion.MaxHealth)
+                                .ToList();
+                    }
                 case MinionTeam.NotAlly:
-                {
-                    return AllMinionsObj.FindAll(minion => CanReturn(minion, from, range));
-                }
+                    {
+                        return AllMinionsObj.FindAll(minion => CanReturn(minion, from, range));
+                    }
                 default:
-                {
-                    return AllMinionsObj.FindAll(minion => CanReturn(minion, from, range));
-                }
+                    {
+                        return AllMinionsObj.FindAll(minion => CanReturn(minion, from, range));
+                    }
             }
         }
 
-        private static bool IsValidMinion(Obj_AI_Base minion)
+        private static bool IsValidMinion(GameObject minion)
         {
             return minion != null && minion.IsValid && !minion.IsDead;
         }
 
-        private static bool CanReturn(Obj_AI_Base minion, Vector3 from, float range)
+        private static bool CanReturn(AttackableUnit minion, Vector3 from, float range)
         {
             if (minion != null && minion.IsValid && !minion.IsDead && minion.IsVisible && minion.IsTargetable)
             {
                 if (range == float.MaxValue)
+                {
                     return true;
+                }
 
                 if (range == 0)
                 {
@@ -139,4 +141,5 @@ using LeagueSharp.Common;
             return false;
         }
     }
+
 }

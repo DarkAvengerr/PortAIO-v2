@@ -1,7 +1,8 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
-namespace myCommon
+namespace ADCCOMMON
 {
+    using LeagueSharp.Common;
     using System.Drawing;
 
     public static class MenuManager
@@ -31,9 +32,9 @@ namespace myCommon
             return Menu.Item(MenuItemName, unique).GetValue<Circle>().Color;
         }
 
-        public static bool GetCircle(this Menu Menu, string MenuItemName, bool unique = true)
+        public static Circle GetCircle(this Menu Menu, string MenuItemName, bool unique = true)
         {
-            return Menu.Item(MenuItemName, unique).GetValue<Circle>().Active;
+            return Menu.Item(MenuItemName, unique).GetValue<Circle>();
         }
     }
 }
