@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Flowers_Yasuo.Manager.Events.Games.Mode
+namespace Flowers_Yasuo.Manager.Events.Games.Mode
 {
     using System;
     using System.Collections.Generic;

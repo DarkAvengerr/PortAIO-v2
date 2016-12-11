@@ -2813,8 +2813,8 @@
     <Compile Include="Core\Champion Ports\Yasuo\Flowers%27 Yasuo\Evade\SpellData\SpellData.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\Flowers%27 Yasuo\Evade\SpellData\SpellDatabase.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\Flowers%27 Yasuo\Logic.cs" />
-    <Compile Include="Core\Champion Ports\Yasuo\Flowers%27 Yasuo\Manager\Attack\AfterAttackManager.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\Flowers%27 Yasuo\Manager\Events\Animation\AnimationManager.cs" />
+    <Compile Include="Core\Champion Ports\Yasuo\Flowers%27 Yasuo\Manager\Events\Attack\AfterAttackManager.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\Flowers%27 Yasuo\Manager\Events\Drawings\DrawManager.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\Flowers%27 Yasuo\Manager\Events\EventManager.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\Flowers%27 Yasuo\Manager\Events\Games\LoopManager.cs" />

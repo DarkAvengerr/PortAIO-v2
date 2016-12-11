@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Flowers_Yasuo.Common
+namespace Flowers_Yasuo.Common
 {
     internal class GrassLocation
     {

@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Flowers_Yasuo.Manager.Menu
+namespace Flowers_Yasuo.Manager.Menu
 {
     using Evade;
     using SharpDX;
@@ -254,7 +254,7 @@ using LeagueSharp.Common;
                     autoWardMenu.AddItem(new MenuItem("OnlyCombo", "Only Combo Mode Active", true).SetValue(true));
                 }
 
-                miscMenu.AddItem(new MenuItem("EQFlash", "EQFlash", true).SetValue(new KeyBind('A', KeyBindType.Press)));
+                miscMenu.AddItem(new MenuItem("EQFlash", "EQFlash Key", true).SetValue(new KeyBind('A', KeyBindType.Press)));
 
             }
 

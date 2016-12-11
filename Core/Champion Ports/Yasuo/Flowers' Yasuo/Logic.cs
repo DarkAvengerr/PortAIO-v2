@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Flowers_Yasuo
+namespace Flowers_Yasuo
 {
     using Evade;
     using System;

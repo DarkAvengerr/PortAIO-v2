@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Flowers_Yasuo.Manager.Events
+namespace Flowers_Yasuo.Manager.Events
 {
     using Spells;
     using LeagueSharp;
