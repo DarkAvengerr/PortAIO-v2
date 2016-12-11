@@ -26,7 +26,7 @@ namespace ReformedAIO.Champions.Vayne.Core.Damage
             this.eSpell = eSpell;
         }
 
-        public float GetComboDamage(AIHeroClient target)
+        public float GetComboDamage(Obj_AI_Base target)
         {
             if (target == null) return 0;
 
@@ -37,10 +37,10 @@ namespace ReformedAIO.Champions.Vayne.Core.Damage
                 comboDmg += qSpell.GetDamage(target);
             }
 
-            if (eSpell.Spell.IsReady())
-            {
-                comboDmg += eSpell.Spell.GetDamage(target);
-            }
+            //if (eSpell.Spell.IsReady())
+            //{
+            //    comboDmg += eSpell.Spell.GetDamage(target);
+            //}
 
             if (eSpell.WStack(target))
             {

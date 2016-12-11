@@ -100,7 +100,7 @@ namespace ReformedAIO.Champions.Vayne
 
             laneParent.Add(new List<Base>()
                                {
-                                  new QLane(qSpell, dashSmart)
+                                  new QLane(qSpell, dashSmart, dmg)
                                });
 
             jungleParent.Add(new List<Base>()

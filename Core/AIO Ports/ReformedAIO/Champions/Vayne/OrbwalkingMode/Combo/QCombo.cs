@@ -31,10 +31,15 @@ namespace ReformedAIO.Champions.Vayne.OrbwalkingMode.Combo
             if (Target == null
                  || !sender.IsMe 
                  || Menu.Item("Vayne.Combo.Q.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent
-                 || (Menu.Item("Vayne.Combo.Q.Stack").GetValue<bool>() && !spell.WStack(Target))
+                 || (Menu.Item("Vayne.Combo.Q.Stack").GetValue<bool>() && !spell.WStack(Target) && ObjectManager.Player.Level > 1)
                  || !CheckGuardians())
             {
                 return;
+            }
+           
+            if (Menu.Item("Vayne.Combo.Q.Melee").GetValue<bool>() && Target.Distance(ObjectManager.Player) <= ObjectManager.Player.AttackRange / 2 - (int)Target.BoundingRadius)
+            {
+                spell.Spell.Cast(ObjectManager.Player.ServerPosition + (ObjectManager.Player.ServerPosition - Target.ServerPosition).Normalized() * 300);
             }
 
             switch (Menu.Item("Vayne.Combo.Q.Mode").GetValue<StringList>().SelectedIndex)
@@ -70,6 +75,8 @@ namespace ReformedAIO.Champions.Vayne.OrbwalkingMode.Combo
             base.OnLoad(sender, eventArgs);
 
             Menu.AddItem(new MenuItem("Vayne.Combo.Q.Mode", "Mode").SetValue(new StringList(new[] { "Cursor", "Kite", "Automatic" })));
+
+            Menu.AddItem(new MenuItem("Vayne.Combo.Q.Melee", "Anti-Melee").SetValue(true));
 
             Menu.AddItem(new MenuItem("Vayne.Combo.Q.Stack", "Only Q To Proc W").SetValue(false));
 

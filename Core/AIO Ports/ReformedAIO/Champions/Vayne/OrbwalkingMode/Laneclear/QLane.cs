@@ -9,6 +9,7 @@ namespace ReformedAIO.Champions.Vayne.OrbwalkingMode.Laneclear
     using LeagueSharp;
     using LeagueSharp.Common;
 
+    using ReformedAIO.Champions.Vayne.Core.Damage;
     using ReformedAIO.Champions.Vayne.Core.Spells;
     using ReformedAIO.Library.Dash_Handler;
 
@@ -22,15 +23,18 @@ namespace ReformedAIO.Champions.Vayne.OrbwalkingMode.Laneclear
 
         private readonly DashSmart dashSmart;
 
-        public QLane(QSpell spell, DashSmart dashSmart)
+        private readonly Damages damage;
+
+        public QLane(QSpell spell, DashSmart dashSmart, Damages damage)
         {
             this.spell = spell;
             this.dashSmart = dashSmart;
+            this.damage = damage;
         }
 
         private IEnumerable<Obj_AI_Base> Minion => 
              MinionManager.GetMinions(ObjectManager.Player.Position, ObjectManager.Player.AttackRange + spell.Spell.Range)
-            .Where(m => m.Health < spell.GetDamage(m) + ObjectManager.Player.GetAutoAttackDamage(m));
+            .Where(m => m.Health < damage.GetComboDamage(m));
 
         private void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {

@@ -925,7 +925,12 @@
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Olaf\OrbwalkingMode\Mixed\WMixed.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Olaf\Utility\OlafSkinchanger.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Vayne\Antigapcloser\VayneAntiGapcloser.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Vayne\Core\Condemn Logic\Condemn.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Vayne\Core\Condemn Logic\CondemnTypes.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Vayne\Core\Condemn Logic\ICondemnType.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Vayne\Core\Condemn Logic\MarksmanCondemn.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Vayne\Core\Condemn Logic\ReformedCondemn.cs" />
+    <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Vayne\Core\Condemn Logic\SharpshooterCondemn.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Vayne\Core\Damage\Damage.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Vayne\Core\Spells\ESpell.cs" />
     <Compile Include="Core\AIO Ports\ReformedAIO\Champions\Vayne\Core\Spells\QSpell.cs" />

@@ -16,18 +16,14 @@ namespace ReformedAIO.Champions.Vayne.Core.Condemn_Logic
 
         private static Vector3 ReformedPosition(Obj_AI_Base target, float range, Spell spell)
         {
-            var prediction = spell.GetPrediction(target).UnitPosition;
-
-            var finalPosition = prediction.Extend(ObjectManager.Player.ServerPosition, -range);
-
-            if (NavMesh.GetCollisionFlags(finalPosition) == CollisionFlags.Wall
-                || NavMesh.GetCollisionFlags(finalPosition) == CollisionFlags.Building
-                || finalPosition.IsWall())
+            if (!Orbwalking.CanMove(5) || !Orbwalking.CanAttack())
             {
-                return finalPosition;
+                return Vector3.Zero;
             }
 
-            for (float i = 0; i < range; i += (int)target.BoundingRadius)
+            var prediction = spell.GetPrediction(target).UnitPosition;
+
+            for (float i = 0; i < range; i += range / 5f)
             {
                 var newprediction = prediction.Extend(ObjectManager.Player.ServerPosition, -i);
 
@@ -39,6 +35,14 @@ namespace ReformedAIO.Champions.Vayne.Core.Condemn_Logic
                 }
             }
 
+            var finalPosition = prediction.Extend(ObjectManager.Player.ServerPosition, -range);
+
+            if (NavMesh.GetCollisionFlags(finalPosition) == CollisionFlags.Wall
+                || NavMesh.GetCollisionFlags(finalPosition) == CollisionFlags.Building
+                || finalPosition.IsWall())
+            {
+                return finalPosition;
+            }
             return Vector3.Zero;
         }
 
