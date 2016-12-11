@@ -129,7 +129,7 @@ namespace Flowers_Riven
                     qMenu.AddItem(new MenuItem("Dance", "Dance Emote in QA", true).SetValue(false));
                     qMenu.AddItem(
                         new MenuItem("QMode", "Q Mode : ", true).SetValue(
-                            new StringList(new[] {"Target Position", "Mouse", "Max Q"})));
+                            new StringList(new[] {"Target Position", "Mouse", "Max Q To Target", "Max Q To Mouse"})));
                 }
 
                 var wMenu = miscMenu.AddSubMenu(new Menu("W Setting", "W Setting"));
@@ -314,9 +314,9 @@ namespace Flowers_Riven
                 LogicSpellCast(Args);
             }
 
-            if (sender.IsEnemy && sender.Type == GameObjectType.AIHeroClient)
+            if (sender.IsEnemy && sender.Type == GameObjectType.AIHeroClient && Args.Target != null && Args.Target.IsMe)
             {
-                if (Menu.GetBool("EShielddogde") && E.IsReady())
+                if (Menu.GetBool("EShielddogde") && E.IsReady() && Me.CanMoveMent())
                 {
                     LogicSpellShield(sender, Args);
                 }
@@ -545,114 +545,111 @@ namespace Flowers_Riven
 
         private static void LogicSpellShield(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs Args)
         {
-            if (Args.Target.IsMe)
+            if (Args.SData.Name.Contains("DariusR"))
             {
-                if (Args.SData.Name.Contains("DariusR"))
+                if (E.IsReady() && Menu.GetBool("EDodgeDariusR"))
                 {
-                    if (E.IsReady() && Menu.GetBool("EDodgeDariusR"))
-                    {
-                        E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
-                    }
+                    E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
                 }
+            }
 
-                if (Args.SData.Name.Contains("GarenQ"))
+            if (Args.SData.Name.Contains("GarenQ"))
+            {
+                if (E.IsReady() && Menu.GetBool("EDodgeGarenQ"))
                 {
-                    if (E.IsReady() && Menu.GetBool("EDodgeGarenQ"))
-                    {
-                        E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
-                    }
+                    E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
                 }
+            }
 
-                if (Args.SData.Name.Contains("GarenR"))
+            if (Args.SData.Name.Contains("GarenR"))
+            {
+                if (E.IsReady() && Menu.GetBool("EDodgeGarenR"))
                 {
-                    if (E.IsReady() && Menu.GetBool("EDodgeGarenR"))
-                    {
-                        E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
-                    }
+                    E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
                 }
+            }
 
-                if (Args.SData.Name.Contains("IreliaE"))
+            if (Args.SData.Name.Contains("IreliaE"))
+            {
+                if (E.IsReady() && Menu.GetBool("EDodgeIreliaE"))
                 {
-                    if (E.IsReady() && Menu.GetBool("EDodgeIreliaE"))
-                    {
-                        E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
-                    }
+                    E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
                 }
+            }
 
-                if (Args.SData.Name.Contains("LeeSinR"))
+            if (Args.SData.Name.Contains("LeeSinR"))
+            {
+                if (E.IsReady() && Menu.GetBool("EDodgeLeeSinR"))
                 {
-                    if (E.IsReady() && Menu.GetBool("EDodgeLeeSinR"))
-                    {
-                        E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
-                    }
+                    E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
                 }
+            }
 
-                if (Args.SData.Name.Contains("OlafE"))
+            if (Args.SData.Name.Contains("OlafE"))
+            {
+                if (E.IsReady() && Menu.GetBool("EDodgeOlafE"))
                 {
-                    if (E.IsReady() && Menu.GetBool("EDodgeOlafE"))
-                    {
-                        E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
-                    }
+                    E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
                 }
+            }
 
-                if (Args.SData.Name.Contains("PantheonW"))
+            if (Args.SData.Name.Contains("PantheonW"))
+            {
+                if (E.IsReady() && Menu.GetBool("EDodgePantheonW"))
                 {
-                    if (E.IsReady() && Menu.GetBool("EDodgePantheonW"))
-                    {
-                        E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
-                    }
+                    E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
                 }
+            }
 
-                if (Args.SData.Name.Contains("RenektonW"))
+            if (Args.SData.Name.Contains("RenektonW"))
+            {
+                if (E.IsReady() && Menu.GetBool("EDodgeRenektonW"))
                 {
-                    if (E.IsReady() && Menu.GetBool("EDodgeRenektonW"))
-                    {
-                        E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
-                    }
+                    E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
                 }
+            }
 
-                if (Args.SData.Name.Contains("RengarQ"))
+            if (Args.SData.Name.Contains("RengarQ"))
+            {
+                if (E.IsReady() && Menu.GetBool("EDodgeRengarQ"))
                 {
-                    if (E.IsReady() && Menu.GetBool("EDodgeRengarQ"))
-                    {
-                        E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
-                    }
+                    E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
                 }
+            }
 
-                if (Args.SData.Name.Contains("VeigarR"))
+            if (Args.SData.Name.Contains("VeigarR"))
+            {
+                if (E.IsReady() && Menu.GetBool("EDodgeVeigarR"))
                 {
-                    if (E.IsReady() && Menu.GetBool("EDodgeVeigarR"))
-                    {
-                        E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
-                    }
+                    E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
                 }
+            }
 
-                if (Args.SData.Name.Contains("VolibearW"))
+            if (Args.SData.Name.Contains("VolibearW"))
+            {
+                if (E.IsReady() && Menu.GetBool("EDodgeVolibearW"))
                 {
-                    if (E.IsReady() && Menu.GetBool("EDodgeVolibearW"))
-                    {
-                        E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
-                    }
+                    E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
                 }
+            }
 
-                if (Args.SData.Name.Contains("XenZhaoThrust3"))
+            if (Args.SData.Name.Contains("XenZhaoThrust3"))
+            {
+                if (E.IsReady() && Menu.GetBool("EDodgeXenZhaoQ3"))
                 {
-                    if (E.IsReady() && Menu.GetBool("EDodgeXenZhaoQ3"))
-                    {
-                        E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
-                    }
+                    E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
                 }
+            }
 
-                if (Args.SData.Name.Contains("attack") && Args.Target.IsMe &&
-                    sender.Buffs.Any(
-                        buff =>
-                            buff.Name == "BlueCardAttack" || buff.Name == "GoldCardAttack" ||
-                            buff.Name == "RedCardAttack"))
+            if (Args.SData.Name.Contains("attack") && Args.Target.IsMe &&
+                sender.Buffs.Any(
+                    buff =>
+                        buff.Name == "BlueCardAttack" || buff.Name == "GoldCardAttack" ||
+                        buff.Name == "RedCardAttack"))
+            {
+                if (E.IsReady() && Menu.GetBool("EDodgeTwistedFateW"))
                 {
-                    if (E.IsReady() && Menu.GetBool("EDodgeTwistedFateW"))
-                    {
-                        E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
-                    }
+                    E.Cast(Me.Position.Extend(Game.CursorPos, E.Range), true);
                 }
             }
         }
@@ -923,11 +920,15 @@ namespace Flowers_Riven
                 }
                 else if (Menu.GetList("QMode") == 1)
                 {
-                    Q.Cast(Me.Position.Extend(Game.CursorPos, Q.Range), true);
+                    Q.Cast(Game.CursorPos, true);
                 }
                 else if (Menu.GetList("QMode") == 2)
                 {
                     Q.Cast(Me.Position.Extend(qTarget.Position, Q.Range), true);
+                }
+                else
+                {
+                    Q.Cast(Me.Position.Extend(Game.CursorPos, Q.Range), true);
                 }
             }
         }

@@ -22,5 +22,8 @@ namespace BadaoKingdom.BadaoChampion.BadaoGangplank
         public static MenuItem AutoWLowHealthValue;
         public static MenuItem AutoWCC;
 
+        public static MenuItem DrawQ;
+        public static MenuItem DrawE;
+
     }
 }

@@ -8,7 +8,7 @@ namespace PRADA_Vayne.MyInitializer
     {
         public static void ShowNotifications()
         {
-            LeagueSharp.Common.Utility.DelayAction.Add(3000, () =>
+            /*LeagueSharp.Common.Utility.DelayAction.Add(3000, () =>
             {
                 Notifications.AddNotification("PRADA Vayne baby", 10000);
                 Notifications.AddNotification("back in force", 10000);
@@ -18,7 +18,7 @@ namespace PRADA_Vayne.MyInitializer
                 Notifications.AddNotification("wish u have fun,", 10000);
                 Notifications.AddNotification("and remember,", 10000);
                 Notifications.AddNotification("u dont need no luck", 10000);
-            });
+            });*/
         }
     }
 }

@@ -15,7 +15,7 @@ namespace Activator.Summoners
         internal override string[] ExtraNames => new[] { "" };
         internal override float Range => 600f;
         internal override int Duration => 100;
-        internal override int Priority => 4;
+        internal override int Priority => 6;
 
         internal Spell Q => new Spell(SpellSlot.Q);
         internal Spell W => new Spell(SpellSlot.W);

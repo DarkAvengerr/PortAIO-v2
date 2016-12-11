@@ -10,7 +10,7 @@ namespace PRADA_Vayne
     {
         #region Fields and Objects
         
-        public static Orbwalking.Orbwalker Orbwalker;
+        public static MyOrbwalker.Orbwalker Orbwalker;
 
         #region Menu
 

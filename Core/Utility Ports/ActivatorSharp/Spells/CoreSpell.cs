@@ -44,16 +44,6 @@ namespace Activator.Spells
                 Lists.Priorities.Values.Where(ii => ii.Needed() && ii.Ready())
                     .OrderByDescending(ii => ii.Menu().Item("prior" + ii.Name()).GetValue<Slider>().Value);
 
-        public AIHeroClient LowTarget
-        {
-            get
-            {
-                return ObjectManager.Get<AIHeroClient>()
-                    .Where(x => x.IsValidTarget(Range))
-                    .OrderBy(ene => ene.Health/ene.MaxHealth*100).First();
-            }
-        }
-
         public CoreSpell CreateMenu(Menu root)
         {
             try
@@ -138,7 +128,7 @@ namespace Activator.Spells
             return ready;
         }
 
-        public void CastOnBestTarget(AIHeroClient primary, bool nonhero = false)
+        public void CastOnBestTarget(AIHeroClient primary, bool minion = false)
         {
             if (IsReady())
             {
@@ -146,7 +136,20 @@ namespace Activator.Spells
                 LeagueSharp.Common.Utility.DelayAction.Add(1000, () => Needed = false);
             }
 
-            if (LowTarget != null)
+            var targets = new List<Obj_AI_Base>();
+
+            targets.Clear();
+            targets.AddRange(Activator.Heroes.Where(x => x.Player.IsValidTarget(Range)).Select(hero => hero.Player));
+
+            if (minion)
+                targets.AddRange(ObjectManager.Get<Obj_AI_Minion>().Where(x => x.IsValidTarget(Range)));
+
+            var sortedList =
+                targets.OrderBy(x => x is Obj_AI_Minion)
+                    .ThenBy(x => x.Health / x.MaxHealth * 100)
+                    .ThenBy(x => x.Distance(Player));
+
+            if (sortedList.First() != null)
             {
                 if (!Player.IsRecalling() &&
                     !Player.HasBuffOfType(BuffType.Invisibility) &&
@@ -154,7 +157,7 @@ namespace Activator.Spells
                     !ObjectManager.Player.Spellbook.IsChanneling &&
                     !Player.IsChannelingImportantSpell())
                 {
-                    if (ObjectManager.Player.Spellbook.CastSpell(Player.GetSpellSlot(Name), LowTarget))
+                    if (ObjectManager.Player.Spellbook.CastSpell(Player.GetSpellSlot(Name), sortedList.First()))
                     {
                         Activator.LastUsedTimeStamp = Utils.GameTimeTickCount;
                         Activator.LastUsedDuration = 100;

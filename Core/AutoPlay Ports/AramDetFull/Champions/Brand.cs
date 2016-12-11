@@ -9,14 +9,14 @@ using SharpDX;
 
 using EloBuddy; namespace ARAMDetFull.Champions
 {
-    class Brand : Champion
+    class BrandA : Champion
     {
 
         public readonly List<Spell> spellList = new List<Spell>();
 
         private const int BOUNCE_RADIUS = 450;
 
-        public Brand()
+        public BrandA()
         {
             ARAMSimulator.champBuild = new Build
             {

@@ -117,6 +117,7 @@ namespace Activator.Handlers
             var aiHero = Activator.Allies().Find(x => x.Player.NetworkId == hero.Player.NetworkId);
             if (aiHero != null && !IncomeDamage.ContainsKey(id))
             {
+                aiHero.Attacker = hpi.Attacker;
                 if (aiHero.Player.IsValidTarget(float.MaxValue, false) && !aiHero.Player.IsZombie)
                 {
                     bool checkmenu = false;
@@ -160,13 +161,28 @@ namespace Activator.Handlers
                             break;
                     }
 
+                    if (notes == "debug.Test")
+                    {
+                        if (!Activator.Origin.Item("acdebug").GetValue<bool>())
+                        {
+                            Chat.Print("<b><font color=\"#FF3366\">Activator#</font></b> - Damage debugging is not enabled!");
+                            return id;
+                        }
+
+                        aiHero.AbilityDamage += hpi.PredictedDmg;
+                        aiHero.HitTypes.Add(hpi.HitType);
+                    }
+
                     if (checkmenu && !string.IsNullOrEmpty(hpi.Name)) // QWER Only
                     {
-                        // add spell flags
-                        hero.HitTypes.AddRange(
-                            Lists.MenuTypes.Where(
-                                x => Activator.Origin.Item(
-                                    hpi.Name.ToLower() + x.ToString().ToLower()).GetValue<bool>()));
+                        if (notes != "debug.Test")
+                        {
+                            // add spell flags
+                            hero.HitTypes.AddRange(
+                                Lists.MenuTypes.Where(
+                                    x => Activator.Origin.Item(
+                                        hpi.Name.ToLower() + x.ToString().ToLower()).GetValue<bool>()));
+                        }
                     }
 
                     if (hpi.HitType == HitType.Stealth)
@@ -235,18 +251,32 @@ namespace Activator.Handlers
                             break;
                         case HitType.Stealth:
                             aiHero.HitTypes.Remove(HitType.Stealth);
-                            checkmenu = true;
                             break;
+                    }
+
+                    if (notes == "debug.Test")
+                    {
+                        if (!Activator.Origin.Item("acdebug").GetValue<bool>())
+                        {
+                            Chat.Print("<b><font color=\"#FF3366\">Activator#</font></b> - Damage debugging is not enabled!");
+                            return;
+                        }
+
+                        aiHero.AbilityDamage -= hpi.PredictedDmg;
+                        aiHero.HitTypes.Remove(hpi.HitType);
                     }
 
                     if (checkmenu && !string.IsNullOrEmpty(hpi.Name)) // QWER Only
                     {
-                        // remove spell flags
-                        aiHero.HitTypes.RemoveAll(
-                            x =>
-                                !x.Equals(HitType.Spell) &&
-                                Activator.Origin.Item(hpi.Name + x.ToString().ToLower())
-                                    .GetValue<bool>());
+                        if (notes != "debug.Test")
+                        {
+                            // remove spell flags
+                            aiHero.HitTypes.RemoveAll(
+                                x =>
+                                    !x.Equals(HitType.Spell) &&
+                                    Activator.Origin.Item(hpi.Name + x.ToString().ToLower())
+                                        .GetValue<bool>());
+                        }
                     }
 
                     if (Activator.Origin.Item("acdebug").GetValue<bool>())
@@ -255,6 +285,7 @@ namespace Activator.Handlers
                                           hpi.PredictedDmg + " / " + hpi.HitType + " / " + notes);
                     }
 
+                    aiHero.Attacker = null;
                     IncomeDamage.Remove(id);
                 }
                 else

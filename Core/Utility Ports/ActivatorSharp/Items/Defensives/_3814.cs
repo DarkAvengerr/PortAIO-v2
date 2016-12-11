@@ -14,7 +14,7 @@ namespace Activator.Items.Defensives
         internal override string Name => "Edge";
         internal override string DisplayName => "Edge of Night";
         internal override int Duration => 250;
-        internal override float Range => 600f;
+        internal override float Range => 1000f;
         internal override MenuType[] Category => new[] { MenuType.SelfMuchHP, MenuType.SelfCount, MenuType.ActiveCheck, MenuType.Gapcloser };
         internal override MapType[] Maps => new[] { MapType.Common };
         internal override int DefaultHP => 85;
@@ -64,7 +64,7 @@ namespace Activator.Items.Defensives
 
                 if (hero.HitTypes.Contains(HitType.Ultimate) || hero.HitTypes.Contains(HitType.Danger))
                 {
-                    if (attacker.Distance(hero.Player) <= Range / 2f)
+                    if (attacker.Distance(hero.Player) <= Range)
                     {
                         UseItem();
                     }
@@ -72,7 +72,7 @@ namespace Activator.Items.Defensives
 
                 if (!Menu.Item("enemygapdanger" + Name).GetValue<bool>())
                 {
-                    if (attacker.Distance(hero.Player) <= Range / 2f)
+                    if (attacker.Distance(hero.Player) <= Range)
                     {
                         UseItem();
                     }

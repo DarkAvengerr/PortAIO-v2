@@ -644,6 +644,9 @@ namespace PortAIO
                         case 11: // SergixBrand
                             SergixBrand.Program.Main();
                             break;
+                        case 12: // Shulepin's Brand
+                            Brand.Load.Main();
+                            break;
                     }
                     break;
                 case Champion.Braum:

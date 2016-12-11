@@ -478,7 +478,7 @@ namespace ARAMDetFull
                     champ = new Kalista();
                     break;
                 case "Brand":
-                    champ = new Brand();
+                    champ = new BrandA();
                     break;
                 case "Jinx":
                     champ = new Jinx();

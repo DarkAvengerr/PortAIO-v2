@@ -24,6 +24,10 @@ namespace PRADA_Vayne.MyLogic.Q
             {
                 Program.Q.Cast(TumbleOrderPos);
             }
+            if (position == Vector3.Zero && ObjectManager.Player.Buffs.Any(b => b.Name.ToLower().Contains("vayneinquisition")))
+            {
+                Program.Q.Cast(Game.CursorPos);
+            }
         }
     }
 }

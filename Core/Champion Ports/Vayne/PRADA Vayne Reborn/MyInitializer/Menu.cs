@@ -47,8 +47,8 @@ namespace PRADA_Vayne.MyInitializer
                         new StringList(new[] {"CLOSETOMOUSE", "CLOSETOTARGET"})));
                 Program.ComboMenu.AddItem(new MenuItem("QChecks", "Q Safety Checks").SetValue(true));
                 Program.ComboMenu.AddItem(new MenuItem("EQ", "Q After E").SetValue(false));
-                Program.ComboMenu.AddItem(new MenuItem("QWall", "Enable Wall Tumble?").SetValue(true));
                 Program.ComboMenu.AddItem(new MenuItem("QR", "Q after Ult").SetValue(true));
+                Program.ComboMenu.AddItem(new MenuItem("OnlyQinCombo", "Only Q in COMBO").SetValue(false));
                 Program.ComboMenu.AddItem(new MenuItem("FocusTwoW", "Focus 2 W Stacks").SetValue(true));
                 Program.ComboMenu.AddItem(new MenuItem("ECombo", "Auto Condemn").SetValue(true));
                 Program.ComboMenu.AddItem(
@@ -71,9 +71,6 @@ namespace PRADA_Vayne.MyInitializer
                 Program.LaneClearMenu.AddItem(new MenuItem("QLastHit", "Use Q to Lasthit").SetValue(true)).SetFontStyle(FontStyle.Bold, SharpDX.Color.Red);
                 Program.LaneClearMenu.AddItem(
                     new MenuItem("QLastHitMana", "Min Mana% for Q Lasthit").SetValue(new Slider(45))); 
-                Program.LaneClearMenu.AddItem(new MenuItem("QWaveClear", "Use Q to clear the wave").SetValue(false)).SetFontStyle(FontStyle.Bold, SharpDX.Color.Red);
-                Program.LaneClearMenu.AddItem(
-                    new MenuItem("QWaveClearMana", "Min Mana for Q Wave clear").SetValue(new Slider(75)));
                 Program.LaneClearMenu.AddItem(
                     new MenuItem("EJungleMobs", "Use E on Jungle Mobs").SetValue(true)).SetFontStyle(FontStyle.Bold, SharpDX.Color.Red);
                 Program.SkinhackMenu.AddItem(new MenuItem("shkenabled", "Enabled").SetValue(true));
@@ -93,7 +90,7 @@ namespace PRADA_Vayne.MyInitializer
 
         public static void InitOrbwalker()
         {
-            Program.Orbwalker = new Orbwalking.Orbwalker(Program.OrbwalkerMenu);
+            Program.Orbwalker = new MyOrbwalker.Orbwalker(Program.OrbwalkerMenu);
         }
 
         public static void FinishMenuInit()

@@ -23,7 +23,7 @@ using EloBuddy;
                 case "Malzahar":
                     return new Malzahar(menu, orbwalker);
                 case "Brand":
-                    return new Brand(menu, orbwalker);
+                    return new Champions.Brand(menu, orbwalker);
                 case "Ryze":
                     return new Ryze(menu, orbwalker);
                 case "Ashe":

@@ -16,9 +16,9 @@ namespace PRADA_Vayne.MyInitializer
         public static void LoadLogic()
         {
             #region Q
-            Orbwalking.AfterAttack += MyLogic.Q.Events.AfterAttack;
-            Orbwalking.BeforeAttack += MyLogic.Q.Events.BeforeAttack;
-            Orbwalking.OnAttack += MyLogic.Q.Events.OnAttack;
+            MyOrbwalker.AfterAttack += MyLogic.Q.Events.AfterAttack;
+            MyOrbwalker.BeforeAttack += MyLogic.Q.Events.BeforeAttack;
+            MyOrbwalker.OnAttack += MyLogic.Q.Events.OnAttack;
             Spellbook.OnCastSpell += MyLogic.Q.Events.OnCastSpell;
             AntiGapcloser.OnEnemyGapcloser += MyLogic.Q.Events.OnGapcloser;
             Obj_AI_Base.OnProcessSpellCast += MyLogic.Q.Events.OnProcessSpellCast;

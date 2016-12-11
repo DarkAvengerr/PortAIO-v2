@@ -1740,6 +1740,7 @@
     <Compile Include="Core\Champion Ports\Vayne\PRADA Vayne Reborn\MyUtils\MyExtensions.cs" />
     <Compile Include="Core\Champion Ports\Vayne\PRADA Vayne Reborn\MyUtils\MyGeometry.cs" />
     <Compile Include="Core\Champion Ports\Vayne\PRADA Vayne Reborn\MyUtils\MyLists.cs" />
+    <Compile Include="Core\Champion Ports\Vayne\PRADA Vayne Reborn\MyUtils\MyOrbwalker.cs" />
     <Compile Include="Core\Champion Ports\Vayne\PRADA Vayne Reborn\MyUtils\MySpellDb.cs" />
     <Compile Include="Core\Champion Ports\Vayne\PRADA Vayne Reborn\MyUtils\MyWizard.cs" />
     <Compile Include="Core\Champion Ports\Vayne\PRADA Vayne Reborn\Program.cs" />
@@ -6049,6 +6050,18 @@
     <Compile Include="Core\SDK Ports\ExorAIO\AIO\Utilities\Vars.cs" />
     <Compile Include="Core\SDK Ports\ExorAIO\ExorAIO.cs" />
     <Compile Include="Core\SDK Ports\ExorAIO\Program.cs" />
+    <Compile Include="Core\SDK Ports\[SDKEx] Brand\Extensions\Config.cs" />
+    <Compile Include="Core\SDK Ports\[SDKEx] Brand\Extensions\DamageBar.cs" />
+    <Compile Include="Core\SDK Ports\[SDKEx] Brand\Extensions\Events.cs" />
+    <Compile Include="Core\SDK Ports\[SDKEx] Brand\Extensions\Other.cs" />
+    <Compile Include="Core\SDK Ports\[SDKEx] Brand\Extensions\Spells.cs" />
+    <Compile Include="Core\SDK Ports\[SDKEx] Brand\Load.cs" />
+    <Compile Include="Core\SDK Ports\[SDKEx] Brand\Modes\Active.cs" />
+    <Compile Include="Core\SDK Ports\[SDKEx] Brand\Modes\Clear.cs" />
+    <Compile Include="Core\SDK Ports\[SDKEx] Brand\Modes\Combo.cs" />
+    <Compile Include="Core\SDK Ports\[SDKEx] Brand\Modes\Harass.cs" />
+    <Compile Include="Core\SDK Ports\[SDKEx] Brand\Modes\Jungle.cs" />
+    <Compile Include="Core\SDK Ports\[SDKEx] Brand\Modes\Killsteal.cs" />
     <Compile Include="Core\Utility Ports\ActivatorSharp\Base\Champion.cs" />
     <Compile Include="Core\Utility Ports\ActivatorSharp\Base\Gametroy.cs" />
     <Compile Include="Core\Utility Ports\ActivatorSharp\Base\Helpers.cs" />

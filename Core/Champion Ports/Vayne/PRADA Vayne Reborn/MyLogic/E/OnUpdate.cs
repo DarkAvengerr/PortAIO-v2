@@ -23,16 +23,15 @@ namespace PRADA_Vayne.MyLogic.E
                     {
                         if (hero != null)
                         {
-                            var prediction = Program.E.GetPrediction(hero);
                             for (var i = 40; i < 425; i += 125)
                             {
                                 var flags = NavMesh.GetCollisionFlags(
-                                    prediction.UnitPosition.To2D()
+                                    hero.ServerPosition.To2D()
                                         .Extend(
                                             Heroes.Player.ServerPosition.To2D(),
                                             -i)
                                         .To3D());
-                                if (flags.HasFlag(CollisionFlags.Wall) || flags.HasFlag(CollisionFlags.Building))
+                                if (flags != null && flags.HasFlag(CollisionFlags.Wall) || flags.HasFlag(CollisionFlags.Building))
                                 {
                                     Program.E.Cast(hero);
                                     return;

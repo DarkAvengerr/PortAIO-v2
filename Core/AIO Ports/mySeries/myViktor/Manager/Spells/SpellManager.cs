@@ -14,7 +14,7 @@ namespace myViktor.Manager.Spells
     {
         internal static void Init()
         {
-            Q = new Spell(SpellSlot.Q, 650f, TargetSelector.DamageType.Magical);
+            Q = new Spell(SpellSlot.Q, 665f, TargetSelector.DamageType.Magical);
             W = new Spell(SpellSlot.W, 700f, TargetSelector.DamageType.Magical);
             E = new Spell(SpellSlot.E, 525f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R, 700f, TargetSelector.DamageType.Magical);

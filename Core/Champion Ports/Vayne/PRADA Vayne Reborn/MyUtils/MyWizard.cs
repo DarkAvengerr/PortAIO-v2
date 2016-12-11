@@ -14,12 +14,12 @@ namespace PRADA_Vayne.MyUtils
     {
         public static bool UltActive()
         {
-            return Heroes.Player.Buffs.Any(b => b.Name.ToLower().Contains("vayneinquisition"));
+            return Heroes.Player.HasBuff("VayneInquisition");
         }
 
         public static bool TumbleActive()
         {
-            return Heroes.Player.Buffs.Any(b => b.Name.ToLower().Contains("vaynetumblebonus"));
+            return Heroes.Player.HasBuff("vaynetumblebonus");
         }
 
         public static bool ShouldSaveCondemn()

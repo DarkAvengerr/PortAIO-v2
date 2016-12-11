@@ -61,8 +61,28 @@ namespace BadaoKingdom.BadaoChampion.BadaoGangplank
             BadaoGangplankVariables.AutoWLowHealthValue = Auto.AddItem(new MenuItem("AutoWLowHealthValue", "% HP to W")).SetValue(new Slider(20,1,100));
             BadaoGangplankVariables.AutoWCC = Auto.AddItem(new MenuItem("AutoWCC", "W anti CC")).SetValue(true);
 
+            //Draw
+            Menu Draw = config.AddSubMenu(new Menu("Draw", "Draw"));
+            BadaoGangplankVariables.DrawQ = Draw.AddItem(new MenuItem("DrawQ", "Q")).SetValue(true);
+            BadaoGangplankVariables.DrawE = Draw.AddItem(new MenuItem("DrawE", "E")).SetValue(true);
+
             // attach to mainmenu
             config.AddToMainMenu();
+            Drawing.OnDraw += Drawing_OnDraw;
+        }
+
+        private static void Drawing_OnDraw(EventArgs args)
+        {
+            if (ObjectManager.Player.IsDead)
+                return;
+            if (BadaoGangplankVariables.DrawQ.GetValue<bool>())
+            {
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, BadaoMainVariables.Q.Range, Color.Yellow);
+            }
+            if (BadaoGangplankVariables.DrawE.GetValue<bool>())
+            {
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, BadaoMainVariables.E.Range, Color.Pink);
+            }
         }
     }
 }

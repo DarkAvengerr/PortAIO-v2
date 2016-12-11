@@ -60,26 +60,69 @@ namespace BadaoKingdom.BadaoChampion.BadaoGangplank
                                         }
                                     }
                                 }
-                                //var mbarrels = nbarrels.Where(x => x.Bottle.Distance(pred) <= 990).OrderBy(x => x.Bottle.Distance(pred));
-                                //foreach (var mbarrel in mbarrels)
-                                //{
-                                //    var pos = mbarrel.Bottle.Position.Extend(pred, 660);
-                                //    if (Player.Distance(pos) < BadaoMainVariables.E.Range)
-                                //    {
-                                //        Orbwalking.Attack = false;
-                                //        Orbwalking.Move = false;
-                                //        LeagueSharp.Common.Utility.DelayAction.Add(100 + Game.Ping, () =>
-                                //        {
-                                //            Orbwalking.Attack = true;
-                                //            Orbwalking.Move = true;
-                                //        });
-                                //        BadaoMainVariables.E.Cast(pos);
-                                //        LastCondition = Environment.TickCount;
-                                //        return;
-                                //    }
-                                //}
                             }
-
+                        }
+                        foreach (var barrel in BadaoGangplankBarrels.QableBarrels())
+                        {
+                            // choi mot luc ba thung
+                            var nbarrels = BadaoGangplankBarrels.ChainedBarrels(barrel);
+                            if (barrel.Bottle.Distance(pred) <= 330 + 660 + 660 && !(barrel.Bottle.Distance(pred) <= 330 + 660) && BadaoMainVariables.E.Instance.Ammo >= 2)
+                            {
+                                for (int i = 330 + 660 + 660; i >= 380 + 660; i -= 20)
+                                {
+                                    if (barrel.Bottle.Distance(pred) <= i)
+                                    {
+                                        var pos1 = barrel.Bottle.Position.To2D().Extend(pred.To2D(), 660);
+                                        var pos2 = barrel.Bottle.Position.To2D().Extend(pred.To2D(), i - 330);
+                                        if (BadaoMainVariables.E.IsInRange(pos1) && BadaoMainVariables.E.IsInRange(pos2)
+                                            && !pos1.IsWall() && !pos2.IsWall())
+                                        {
+                                            Orbwalking.Attack = false;
+                                            Orbwalking.Move = false;
+                                            LeagueSharp.Common.Utility.DelayAction.Add(100 + Game.Ping + 875, () =>
+                                            {
+                                                Orbwalking.Attack = true;
+                                                Orbwalking.Move = true;
+                                            });
+                                            BadaoMainVariables.E.Cast(pos1);
+                                            LeagueSharp.Common.Utility.DelayAction.Add(550, () => BadaoMainVariables.Q.Cast(barrel.Bottle));
+                                            LeagueSharp.Common.Utility.DelayAction.Add(875, () => BadaoMainVariables.E.Cast(pos2));
+                                            LastCondition = Environment.TickCount + 875;
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                            foreach (var nbarrel in nbarrels)
+                            {
+                                if (nbarrel.Bottle.Distance(pred) <= 330 + 660 + 660 && !(nbarrel.Bottle.Distance(pred) <= 330 + 660) && BadaoMainVariables.E.Instance.Ammo >= 2)
+                                {
+                                    for (int i = 330 + 660 + 660; i >= 380 + 660; i -= 20)
+                                    {
+                                        if (nbarrel.Bottle.Distance(pred) <= i)
+                                        {
+                                            var pos1 = nbarrel.Bottle.Position.To2D().Extend(pred.To2D(), 660);
+                                            var pos2 = nbarrel.Bottle.Position.To2D().Extend(pred.To2D(), i - 330);
+                                            if (BadaoMainVariables.E.IsInRange(pos1) && BadaoMainVariables.E.IsInRange(pos2)
+                                                && !pos1.IsWall() && !pos2.IsWall())
+                                            {
+                                                Orbwalking.Attack = false;
+                                                Orbwalking.Move = false;
+                                                LeagueSharp.Common.Utility.DelayAction.Add(100 + Game.Ping + 875, () =>
+                                                {
+                                                    Orbwalking.Attack = true;
+                                                    Orbwalking.Move = true;
+                                                });
+                                                BadaoMainVariables.E.Cast(pos1);
+                                                LeagueSharp.Common.Utility.DelayAction.Add(550, () => BadaoMainVariables.Q.Cast(barrel.Bottle));
+                                                LeagueSharp.Common.Utility.DelayAction.Add(875, () => BadaoMainVariables.E.Cast(pos2));
+                                                LastCondition = Environment.TickCount + 875;
+                                                return;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
@@ -114,18 +157,68 @@ namespace BadaoKingdom.BadaoChampion.BadaoGangplank
                                             return;
                                         }
                                     }
-                                    //Orbwalking.Attack = false;
-                                    //Orbwalking.Move = false;
-                                    //LeagueSharp.Common.Utility.DelayAction.Add(100 + Game.Ping, () =>
-                                    //{
-                                    //    Orbwalking.Attack = true;
-                                    //    Orbwalking.Move = true;
-                                    //});
-                                    //var mbarrels = nbarrels.FirstOrDefault(x => x.Bottle.Distance(pred) <= 660);
-                                    //var pos = mbarrels.Bottle.Position.Extend(pred, 660);
-                                    //BadaoMainVariables.E.Cast(pos);
-                                    //LastCondition = Environment.TickCount;
-                                    //return;
+                                }
+                            }
+                        }
+                        foreach (var barrel in BadaoGangplankBarrels.AttackableBarrels())
+                        {
+                            // choi mot luc ba thung
+                            var nbarrels = BadaoGangplankBarrels.ChainedBarrels(barrel);
+                            if (barrel.Bottle.Distance(pred) <= 330 + 660 + 660 && !(barrel.Bottle.Distance(pred) <= 330 + 660) && BadaoMainVariables.E.Instance.Ammo >= 2)
+                            {
+                                for (int i = 330 + 660 + 660; i >= 380 + 660; i -= 20)
+                                {
+                                    if (barrel.Bottle.Distance(pred) <= i)
+                                    {
+                                        var pos1 = barrel.Bottle.Position.To2D().Extend(pred.To2D(), 660);
+                                        var pos2 = barrel.Bottle.Position.To2D().Extend(pred.To2D(), i - 330);
+                                        if (BadaoMainVariables.E.IsInRange(pos1) && BadaoMainVariables.E.IsInRange(pos2)
+                                            && !pos1.IsWall() && !pos2.IsWall())
+                                        {
+                                            Orbwalking.Attack = false;
+                                            Orbwalking.Move = false;
+                                            LeagueSharp.Common.Utility.DelayAction.Add(100 + Game.Ping + 875, () =>
+                                            {
+                                                Orbwalking.Attack = true;
+                                                Orbwalking.Move = true;
+                                            });
+                                            BadaoMainVariables.E.Cast(pos1);
+                                            LeagueSharp.Common.Utility.DelayAction.Add(550, () => EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, barrel.Bottle));
+                                            LeagueSharp.Common.Utility.DelayAction.Add(875, () => BadaoMainVariables.E.Cast(pos2));
+                                            LastCondition = Environment.TickCount + 875;
+                                            return;
+                                        }
+                                    }
+                                }
+                            }
+                            foreach (var nbarrel in nbarrels)
+                            {
+                                if (nbarrel.Bottle.Distance(pred) <= 330 + 660 + 660 && !(nbarrel.Bottle.Distance(pred) <= 330 + 660) && BadaoMainVariables.E.Instance.Ammo >= 2)
+                                {
+                                    for (int i = 330 + 660 + 660; i >= 380 + 660; i -= 20)
+                                    {
+                                        if (nbarrel.Bottle.Distance(pred) <= i)
+                                        {
+                                            var pos1 = nbarrel.Bottle.Position.To2D().Extend(pred.To2D(), 660);
+                                            var pos2 = nbarrel.Bottle.Position.To2D().Extend(pred.To2D(), i - 330);
+                                            if (BadaoMainVariables.E.IsInRange(pos1) && BadaoMainVariables.E.IsInRange(pos2)
+                                                && !pos1.IsWall() && !pos2.IsWall())
+                                            {
+                                                Orbwalking.Attack = false;
+                                                Orbwalking.Move = false;
+                                                LeagueSharp.Common.Utility.DelayAction.Add(100 + Game.Ping + 875, () =>
+                                                {
+                                                    Orbwalking.Attack = true;
+                                                    Orbwalking.Move = true;
+                                                });
+                                                BadaoMainVariables.E.Cast(pos1);
+                                                LeagueSharp.Common.Utility.DelayAction.Add(550, () => BadaoMainVariables.Q.Cast(barrel.Bottle));
+                                                LeagueSharp.Common.Utility.DelayAction.Add(875, () => BadaoMainVariables.E.Cast(pos2));
+                                                LastCondition = Environment.TickCount + 875;
+                                                return;
+                                            }
+                                        }
+                                    }
                                 }
                             }
                         }

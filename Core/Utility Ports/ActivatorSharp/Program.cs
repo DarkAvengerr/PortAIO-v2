@@ -48,12 +48,6 @@ namespace Activator
         public static System.Version Version;
         public static List<Base.Champion> Heroes = new List<Base.Champion>();
 
-        public static void Main()
-        {
-            Version = Assembly.GetExecutingAssembly().GetName().Version;
-            Game_OnGameLoad();
-        }
-
         public static void Game_OnGameLoad()
         {
             try
@@ -119,6 +113,35 @@ namespace Activator
                 }
 
                 var bbmenu = new Menu("Debug Tools", "bbmenu");
+
+                var premenu = new Menu("Debug Health Prediction", "dhp");
+                premenu.AddItem(new MenuItem("testdamage", "Test Damage")).SetValue(false).ValueChanged +=
+                    (sender, eventArgs) =>
+                    {
+                        if (eventArgs.GetNewValue<bool>())
+                        {
+                            var caster = ObjectManager.Player;
+
+                            var target = Heroes.First(x =>
+                                        x.Player.ChampionName.ToLower() ==
+                                        Origin.Item("testdamagetarget").GetValue<StringList>().SelectedValue.ToLower());
+
+                            var type = (HitType) Enum.Parse(typeof (HitType),
+                                Origin.Item("testdamagetype").GetValue<StringList>().SelectedValue);
+
+                            Projections.PredictTheDamage(caster, target, new Gamedata { SDataName = "KurisuQtPie" }, type, "debug.Test");
+                            eventArgs.Process = false;
+                        }
+                    };
+
+                premenu.AddItem(new MenuItem("testdamagetype", "HitType"))
+                    .SetValue(new StringList(Enum.GetValues(typeof(HitType)).Cast<HitType>().Select(v => v.ToString()).ToArray(), 0));
+                premenu.AddItem(new MenuItem("testdamagetarget", "Target"))
+                    .SetValue(new StringList(Heroes.Select(x => x.Player.ChampionName).ToArray()));
+
+                bbmenu.AddSubMenu(premenu);
+
+
                 bbmenu.AddItem(new MenuItem("acdebug", "Debug Income Damage")).SetValue(false);
                 bbmenu.AddItem(new MenuItem("acdebug2", "Debug Item Priority")).SetValue(false);
                 bbmenu.AddItem(new MenuItem("acdebug3", "Debug QSS/Cleanse")).SetValue(false);

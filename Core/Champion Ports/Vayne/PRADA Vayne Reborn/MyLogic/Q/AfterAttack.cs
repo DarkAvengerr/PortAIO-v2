@@ -16,7 +16,7 @@ namespace PRADA_Vayne.MyLogic.Q
         public static void AfterAttack(AttackableUnit sender, AttackableUnit target)
         {
             if (!Program.Q.IsReady()) return;
-            if (sender.IsMe && target.IsValid<AIHeroClient>())
+            if (sender.IsMe && target.IsValid<AIHeroClient>() && (Program.Orbwalker.ActiveMode == MyOrbwalker.OrbwalkingMode.Combo || !Program.ComboMenu.Item("OnlyQinCombo").GetValue<bool>()))
             {
                 var tg = target as AIHeroClient;
                 if (tg == null) return;
@@ -33,50 +33,46 @@ namespace PRADA_Vayne.MyLogic.Q
                 }
                 Tumble.Cast(tumblePosition);
             }
-            if (sender.IsMe && target.IsValid<Obj_AI_Minion>())
+            var m = target as Obj_AI_Minion;
+
+            if (m != null && Program.LaneClearMenu.Item("QLastHit").GetValue<bool>() &&
+                ObjectManager.Player.ManaPercent >=
+                Program.LaneClearMenu.Item("QLastHitMana").GetValue<Slider>().Value &&
+                Program.Orbwalker.ActiveMode == MyOrbwalker.OrbwalkingMode.LastHit ||
+                Program.Orbwalker.ActiveMode == MyOrbwalker.OrbwalkingMode.LaneClear)
             {
-                if (Program.LaneClearMenu.Item("QWaveClear").GetValue<bool>() &&
-                       Program.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+                var dashPosition = Game.CursorPos;
+                var mode = Program.ComboMenu.Item("QMode").GetValue<StringList>().SelectedValue;
+                switch (mode)
                 {
-                    var meleeMinion = ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(m => m.IsMelee);
-                    if (ObjectManager.Player.ManaPercent >=
-                        Program.LaneClearMenu.Item("QWaveClearMana").GetValue<Slider>().Value &&
-                        meleeMinion.IsValidTarget())
-                    {
-                        if (ObjectManager.Player.Level == 1)
-                        {
-                            Tumble.Cast(meleeMinion.GetTumblePos());
-                        }
-                        if (ObjectManager.Player.CountEnemiesInRange(1600) == 0)
-                        {
-                            Tumble.Cast(meleeMinion.GetTumblePos());
-                        }
-                    }
-                    var minion = target as Obj_AI_Minion;
-                    if (minion.BaseSkinName.Contains("SRU_") && !minion.BaseSkinName.Contains("Mini"))
-                    {
-                        Tumble.Cast(((Obj_AI_Base)target).GetTumblePos());
-                    }
+                    case "PRADA":
+                        dashPosition = m.GetTumblePos();
+                        break;
+                    default:
+                        dashPosition = Game.CursorPos;
+                        break;
                 }
-                if (Program.LaneClearMenu.Item("QLastHit").GetValue<bool>() &&
-                    ObjectManager.Player.ManaPercent >=
-                    Program.LaneClearMenu.Item("QLastHitMana").GetValue<Slider>().Value &&
-                    Program.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit ||
-                    Program.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
+                if (m.Team == GameObjectTeam.Neutral)
                 {
-                    if (ObjectManager.Get<Obj_AI_Minion>()
+                    Program.Q.Cast(dashPosition);
+                }
+                foreach (
+                    var minion in
+                        ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
-                                m =>
-                                    Orbwalking.InAutoAttackRange(m)).Count(m =>
-                                    m.Health <= ObjectManager.Player.GetAutoAttackDamage(m)) > 2)
-                    {
-                        var cursorPos = Game.CursorPos;
-                        if (!cursorPos.IsDangerousPosition())
-                        {
-                            Program.Q.Cast(ObjectManager.Player.GetTumblePos());
-                            return;
-                        }
-                    }
+                                minion => m.NetworkId != minion.NetworkId && minion.IsEnemy && minion.IsValidTarget(615))
+                    )
+                {
+                    var time = (int) (ObjectManager.Player.AttackCastDelay*1000) + Game.Ping/2 +
+                               1000*
+                               (int)
+                                   Math.Max(0,
+                                       ObjectManager.Player.Distance(minion) - ObjectManager.Player.BoundingRadius)/
+                               (int) ObjectManager.Player.BasicAttack.MissileSpeed;
+                    var predHealth = HealthPrediction.GetHealthPrediction(minion, time);
+                    if (predHealth < ObjectManager.Player.GetAutoAttackDamage(minion) + Program.Q.GetDamage(minion) &&
+                        predHealth > 0)
+                        Program.Q.Cast(dashPosition, true);
                 }
             }
         }

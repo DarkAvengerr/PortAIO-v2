@@ -228,11 +228,12 @@ namespace Activator.Data
 
             Spells.Add(new Gamedata
             {
-                SDataName = "triumphantroar",
+                SDataName = "alistare",
                 ChampionName = "alistar",
                 Slot = SpellSlot.E,
-                CastRange = 0f,
-                Delay = 0f,
+                CastRange = 300f,
+                Radius = 300f,
+                Delay = 250f,
                 HitTypes = new HitType[] { },
                 MissileSpeed = int.MaxValue
             });
