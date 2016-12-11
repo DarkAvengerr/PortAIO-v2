@@ -15,7 +15,7 @@ namespace e.Motion_Katarina
         static public Spell Q, W, E, R;
         static public AIHeroClient Player => HeroManager.Player; //Beautiful Lambda
 
-        private static readonly int[] DAMAGEONLEVEL = {75, 78, 83, 88, 95, 103, 112, 122, 133, 145, 159, 173, 189, 206, 224, 243, 264, 285}; //Copied from Katarina's Wikia
+        private static readonly int[] DAMAGEONLEVEL = {75, 78, 87, 94, 102, 111, 120, 131, 143, 155, 168, 183, 198, 214, 231, 248, 267, 287}; //Copied from Katarina's Wikia
 
         public static void startLogic()
         {
@@ -108,7 +108,7 @@ namespace e.Motion_Katarina
             }
         }
         
-        private static void QLogic(bool KSMode = false)
+        private static void QLogic(bool ksMode = false)
         {
             if (!Q.IsReady())
             {
@@ -119,17 +119,18 @@ namespace e.Motion_Katarina
             {
                 return;
             }
-            if (!KSMode && Config.GetBoolValue("combo.q.minion") && target.Distance(Player) > 400)
+            if (!ksMode && Config.GetBoolValue("combo.q.minion") && target.Distance(Player) > 400)
             {
                 //Optimal Position to attack Target
-                Vector3 OptimalQPosition = target.ServerPosition.Extend(Player.Position, 350);
-                Obj_AI_Base min = ObjectManager.Get<Obj_AI_Base>().Aggregate((x, y) => x.Distance(OptimalQPosition) < y.Distance(OptimalQPosition) ? x : y);
-                if(min.Distance(OptimalQPosition) < 130)
+                Vector3 optimalQPosition = target.ServerPosition.Extend(Player.Position, 350);
+                Obj_AI_Base min = ObjectManager.Get<Obj_AI_Base>().Aggregate((x, y) => x.Distance(optimalQPosition) < y.Distance(optimalQPosition) ? x : y);
+                if(min.Distance(optimalQPosition) < 130)
                 {
                     Q.Cast(min);
                 }
             }
-            if (target.Distance(Player) < Q.Range && (Config.GetBoolValue("combo.q.direct") && (!Config.GetBoolValue("combo.q.onlyrunaway") || !target.IsFacing(Player) || target.Distance(Player) < 300) || KSMode))
+            target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
+            if (target.Distance(Player) < Q.Range && (Config.GetBoolValue("combo.q.direct") && (!Config.GetBoolValue("combo.q.onlyrunaway") || !target.IsFacing(Player) || target.Distance(Player) < 300) || ksMode))
             {
                 Q.Cast(target);
             }
