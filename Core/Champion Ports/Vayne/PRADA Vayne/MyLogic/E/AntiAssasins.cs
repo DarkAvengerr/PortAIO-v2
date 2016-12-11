@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
-using PRADA_Vayne.MyUtils;
+using PRADA_Vayne_Old.MyUtils;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace PRADA_Vayne.MyLogic.E
+ namespace PRADA_Vayne_Old.MyLogic.E
 {
     public static class AntiAssasins
     {

@@ -6,13 +6,13 @@ using System.Linq;
 using System.Reflection;
 using LeagueSharp;
 using LeagueSharp.Common;
-using PRADA_Vayne.Utils;
+using PRADA_Vayne_Old.Utils;
 using SharpDX;
 using SpellSlot = EloBuddy.SpellSlot;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace PRADA_Vayne.MyUtils
+ namespace PRADA_Vayne_Old.MyUtils
 {
     public class MActivator
     {

@@ -3,7 +3,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace PRADA_Vayne.MyInitializer
+ namespace PRADA_Vayne_Old.MyInitializer
 {
     public static partial class PRADALoader
     {

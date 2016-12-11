@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace PRADA_Vayne.MyUtils
+ namespace PRADA_Vayne_Old.MyUtils
 {
     public static class Lists
     {

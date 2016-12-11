@@ -38,7 +38,7 @@ using SharpDX;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace PRADA_Vayne.Utils
+ namespace PRADA_Vayne_Old.Utils
 {
     public static class SpellDb
     {

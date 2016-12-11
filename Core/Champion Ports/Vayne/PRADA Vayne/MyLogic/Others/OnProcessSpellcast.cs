@@ -5,13 +5,13 @@ using System.Text;
 using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
-using PRADA_Vayne.MyLogic.Q;
-using PRADA_Vayne.MyUtils;
-using PRADA_Vayne.Utils;
+using PRADA_Vayne_Old.MyLogic.Q;
+using PRADA_Vayne_Old.MyUtils;
+using PRADA_Vayne_Old.Utils;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace PRADA_Vayne.MyLogic.Others
+ namespace PRADA_Vayne_Old.MyLogic.Others
 {
     public static partial class Events
     {

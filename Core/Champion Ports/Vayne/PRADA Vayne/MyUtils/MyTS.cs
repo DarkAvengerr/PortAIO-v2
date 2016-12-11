@@ -34,7 +34,7 @@ using LeagueSharp.Common;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace PRADA_Vayne.MyUtils
+ namespace PRADA_Vayne_Old.MyUtils
 {
     public class TargetSelector
     {

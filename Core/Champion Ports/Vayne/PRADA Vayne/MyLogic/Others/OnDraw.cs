@@ -5,12 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
-using PRADA_Vayne.MyUtils;
+using PRADA_Vayne_Old.MyUtils;
 using Color = System.Drawing.Color;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace PRADA_Vayne.MyLogic.Others
+ namespace PRADA_Vayne_Old.MyLogic.Others
 {
     public static partial class Events
     {

@@ -3505,7 +3505,7 @@ namespace PortAIO
                             HikiCarry_Vayne_Masterrace.Program.Main();
                             break;
                         case 14: // PRADA Vayne
-                            PRADA_Vayne.Program.Main();
+                            PRADA_Vayne_Old.Program.Main();
                             break;
                         case 15: // SOLO Vayne
                             SoloVayne.Program.Main();
@@ -3527,6 +3527,9 @@ namespace PortAIO
                             break;
                         case 21: // Lord's Vayne
                             Lord_s_Vayne.Program.Main();
+                            break;
+                        case 22: // PradaVayneReborn
+                            PRADA_Vayne.Program.Main();
                             break;
                     }
                     break;

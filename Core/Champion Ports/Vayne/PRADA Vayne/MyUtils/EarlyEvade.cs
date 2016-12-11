@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using System.Drawing;
 using LeagueSharp.Common;
-using PRADA_Vayne.MyUtils;
+using PRADA_Vayne_Old.MyUtils;
 using Color = SharpDX.Color;
 using Geometry = LeagueSharp.Common.Geometry;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace PRADA_Vayne.MyUtils
+ namespace PRADA_Vayne_Old.MyUtils
 {
     using System;
     using System.Linq;

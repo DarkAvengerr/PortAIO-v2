@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LeagueSharp.Common;
-using PRADA_Vayne.MyUtils;
+using PRADA_Vayne_Old.MyUtils;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace PRADA_Vayne.MyLogic.Q
+ namespace PRADA_Vayne_Old.MyLogic.Q
 {
     public static partial class Events
     {

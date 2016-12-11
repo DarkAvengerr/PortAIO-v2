@@ -6,12 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
-using PRADA_Vayne.MyInitializer;
-using PRADA_Vayne.MyUtils;
+using PRADA_Vayne_Old.MyInitializer;
+using PRADA_Vayne_Old.MyUtils;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace PRADA_Vayne
+ namespace PRADA_Vayne_Old
 {
     public static class PRADAHijacker
     {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace PRADA_Vayne.MyLogic.Q
+ namespace PRADA_Vayne_Old.MyLogic.Q
 {
     public static partial class Events
     {

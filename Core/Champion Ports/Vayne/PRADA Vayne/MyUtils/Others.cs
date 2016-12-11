@@ -12,7 +12,7 @@ using SharpDX.Direct3D9;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
- namespace PRADA_Vayne.MyUtils
+ namespace PRADA_Vayne_Old.MyUtils
 {
 
     internal class Others
