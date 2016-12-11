@@ -26,8 +26,8 @@ using EloBuddy;
 
         public void OnExecute()
         {
-            Variables.Orbwalker.SetMovement(!MenuExtensions.GetItemValue<bool>("dz191.vhr.misc.general.disablemovement"));
-            Variables.Orbwalker.SetAttack(!MenuExtensions.GetItemValue<bool>("dz191.vhr.misc.general.disableattk"));
+            //Variables.Orbwalker.SetMovement(!MenuExtensions.GetItemValue<bool>("dz191.vhr.misc.general.disablemovement"));
+            //Variables.Orbwalker.SetAttack(!MenuExtensions.GetItemValue<bool>("dz191.vhr.misc.general.disableattk"));
         }
     }
 }
