@@ -1,6 +1,6 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Flowers_Talon.Common
+using LeagueSharp.Common; 
+namespace Flowers_Talon.Common
 {
     using LeagueSharp;
     using LeagueSharp.Common;
@@ -9,9 +9,9 @@ using EloBuddy;
     using System;
     using System.Drawing;
     using System.Linq;
+    using PortAIO.Properties;
     using Color = System.Drawing.Color;
     using Font = SharpDX.Direct3D9.Font;
-    using PortAIO.Properties;
 
     internal enum TargetSelect
     {
@@ -303,14 +303,14 @@ using EloBuddy;
                     DrawText(
                         Text,
                         "1st Priority Target",
-                        e.HPBarPosition.X + e.BoundingRadius / 2f - (e.CharData.BaseSkinName.Length / 2f) - 27,
+                        e.HPBarPosition.X + e.BoundingRadius / 2f - (e.BaseSkinName.Length / 2f) - 27,
                         e.HPBarPosition.Y - 23,
                         SharpDX.Color.Black);
 
                     DrawText(
                         Text,
                         "1st Priority Target",
-                        e.HPBarPosition.X + e.BoundingRadius / 2f - (e.CharData.BaseSkinName.Length / 2f) - 29,
+                        e.HPBarPosition.X + e.BoundingRadius / 2f - (e.BaseSkinName.Length / 2f) - 29,
                         e.HPBarPosition.Y - 25,
                         SharpDX.Color.IndianRed);
                 }

@@ -1,6 +1,6 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Flowers_Talon.Common
+using LeagueSharp.Common; 
+namespace Flowers_Talon.Common
 {
     using LeagueSharp;
     using LeagueSharp.Common;
@@ -260,16 +260,16 @@ using EloBuddy;
 
                 var damage = 0d;
 
-                damage += ObjectManager.Player.GetAutoAttackDamage(target) + GetPassiveDamage(target) +
-                          (Player.Instance.Spellbook.GetSpell(SpellSlot.Q).IsReady()
+                damage += ObjectManager.Player.GetAutoAttackDamage(target) + GetPassiveDamage(target) + 
+                          (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).IsReady()
                               ? (target.DistanceToPlayer() <= 170f + target.BoundingRadius
                                   ? GetQ1Damage(target)
                                   : GetQDamage(target))
                               : 0d) +
-                          (Player.Instance.Spellbook.GetSpell(SpellSlot.W).IsReady()
+                          (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).IsReady()
                               ? GetWDamage(target) + GetW1Damage(target)
                               : 0d) +
-                              (Player.Instance.Spellbook.GetSpell(SpellSlot.R).IsReady()
+                              (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).IsReady()
                               ? GetRDamage(target)
                               : 0d) +
                           ((ObjectManager.Player.GetSpellSlot("SummonerDot") != SpellSlot.Unknown &&

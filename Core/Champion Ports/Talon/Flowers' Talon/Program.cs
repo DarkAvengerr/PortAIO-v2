@@ -1,6 +1,6 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Flowers_Talon
+using LeagueSharp.Common; 
+namespace Flowers_Talon
 {
     using Common;
     using System;
@@ -27,10 +27,10 @@ using EloBuddy;
 
         public static void Main()
         {
-            OnGameLoad();
+            OnGameLoad(new EventArgs());
         }
 
-        private static void OnGameLoad()
+        private static void OnGameLoad(EventArgs Args)
         {
             if (ObjectManager.Player.ChampionName != "Talon")
             {
@@ -398,13 +398,14 @@ using EloBuddy;
                 {
                     if (Menu.Item("LaneClearW", true).GetValue<bool>() && W.IsReady())
                     {
-                        var wFarm =
-                            MinionManager.GetBestCircularFarmLocation(minions.Select(x => x.Position.To2D()).ToList(),
-                                75f, W.Range);
-
-                        if (wFarm.MinionsHit >= Menu.Item("LaneClearWCount", true).GetValue<Slider>().Value)
+                        if (minions.Count >= Menu.Item("LaneClearWCount", true).GetValue<Slider>().Value)
                         {
-                            W.Cast(wFarm.Position);
+                            var min = minions.MaxOrDefault(x => x.DistanceToPlayer());
+
+                            if (min != null)
+                            {
+                                W.Cast(min.Position);
+                            }
                         }
                     }
 

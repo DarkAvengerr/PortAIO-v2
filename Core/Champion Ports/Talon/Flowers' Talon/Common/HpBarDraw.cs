@@ -1,6 +1,6 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Flowers_Talon.Common
+using LeagueSharp.Common; 
+namespace Flowers_Talon.Common
 {
     using LeagueSharp;
     using SharpDX;
