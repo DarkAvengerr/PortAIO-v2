@@ -1991,6 +1991,9 @@ namespace PortAIO
                         case 9: // LeeSin EloClimber
                             LeeSin_EloClimber.Program.Main();
                             break;
+                        case 10: // MasterOfInsec
+                            MasterOfInsec.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Leona:
