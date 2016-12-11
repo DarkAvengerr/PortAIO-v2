@@ -10,7 +10,7 @@ namespace myViktor.Manager.Events
     {
         internal static void Init(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs Args)
         {
-            if (Menu.GetBool("IntW") && W.IsReady() && sender.IsEnemy &&
+            if (Menu.GetBool("IntW") && W.IsReady() && sender.IsEnemy && sender.IsValidTarget(W.Range) && 
                 Args.DangerLevel >= Interrupter2.DangerLevel.High)
             {
                 W.Cast(sender.Position, true);

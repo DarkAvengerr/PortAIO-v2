@@ -2,6 +2,7 @@ using EloBuddy;
 using LeagueSharp.Common; 
 namespace myCommon
 {
+    using System.Linq;
     using LeagueSharp;
     using LeagueSharp.Common;
 
@@ -20,6 +21,18 @@ namespace myCommon
             damage += GetWDamage(target);
             damage += GetEDamage(target);
             damage += GetRDamage(target);
+
+            var targetDagger =
+                ObjectManager.Get<Obj_AI_Minion>()
+                    .Where(
+                        x =>
+                            x.BaseSkinName == "testcuberender" && x.Health > 1 && x.IsValid &&
+                            x.Distance(target) <= 340);
+
+            if (targetDagger.Any())
+            {
+                damage += GetPassiveDamage(target)*targetDagger.Count();
+            }
 
             if (ObjectManager.Player.HasBuff("SummonerExhaust"))
             {
@@ -48,6 +61,22 @@ namespace myCommon
 
             return (float)damage;
         }
+        //Katarina Damage Code Copy From BadaoKingdom
+        public static float GetPassiveDamage(Obj_AI_Base target)
+        {
+            var hant = ObjectManager.Player.Level < 6
+                ? 0
+                : (ObjectManager.Player.Level < 11
+                    ? 1
+                    : (ObjectManager.Player.Level < 16 ? 2 : 3));
+            var damage = new double[]
+                             {75, 78, 83, 88, 95, 103, 112, 122, 133, 145, 159, 173, 189, 206, 224, 243, 264, 245}[
+                             ObjectManager.Player.Level - 1]
+                         + ObjectManager.Player.FlatPhysicalDamageMod
+                         + new[] {0.55, 0.70, 0.85, 1}[hant]*ObjectManager.Player.TotalMagicalDamage;
+
+            return (float)ObjectManager.Player.CalcDamage(target, Damage.DamageType.Magical, damage);
+        }
 
         public static float GetQDamage(Obj_AI_Base target, int stage = 0, bool newDamageLogic = false,
             float newDamage = 0f)
@@ -58,12 +87,11 @@ namespace myCommon
                 return 0f;
             }
 
-            if (newDamageLogic)
-            {
-                return newDamage;
-            }
+            var damage =
+                new double[] { 75, 105, 135, 165, 195 }[ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level - 1
+                ] + 0.3 * ObjectManager.Player.TotalMagicalDamage;
 
-            return (float)ObjectManager.Player.GetSpellDamage(target, SpellSlot.Q, stage);
+            return (float)ObjectManager.Player.CalcDamage(target, Damage.DamageType.Magical, damage);
         }
 
         public static float GetWDamage(Obj_AI_Base target, int stage = 0, bool newDamageLogic = false,
@@ -80,7 +108,7 @@ namespace myCommon
                 return newDamage;
             }
 
-            return (float)ObjectManager.Player.GetSpellDamage(target, SpellSlot.W, stage);
+            return 0f;
         }
 
         public static float GetEDamage(Obj_AI_Base target, int stage = 0, bool newDamageLogic = false,
@@ -92,12 +120,11 @@ namespace myCommon
                 return 0f;
             }
 
-            if (newDamageLogic)
-            {
-                return newDamage;
-            }
+            var damage =
+                new double[] {30, 45, 60, 75, 90}[ObjectManager.Player.Spellbook.GetSpell(SpellSlot.E).Level - 1] +
+                0.25*ObjectManager.Player.TotalMagicalDamage + 0.65*ObjectManager.Player.TotalAttackDamage;
 
-            return (float)ObjectManager.Player.GetSpellDamage(target, SpellSlot.E, stage);
+            return (float)ObjectManager.Player.CalcDamage(target, Damage.DamageType.Magical, damage);
         }
 
         public static float GetRDamage(Obj_AI_Base target, int stage = 0, bool newDamageLogic = false,
@@ -109,12 +136,10 @@ namespace myCommon
                 return 0f;
             }
 
-            if (newDamageLogic)
-            {
-                return newDamage;
-            }
+            var damage = new[] {375, 562.5, 750}[ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level - 1] +
+                         2.85*ObjectManager.Player.TotalMagicalDamage + 3.30*ObjectManager.Player.TotalAttackDamage;
 
-            return (float)ObjectManager.Player.GetSpellDamage(target, SpellSlot.R, stage);
+            return (float)ObjectManager.Player.CalcDamage(target, Damage.DamageType.Magical, damage);
         }
 
         public static float GetIgniteDmage(Obj_AI_Base target)

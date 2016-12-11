@@ -14,12 +14,12 @@ namespace myViktor.Manager.Spells
     {
         internal static void Init()
         {
-            Q = new Spell(SpellSlot.Q, 600f, TargetSelector.DamageType.Magical);
+            Q = new Spell(SpellSlot.Q, 650f, TargetSelector.DamageType.Magical);
             W = new Spell(SpellSlot.W, 700f, TargetSelector.DamageType.Magical);
             E = new Spell(SpellSlot.E, 525f, TargetSelector.DamageType.Magical);
             R = new Spell(SpellSlot.R, 700f, TargetSelector.DamageType.Magical);
 
-            W.SetSkillshot(0.5f, 300f, float.MaxValue, false, SkillshotType.SkillshotCircle);
+            W.SetSkillshot(1.50f, 300f, float.MaxValue, false, SkillshotType.SkillshotCircle);
             E.SetSkillshot(0.25f, 100f, float.MaxValue, false, SkillshotType.SkillshotLine);
             R.SetSkillshot(0.25f, 450f, float.MaxValue, false, SkillshotType.SkillshotCircle);
 

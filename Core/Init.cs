@@ -1800,6 +1800,9 @@ namespace PortAIO
                         case 11: // BadaoKingdom
                             BadaoKingdom.Program.Main();
                             break;
+                        case 12: //mySeries
+                            myKatarina.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Kayle:
