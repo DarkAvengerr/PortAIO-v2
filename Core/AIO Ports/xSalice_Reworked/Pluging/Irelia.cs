@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace xSaliceResurrected_Rework.Pluging
+namespace xSaliceResurrected_Rework.Pluging
 {
     using System;
     using System.Linq;

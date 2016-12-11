@@ -24,7 +24,7 @@
 */
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace xSaliceResurrected_Rework.Utilities
+namespace xSaliceResurrected_Rework.Utilities
 {
     using System;
     using System.Collections.Generic;

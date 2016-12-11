@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace xSaliceResurrected_Rework.Pluging
+namespace xSaliceResurrected_Rework.Pluging
 {
     using Base;
     using System;
@@ -23,7 +23,7 @@ using LeagueSharp.Common;
             SpellManager.R = new Spell(SpellSlot.R, 550f);
 
             SpellManager.Q.SetTargetted(400f, 1400f);
-            SpellManager.R.SetCharged(550, 550, 1.0f);
+            SpellManager.R.SetCharged( 550, 550, 1.0f);
 
             SpellManager.SpellList.Add(Q);
             SpellManager.SpellList.Add(E);
@@ -36,7 +36,7 @@ using LeagueSharp.Common;
                 combo.AddItem(new MenuItem("UseECombo", "Use E", true).SetValue(true));
                 combo.AddItem(new MenuItem("UseEDaggerCombo", "Use E to Dagger", true).SetValue(true));
                 combo.AddItem(new MenuItem("eDis", "E only if >", true).SetValue(new Slider(0, 0, 700)));
-                combo.AddItem(new MenuItem("smartE", "Smart E with R CD ", true).SetValue(false));
+                combo.AddItem(new MenuItem("smartE", "Smart E During R CD ", true).SetValue(false));
                 combo.AddItem(new MenuItem("UseRCombo", "Use R", true).SetValue(true));
                 combo.AddItem(
                     new MenuItem("comboMode", "Mode", true).SetValue(new StringList(new[] {"Beta(QWEE)", "QEW", "EQW"}, 1)));
@@ -73,7 +73,7 @@ using LeagueSharp.Common;
                 killSteal.AddItem(new MenuItem("smartKS", "Use Smart KS System", true).SetValue(true));
                 killSteal.AddItem(new MenuItem("wardKs", "Use Jump KS", true).SetValue(true));
                 killSteal.AddItem(new MenuItem("rKS", "Use R for KS", true).SetValue(true));
-                killSteal.AddItem(new MenuItem("rCancel", "NO R Cancel for KS", true).SetValue(true));
+                killSteal.AddItem(new MenuItem("rCancel", "Do NOT Cancel R While KSing", true).SetValue(true));
                 killSteal.AddItem(new MenuItem("KS_With_E", "Don't KS with E Toggle!", true).SetValue(new KeyBind("H".ToCharArray()[0], KeyBindType.Toggle)));
                 Menu.AddSubMenu(killSteal);
             }

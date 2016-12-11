@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace xSaliceResurrected_Rework.Base
+namespace xSaliceResurrected_Rework.Base
 {
     using System.Collections.Generic;
     using LeagueSharp;

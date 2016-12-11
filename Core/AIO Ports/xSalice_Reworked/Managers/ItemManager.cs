@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace xSaliceResurrected_Rework.Managers
+namespace xSaliceResurrected_Rework.Managers
 {
     using System;
     using System.Collections.Generic;
