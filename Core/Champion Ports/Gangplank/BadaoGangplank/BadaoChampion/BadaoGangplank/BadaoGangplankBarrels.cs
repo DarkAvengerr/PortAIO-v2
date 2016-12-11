@@ -7,10 +7,10 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using Color = System.Drawing.Color;
-using BadaoGP;
+
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace BadaoKingdom.BadaoChampion.BadaoGangplank
+using LeagueSharp.Common; 
+namespace BadaoKingdom.BadaoChampion.BadaoGangplank
 {
     // 350 range
     public static class BadaoGangplankBarrels
@@ -103,7 +103,7 @@ using EloBuddy;
         {
             if (!(sender is Obj_AI_Minion))
                 return;
-            if ((sender as Obj_AI_Minion).CharData.BaseSkinName != "gangplankbarrel")
+            if ((sender as Obj_AI_Minion).BaseSkinName != "gangplankbarrel")
                 return;
             Barrels.RemoveAll(x => x.Bottle.NetworkId == sender.NetworkId);
         }
@@ -116,6 +116,18 @@ using EloBuddy;
                 if (ChainedBarrels(barrel).Count() >= 2)
                     Render.Circle.DrawCircle(barrel.Bottle.Position, 100, Color.Pink);
             }
+            //var barreled = Barrels.FirstOrDefault();
+            //if (barreled!= null)
+            //{
+            //    var barreledes = ChainedBarrels(barreled);
+            //    foreach (var barrel in barreledes)
+            //    {
+            //        Render.Circle.DrawCircle(barrel.Bottle.Position, 150, Color.Red);
+            //    }
+            //}
+            //var pred = Prediction.GetPrediction(Player, 2);
+            //Render.Circle.DrawCircle(pred.UnitPosition, 50, Color.Pink);
+            //Render.Circle.DrawCircle(pred.CastPosition, 50, Color.Yellow);
         }
 
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -133,7 +145,7 @@ using EloBuddy;
         {
             if (!(sender is Obj_AI_Minion))
                 return;
-            if ((sender as Obj_AI_Minion).CharData.BaseSkinName != "gangplankbarrel")
+            if ((sender as Obj_AI_Minion).BaseSkinName != "gangplankbarrel")
                 return;
             if (Math.Abs(LastCastE - Environment.TickCount) < 800 && LastEPos.Distance(sender.Position) < 500)
             {

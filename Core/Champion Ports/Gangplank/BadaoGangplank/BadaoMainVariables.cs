@@ -10,8 +10,8 @@ using Color = System.Drawing.Color;
 
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace BadaoGP
+using LeagueSharp.Common; 
+namespace BadaoGP
 {
     public static class BadaoMainVariables
     {

@@ -5,13 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
-using BadaoGP;
 using SharpDX;
 using Color = System.Drawing.Color;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace BadaoKingdom.BadaoChampion.BadaoGangplank
+using LeagueSharp.Common; 
+namespace BadaoKingdom.BadaoChampion.BadaoGangplank
 {
     public static class BadaoGangplankLaneClear
     {
