@@ -2,7 +2,6 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using PRADA_Vayne.MyUtils;
-using Orbwalker = PRADA_Vayne.MyUtils.MyOrbwalker;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
@@ -10,7 +9,7 @@ namespace PRADA_Vayne.MyLogic.R
 {
     public static partial class Events
     {
-        public static void BeforeAttack(Orbwalker.BeforeAttackEventArgs args)
+        public static void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
             if (args.Unit.IsMe || Program.Q.IsReady() || Program.ComboMenu.Item("QCombo").GetValue<bool>())
             {

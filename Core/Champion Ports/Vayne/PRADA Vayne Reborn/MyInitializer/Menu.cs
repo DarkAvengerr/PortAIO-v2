@@ -90,7 +90,7 @@ namespace PRADA_Vayne.MyInitializer
 
         public static void InitOrbwalker()
         {
-            Program.Orbwalker = new MyOrbwalker.Orbwalker(Program.OrbwalkerMenu);
+            Program.Orbwalker = new Orbwalking.Orbwalker(Program.OrbwalkerMenu);
         }
 
         public static void FinishMenuInit()

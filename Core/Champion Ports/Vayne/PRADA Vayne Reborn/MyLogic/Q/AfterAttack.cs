@@ -16,7 +16,7 @@ namespace PRADA_Vayne.MyLogic.Q
         public static void AfterAttack(AttackableUnit sender, AttackableUnit target)
         {
             if (!Program.Q.IsReady()) return;
-            if (sender.IsMe && target.IsValid<AIHeroClient>() && (Program.Orbwalker.ActiveMode == MyOrbwalker.OrbwalkingMode.Combo || !Program.ComboMenu.Item("OnlyQinCombo").GetValue<bool>()))
+            if (sender.IsMe && target.IsValid<AIHeroClient>() && (Program.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || !Program.ComboMenu.Item("OnlyQinCombo").GetValue<bool>()))
             {
                 var tg = target as AIHeroClient;
                 if (tg == null) return;
@@ -38,8 +38,8 @@ namespace PRADA_Vayne.MyLogic.Q
             if (m != null && Program.LaneClearMenu.Item("QLastHit").GetValue<bool>() &&
                 ObjectManager.Player.ManaPercent >=
                 Program.LaneClearMenu.Item("QLastHitMana").GetValue<Slider>().Value &&
-                Program.Orbwalker.ActiveMode == MyOrbwalker.OrbwalkingMode.LastHit ||
-                Program.Orbwalker.ActiveMode == MyOrbwalker.OrbwalkingMode.LaneClear)
+                Program.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit ||
+                Program.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
                 var dashPosition = Game.CursorPos;
                 var mode = Program.ComboMenu.Item("QMode").GetValue<StringList>().SelectedValue;

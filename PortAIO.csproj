@@ -1740,7 +1740,6 @@
     <Compile Include="Core\Champion Ports\Vayne\PRADA Vayne Reborn\MyUtils\MyExtensions.cs" />
     <Compile Include="Core\Champion Ports\Vayne\PRADA Vayne Reborn\MyUtils\MyGeometry.cs" />
     <Compile Include="Core\Champion Ports\Vayne\PRADA Vayne Reborn\MyUtils\MyLists.cs" />
-    <Compile Include="Core\Champion Ports\Vayne\PRADA Vayne Reborn\MyUtils\MyOrbwalker.cs" />
     <Compile Include="Core\Champion Ports\Vayne\PRADA Vayne Reborn\MyUtils\MySpellDb.cs" />
     <Compile Include="Core\Champion Ports\Vayne\PRADA Vayne Reborn\MyUtils\MyWizard.cs" />
     <Compile Include="Core\Champion Ports\Vayne\PRADA Vayne Reborn\Program.cs" />
