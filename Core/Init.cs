@@ -213,6 +213,10 @@ namespace PortAIO
 
         public static void LoadChampion()
         {
+            if (EloBuddy.Player.Instance.ChampionName == "Camille")
+            {
+                hCamille.Program.Main();
+            }
             switch (ObjectManager.Player.Hero)
             {
                 case Champion.Aatrox:

@@ -1287,6 +1287,11 @@
     <Compile Include="Core\Champion Ports\Brand\SergixBrand\Spells.cs" />
     <Compile Include="Core\Champion Ports\Brand\SergixBrand\Spells1.cs" />
     <Compile Include="Core\Champion Ports\Caitlyn\Caitlyn_Master_Headshot\Program.cs" />
+    <Compile Include="Core\Champion Ports\Camille\hCamille\Champions\Camille.cs" />
+    <Compile Include="Core\Champion Ports\Camille\hCamille\Extensions\Menus.cs" />
+    <Compile Include="Core\Champion Ports\Camille\hCamille\Extensions\Spells.cs" />
+    <Compile Include="Core\Champion Ports\Camille\hCamille\Extensions\Utilities.cs" />
+    <Compile Include="Core\Champion Ports\Camille\hCamille\Program.cs" />
     <Compile Include="Core\Champion Ports\Cassiopeia\DevCassio2\DevCommon\DevHelper.cs" />
     <Compile Include="Core\Champion Ports\Cassiopeia\DevCassio2\DevCommon\IgniteManager.cs" />
     <Compile Include="Core\Champion Ports\Cassiopeia\DevCassio2\DevCommon\ItemManager.cs" />
