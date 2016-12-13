@@ -22,7 +22,7 @@ namespace hCamille
         {
             if (ObjectManager.Player.ChampionName == "Camille")
             {
-                new Camille();
+                new hCamille.Champions.Camille();
             }
             else
             {

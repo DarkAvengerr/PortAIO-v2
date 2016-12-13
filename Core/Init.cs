@@ -213,10 +213,6 @@ namespace PortAIO
 
         public static void LoadChampion()
         {
-            if (EloBuddy.Player.Instance.ChampionName == "Camille")
-            {
-                hCamille.Program.Main();
-            }
             switch (ObjectManager.Player.Hero)
             {
                 case Champion.Aatrox:
@@ -699,6 +695,17 @@ namespace PortAIO
                             break;
                         case 9: // Caitlyn Master Headshot
                             Caitlyn_Master_Headshot.Program.Main();
+                            break;
+                    }
+                    break;
+                case Champion.Camille:
+                    switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
+                    {
+                        case 0: // hCamille
+                            hCamille.Program.Main();
+                            break;
+                        case 1: // Camille#
+                            Camille.Program.Main();
                             break;
                     }
                     break;
