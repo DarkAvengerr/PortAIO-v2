@@ -9,7 +9,7 @@ namespace Flowers_ADC_Series.Pluging
     using LeagueSharp.Common;
     using SharpDX;
     using Color = System.Drawing.Color;
-    using Orbwalking = ADCCOMMON.Orbwalking;
+    
 
     internal class Varus : Logic
     {
@@ -178,7 +178,7 @@ namespace Flowers_ADC_Series.Pluging
                 return;
             }
 
-            if (Menu.GetKey("AutoHarass") && !Orbwalking.isCombo && !Orbwalking.isHarass && !Me.IsRecalling())
+            if (Menu.GetKey("AutoHarass") && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Mixed && !Me.IsRecalling())
             {
                 Harass();
             }

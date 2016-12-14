@@ -79,7 +79,7 @@ namespace ADCCOMMON
                 return true;
             }
 
-            if (Orbwalking.isCombo)
+            if (Flowers_ADC_Series.Logic.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 if (ObjectManager.Player.CountEnemiesInRange(Orbwalking.GetRealAutoAttackRange(ObjectManager.Player)) == 0)
                 {
@@ -89,7 +89,7 @@ namespace ADCCOMMON
                 return Utils.TickCount - allTime > 0;
             }
 
-            if (Orbwalking.isLaneClear)
+            if (Flowers_ADC_Series.Logic.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
                 var haveMinions =
                     MinionManager.GetMinions(ObjectManager.Player.Position,

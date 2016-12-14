@@ -28,7 +28,7 @@ namespace ADCCOMMON
                 return;
             }
 
-            if (Orbwalking.isCombo)
+            if (Flowers_ADC_Series.Logic.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 var target = TargetSelector.GetTarget(800, TargetSelector.DamageType.Physical);
 

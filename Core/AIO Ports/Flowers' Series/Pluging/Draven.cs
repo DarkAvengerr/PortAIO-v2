@@ -9,7 +9,7 @@ namespace Flowers_ADC_Series.Pluging
     using LeagueSharp;
     using LeagueSharp.Common;
     using Color = System.Drawing.Color;
-    using Orbwalking = ADCCOMMON.Orbwalking;
+    
 
     internal class Draven : Logic
     {
@@ -329,7 +329,7 @@ namespace Flowers_ADC_Series.Pluging
 
         private void AutoCatchLogic()
         {
-            if ((Menu.GetList("CatchMode") == 2) || (Menu.GetList("CatchMode") == 1 && Orbwalking.isCombo))
+            if ((Menu.GetList("CatchMode") == 2) || (Menu.GetList("CatchMode") == 1 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo))
             {
                 Orbwalker.SetOrbwalkingPoint(Game.CursorPos);
                 return;
@@ -361,8 +361,8 @@ namespace Flowers_ADC_Series.Pluging
                     return;
                 }
 
-                if (((Menu.GetList("WCatchAxe") == 0 && (Orbwalking.isCombo || Orbwalking.isHarass)) || 
-                    (Menu.GetList("WCatchAxe") == 1 && Orbwalking.isCombo)) && W.IsReady() &&
+                if (((Menu.GetList("WCatchAxe") == 0 && (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)) || 
+                    (Menu.GetList("WCatchAxe") == 1 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)) && W.IsReady() &&
                     (bestAxe.Axe.Position.DistanceToPlayer()/Me.MoveSpeed*1000 >= bestAxe.AxeTime - Utils.TickCount))
                 {
                     W.Cast();

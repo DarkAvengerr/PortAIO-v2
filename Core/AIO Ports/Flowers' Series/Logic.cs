@@ -5,7 +5,7 @@ namespace Flowers_ADC_Series
     using LeagueSharp;
     using LeagueSharp.Common;
     using System.Linq;
-    using Orbwalking = ADCCOMMON.Orbwalking;
+    
 
     internal class Logic
     {
@@ -16,7 +16,7 @@ namespace Flowers_ADC_Series
         protected static Spell EQ;
         protected static Spell QExtend;
         protected static AIHeroClient Me;
-        protected static Orbwalking.Orbwalker Orbwalker;
+        public static Orbwalking.Orbwalker Orbwalker;
         protected static Menu Menu;
 
         private static readonly string[] SupportList =

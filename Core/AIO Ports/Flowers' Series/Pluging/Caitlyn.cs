@@ -10,7 +10,7 @@ namespace Flowers_ADC_Series.Pluging
     using LeagueSharp.Common;
     using SharpDX;
     using Color = System.Drawing.Color;
-    using Orbwalking = ADCCOMMON.Orbwalking;
+    
 
     internal class Caitlyn : Logic
     {
@@ -291,7 +291,7 @@ namespace Flowers_ADC_Series.Pluging
 
         private void Auto()
         {
-            if (Menu.GetBool("AutoQ") && Q.IsReady() && !Orbwalking.isCombo && !Orbwalking.isHarass)
+            if (Menu.GetBool("AutoQ") && Q.IsReady() && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Mixed)
             {
                 var target = TargetSelector.GetTarget(Q.Range - 30, TargetSelector.DamageType.Physical);
 

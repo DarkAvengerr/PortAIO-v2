@@ -197,7 +197,6 @@
     <Compile Include="Core\AIO Ports\Flowers%27 Series\myCommon\ManaManager.cs" />
     <Compile Include="Core\AIO Ports\Flowers%27 Series\myCommon\MenuManager.cs" />
     <Compile Include="Core\AIO Ports\Flowers%27 Series\myCommon\MinionCache.cs" />
-    <Compile Include="Core\AIO Ports\Flowers%27 Series\myCommon\Orbwalking.cs" />
     <Compile Include="Core\AIO Ports\Flowers%27 Series\myCommon\SkinManager.cs" />
     <Compile Include="Core\AIO Ports\Flowers%27 Series\myCommon\SpellManager.cs" />
     <Compile Include="Core\AIO Ports\Flowers%27 Series\myCommon\StackManager.cs" />

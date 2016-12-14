@@ -45,7 +45,7 @@ namespace ADCCOMMON
                 return;
             }
 
-            if (Menu.Item("AutoStack", true).GetValue<bool>() && Orbwalking.isNone && 
+            if (Menu.Item("AutoStack", true).GetValue<bool>() && Flowers_ADC_Series.Logic.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None && 
                 ObjectManager.Player.ManaPercent >= Menu.Item("AutoStackMana", true).GetValue<Slider>().Value)
             {
                 if (Utils.TickCount - lastSpellCast < 4100)
