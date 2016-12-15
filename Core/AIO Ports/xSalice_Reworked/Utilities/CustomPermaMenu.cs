@@ -25,7 +25,7 @@ namespace xSaliceResurrected_Rework.Utilities
 
         public CustomPermaMenu()
         {
-            Drawing.OnDraw += Drawing_OnDraw;
+            //Drawing.OnDraw += Drawing_OnDraw;
         }
 
         public MenuItem AddToMenu(string text, string source)
