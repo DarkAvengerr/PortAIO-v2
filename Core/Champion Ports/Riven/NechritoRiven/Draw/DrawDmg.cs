@@ -16,7 +16,7 @@ namespace NechritoRiven.Draw
 
     #endregion
 
-    internal class DrawDmg
+    internal class DrawDmg : Core
     {
         private static readonly HpBarIndicator Indicator = new HpBarIndicator();
 
@@ -24,17 +24,25 @@ namespace NechritoRiven.Draw
         {
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(1750)))
             {
-                if (!MenuConfig.Dind || ObjectManager.Player.IsDead)
+                if (ObjectManager.Player.IsDead)
                 {
                     return;
                 }
 
                 Indicator.Unit = enemy;
 
-                Indicator.DrawDmg(Dmg.GetComboDamage(enemy), 
-                   enemy.Health <= Dmg.GetComboDamage(enemy) * .85
-                   ? Color.LawnGreen 
-                   : Color.Yellow);
+                if (MenuConfig.Dind)
+                {
+                    Indicator.DrawDmg(Dmg.GetComboDamage(enemy),
+                       enemy.Health <= Dmg.GetComboDamage(enemy) * .85
+                       ? Color.LawnGreen
+                       : Color.Yellow);
+                }
+
+                if (MenuConfig.R2Draw && Spells.R.IsReady() && Spells.R.Instance.Name == IsSecondR)
+                {
+                    Indicator.DrawDmg(Dmg.RDmg(enemy), Color.DarkSlateGray);   
+                }
             }
         }
     }

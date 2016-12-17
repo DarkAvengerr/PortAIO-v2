@@ -37,7 +37,7 @@ namespace NechritoRiven.Core
                                                         "BraumBasicAttackPassiveOverride", "gnarwproc",
                                                         "hecarimrampattack", "illaoiwattack", "JaxEmpowerTwo",
                                                         "JayceThunderingBlow", "RenektonSuperExecute",
-                                                        "vaynesilvereddebuff"
+                                                        "vaynesilvereddebuff", "rocketgrab2"
                                                     };
 
         /// <summary>
@@ -119,7 +119,9 @@ namespace NechritoRiven.Core
 
                 if (doublecastQ && Spells.Q.IsReady() && Qstack == 1 && MenuConfig.Doublecast)
                 {
-                    var delay = Spells.R.IsReady() ? 190 : 90;
+                    var delay = Spells.R.IsReady() 
+                        ? 205 - (Game.Ping / 2) 
+                        : 105 - (Game.Ping / 2);
 
                     LeagueSharp.Common.Utility.DelayAction.Add(delay, () => Spells.Q.Cast(Unit.Position));
                 }

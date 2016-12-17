@@ -110,6 +110,8 @@ namespace NechritoRiven
 
         public static bool QReset => config.Item("qReset").GetValue<bool>();
 
+        public static bool R2Draw => config.Item("R2Draw").GetValue<bool>();
+
         public static StringList SkinList => config.Item("SkinList").GetValue<StringList>();
 
         public static bool UseSkin => config.Item("UseSkin").GetValue<bool>();
@@ -178,10 +180,11 @@ namespace NechritoRiven
             config.AddSubMenu(misc);
 
             var draw = new Menu("Draw", "Draw");
-            draw.AddItem(new MenuItem("FleeSpot", "Draw Flee Spots").SetValue(true));
-            draw.AddItem(new MenuItem("Dind", "Damage Indicator").SetValue(true));
             draw.AddItem(new MenuItem("DrawForceFlash", "Flash Status").SetValue(true));
             draw.AddItem(new MenuItem("DrawAlwaysR", "R Status").SetValue(true));
+            draw.AddItem(new MenuItem("R2Draw", "R2 Dmg").SetValue(false));
+            draw.AddItem(new MenuItem("Dind", "Damage Indicator").SetValue(true));
+            draw.AddItem(new MenuItem("FleeSpot", "Draw Flee Spots").SetValue(true));
             draw.AddItem(new MenuItem("DrawCB", "Combo Engage").SetValue(true));
             draw.AddItem(new MenuItem("DrawBT", "BurstMode Engage").SetValue(false));
             draw.AddItem(new MenuItem("DrawFH", "FastHarassMode Engage").SetValue(false));
@@ -217,7 +220,7 @@ namespace NechritoRiven
 
             config.AddSubMenu(skin);
 
-            config.AddItem(new MenuItem("version", "Version: 6.24.1").SetFontStyle(FontStyle.Bold, Color.Cyan));
+            config.AddItem(new MenuItem("version", "Version: 6.24.2").SetFontStyle(FontStyle.Bold, Color.Cyan));
 
             config.AddItem(new MenuItem("paypal", "Paypal: nechrito@live.se").SetFontStyle(FontStyle.Regular, Color.Cyan));
 

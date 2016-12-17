@@ -75,7 +75,8 @@ namespace NechritoRiven.Event.OrbwalkingModes
                 }
                 Spells.R.Cast();
             }
-           else if (!Spells.W.IsReady() || !BackgroundData.InRange(Target))
+
+            if (!Spells.W.IsReady() || !BackgroundData.InRange(Target))
             {
                 return;
             }
