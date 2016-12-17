@@ -1555,6 +1555,7 @@
     <Compile Include="Core\Champion Ports\Nami\ElNamiDecentralized\Program.cs" />
     <Compile Include="Core\Champion Ports\Nami\ElNamiDecentralized\Utils\Logging.cs" />
     <Compile Include="Core\Champion Ports\Nami\ElNamiDecentralized\Utils\Misc.cs" />
+    <Compile Include="Core\Champion Ports\Nasus\Lord%27s Nasus\Program.cs" />
     <Compile Include="Core\Champion Ports\Nidalee\Flowers%27 Nidalee\Common\Common.cs" />
     <Compile Include="Core\Champion Ports\Nidalee\Flowers%27 Nidalee\Common\HpBarDraw.cs" />
     <Compile Include="Core\Champion Ports\Nidalee\Flowers%27 Nidalee\Common\YasuoWindWall.cs" />

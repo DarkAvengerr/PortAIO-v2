@@ -2361,9 +2361,16 @@ namespace PortAIO
                             UnderratedAIO.Program.OnGameLoad();
                             break;
                         case 3: // Nasus The Crazy Dog
+                            Nasus.Program.Main();
                             break;
                         case 4: // Nasus the Lumberjack
                             NasusTheLumberJack.Program.Main();
+                            break;
+                        case 5: // sAIO
+                            sAIO.Program.Main();
+                            break;
+                        case 6: // Lord's Nasus
+                            HelpingLSharpNasus.Program.Main();
                             break;
                     }
                     break;
