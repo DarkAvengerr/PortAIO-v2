@@ -3610,6 +3610,9 @@ namespace PortAIO
                         case 1: // OKTW
                             OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
                             break;
+                        case 2: // Darwinn Vel'Koz
+                            Darwinn_s_velkoz.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Vi:

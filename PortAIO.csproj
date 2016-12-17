@@ -1821,6 +1821,12 @@
     <Compile Include="Core\Champion Ports\Vayne\PRADA Vayne Reborn\MyUtils\MySpellDb.cs" />
     <Compile Include="Core\Champion Ports\Vayne\PRADA Vayne Reborn\MyUtils\MyWizard.cs" />
     <Compile Include="Core\Champion Ports\Vayne\PRADA Vayne Reborn\Program.cs" />
+    <Compile Include="Core\Champion Ports\Vel%27Koz\Darwinn Velkoz\Extensions\Menus.cs" />
+    <Compile Include="Core\Champion Ports\Vel%27Koz\Darwinn Velkoz\Extensions\Predictions.cs" />
+    <Compile Include="Core\Champion Ports\Vel%27Koz\Darwinn Velkoz\Extensions\Spells.cs" />
+    <Compile Include="Core\Champion Ports\Vel%27Koz\Darwinn Velkoz\Extensions\Utilities.cs" />
+    <Compile Include="Core\Champion Ports\Vel%27Koz\Darwinn Velkoz\Plugins\Velkoz.cs" />
+    <Compile Include="Core\Champion Ports\Vel%27Koz\Darwinn Velkoz\Program.cs" />
     <Compile Include="Core\Champion Ports\Viktor\[2HAM Viktor] King Lazer\Champions\Viktor.cs" />
     <Compile Include="Core\Champion Ports\Viktor\[2HAM Viktor] King Lazer\Extensions\DrawingDamage.cs" />
     <Compile Include="Core\Champion Ports\Viktor\[2HAM Viktor] King Lazer\Extensions\Menus.cs" />
