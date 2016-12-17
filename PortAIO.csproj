@@ -1298,6 +1298,7 @@
     <Compile Include="Core\Champion Ports\Camille\hCamille\Extensions\Spells.cs" />
     <Compile Include="Core\Champion Ports\Camille\hCamille\Extensions\Utilities.cs" />
     <Compile Include="Core\Champion Ports\Camille\hCamille\Program.cs" />
+    <Compile Include="Core\Champion Ports\Camille\Lord%27s Camille\Program.cs" />
     <Compile Include="Core\Champion Ports\Cassiopeia\DevCassio2\DevCommon\DevHelper.cs" />
     <Compile Include="Core\Champion Ports\Cassiopeia\DevCassio2\DevCommon\IgniteManager.cs" />
     <Compile Include="Core\Champion Ports\Cassiopeia\DevCassio2\DevCommon\ItemManager.cs" />

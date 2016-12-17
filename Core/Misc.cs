@@ -70,7 +70,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "OKTW", "SharpShooter", "Marksman#", "[SDK] ChallengerSeriesAIO", "[SDK] ExorAIO", "SluttyCaitlyn", "Hikicarry ADC", "Flowers' ADC Series", "ReformedAIO", "Caitlyn Master Headshot" };
                     break;
                 case EloBuddy.Champion.Camille:
-                    champ = new string[] { "hCamille", "Camille#" };
+                    champ = new string[] { "hCamille", "Camille#", "Lord's Camille" };
                     break;
                 case EloBuddy.Champion.Cassiopeia:
                     champ = new string[] { "SAutoCarry", "SFXChallenger", "SharpyAIO", "xSalice", "TheCassiopeia", "[SDK] ExorAIO", "Eat My Cass", "mztikk's Cass", "RiseOfThePython", "sAIO", "DevCassio2" };

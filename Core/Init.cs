@@ -707,6 +707,9 @@ namespace PortAIO
                         case 1: // Camille#
                             Camille.Program.Main();
                             break;
+                        case 2: // Lord's Camille
+                            LordsCamille.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Cassiopeia:
