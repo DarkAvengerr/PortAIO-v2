@@ -5,7 +5,7 @@ namespace FlowersRivenCommon
     using LeagueSharp.Common;
     using System.Drawing;
 
-    public static class MenuManager
+    public static class MenuManagers
     {
         public static bool GetBool(this Menu Menu, string MenuItemName, bool unique = true)
         {

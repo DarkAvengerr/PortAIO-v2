@@ -51,6 +51,44 @@ namespace FlowersRivenCommon
             return (float)damage;
         }
 
+        internal static double GetPassive
+        {
+            get
+            {
+                if (ObjectManager.Player.Level == 18)
+                {
+                    return 0.5;
+                }
+
+                if (ObjectManager.Player.Level >= 15)
+                {
+                    return 0.45;
+                }
+
+                if (ObjectManager.Player.Level >= 12)
+                {
+                    return 0.4;
+                }
+
+                if (ObjectManager.Player.Level >= 9)
+                {
+                    return 0.35;
+                }
+
+                if (ObjectManager.Player.Level >= 6)
+                {
+                    return 0.3;
+                }
+
+                if (ObjectManager.Player.Level >= 3)
+                {
+                    return 0.25;
+                }
+
+                return 0.2;
+            }
+        }
+
         public static float GetQDamage(Obj_AI_Base target)
         {
             if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level == 0 ||
@@ -59,7 +97,12 @@ namespace FlowersRivenCommon
                 return 0f;
             }
 
-            return (float)ObjectManager.Player.GetSpellDamage(target, SpellSlot.Q);
+            var qhan = 3 - Flowers_Riven_Reborn.Logic.qStack;
+
+            return
+                (float)
+                (ObjectManager.Player.GetSpellDamage(target, SpellSlot.Q)*qhan +
+                 ObjectManager.Player.GetAutoAttackDamage(target)*qhan*(1 + GetPassive));
         }
 
         public static float GetWDamage(Obj_AI_Base target)
@@ -81,7 +124,7 @@ namespace FlowersRivenCommon
                 return 0f;
             }
 
-            return (float)ObjectManager.Player.GetSpellDamage(target, SpellSlot.E);
+            return 0;
         }
 
         public static float GetRDamage(Obj_AI_Base target)
@@ -92,7 +135,13 @@ namespace FlowersRivenCommon
                 return 0f;
             }
 
-            return (float)ObjectManager.Player.GetSpellDamage(target, SpellSlot.R);
+            return (float) ObjectManager.Player.CalcDamage(target, Damage.DamageType.Physical,
+                (new double[] {80, 120, 160}[ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Level - 1] +
+                 0.6*ObjectManager.Player.FlatPhysicalDamageMod)*
+                (1 + (target.MaxHealth - target.Health)/
+                 target.MaxHealth > 0.75
+                    ? 0.75
+                    : (target.MaxHealth - target.Health)/target.MaxHealth)*8/3);
         }
 
         public static float GetIgniteDmage(Obj_AI_Base target)
