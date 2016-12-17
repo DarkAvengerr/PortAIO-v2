@@ -41,31 +41,28 @@ namespace Flowers_Yasuo.Manager.Events.Games.Mode
 
             if (Menu.Item("ComboR", true).GetValue<KeyBind>().Active && R.IsReady())
             {
-                var KnockedUpEnemies =
-                    HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range))
-                        .Where(x => x.HasBuffOfType(BuffType.Knockup) || x.HasBuffOfType(BuffType.Knockback))
-                        .Where(CanCastDelayR);
+                var rEmemies = HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range))
+                    .Where(x => x.HasBuffOfType(BuffType.Knockup) || x.HasBuffOfType(BuffType.Knockback));
 
-                if (KnockedUpEnemies.Count() >= Menu.Item("ComboRCount", true).GetValue<Slider>().Value)
+                if (rEmemies.Count() >= Menu.Item("ComboRCount", true).GetValue<Slider>().Value)
                 {
                     R.Cast();
                 }
 
-                foreach (var rTarget in HeroManager.Enemies.Where(x => x.IsValidTarget(R.Range))
-                    .Where(x => x.HasBuffOfType(BuffType.Knockup) || x.HasBuffOfType(BuffType.Knockback))
-                    .Where(CanCastDelayR))
+                foreach (
+                    var rTarget in
+                    HeroManager.Enemies.Where(
+                            x =>
+                                x.IsValidTarget(R.Range) &&
+                                Menu.Item("R" + x.ChampionName.ToLower(), true).GetValue<bool>())
+                        .Where(x => x.HasBuffOfType(BuffType.Knockup) || x.HasBuffOfType(BuffType.Knockback)))
                 {
-                    if (Menu.Item("R" + rTarget.ChampionName.ToLower(), true).GetValue<bool>() &&
-                        rTarget.HealthPercent <= Menu.Item("ComboRHp", true).GetValue<Slider>().Value)
+                    if (rTarget.HealthPercent <= Menu.Item("ComboRHp", true).GetValue<Slider>().Value)
                     {
-                        R.Cast();
-                    }
-
-                    if (Menu.Item("ComboRAlly", true).GetValue<bool>() &&
-                        HeroManager.Allies.Any(x => !x.IsDead && !x.IsZombie && x.Distance(rTarget) <= 600) &&
-                        rTarget.Health >= Menu.Item("ComboRHp", true).GetValue<Slider>().Value)
-                    {
-                        R.Cast();
+                        if (CanCastDelayR(rTarget))
+                        {
+                            R.Cast();
+                        }
                     }
                 }
             }

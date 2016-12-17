@@ -306,31 +306,7 @@ namespace Flowers_Yasuo.Evade
             #endregion Annie
 
             #region Ashe
-
-            Spells.Add(
-                new SpellData
-                {
-                    ChampionName = "Ashe",
-                    SpellName = "Volley",
-                    Slot = SpellSlot.W,
-                    Type = SkillShotType.SkillshotMissileLine,
-                    Delay = 250,
-                    Range = 1250,
-                    Radius = 60,
-                    MissileSpeed = 1500,
-                    FixedRange = true,
-                    AddHitbox = true,
-                    DangerValue = 2,
-                    IsDangerous = false,
-                    MissileSpellName = "VolleyAttack",
-                    MultipleNumber = 9,
-                    MultipleAngle = 4.62f*(float) Math.PI/180,
-                    CanBeRemoved = true,
-                    CollisionObjects =
-                        new[]
-                        {CollisionObjectTypes.Champions, CollisionObjectTypes.YasuoWall, CollisionObjectTypes.Minion}
-                });
-
+			
             Spells.Add(
                 new SpellData
                 {

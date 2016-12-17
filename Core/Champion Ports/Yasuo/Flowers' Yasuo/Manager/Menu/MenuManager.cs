@@ -4,9 +4,6 @@ namespace Flowers_Yasuo.Manager.Menu
 {
     using Evade;
     using SharpDX;
-    using System.Linq;
-    using Spells;
-    using LeagueSharp;
     using LeagueSharp.Common;
     using Orbwalking = Orbwalking;
 
@@ -45,8 +42,6 @@ namespace Flowers_Yasuo.Manager.Menu
                 comboMenu.AddItem(
                     new MenuItem("ComboRCount", "Use R|When knockedUp enemy Count >= x", true).SetValue(
                         new Slider(2, 1, 5)));
-                comboMenu.AddItem(
-                    new MenuItem("ComboRAlly", "Use R| When Have Ally In Range", true).SetValue(true));
                 comboMenu.AddItem(
                     new MenuItem("ComboEQFlash", "Use EQ Flash?", true).SetValue(new KeyBind('E', KeyBindType.Toggle)));
                 comboMenu.AddItem(
@@ -144,7 +139,7 @@ namespace Flowers_Yasuo.Manager.Menu
                             new MenuItem("AutoRCount", "Auto R|When knockedUp enemy Count >= x", true).SetValue(
                                 new Slider(3, 1, 5)));
                         autoR.AddItem(
-                            new MenuItem("AutoRRangeCount", "Auto R|When all Enemy Count >= x", true).SetValue(
+                            new MenuItem("AutoRRangeCount", "Auto R|When Ally Count >= x", true).SetValue(
                                 new Slider(2, 1, 5)));
                         autoR.AddItem(
                             new MenuItem("AutoRMyHp", "Auto R|When Player HealthPercent >= x%", true).SetValue(
@@ -156,83 +151,12 @@ namespace Flowers_Yasuo.Manager.Menu
                 {
                     var evadespellSettings = evadeSettings.AddSubMenu(new Menu("Dodge Spells", "Dodge Spells"));
                     {
-                        var evadeSpells = evadespellSettings.AddSubMenu(new Menu("Evade spells", "evadeSpells"));
-                        {
-                            foreach (var spell in EvadeSpellDatabase.Spells)
-                            {
-                                var subMenu = evadeSpells.AddSubMenu(new Menu("Yasuo " + spell.Slot, spell.Name));
-                                {
-                                    subMenu.AddItem(
-                                        new MenuItem("DangerLevel" + spell.Name, "Danger level", true).SetValue(
-                                            new Slider(spell.DangerLevel, 5, 1)));
-
-                                    if (spell.Slot == SpellSlot.E)
-                                    {
-                                        subMenu.AddItem(new MenuItem("ETower", "Under Tower", true).SetValue(false));
-                                    }
-
-                                    subMenu.AddItem(new MenuItem("Enabled" + spell.Name, "Enabled", true).SetValue(true));
-                                }
-                            }
-                        }
-
-                        var skillShotMenu = evadespellSettings.AddSubMenu(new Menu("Skillshots", "Skillshots"));
-                        {
-                            foreach (
-                                var hero in
-                                HeroManager.Enemies.Where(
-                                    i => SpellDatabase.Spells.Any(a => a.ChampionName == i.ChampionName)))
-                            {
-                                skillShotMenu.AddSubMenu(new Menu(hero.ChampionName, "Evade" + hero.ChampionName.ToLower()));
-                            }
-
-                            foreach (
-                                var spell in
-                                SpellDatabase.Spells.Where(
-                                    i => HeroManager.Enemies.Any(a => a.ChampionName == i.ChampionName)))
-                            {
-                                var subMenu =
-                                    skillShotMenu.SubMenu("Evade" + spell.ChampionName.ToLower())
-                                        .AddSubMenu(new Menu(spell.SpellName + " " + spell.Slot,
-                                            "EvadeSpell" + spell.MenuItemName));
-                                {
-                                    subMenu.AddItem(
-                                        new MenuItem("DangerLevel" + spell.MenuItemName, "Danger Level", true).SetValue(
-                                            new Slider(spell.DangerValue, 1, 5)));
-                                    subMenu.AddItem(
-                                        new MenuItem("Enabled" + spell.MenuItemName, "Enabled", true).SetValue(
-                                            !spell.DisabledByDefault));
-                                }
-                            }
-                        }
+                        EvadeManager.Init(evadespellSettings);
                     }
 
                     var evadeMenu = evadeSettings.AddSubMenu(new Menu("Evade Target", "EvadeTarget"));
                     {
-                        evadeMenu.AddItem(new MenuItem("EvadeTargetW", "Use W", true).SetValue(true));
-                        evadeMenu.AddItem(new MenuItem("EvadeTargetE", "Use E (To Dash Behind WindWall)", true).SetValue(true));
-                        evadeMenu.AddItem(new MenuItem("EvadeTargetETower", "-> Under Tower", true).SetValue(false));
-                        evadeMenu.AddItem(new MenuItem("BAttack", "Basic Attack", true).SetValue(true));
-                        evadeMenu.AddItem(new MenuItem("BAttackHpU", "-> If Hp <", true).SetValue(new Slider(35)));
-                        evadeMenu.AddItem(new MenuItem("CAttack", "Crit Attack", true).SetValue(true));
-                        evadeMenu.AddItem(new MenuItem("CAttackHpU", "-> If Hp <", true).SetValue(new Slider(40)));
-
-                        foreach (var hero in
-                            HeroManager.Enemies.Where(i => SpellManager.Spells.Any(a => a.ChampionName == i.ChampionName)))
-                        {
-                            evadeMenu.AddSubMenu(new Menu("-> " + hero.ChampionName, "ET_" + hero.ChampionName));
-                        }
-
-                        foreach (
-                            var spell in
-                            SpellManager.Spells.Where(
-                                i => HeroManager.Enemies.Any(a => a.ChampionName == i.ChampionName)))
-                        {
-                            evadeMenu.SubMenu("ET_" + spell.ChampionName)
-                                .AddItem(
-                                    new MenuItem(spell.MissileName, spell.MissileName + " (" + spell.Slot + ")", true)
-                                        .SetValue(false));
-                        }
+                        EvadeTargetManager.Init(evadeMenu);
                     }
                 }
 

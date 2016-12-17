@@ -2,7 +2,6 @@ using EloBuddy;
 using LeagueSharp.Common; 
 namespace Flowers_Yasuo
 {
-    using Evade;
     using System;
     using System.Linq;
     using System.Collections.Generic;
@@ -45,8 +44,6 @@ namespace Flowers_Yasuo
 
             SpellManager.Init();
             MenuManager.Init();
-            EvadeManager.Init();
-            EvadeTargetManager.Init();
             EventManager.Init();
         }
 
