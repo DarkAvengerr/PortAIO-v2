@@ -1414,6 +1414,12 @@
     <Compile Include="Core\Champion Ports\Fiora\Flower%27s Fiora\Manager\Spells\SpellManager.cs" />
     <Compile Include="Core\Champion Ports\Fiora\Flower%27s Fiora\Program.cs" />
     <Compile Include="Core\Champion Ports\Fizz\Lord%27s Fizz\Program.cs" />
+    <Compile Include="Core\Champion Ports\Hecarim\Darwinn Hecarim\Champions\Hecarim.cs" />
+    <Compile Include="Core\Champion Ports\Hecarim\Darwinn Hecarim\Extensions\Menus.cs" />
+    <Compile Include="Core\Champion Ports\Hecarim\Darwinn Hecarim\Extensions\Predictions.cs" />
+    <Compile Include="Core\Champion Ports\Hecarim\Darwinn Hecarim\Extensions\Spells.cs" />
+    <Compile Include="Core\Champion Ports\Hecarim\Darwinn Hecarim\Extensions\Utilities.cs" />
+    <Compile Include="Core\Champion Ports\Hecarim\Darwinn Hecarim\Program.cs" />
     <Compile Include="Core\Champion Ports\Irelia\Rethought Irelia\IreliaV1\Combo\E.cs" />
     <Compile Include="Core\Champion Ports\Irelia\Rethought Irelia\IreliaV1\Combo\Q.cs" />
     <Compile Include="Core\Champion Ports\Irelia\Rethought Irelia\IreliaV1\Combo\R.cs" />

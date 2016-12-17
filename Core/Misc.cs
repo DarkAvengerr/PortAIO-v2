@@ -133,7 +133,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "OKTW", "D-Graves", "hikiMarksman", "Kurisu Graves", "SFXChallenger", "SharpShooter", "Marksman#", "[SDK] ExorAIO", "[SDK] Flowers' Series", "[SDK] VSTGraves", "EasyGraves", "BadaoGraves", "Flowers' ADC Series" };
                     break;
                 case EloBuddy.Champion.Hecarim:
-                    champ = new string[] { "JustHecarim", "SharpyAIO", "UnderratedAIO", "[SDK] [SBTW] Hecarim", "[SDK] Flowers' Series", "Herrari 477 GTB", "Ponycopter" };
+                    champ = new string[] { "JustHecarim", "SharpyAIO", "UnderratedAIO", "[SDK] [SBTW] Hecarim", "[SDK] Flowers' Series", "Herrari 477 GTB", "Ponycopter", "DarwinnHecarim" };
                     break;
                 case EloBuddy.Champion.Heimerdinger:
                     champ = new string[] { "2Girls1Donger", "TheDonger" };

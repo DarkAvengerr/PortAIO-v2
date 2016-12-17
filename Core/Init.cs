@@ -1364,6 +1364,9 @@ namespace PortAIO
                         case 6: // Ponycopter
                             Ponycopter.Ponycopter.Main();
                             break;
+                        case 7: // Darwinn Hecarim
+                            Enurped_s.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Heimerdinger:
