@@ -1292,6 +1292,8 @@
     <Compile Include="Core\Champion Ports\Camille\CamilleSharp\HpBarIndicator.cs" />
     <Compile Include="Core\Champion Ports\Camille\CamilleSharp\Program.cs" />
     <Compile Include="Core\Champion Ports\Camille\hCamille\Champions\Camille.cs" />
+    <Compile Include="Core\Champion Ports\Camille\hCamille\Extensions\Calculation.cs" />
+    <Compile Include="Core\Champion Ports\Camille\hCamille\Extensions\DamageIndicator.cs" />
     <Compile Include="Core\Champion Ports\Camille\hCamille\Extensions\Menus.cs" />
     <Compile Include="Core\Champion Ports\Camille\hCamille\Extensions\Spells.cs" />
     <Compile Include="Core\Champion Ports\Camille\hCamille\Extensions\Utilities.cs" />
