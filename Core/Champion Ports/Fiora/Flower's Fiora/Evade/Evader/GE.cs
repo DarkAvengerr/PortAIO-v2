@@ -30,7 +30,7 @@ using GamePath = System.Collections.Generic.List<SharpDX.Vector2>;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Flowers_Fiora.Evade
+namespace Flowers_Fiora.Evade
 {
     /// <summary>
     /// Class that contains the geometry related methods.

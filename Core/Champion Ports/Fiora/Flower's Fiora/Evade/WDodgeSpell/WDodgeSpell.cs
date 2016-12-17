@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Flowers_Fiora.Evade
+namespace Flowers_Fiora.Evade
 {
     using System;
     using LeagueSharp;
@@ -155,7 +155,8 @@ using LeagueSharp.Common;
 
             var target = sender as AIHeroClient;
 
-            if (target == null || target.Team == ObjectManager.Player.Team || !target.IsValid)
+            if (target == null || target.Team == ObjectManager.Player.Team || !target.IsValid || 
+                Args.Target == null || Args.SData == null)
             {
                 return;
             }

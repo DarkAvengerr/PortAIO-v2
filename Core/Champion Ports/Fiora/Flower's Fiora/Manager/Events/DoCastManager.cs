@@ -2,7 +2,7 @@ using System.Linq;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Flowers_Fiora.Manager.Events
+namespace Flowers_Fiora.Manager.Events
 {
     using LeagueSharp;
     using LeagueSharp.Common;

@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Flowers_Fiora
+namespace Flowers_Fiora
 {
     using Common;
     using Manager.Passive;

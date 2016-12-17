@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Flowers_Fiora.Manager.Events
+namespace Flowers_Fiora.Manager.Events
 {
     using Common;
     using Spells;

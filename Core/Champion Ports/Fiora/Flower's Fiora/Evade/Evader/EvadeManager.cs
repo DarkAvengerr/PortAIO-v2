@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace Flowers_Fiora.Evade
+namespace Flowers_Fiora.Evade
 {
     using System;
     using System.Collections.Generic;
@@ -402,7 +402,7 @@ using LeagueSharp.Common;
 
                         foreach (var m in ObjectManager.Get<Obj_AI_Minion>())
                         {
-                            if (m.CharData.BaseSkinName == "jarvanivstandard" && m.Team == skillshot.Unit.Team)
+                            if (m.BaseSkinName == "jarvanivstandard" && m.Team == skillshot.Unit.Team)
                             {
                                 var extendedE = new Skillshot(
                                     skillshot.DetectionType, skillshot.SpellData, skillshot.StartTick, skillshot.Start,
