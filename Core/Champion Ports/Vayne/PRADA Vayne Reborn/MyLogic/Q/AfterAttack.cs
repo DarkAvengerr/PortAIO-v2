@@ -63,6 +63,10 @@ namespace PRADA_Vayne.MyLogic.Q
                                 minion => m.NetworkId != minion.NetworkId && minion.IsEnemy && minion.IsValidTarget(615))
                     )
                 {
+                    if (minion == null)
+                    {
+                        break;
+                    }
                     var time = (int) (ObjectManager.Player.AttackCastDelay*1000) + Game.Ping/2 +
                                1000*
                                (int)
