@@ -1,6 +1,6 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace iLucian
+using EloBuddy;
+using LeagueSharp.Common;
+namespace iLucian
 {
     using System;
     using System.Collections.Generic;
@@ -45,7 +45,7 @@ using EloBuddy;
                 < Variables.Menu.Item("com.ilucian.harass.auto.autoharass.mana").GetValue<Slider>().Value) return;
 
             var target = TargetSelector.GetTarget(
-                Variables.Spell[Variables.Spells.Q2].Range, 
+                Variables.Spell[Variables.Spells.Q2].Range,
                 TargetSelector.DamageType.Physical);
 
             if (Variables.Menu.IsEnabled("com.ilucian.harass.auto.q") && Variables.Spell[Variables.Spells.Q].IsReady())
@@ -76,10 +76,10 @@ using EloBuddy;
             angle *= Math.PI / 180.0;
             var temp = Vector2.Subtract(point2, point1);
             var result = new Vector2(0)
-                             {
-                                 X = (float)(temp.X * Math.Cos(angle) - temp.Y * Math.Sin(angle)) / 4, 
-                                 Y = (float)(temp.X * Math.Sin(angle) + temp.Y * Math.Cos(angle)) / 4
-                             };
+            {
+                X = (float)(temp.X * Math.Cos(angle) - temp.Y * Math.Sin(angle)) / 4,
+                Y = (float)(temp.X * Math.Sin(angle) + temp.Y * Math.Cos(angle)) / 4
+            };
             result = Vector2.Add(result, point1);
             return result;
         }
@@ -88,7 +88,7 @@ using EloBuddy;
         {
             var unitList = new List<Obj_AI_Base>();
             var minions = MinionManager.GetMinions(
-                ObjectManager.Player.Position, 
+                ObjectManager.Player.Position,
                 Variables.Spell[Variables.Spells.Q].Range);
             var champions =
                 HeroManager.Enemies.Where(
@@ -110,7 +110,7 @@ using EloBuddy;
         {
             var target =
                 TargetSelector.GetTarget(
-                    Variables.Spell[Variables.Spells.E].Range + Variables.Spell[Variables.Spells.Q2].Range, 
+                    Variables.Spell[Variables.Spells.E].Range + Variables.Spell[Variables.Spells.Q2].Range,
                     TargetSelector.DamageType.Physical);
 
             if (!Variables.Menu.IsEnabled("com.ilucian.misc.eqKs") || !Variables.Spell[Variables.Spells.Q].IsReady()
@@ -219,7 +219,7 @@ using EloBuddy;
             {
                 case 0: // kite
                     var hypotheticalPosition = ObjectManager.Player.ServerPosition.Extend(
-                        Game.CursorPos, 
+                        Game.CursorPos,
                         Variables.Spell[Variables.Spells.E].Range);
                     if (ObjectManager.Player.HealthPercent <= 70
                         && target.HealthPercent >= ObjectManager.Player.HealthPercent)
@@ -282,7 +282,7 @@ using EloBuddy;
         {
             var target =
                 TargetSelector.GetTarget(
-                    Variables.Spell[Variables.Spells.E].Range + Variables.Spell[Variables.Spells.Q2].Range, 
+                    Variables.Spell[Variables.Spells.E].Range + Variables.Spell[Variables.Spells.Q2].Range,
                     TargetSelector.DamageType.Physical);
 
             if (
@@ -302,9 +302,9 @@ using EloBuddy;
                     .Select(
                         pred =>
                         MathHelper.GetCicleLineInteraction(
-                            pred.UnitPosition.To2D(), 
-                            extendedPrediction.To2D(), 
-                            ObjectManager.Player.ServerPosition.To2D(), 
+                            pred.UnitPosition.To2D(),
+                            extendedPrediction.To2D(),
+                            ObjectManager.Player.ServerPosition.To2D(),
                             Variables.Spell[Variables.Spells.E].Range))
                     .Select(inter => inter.GetBestInter(target)))
             {
@@ -330,9 +330,9 @@ using EloBuddy;
                         .Select(
                             pred =>
                             MathHelper.GetCicleLineInteraction(
-                                pred.UnitPosition.To2D(), 
-                                extendedPrediction.To2D(), 
-                                ObjectManager.Player.ServerPosition.To2D(), 
+                                pred.UnitPosition.To2D(),
+                                extendedPrediction.To2D(),
+                                ObjectManager.Player.ServerPosition.To2D(),
                                 Variables.Spell[Variables.Spells.E].Range))
                         .Select(inter => inter.GetBestInter(target)))
                 {
@@ -359,23 +359,25 @@ using EloBuddy;
                          && TargetSelector.SelectedTarget.Distance(ObjectManager.Player) < 1800
                              ? TargetSelector.SelectedTarget
                              : TargetSelector.GetTarget(
-                                 Variables.Spell[Variables.Spells.Q2].Range, 
+                                 Variables.Spell[Variables.Spells.Q2].Range,
                                  TargetSelector.DamageType.Physical);
-
-            var predictionPosition = Variables.Spell[Variables.Spells.Q2].GetPrediction(target);
-
-            foreach (var unit in from unit in GetHittableTargets()
-                                 let polygon =
-                                     new Geometry.Polygon.Rectangle(
-                                     ObjectManager.Player.ServerPosition, 
-                                     ObjectManager.Player.ServerPosition.Extend(
-                                         unit.ServerPosition, 
-                                         Variables.Spell[Variables.Spells.Q2].Range), 
-                                     65f)
-                                 where polygon.IsInside(predictionPosition.CastPosition)
-                                 select unit)
+            if (target != null)
             {
-                Variables.Spell[Variables.Spells.Q].Cast(unit);
+                var predictionPosition = Variables.Spell[Variables.Spells.Q2].GetPrediction(target);
+
+                foreach (var unit in from unit in GetHittableTargets()
+                                     let polygon =
+                                         new Geometry.Polygon.Rectangle(
+                                         ObjectManager.Player.ServerPosition,
+                                         ObjectManager.Player.ServerPosition.Extend(
+                                             unit.ServerPosition,
+                                             Variables.Spell[Variables.Spells.Q2].Range),
+                                         65f)
+                                     where polygon.IsInside(predictionPosition.CastPosition)
+                                     select unit)
+                {
+                    Variables.Spell[Variables.Spells.Q].Cast(unit);
+                }
             }
         }
 
@@ -408,8 +410,8 @@ using EloBuddy;
                     if (Variables.Menu.IsEnabled("com.ilucian.misc.drawQ"))
                     {
                         Render.Circle.DrawCircle(
-                            ObjectManager.Player.Position, 
-                            Variables.Spell[Variables.Spells.Q2].Range, 
+                            ObjectManager.Player.Position,
+                            Variables.Spell[Variables.Spells.Q2].Range,
                             Color.BlueViolet);
                     }
                 };
@@ -419,10 +421,10 @@ using EloBuddy;
         {
             Variables.Spell[Variables.Spells.Q].SetTargetted(0.25f, 1400f);
             Variables.Spell[Variables.Spells.Q2].SetSkillshot(
-                0.5f, 
-                50, 
-                float.MaxValue, 
-                false, 
+                0.5f,
+                50,
+                float.MaxValue,
+                false,
                 SkillshotType.SkillshotLine);
             Variables.Spell[Variables.Spells.W].SetSkillshot(0.30f, 70f, 1600f, false, SkillshotType.SkillshotLine);
             Variables.Spell[Variables.Spells.R].SetSkillshot(0.2f, 110f, 2500, true, SkillshotType.SkillshotLine);
@@ -433,7 +435,7 @@ using EloBuddy;
             if (!sender.IsMe) return;
 
             var target = TargetSelector.GetTarget(
-                Variables.Spell[Variables.Spells.Q].Range, 
+                Variables.Spell[Variables.Spells.Q].Range,
                 TargetSelector.DamageType.Physical);
 
             switch (Variables.Orbwalker.ActiveMode)
@@ -610,7 +612,7 @@ using EloBuddy;
         private void OnHarass()
         {
             var target = TargetSelector.GetTarget(
-                Variables.Spell[Variables.Spells.Q2].Range, 
+                Variables.Spell[Variables.Spells.Q2].Range,
                 TargetSelector.DamageType.Physical);
 
             if (target == null || Variables.HasPassive()
@@ -662,18 +664,18 @@ using EloBuddy;
 
             foreach (var minion in
                 MinionManager.GetMinions(
-                    ObjectManager.Player.ServerPosition, 
-                    Variables.Spell[Variables.Spells.Q].Range, 
-                    MinionTypes.All, 
+                    ObjectManager.Player.ServerPosition,
+                    Variables.Spell[Variables.Spells.Q].Range,
+                    MinionTypes.All,
                     MinionTeam.NotAlly))
             {
                 var prediction = Prediction.GetPrediction(
-                    minion, 
-                    Variables.Spell[Variables.Spells.Q].Delay, 
+                    minion,
+                    Variables.Spell[Variables.Spells.Q].Delay,
                     ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).SData.CastRadius);
 
                 var collision = Variables.Spell[Variables.Spells.Q].GetCollision(
-                    ObjectManager.Player.Position.To2D(), 
+                    ObjectManager.Player.Position.To2D(),
                     new List<Vector2> { prediction.UnitPosition.To2D() });
 
                 foreach (var cs in collision)
@@ -746,7 +748,7 @@ using EloBuddy;
             if (Variables.Menu.IsEnabled("com.ilucian.misc.forcePassive") && Variables.HasPassive())
             {
                 var target = TargetSelector.GetTarget(
-                    ObjectManager.Player.AttackRange, 
+                    ObjectManager.Player.AttackRange,
                     TargetSelector.DamageType.Physical);
                 if (target != null && target.IsValid)
                 {

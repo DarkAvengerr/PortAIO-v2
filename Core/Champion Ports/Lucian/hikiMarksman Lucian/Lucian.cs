@@ -206,13 +206,16 @@ using EloBuddy;
                 case 0:
                         var minions = ObjectManager.Get<Obj_AI_Minion>().Where(o => o.IsValidTarget(LucianSpells.Q.Range));
                         var target = ObjectManager.Get<AIHeroClient>().Where(x => x.IsValidTarget(LucianSpells.Q2.Range)).FirstOrDefault(x => LucianMenu.Config.Item("lucian.white" + x.ChampionName).GetValue<bool>());
-                        if (target.Distance(ObjectManager.Player.Position) > LucianSpells.Q.Range && target.CountEnemiesInRange(LucianSpells.Q2.Range) > 0)
+                        if (target != null && minions != null)
                         {
-                            foreach (var minion in minions)
+                            if (target.Distance(ObjectManager.Player.Position) > LucianSpells.Q.Range && target.CountEnemiesInRange(LucianSpells.Q2.Range) > 0)
                             {
-                                if (LucianSpells.Q2.WillHit(target, ObjectManager.Player.ServerPosition.Extend(minion.ServerPosition, LucianSpells.Q2.Range), 0, HitChance.VeryHigh))
+                                foreach (var minion in minions)
                                 {
-                                    LucianSpells.Q2.CastOnUnit(minion);
+                                    if (LucianSpells.Q2.WillHit(target, ObjectManager.Player.ServerPosition.Extend(minion.ServerPosition, LucianSpells.Q2.Range), 0, HitChance.VeryHigh))
+                                    {
+                                        LucianSpells.Q2.CastOnUnit(minion);
+                                    }
                                 }
                             }
                         }

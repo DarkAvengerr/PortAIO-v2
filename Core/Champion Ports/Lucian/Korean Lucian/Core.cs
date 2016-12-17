@@ -1,6 +1,6 @@
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace KoreanLucian
+using EloBuddy;
+using LeagueSharp.Common;
+namespace KoreanLucian
 {
     using System;
     using System.Collections.Generic;
@@ -307,22 +307,25 @@ using EloBuddy;
             {
                 target = TargetSelector.GetTarget(champion.Player, W.Range, TargetSelector.DamageType.Physical);
 
-                PredictionOutput wPrediction = W.GetPrediction(target);
+                if (target != null)
+                {
+                    PredictionOutput wPrediction = W.GetPrediction(target);
 
-                if (wPrediction != null && wPrediction.Hitchance >= HitChance.High
-                    && wPrediction.CastPosition != Vector3.Zero)
-                {
-                    if (W.Cast(wPrediction.CastPosition))
+                    if (wPrediction != null && wPrediction.Hitchance >= HitChance.High
+                        && wPrediction.CastPosition != Vector3.Zero)
                     {
-                        ProcessSpell();
+                        if (W.Cast(wPrediction.CastPosition))
+                        {
+                            ProcessSpell();
+                        }
                     }
-                }
-                else if (target != null
-                         && target.Distance(champion.Player) <= Orbwalking.GetRealAutoAttackRange(champion.Player))
-                {
-                    if (W.Cast(target.ServerPosition))
+                    else if (target != null
+                             && target.Distance(champion.Player) <= Orbwalking.GetRealAutoAttackRange(champion.Player))
                     {
-                        ProcessSpell();
+                        if (W.Cast(target.ServerPosition))
+                        {
+                            ProcessSpell();
+                        }
                     }
                 }
             }
@@ -333,11 +336,14 @@ using EloBuddy;
                 {
                     target = TargetSelector.GetTarget(champion.Player, Q.Range, TargetSelector.DamageType.Physical);
 
-                    if (target != null && Q.IsReadyToCastOn(target) && Q.CanCast(target))
+                    if (target != null)
                     {
-                        if (Q.CastOnUnit(target))
+                        if (target != null && Q.IsReadyToCastOn(target) && Q.CanCast(target))
                         {
-                            ProcessSpell();
+                            if (Q.CastOnUnit(target))
+                            {
+                                ProcessSpell();
+                            }
                         }
                     }
                 }

@@ -1,4 +1,4 @@
-using System;
+    using System;
 using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
@@ -341,13 +341,16 @@ using LeagueSharp.Common;
         private static void KillstealW()
         {
             var target = HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.W.Range)).
-                FirstOrDefault(x=> x.Health < Spells.W.GetDamage(x) + (ObjectManager.Player.AttackRange * 2));
+                FirstOrDefault(x => x.Health < Spells.W.GetDamage(x) + (ObjectManager.Player.AttackRange * 2));
 
-            var pred = Spells.W.GetPrediction(target);
-
-            if (target != null && pred.Hitchance >= HitChance.High)
+            if (target != null)
             {
-                Spells.W.Cast(pred.CastPosition);
+                var pred = Spells.W.GetPrediction(target);
+
+                if (target != null && pred.Hitchance >= HitChance.High)
+                {
+                    Spells.W.Cast(pred.CastPosition);
+                }
             }
         }
         private static void Clear()
