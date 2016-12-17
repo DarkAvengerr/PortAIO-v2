@@ -10,7 +10,7 @@ using Color = System.Drawing.Color;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace BadaoKingdom.BadaoChampion.BadaoKatarina
+namespace BadaoKingdom.BadaoChampion.BadaoKatarina
 {
     using static BadaoKatarinaVariables;
     using static BadaoMainVariables;

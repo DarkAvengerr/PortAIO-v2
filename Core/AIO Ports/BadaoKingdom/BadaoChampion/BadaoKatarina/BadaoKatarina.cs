@@ -10,7 +10,7 @@ using Color = System.Drawing.Color;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace BadaoKingdom.BadaoChampion.BadaoKatarina
+namespace BadaoKingdom.BadaoChampion.BadaoKatarina
 {
     using static BadaoMainVariables;
     using static BadaoKatarinaVariables;
@@ -24,6 +24,8 @@ using LeagueSharp.Common;
             BadaoKatarinaCombo.BadaoActivate();
             BadaoKatarinaHarass.BadaoAcitvate();
             BadaoKatarinaFlee.BadaoActivate();
+            BadaoKatarinaLastHit.BadaoActivate();
+            BadaoKatarinaLaneClear.BadaoActivate();
 
             GameObject.OnCreate += GameObject_OnCreate;
             GameObject.OnDelete += GameObject_OnDelete;

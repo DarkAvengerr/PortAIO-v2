@@ -11,7 +11,7 @@ using Color = System.Drawing.Color;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace BadaoKingdom.BadaoChampion.BadaoGraves
+namespace BadaoKingdom.BadaoChampion.BadaoGraves
 {
     public static class BadaoGravesCombo
     {
@@ -20,10 +20,10 @@ using LeagueSharp.Common;
         {
             Game.OnUpdate += Game_OnUpdate;
             //Orbwalking.OnAttack += Orbwalking_OnAttack;
-            EloBuddy.Player.OnIssueOrder += Obj_AI_Base_OnIssueOrder;
+            //EloBuddy.Player.OnIssueOrder += Obj_AI_Base_OnIssueOrder;
         }
 
-        private static void Obj_AI_Base_OnIssueOrder(Obj_AI_Base sender, PlayerIssueOrderEventArgs args)
+        public static void Obj_AI_Base_OnIssueOrder(Obj_AI_Base sender, PlayerIssueOrderEventArgs args)
         {
             if (BadaoMainVariables.Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo)
                 return;

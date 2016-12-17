@@ -11,7 +11,7 @@ using Color = System.Drawing.Color;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace BadaoKingdom.BadaoChampion.BadaoGraves
+namespace BadaoKingdom.BadaoChampion.BadaoGraves
 {
     public static class BadaoGravesConfig
     {
@@ -43,6 +43,11 @@ using LeagueSharp.Common;
             Menu ts = config.AddSubMenu(new Menu("Target Selector", "Target Selector")); ;
             TargetSelector.AddToMenu(ts);
 
+            //Burst
+            Menu Burst = config.AddSubMenu(new Menu("Burst", "Burst"));
+            BadaoGravesVariables.BurstKey = Burst.AddItem(new MenuItem("BurstKey", "BurstKey")).SetValue(new KeyBind('T', KeyBindType.Press));
+            Burst.AddItem(new MenuItem("BurstIntro", "You'll have to select a target in this mode!"));
+
             // Combo
             Menu Combo = config.AddSubMenu(new Menu("Combo", "Combo"));
             BadaoGravesVariables.ComboQ = Combo.AddItem(new MenuItem("ComboQ", "Q")).SetValue(true);
@@ -60,6 +65,7 @@ using LeagueSharp.Common;
             Menu Auto = config.AddSubMenu(new Menu("Auto", "Auto"));
             BadaoGravesVariables.AutoSmite = Auto.AddItem(new MenuItem("AutoSmite", "Smite Baron, Dragon")).SetValue(true);
             BadaoGravesVariables.AutoRKS = Auto.AddItem(new MenuItem("AutoRKS", "R KS")).SetValue(true);
+            BadaoGravesVariables.ExtraAADelay = Auto.AddItem(new MenuItem("ExtraAADelay", "Extra AA Delay")).SetValue(new Slider(0,0,10));
             // attach to mainmenu
             config.AddToMainMenu();
         }

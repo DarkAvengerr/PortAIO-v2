@@ -10,7 +10,7 @@ using Color = System.Drawing.Color;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace BadaoKingdom.BadaoChampion.BadaoKatarina
+namespace BadaoKingdom.BadaoChampion.BadaoKatarina
 {
     using static BadaoMainVariables;
     // KatarinaRMis
@@ -38,7 +38,12 @@ using LeagueSharp.Common;
 
         public static MenuItem HarassWE;
 
-        
+        public static MenuItem LastHitQ;
+
+        public static MenuItem LaneClearQ;
+        public static MenuItem LaneClearW;
+
+
     }
     public class KatarinaDagger
     {
