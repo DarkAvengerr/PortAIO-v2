@@ -15,7 +15,7 @@ namespace HeavenStrikeAzir
 {
     public static class Soldiers
     {
-        public static AIHeroClient Player { get{ return ObjectManager.Player; } }
+        public static AIHeroClient Player { get { return ObjectManager.Player; } }
         private static int LastWTick;
         public static List<GameObject> soldier = new List<GameObject>();
 
@@ -34,14 +34,14 @@ namespace HeavenStrikeAzir
             Game.OnUpdate += Game_OnUpdate;
             GameObject.OnDelete += GameObject_OnDelete;
             GameObject.OnCreate += GameObject_OnCreate;
-            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
         }
 
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!sender.IsMe) return;
-            //Chat.Print(args.SData.Name);
-            if (/*args.Slot == SpellSlot.W*/args.SData.Name == "AzirW")
+
+            if (args.Slot == SpellSlot.W)
                 LastWTick = Environment.TickCount;
         }
 
@@ -65,7 +65,7 @@ namespace HeavenStrikeAzir
         {
             var soldierandtargetminion = new List<SoldierAndTargetMinion>();
             var minions = GameObjects.EnemyMinions.Where(x => x.IsValidTarget()).ToList();
-            minions.AddRange(GameObjects.Jungle.Where(x=> x.IsValidTarget()));
+            minions.AddRange(GameObjects.Jungle.Where(x => x.IsValidTarget()));
             var minionspredictedposition = new List<MinionPredictedPosition>();
             foreach (var x in minions)
             {
