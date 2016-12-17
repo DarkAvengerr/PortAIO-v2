@@ -2896,6 +2896,13 @@
     <Compile Include="Core\Champion Ports\Wukong\xQx Wukong\AssassinManager.cs" />
     <Compile Include="Core\Champion Ports\Wukong\xQx Wukong\PotionManager.cs" />
     <Compile Include="Core\Champion Ports\Wukong\xQx Wukong\Program.cs" />
+    <Compile Include="Core\Champion Ports\Xerath\Lord%27s Xerath\ActiveModes.cs" />
+    <Compile Include="Core\Champion Ports\Xerath\Lord%27s Xerath\Config.cs" />
+    <Compile Include="Core\Champion Ports\Xerath\Lord%27s Xerath\DamageIndicator.cs" />
+    <Compile Include="Core\Champion Ports\Xerath\Lord%27s Xerath\Damages.cs" />
+    <Compile Include="Core\Champion Ports\Xerath\Lord%27s Xerath\Extensions.cs" />
+    <Compile Include="Core\Champion Ports\Xerath\Lord%27s Xerath\Program.cs" />
+    <Compile Include="Core\Champion Ports\Xerath\Lord%27s Xerath\SpellManager.cs" />
     <Compile Include="Core\Champion Ports\Xerath\M1D 0R F33D Xerath\Xerath.cs" />
     <Compile Include="Core\Champion Ports\Xerath\SluttyXerath\GlobalManager.cs" />
     <Compile Include="Core\Champion Ports\Xerath\SluttyXerath\MenuConfigs.cs" />

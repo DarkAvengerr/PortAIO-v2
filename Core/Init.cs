@@ -3769,6 +3769,9 @@ namespace PortAIO
                         case 5: // Xerath - Magnus Ascendant
                             Xerath___The_Magus_Ascendant.Program.Main();
                             break;
+                        case 6: // Lord's Xerath
+                            Lords_Xerath.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.XinZhao:

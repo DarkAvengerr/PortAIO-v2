@@ -398,7 +398,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "UnderratedAIO", "2Girls1Monkey", "Hoola Wukong", "JustWukong", "mztikk's Wukong", "xQx Wukong", "NoobWukong" };
                     break;
                 case EloBuddy.Champion.Xerath:
-                    champ = new string[] { "Kortatu's Xerath", "OKTW", "SluttyXerath", "M1D 0R F33D", "ElXerath", "Xerath - the Magnus Ascendant" };
+                    champ = new string[] { "Kortatu's Xerath", "OKTW", "SluttyXerath", "M1D 0R F33D", "ElXerath", "Xerath - the Magnus Ascendant", "Lord's Xerath" };
                     break;
                 case EloBuddy.Champion.XinZhao:
                     champ = new string[] { "xQx XinZhao", "BrianSharp", "XinZhao God", "mztikk's Xin Zhao", "NoobXinZhao" };
