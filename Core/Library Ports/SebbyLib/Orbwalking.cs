@@ -576,7 +576,7 @@ namespace SebbyLib
         public class Orbwalker
         {
 
-            private const float LaneClearWaitTimeMod = 2f;
+            private const float LaneClearWaitTimeMod = 1.8f;
 
             /// <summary>
             ///     The configuration
