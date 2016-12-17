@@ -40,6 +40,7 @@ namespace BadaoKingdom.BadaoChampion.BadaoGangplank
             // Combo
             Menu Combo = config.AddSubMenu(new Menu("Combo", "Combo"));
             BadaoGangplankVariables.ComboE1 = Combo.AddItem(new MenuItem("ComboE1", "Place 1st Barrel")).SetValue(true);
+            BadaoGangplankVariables.ComboQSave = Combo.AddItem(new MenuItem("ComboQSave", "Save Q if can detonate barrels")).SetValue(false);
 
 
             // Harass
@@ -61,14 +62,51 @@ namespace BadaoKingdom.BadaoChampion.BadaoGangplank
             BadaoGangplankVariables.AutoWLowHealthValue = Auto.AddItem(new MenuItem("AutoWLowHealthValue", "% HP to W")).SetValue(new Slider(20,1,100));
             BadaoGangplankVariables.AutoWCC = Auto.AddItem(new MenuItem("AutoWCC", "W anti CC")).SetValue(true);
 
-            //Draw
+            //Flee nam o trong config luon nha
+            Menu Flee = config.AddSubMenu(new Menu("Flee", "Flee"));
+            BadaoGangplankVariables.FleeKey = Flee.AddItem(new MenuItem("FleeKey", "Flee Key")).SetValue(new KeyBind('G', KeyBindType.Press));
+
+            //Draw nam o trong config luon ne
             Menu Draw = config.AddSubMenu(new Menu("Draw", "Draw"));
             BadaoGangplankVariables.DrawQ = Draw.AddItem(new MenuItem("DrawQ", "Q")).SetValue(true);
             BadaoGangplankVariables.DrawE = Draw.AddItem(new MenuItem("DrawE", "E")).SetValue(true);
+            BadaoGangplankVariables.DrawEPlacement = Draw.AddItem(new MenuItem("DrawEPlacement", "E Chain range")).SetValue(true);
 
             // attach to mainmenu
             config.AddToMainMenu();
+
             Drawing.OnDraw += Drawing_OnDraw;
+            Game.OnUpdate += Game_OnUpdate;
+        }
+
+        private static void Game_OnUpdate(EventArgs args)
+        {
+            if (!BadaoGangplankVariables.FleeKey.GetValue<KeyBind>().Active)
+                return;
+            Orbwalking.Orbwalk(null, Game.CursorPos);
+            if (BadaoMainVariables.Q.IsReady())
+            {
+                foreach (var barrel in BadaoGangplankBarrels.QableBarrels())
+                {
+                    if (BadaoMainVariables.Q.Cast(barrel.Bottle) == Spell.CastStates.SuccessfullyCasted)
+                        return;
+                }
+            }
+            if (Orbwalking.CanAttack())
+            {
+                foreach (var barrel in BadaoGangplankBarrels.AttackableBarrels())
+                {
+                    Orbwalking.Attack = false;
+                    Orbwalking.Move = false;
+                    LeagueSharp.Common.Utility.DelayAction.Add(100 + Game.Ping, () =>
+                    {
+                        Orbwalking.Attack = true;
+                        Orbwalking.Move = true;
+                    }); 
+                    if (EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, barrel.Bottle))
+                        return;
+                }
+            }
         }
 
         private static void Drawing_OnDraw(EventArgs args)
@@ -82,6 +120,13 @@ namespace BadaoKingdom.BadaoChampion.BadaoGangplank
             if (BadaoGangplankVariables.DrawE.GetValue<bool>())
             {
                 Render.Circle.DrawCircle(ObjectManager.Player.Position, BadaoMainVariables.E.Range, Color.Pink);
+            }
+            if (BadaoGangplankVariables.DrawEPlacement.GetValue<bool>())
+            {
+                foreach (var barrel in BadaoGangplankBarrels.Barrels)
+                {
+                    Render.Circle.DrawCircle(barrel.Bottle.Position, 660, Color.Red );
+                }
             }
         }
     }

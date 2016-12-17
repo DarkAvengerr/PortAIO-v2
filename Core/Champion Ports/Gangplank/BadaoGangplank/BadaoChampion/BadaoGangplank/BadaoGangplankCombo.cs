@@ -302,10 +302,29 @@ namespace BadaoKingdom.BadaoChampion.BadaoGangplank
                             && !nbarrels.Any(x => x.Bottle.Distance(target.Position) <= 330 + target.BoundingRadius))
                         {
                             useQ = false;
+                            break;
                         }
                         else if (nbarrels.Any(x => x.Bottle.Distance(target.Position) <= 330 + target.BoundingRadius))
                         {
                             useQ = false;
+                            break;
+                        }
+                    }
+                    if (BadaoGangplankVariables.ComboQSave.GetValue<bool>())
+                    {
+                        foreach (var barrel in BadaoGangplankBarrels.DelayedBarrels(10000))
+                        {
+                            var nbarrels = BadaoGangplankBarrels.ChainedBarrels(barrel);
+                            foreach (var hero in HeroManager.Enemies.Where(x => x.IsValidTarget()))
+                            {
+                                if (nbarrels.Any(x => x.Bottle.Distance(hero.Position) <= 330 + hero.BoundingRadius))
+                                {
+                                    useQ = false;
+                                    break;
+                                }
+                            }
+                            if (useQ == false)
+                                break;
                         }
                     }
                     if (useQ)
