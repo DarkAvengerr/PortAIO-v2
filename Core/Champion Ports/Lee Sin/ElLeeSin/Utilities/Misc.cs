@@ -1,14 +1,19 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ElLeeSin.Utilities
+using LeagueSharp.Common; 
+namespace ElLeeSin.Utilities
 {
     using System;
     using System.Linq;
 
+    using ElLeeSin.Components;
+    using ElLeeSin.Components.SpellManagers;
+
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using static Program;
+    using SharpDX;
+
+    using static LeeSin;
 
     using ItemData = LeagueSharp.Common.Data.ItemData;
 
@@ -70,7 +75,7 @@ using EloBuddy;
         /// <summary>
         ///     The ward flash range.
         /// </summary>
-        internal static float WardFlashRange => WardRange + spells[Spells.R].Range - 100;
+        internal static float WardFlashRange => InsecManager.WardRange + spells[Spells.R].Range - 100;
 
         /// <summary>
         ///     Gets the W Instance name
@@ -79,19 +84,19 @@ using EloBuddy;
         /// <value>
         ///     W instance name
         /// </value>
-        internal static WCastStage WStage
+        internal static Wardmanager.WCastStage WStage
         {
             get
             {
                 if (!spells[Spells.W].IsReady())
                 {
-                    return WCastStage.Cooldown;
+                    return Wardmanager.WCastStage.Cooldown;
                 }
 
                 return ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W)
                            .Name.Equals("blindmonkwtwo", StringComparison.InvariantCultureIgnoreCase)
-                           ? WCastStage.Second
-                           : WCastStage.First;
+                           ? Wardmanager.WCastStage.Second
+                           : Wardmanager.WCastStage.First;
             }
         }
 
@@ -120,6 +125,37 @@ using EloBuddy;
         }
 
         /// <summary>
+        ///     Orbwalker.
+        /// </summary>
+        /// <param name="pos"></param>
+        /// <param name="target"></param>
+        public static void Orbwalk(Vector3 pos, AIHeroClient target = null)
+        {
+            EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, pos);
+        }
+
+        /// <summary>
+        ///     Gets the Q2 damage
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="subHP"></param>
+        /// <param name="monster"></param>
+        /// <returns></returns>
+        public static float Q2Damage(Obj_AI_Base target, float subHP = 0, bool monster = false)
+        {
+            var dmg = new[] { 50, 80, 110, 140, 170 }[spells[Spells.Q].Level - 1]
+                      + 0.9 * ObjectManager.Player.FlatPhysicalDamageMod
+                      + 0.08 * (target.MaxHealth - (target.Health - subHP));
+
+            return
+                (float)
+                (ObjectManager.Player.CalcDamage(
+                     target,
+                     Damage.DamageType.Physical,
+                     target is Obj_AI_Minion ? Math.Min(dmg, 400) : dmg) + subHP);
+        }
+
+        /// <summary>
         ///     Gets the distance to player.
         /// </summary>
         /// <param name="source"></param>
@@ -127,6 +163,16 @@ using EloBuddy;
         internal static float DistanceToPlayer(this Obj_AI_Base source)
         {
             return ObjectManager.Player.Distance(source);
+        }
+
+        /// <summary>
+        ///     Gets the menu item.
+        /// </summary>
+        /// <param name="paramName"></param>
+        /// <returns></returns>
+        public static bool GetMenuItem(string paramName)
+        {
+            return MyMenu.Menu.Item(paramName).IsActive();
         }
 
         /// <summary>

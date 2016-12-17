@@ -1,6 +1,6 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ElLeeSin
+using LeagueSharp.Common; 
+namespace ElLeeSin.Components
 {
     using System.Drawing;
 
@@ -8,7 +8,7 @@ using EloBuddy;
 
     using Color = SharpDX.Color;
 
-    public class InitMenu
+    internal class MyMenu
     {
         #region Static Fields
 
@@ -20,9 +20,9 @@ using EloBuddy;
 
         public static void Initialize()
         {
-            Menu = new Menu("ElLeeSin", "LeeSin", true);
+            Menu = new Menu("ElLeeSin", "LeeSin", true).SetFontStyle(FontStyle.Bold, Color.RoyalBlue);
             Menu.AddSubMenu(new Menu("Orbwalker", "Orbwalker"));
-            Program.Orbwalker = new Orbwalking.Orbwalker(Menu.SubMenu("Orbwalker"));
+            LeeSin.Orbwalker = new Orbwalking.Orbwalker(Menu.SubMenu("Orbwalker"));
 
             Menu.AddSubMenu(new Menu("Combo", "Combo"));
             Menu.SubMenu("Combo").AddItem(new MenuItem("ElLeeSin.Combo.Q", "Use Q").SetValue(true));
@@ -115,12 +115,20 @@ using EloBuddy;
                 wardjumpMenu.AddItem(new MenuItem("escapeMode", "Enable Jungle Escape").SetValue(true));
                 wardjumpMenu.AddItem(
                     new MenuItem("ElLeeSin.Wardjump", "Wardjump key").SetValue(
-                        new KeyBind("G".ToCharArray()[0], KeyBindType.Press)));
+                        new KeyBind("U".ToCharArray()[0], KeyBindType.Press)));
                 wardjumpMenu.AddItem(
                     new MenuItem("ElLeeSin.Wardjump.MaxRange", "Ward jump on max range").SetValue(false));
                 wardjumpMenu.AddItem(new MenuItem("ElLeeSin.Wardjump.Mouse", "Jump to mouse").SetValue(true));
                 wardjumpMenu.AddItem(new MenuItem("ElLeeSin.Wardjump.Minions", "Jump to minions").SetValue(true));
                 wardjumpMenu.AddItem(new MenuItem("ElLeeSin.Wardjump.Champions", "Jump to champions").SetValue(true));
+            }
+
+            var node = Menu.AddSubMenu(new Menu("Items", "items"));
+            {
+                node.AddItem(new MenuItem("Itemscombo", "Use in Combo").SetValue(true));
+                node.AddItem(new MenuItem("Itemsharass", "Use in Harass").SetValue(true));
+                node.AddItem(new MenuItem("FarmEnabled", "Activate").SetValue(true)).SetTooltip("Enabled in LastHit and LaneClear mode.");
+                node.AddItem(new MenuItem("Itemslaneclear", "Use in LaneClear").SetValue(true));
             }
 
             var drawMenu = Menu.AddSubMenu(new Menu("Drawings", "Drawings"));
@@ -141,11 +149,22 @@ using EloBuddy;
 
             var miscMenu = Menu.AddSubMenu(new Menu("Misc", "Misc"));
             {
-                miscMenu.AddItem(new MenuItem("Combo.Use.items", "Use Items").SetValue(true));
                 miscMenu.AddItem(new MenuItem("ElLeeSin.Ignite.KS", "Use Ignite").SetValue(true));
                 miscMenu.AddItem(new MenuItem("ElLeeSin.Smite.KS", "Use Smite").SetValue(true));
-                miscMenu.AddItem(new MenuItem("ElLeeSin.Smite.Q", "Smite Q!").SetValue(false)); //qSmite
+                miscMenu.AddItem(new MenuItem("ElLeeSin.Smite.Q", "Smite Q!").SetValue(false)); 
             }
+
+
+            /*var drawings = Menu.AddSubMenu(new Menu("Bubba", "Bubba"));
+            {
+                drawings.AddItem(new MenuItem("drawKickPos", "Kick Position"))
+                .SetValue(new Circle(true, System.Drawing.Color.Fuchsia));
+                drawings.AddItem(new MenuItem("bubbaflash", "Use flash").SetValue(false));
+                drawings.AddItem(new MenuItem("drawKickLine", "Kick Line Direction")).SetValue(new Circle(true, System.Drawing.Color.Fuchsia));
+                drawings.AddItem(new MenuItem("drawKickTarget", "Desired Target")).SetValue(new Circle(true, System.Drawing.Color.LimeGreen));
+
+                drawings.AddItem(new MenuItem("bSharpOn", "BubbaKush Key")).SetValue(new KeyBind('T', KeyBindType.Press));
+            }*/
 
             Menu.AddToMainMenu();
         }

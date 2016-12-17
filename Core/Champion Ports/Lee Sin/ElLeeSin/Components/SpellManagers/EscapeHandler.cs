@@ -1,11 +1,12 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ElLeeSin
+using LeagueSharp.Common; 
+namespace ElLeeSin.Components.SpellManagers
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
+    using ElLeeSin.Components;
     using ElLeeSin.Utilities;
 
     using LeagueSharp;
@@ -14,6 +15,7 @@ using EloBuddy;
     using SharpDX;
 
     using Color = System.Drawing.Color;
+    using Geometry = ElLeeSin.Geometry;
 
     internal class JumpHandler
     {
@@ -48,25 +50,7 @@ using EloBuddy;
 
         #region Public Properties
 
-        public static Obj_AI_Base BuffedEnemy
-        {
-            get
-            {
-                return ObjectManager.Get<Obj_AI_Base>().FirstOrDefault(unit => unit.IsEnemy && unit.HasQBuff());
-            }
-        }
-
-        #endregion
-
-        #region Properties
-
-        private static AIHeroClient Player
-        {
-            get
-            {
-                return ObjectManager.Player;
-            }
-        }
+        public static Obj_AI_Base BuffedEnemy => ObjectManager.Get<Obj_AI_Base>().FirstOrDefault(unit => unit.IsEnemy && unit.HasQBuff());
 
         #endregion
 
@@ -84,14 +68,14 @@ using EloBuddy;
 
         private static void Draw()
         {
-            if (!InitMenu.Menu.Item("escapeMode").GetValue<bool>()
-                || !InitMenu.Menu.Item("ElLeeSin.Draw.Escape").GetValue<bool>())
+            if (!Misc.GetMenuItem("escapeMode")
+                || !Misc.GetMenuItem("ElLeeSin.Draw.Escape"))
             {
                 return;
             }
 
-            if (active && Program.spells[Program.Spells.Q].IsReady()
-                && InitMenu.Menu.Item("ElLeeSin.Draw.Q.Width").GetValue<bool>())
+            if (active && LeeSin.spells[LeeSin.Spells.Q].IsReady()
+                && Misc.GetMenuItem("ElLeeSin.Draw.Q.Width"))
             {
                 rect.Draw(Color.White);
             }
@@ -99,14 +83,14 @@ using EloBuddy;
             {
                 if (rect != null)
                 {
-                    if (pos.Distance(Player.Position) < 2000)
+                    if (pos.Distance(ObjectManager.Player.Position) < 2000)
                     {
                         Render.Circle.DrawCircle(pos, 100, rect.IsOutside(pos.To2D()) ? Color.White : Color.DeepSkyBlue);
                     }
                 }
                 else
                 {
-                    if (pos.Distance(Player.Position) < 2000)
+                    if (pos.Distance(ObjectManager.Player.Position) < 2000)
                     {
                         Render.Circle.DrawCircle(pos, 100, Color.White);
                     }
@@ -116,7 +100,7 @@ using EloBuddy;
 
         private static void Escape()
         {
-            Program.Orbwalk(Game.CursorPos);
+            Misc.Orbwalk(Game.CursorPos);
 
             if (BuffedEnemy.IsValidTarget() && BuffedEnemy.IsValid<AIHeroClient>())
             {
@@ -127,7 +111,7 @@ using EloBuddy;
             {
                 foreach (var point in JunglePos)
                 {
-                    if ((Player.Distance(point) < 100) || (Program.LastQ2 + 2000 < Environment.TickCount))
+                    if ((ObjectManager.Player.Distance(point) < 100) || (LeeSin.LastQ2 + 2000 < Environment.TickCount))
                     {
                         InitQ = false;
                     }
@@ -135,13 +119,13 @@ using EloBuddy;
             }
 
             rect = new Geometry.Polygon.Rectangle(
-                       Player.Position.To2D(),
-                       Player.Position.To2D().Extend(Game.CursorPos.To2D(), 1050),
+                       ObjectManager.Player.Position.To2D(),
+                       ObjectManager.Player.Position.To2D().Extend(Game.CursorPos.To2D(), 1050),
                        100);
 
             if (Misc.IsQOne)
             {
-                if (Program.spells[Program.Spells.Q].IsReady())
+                if (LeeSin.spells[LeeSin.Spells.Q].IsReady())
                 {
                     foreach (var pos in JunglePos)
                     {
@@ -150,22 +134,22 @@ using EloBuddy;
                             continue;
                         }
                         InitQ = true;
-                        Program.spells[Program.Spells.Q].Cast(pos);
+                        LeeSin.spells[LeeSin.Spells.Q].Cast(pos);
                         return;
                     }
                 }
             }
             else
             {
-                Program.spells[Program.Spells.Q].Cast();
+                LeeSin.spells[LeeSin.Spells.Q].Cast();
                 InitQ = true;
             }
         }
 
         private static void Tick()
         {
-            if (InitMenu.Menu.Item("ElLeeSin.Escape").GetValue<KeyBind>().Active
-                && InitMenu.Menu.Item("escapeMode").GetValue<bool>())
+            if (MyMenu.Menu.Item("ElLeeSin.Escape").GetValue<KeyBind>().Active
+                && Misc.GetMenuItem("escapeMode"))
             {
                 Escape();
                 active = true;

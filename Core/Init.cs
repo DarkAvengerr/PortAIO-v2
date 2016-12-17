@@ -1979,7 +1979,7 @@ namespace PortAIO
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
                         case 0: // ElLeeSin
-                            ElLeeSin.Program.Game_OnGameLoad();
+                            ElLeeSin.Program.Main();
                             break;
                         case 1: // BrianSharp
                             BrianSharp.Program.Main();

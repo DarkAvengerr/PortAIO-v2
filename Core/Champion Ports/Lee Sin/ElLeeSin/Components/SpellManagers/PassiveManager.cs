@@ -1,13 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ElLeeSin.Utilities
+using LeagueSharp.Common; 
+namespace ElLeeSin.Components.SpellManagers
 {
+    using System;
+    using System.Collections.Generic;
+
+    using ElLeeSin.Utilities;
+
     using LeagueSharp;
 
     internal class PassiveManager
@@ -23,12 +22,12 @@ using EloBuddy;
 
                 if (args.Buff.DisplayName.Equals("BlindMonkFlurry", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    Program.PassiveStacks = 2;
+                   LeeSin.PassiveStacks = 2;
                 }
 
                 if (args.Buff.DisplayName.Equals("BlindMonkQTwoDash", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    Program.isInQ2 = true;
+                   LeeSin.isInQ2 = true;
                 }
             }
             catch (Exception e)
@@ -49,12 +48,12 @@ using EloBuddy;
 
                 if (args.Buff.DisplayName.Equals("BlindMonkFlurry", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    Program.PassiveStacks = 0;
+                   LeeSin.PassiveStacks = 0;
                 }
 
                 if (args.Buff.DisplayName.Equals("BlindMonkQTwoDash", StringComparison.InvariantCultureIgnoreCase))
                 {
-                    Program.isInQ2 = false;
+                   LeeSin.isInQ2 = false;
                 }
             }
             catch (Exception e)

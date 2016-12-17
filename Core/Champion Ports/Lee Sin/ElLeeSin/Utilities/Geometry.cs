@@ -3,8 +3,8 @@
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ElLeeSin
+using LeagueSharp.Common; 
+namespace ElLeeSin
 {
     using System;
     using System.Collections.Generic;

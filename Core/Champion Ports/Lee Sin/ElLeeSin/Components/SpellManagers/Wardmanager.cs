@@ -1,19 +1,72 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ElLeeSin.Utilities
+using LeagueSharp.Common; 
+namespace ElLeeSin.Components.SpellManagers
 {
+    using System;
     using System.Linq;
+
+    using ElLeeSin.Utilities;
 
     using LeagueSharp;
     using LeagueSharp.Common;
 
     using SharpDX;
 
-    using static Program;
-
     internal class Wardmanager
     {
         #region Public Methods and Operators
+
+        public static Vector2 JumpPos;
+
+        public static bool reCheckWard = true;
+
+        public static int Wcasttime;
+
+        public static Vector3 lastWardPos;
+
+        public static float LastWard;
+
+        public static bool castWardAgain = true;
+
+
+        public enum WCastStage
+        {
+            First,
+
+            Second,
+
+            Cooldown
+        }
+
+        private static SpellDataInst GetItemSpell(InventorySlot invSlot)
+        {
+            return ObjectManager.Player.Spellbook.Spells.FirstOrDefault(spell => (int)spell.Slot == invSlot.Slot + 4);
+        }
+
+        public static InventorySlot FindBestWardItem()
+        {
+            try
+            {
+                var slot = Items.GetWardSlot();
+                if (slot == default(InventorySlot))
+                {
+                    return null;
+                }
+
+                var sdi = GetItemSpell(slot);
+                if ((sdi != default(SpellDataInst)) && (sdi.State == SpellState.Ready))
+                {
+                    return slot;
+                }
+                return slot;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
+            return null;
+        }
 
         public static void WardJump(
             Vector3 pos,
@@ -62,10 +115,10 @@ using EloBuddy;
             }
             if (m2M)
             {
-                Orbwalk(pos);
+                Misc.Orbwalk(pos);
             }
-            if (!spells[Spells.W].IsReady() || (Misc.WStage != WCastStage.First)
-                || (reqinMaxRange && (ObjectManager.Player.Distance(pos) > spells[Spells.W].Range)))
+            if (!LeeSin.spells[LeeSin.Spells.W].IsReady() || (Misc.WStage != WCastStage.First)
+                || (reqinMaxRange && (ObjectManager.Player.Distance(pos) >LeeSin.spells[LeeSin.Spells.W].Range)))
             {
                 return;
             }
@@ -78,7 +131,7 @@ using EloBuddy;
                         ObjectManager.Get<AIHeroClient>()
                             .Where(
                                 x =>
-                                    x.IsAlly && (x.Distance(ObjectManager.Player) < spells[Spells.W].Range)
+                                    x.IsAlly && (x.Distance(ObjectManager.Player) < LeeSin.spells[LeeSin.Spells.W].Range)
                                     && (x.Distance(pos) < 200) && !x.IsMe)
                             .OrderByDescending(i => i.Distance(ObjectManager.Player))
                             .ToList()
@@ -91,7 +144,7 @@ using EloBuddy;
                             return;
                         }
 
-                        CastW(wardJumpableChampion);
+                        LeeSin.CastW(wardJumpableChampion);
                         return;
                     }
                 }
@@ -101,7 +154,7 @@ using EloBuddy;
                         ObjectManager.Get<Obj_AI_Minion>()
                             .Where(
                                 m =>
-                                    m.IsAlly && (m.Distance(ObjectManager.Player) < spells[Spells.W].Range)
+                                    m.IsAlly && (m.Distance(ObjectManager.Player) < LeeSin.spells[LeeSin.Spells.W].Range)
                                     && (m.Distance(pos) < 200) && !m.Name.ToLower().Contains("ward"))
                             .OrderByDescending(i => i.Distance(ObjectManager.Player))
                             .ToList()
@@ -114,7 +167,7 @@ using EloBuddy;
                             return;
                         }
 
-                        CastW(wardJumpableMinion);
+                        LeeSin.CastW(wardJumpableMinion);
                         return;
                     }
                 }
@@ -136,7 +189,7 @@ using EloBuddy;
                     return;
                 }
 
-                CastW(wardObject);
+                LeeSin.CastW(wardObject);
             }
 
             if (!isWard && castWardAgain)
@@ -147,7 +200,7 @@ using EloBuddy;
                     return;
                 }
 
-                if (spells[Spells.W].IsReady() && Misc.IsWOne && (LastWard + 400 < Utils.TickCount))
+                if (LeeSin.spells[LeeSin.Spells.W].IsReady() && Misc.IsWOne && (LastWard + 400 < Utils.TickCount))
                 {
                     ObjectManager.Player.Spellbook.CastSpell(ward.SpellSlot, JumpPos.To3D());
                     lastWardPos = JumpPos.To3D();
@@ -160,11 +213,11 @@ using EloBuddy;
         {
             WardJump(
                 Game.CursorPos,
-                ParamBool("ElLeeSin.Wardjump.Mouse"),
+                Misc.GetMenuItem("ElLeeSin.Wardjump.Mouse"),
                 false,
                 false,
-                ParamBool("ElLeeSin.Wardjump.Minions"),
-                ParamBool("ElLeeSin.Wardjump.Champions"));
+                Misc.GetMenuItem("ElLeeSin.Wardjump.Minions"),
+                Misc.GetMenuItem("ElLeeSin.Wardjump.Champions"));
         }
 
         #endregion
