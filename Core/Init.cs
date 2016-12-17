@@ -853,6 +853,9 @@ namespace PortAIO
                         case 9: // sAIO
                             sAIO.Program.Main();
                             break;
+                        case 10: // Flowers' Darius
+                            Flowers_Darius.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Diana:
