@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------------------------------------------------
-// <copyright file="DrawDamage.cs.cs" company="SurvivorSeriesBrand">
+// <copyright file="DrawDamage.cs" company="SurvivorSeriesBrand">
 //      Copyright (c) SurvivorSeriesBrand. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------------------------------------------------
