@@ -646,33 +646,33 @@ namespace SurvivorRyze
         private static float QGetRealDamage(Obj_AI_Base target)
         {
             if (!target.HasBuff("RyzeE"))
-                return Q.GetDamage(target);
+                return QDefaultDamage(target);
             if (((E.IsReady() && !Q.IsReady()) || (E.IsReady() && Q.IsReady()) || (!E.IsReady() && Q.IsReady())) &&
                 target.HasBuff("RyzeE"))
             {
                 switch (E.Level)
                 {
                     case 1:
-                        QRealDamage = Q.GetDamage(target)/40*100;
+                        QRealDamage = QDefaultDamage(target)/40*100;
                         break;
                     case 2:
-                        QRealDamage = Q.GetDamage(target)/55*100;
+                        QRealDamage = QDefaultDamage(target)/55*100;
                         break;
                     case 3:
-                        QRealDamage = Q.GetDamage(target)/70*100;
+                        QRealDamage = QDefaultDamage(target)/70*100;
                         break;
                     case 4:
-                        QRealDamage = Q.GetDamage(target)/85*100;
+                        QRealDamage = QDefaultDamage(target)/85*100;
                         break;
                     case 5:
-                        QRealDamage = Q.GetDamage(target)/100*100;
+                        QRealDamage = QDefaultDamage(target)/100*100;
                         break;
                 }
                 //Chat.Print("Inside V2 qRealDamage:" + QRealDamage);
                 return QRealDamage;
             }
-            //Chat.Print("Inside else at end:" + Q.GetDamage(target));
-            return Q.GetDamage(target);
+            //Chat.Print("Inside else at end:" + QDefaultDamage(target));
+            return QDefaultDamage(target);
         }
 
         private static void ComboPlusCheck()
@@ -736,13 +736,12 @@ namespace SurvivorRyze
                 }
         }
 
-        private static void ModeChanger()
+        private static float QDefaultDamage(Obj_AI_Base target)
         {
-            if (Menu.Item("ModeChangerOnLowHP").GetValue<bool>())
-                if (Player.HealthPercent < Menu.Item("ModeChangerHPToChange").GetValue<Slider>().Value)
-                {
-                    //
-                }
+            var damage = Player.CalcDamage(target, Damage.DamageType.Magical,
+                    (float)new[] { 60, 85, 110, 135, 160, 185 }[Player.GetSpell(SpellSlot.Q).Level - 1] +
+                    Player.TotalMagicalDamage / 45 * 100 + Player.Mana / 3 * 100);
+            return (float)damage;
         }
 
         private static void Combo()
@@ -757,7 +756,6 @@ namespace SurvivorRyze
             // If Target's not in Q Range or there's no target or target's invulnerable don't fuck with him
             if ((target == null) || !target.IsValidTarget(Q.Range) || target.IsInvulnerable)
                 return;
-
             switch (Menu.Item("ComboMode").GetValue<StringList>().SelectedIndex)
             {
                 case 0:
@@ -987,7 +985,7 @@ namespace SurvivorRyze
                         if (ryzeebuffed != null)
                         {
                             if ((ryzeebuffed.Health <
-                                 Q.GetDamage(ryzeebuffed) + E.GetDamage(ryzeebuffed) + Q.GetDamage(ryzeebuffed)) &&
+                                 QDefaultDamage(ryzeebuffed) + E.GetDamage(ryzeebuffed) + QDefaultDamage(ryzeebuffed)) &&
                                 ryzeebuffed.IsValidTarget(E.Range))
                             {
                                 Q.Cast(ryzeebuffed);
@@ -1000,7 +998,7 @@ namespace SurvivorRyze
                         else if (ryzeebuffed == null)
                         {
                             if ((ryzenotebuffed.Health <
-                                 Q.GetDamage(ryzenotebuffed) + E.GetDamage(ryzenotebuffed) + Q.GetDamage(ryzenotebuffed)) &&
+                                 QDefaultDamage(ryzenotebuffed) + E.GetDamage(ryzenotebuffed) + QDefaultDamage(ryzenotebuffed)) &&
                                 ryzenotebuffed.IsValidTarget(E.Range))
                             {
                                 Q.Cast(ryzenotebuffed);
@@ -1041,7 +1039,7 @@ namespace SurvivorRyze
             if (Q.IsReady() || (Player.Mana <= Q.Instance.SData.Mana + E.Instance.SData.Mana))
                 damage += QGetRealDamage(enemy);
             else if (Q.IsReady() || (Player.Mana <= Q.Instance.SData.Mana))
-                damage += Q.GetDamage(enemy);
+                damage += QDefaultDamage(enemy);
 
             if (W.IsReady() || (Player.Mana <= W.Instance.SData.Mana + W.Instance.SData.Mana))
                 damage += W.GetDamage(enemy) + W.GetDamage(enemy);
