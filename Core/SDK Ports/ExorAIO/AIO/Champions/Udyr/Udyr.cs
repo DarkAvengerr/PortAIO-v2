@@ -6,11 +6,14 @@ using LeagueSharp.SDK;
 namespace ExorAIO.Champions.Udyr
 {
     using System;
+    using System.Linq;
 
     using ExorAIO.Utilities;
 
+    using LeagueSharp;
     using LeagueSharp.SDK;
     using LeagueSharp.SDK.Enumerations;
+    using LeagueSharp.SDK.UI;
 
     /// <summary>
     ///     The champion class.
@@ -18,6 +21,34 @@ namespace ExorAIO.Champions.Udyr
     internal class Udyr
     {
         #region Public Methods and Operators
+
+        /// <summary>
+        ///     Called when a <see cref="AttackableUnit" /> takes/gives damage.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="args">The <see cref="AttackableUnitDamageEventArgs" /> instance containing the event data.</param>
+        public static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (Vars.W.IsReady() && Vars.Menu["spells"]["w"]["logical"].GetValue<MenuBool>().Value)
+            {
+                if (sender is AIHeroClient || sender is Obj_AI_Turret
+                    || GameObjects.Jungle.Any(
+                        m =>
+                        m.BaseSkinName == sender.BaseSkinName
+                        && GameObjects.JungleSmall.All(m2 => m2.BaseSkinName != sender.BaseSkinName)))
+                {
+                    if (args.SData.Name.Equals("GangplankE"))
+                    {
+                        return;
+                    }
+
+                    if (args.Target != null && args.Target.IsMe)
+                    {
+                        Vars.W.Cast();
+                    }
+                }
+            }
+        }
 
         /// <summary>
         ///     Fired when the game is updated.

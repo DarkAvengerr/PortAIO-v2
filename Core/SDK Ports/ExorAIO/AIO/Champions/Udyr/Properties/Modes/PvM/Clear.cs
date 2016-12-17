@@ -59,18 +59,6 @@ namespace ExorAIO.Champions.Udyr
             }
 
             /// <summary>
-            ///     The W Clear Logic.
-            /// </summary>
-            if (Vars.W.IsReady()
-                && GameObjects.Player.HealthPercent
-                < Vars.Menu["spells"]["w"]["clear"].GetValue<MenuSliderButton>().SValue
-                && Vars.Menu["spells"]["w"]["clear"].GetValue<MenuSliderButton>().BValue)
-            {
-                Vars.W.Cast();
-                return;
-            }
-
-            /// <summary>
             ///     The JungleClear Logic.
             /// </summary>
             if (Targets.JungleMinions.Any())
@@ -90,32 +78,27 @@ namespace ExorAIO.Champions.Udyr
                         Vars.E.Cast();
                     }
                 }
-                if (GameObjects.Player.HasBuff("itemmagicshankcharge")
-                    || GameObjects.Player.Spellbook.GetSpell(SpellSlot.Q).Level == 0)
+
+                /// <summary>
+                ///     The R JungleClear Logic.
+                /// </summary>
+                if (Vars.R.IsReady()
+                    && GameObjects.Player.ManaPercent
+                    >= ManaManager.GetNeededHealth(Vars.R.Slot, Vars.Menu["spells"]["r"]["jungleclear"])
+                    && Vars.Menu["spells"]["r"]["jungleclear"].GetValue<MenuSliderButton>().BValue)
                 {
-                    /// <summary>
-                    ///     The R JungleClear Logic.
-                    /// </summary>
-                    if (Vars.R.IsReady() && GameObjects.Player.GetBuffCount("UdyrPhoenixStance") != 3
-                        && GameObjects.Player.ManaPercent
-                        >= ManaManager.GetNeededHealth(Vars.R.Slot, Vars.Menu["spells"]["r"]["clear"])
-                        && Vars.Menu["spells"]["r"]["clear"].GetValue<MenuSliderButton>().BValue)
-                    {
-                        Vars.R.Cast();
-                    }
+                    Vars.R.Cast();
                 }
-                else
+
+                /// <summary>
+                ///     The Q JungleClear Logic.
+                /// </summary>
+                else if (Vars.Q.IsReady()
+                         && GameObjects.Player.ManaPercent
+                         >= ManaManager.GetNeededHealth(Vars.Q.Slot, Vars.Menu["spells"]["q"]["jungleclear"])
+                         && Vars.Menu["spells"]["q"]["jungleclear"].GetValue<MenuSliderButton>().BValue)
                 {
-                    /// <summary>
-                    ///     The Q JungleClear Logic.
-                    /// </summary>
-                    if (Vars.Q.IsReady()
-                        && GameObjects.Player.ManaPercent
-                        >= ManaManager.GetNeededHealth(Vars.Q.Slot, Vars.Menu["spells"]["q"]["clear"])
-                        && Vars.Menu["spells"]["q"]["clear"].GetValue<MenuSliderButton>().BValue)
-                    {
-                        Vars.Q.Cast();
-                    }
+                    Vars.Q.Cast();
                 }
             }
 
@@ -126,8 +109,8 @@ namespace ExorAIO.Champions.Udyr
             {
                 if (Vars.R.IsReady() && GameObjects.Player.GetBuffCount("UdyrPhoenixStance") != 3
                     && GameObjects.Player.ManaPercent
-                    >= ManaManager.GetNeededHealth(Vars.R.Slot, Vars.Menu["spells"]["r"]["clear"])
-                    && Vars.Menu["spells"]["r"]["clear"].GetValue<MenuSliderButton>().BValue)
+                    >= ManaManager.GetNeededHealth(Vars.R.Slot, Vars.Menu["spells"]["r"]["laneclear"])
+                    && Vars.Menu["spells"]["r"]["laneclear"].GetValue<MenuSliderButton>().BValue)
                 {
                     Vars.R.Cast();
                 }

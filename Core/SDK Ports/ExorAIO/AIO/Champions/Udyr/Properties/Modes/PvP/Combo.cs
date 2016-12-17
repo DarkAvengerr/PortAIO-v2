@@ -42,7 +42,9 @@ namespace ExorAIO.Champions.Udyr
             {
                 Vars.E.Cast();
             }
-            if (!Targets.Target.HasBuff("udyrbearstuncheck"))
+
+            var target = (AIHeroClient)Variables.Orbwalker.GetTarget();
+            if (target == null || !target.HasBuff("udyrbearstuncheck"))
             {
                 return;
             }
@@ -50,25 +52,17 @@ namespace ExorAIO.Champions.Udyr
             /// <summary>
             ///     The R Combo Logic.
             /// </summary>
-            if (GameObjects.Player.HasBuff("itemmagicshankcharge")
-                || GameObjects.Player.Spellbook.GetSpell(SpellSlot.Q).Level == 0)
+            if (Vars.R.IsReady() && Vars.Menu["spells"]["r"]["combo"].GetValue<MenuBool>().Value)
             {
-                if (Vars.R.IsReady() && GameObjects.Player.GetBuffCount("UdyrPhoenixStance") != 3
-                    && Vars.Menu["spells"]["r"]["combo"].GetValue<MenuBool>().Value)
-                {
-                    Vars.R.Cast();
-                }
+                Vars.R.Cast();
             }
 
             /// <summary>
             ///     The Q Combo Logic.
             /// </summary>
-            else
+            else if (Vars.Q.IsReady() && Vars.Menu["spells"]["q"]["combo"].GetValue<MenuBool>().Value)
             {
-                if (Vars.Q.IsReady() && Vars.Menu["spells"]["q"]["combo"].GetValue<MenuBool>().Value)
-                {
-                    Vars.Q.Cast();
-                }
+                Vars.Q.Cast();
             }
         }
 
