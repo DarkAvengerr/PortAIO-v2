@@ -1442,6 +1442,7 @@
     <Compile Include="Core\Champion Ports\Katarina\ElKatarinaDecentralized\Utils\FleeManager.cs" />
     <Compile Include="Core\Champion Ports\Katarina\ElKatarinaDecentralized\Utils\Logging.cs" />
     <Compile Include="Core\Champion Ports\Katarina\ElKatarinaDecentralized\Utils\Misc.cs" />
+    <Compile Include="Core\Champion Ports\Kayle\KillaryClintonKalye\Program.cs" />
     <Compile Include="Core\Champion Ports\Kennen\Hestia%27s Kennen\Champion\Kennen.cs" />
     <Compile Include="Core\Champion Ports\Kennen\Hestia%27s Kennen\Core\Configs.cs" />
     <Compile Include="Core\Champion Ports\Kennen\Hestia%27s Kennen\Core\Drawings.cs" />

@@ -1846,6 +1846,9 @@ namespace PortAIO
                         case 7: // Roach's Kayle
                             RoachKayle.Program.Main();
                             break;
+                        case 8: //KillaryClintonKalye
+                            kck.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Kennen:

@@ -181,7 +181,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "Staberina", "ElEasy", "ElSmartKatarina", "xSalice", "e.Motion Katarina", "EasyCarry Katarina", "JustKatarina", "sKatarina", "SluttyKatarina", "sAIO", "ElKatarinaDecentralized", "BadaoKingdom", "mySeries" };
                     break;
                 case EloBuddy.Champion.Kayle:
-                    champ = new string[] { "SephKayle", "BrianSharp", "D-Kayle", "OKTW", "[SDK] ChallengerSeriesAIO", "Hikicarry Kayle", "LeKayle", "Roach's Kayle" };
+                    champ = new string[] { "SephKayle", "BrianSharp", "D-Kayle", "OKTW", "[SDK] ChallengerSeriesAIO", "Hikicarry Kayle", "LeKayle", "Roach's Kayle", "KillaryClintonKalye" };
                     break;
                 case EloBuddy.Champion.Kennen:
                     champ = new string[] { "UnderratedAIO", "BrianSharp", "Hestia's Kennen", "[SDK] Valvrave#" };
