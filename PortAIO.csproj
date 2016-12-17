@@ -1600,6 +1600,8 @@
     <Compile Include="Core\Champion Ports\Riven\NechritoRiven\Load.cs" />
     <Compile Include="Core\Champion Ports\Riven\NechritoRiven\MenuConfig.cs" />
     <Compile Include="Core\Champion Ports\Riven\NechritoRiven\Program.cs" />
+    <Compile Include="Core\Champion Ports\Rumble\SSRumble\DrawDamage.cs" />
+    <Compile Include="Core\Champion Ports\Rumble\SSRumble\Program.cs" />
     <Compile Include="Core\Champion Ports\Syndra\Lord%27s Syndra\Drawings.cs" />
     <Compile Include="Core\Champion Ports\Syndra\Lord%27s Syndra\GetDamage.cs" />
     <Compile Include="Core\Champion Ports\Syndra\Lord%27s Syndra\OrbManager.cs" />

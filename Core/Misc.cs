@@ -287,7 +287,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "KurisuRiven", "Hoola Riven", "SAutoCarry", "Nechrito Riven", "[SDK] Flowers' Series", "[SDK] ReforgedRiven", "EasyPeasyRivenSqueezy", "EloFactory Riven", "Flowers' Riven", "HeavenStrikeRiven", "RivenSharpV2", "yol0Riven", "RivenToTheChallenger" };
                     break;
                 case EloBuddy.Champion.Rumble:
-                    champ = new string[] { "UnderratedAIO", "xSalice", "ElRumble" };
+                    champ = new string[] { "UnderratedAIO", "xSalice", "ElRumble", "SurvivorSeries Rumble" };
                     break;
                 case EloBuddy.Champion.Ryze:
                     champ = new string[] { "[SA] SurvivorSeries", "BrianSharp", "FreshBooster", "Sharpshooter", "StonedSeries AIO", "[SDK] ArcaneRyze", "[SDK] EvictRyze", "[SDK] ExorAIO", "[SDK] Flowers' Series", "BurstRyze", "HeavenStrikeRyze", "JustRyze", "Ryze#", "SluttyRyze", "TRUSt in my Ryze", "sAIO", "SurvivorSeriesAIO", "mySeries" };

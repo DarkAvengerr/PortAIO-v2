@@ -2696,6 +2696,9 @@ namespace PortAIO
                         case 2: // ElRumble
                             ElRumble.Program.Main();
                             break;
+                        case 3: // SurvivorSeries Rumble
+                            SSRumble.SSRumbleInit.Main();
+                            break;
                     }
                     break;
                 case Champion.Ryze:
