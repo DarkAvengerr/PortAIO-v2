@@ -281,15 +281,15 @@ namespace DesomondGalio
 
             if (Menu.Item("DrawQ").GetValue<bool>())
             {
-                Render.Circle.DrawCircle(Player.Position, Q.Range, Menu.SubMenu("Drawing").Item("drawQRange").GetValue<Circle>().Color);
+                Render.Circle.DrawCircle(Player.Position, Q.Range, Menu.SubMenu("Drawing").Item("DrawQ").GetValue<Circle>().Color);
             }
             if (Menu.Item("DrawE").GetValue<bool>())
             {
-                Render.Circle.DrawCircle(Player.Position, E.Range, Menu.SubMenu("Drawing").Item("drawERange").GetValue<Circle>().Color);
+                Render.Circle.DrawCircle(Player.Position, E.Range, Menu.SubMenu("Drawing").Item("DrawE").GetValue<Circle>().Color);
             }
             if (Menu.Item("DrawR").GetValue<bool>() && Player.Level >= 6)
             {
-                Render.Circle.DrawCircle(ObjectManager.Player.Position, R.Range, Menu.SubMenu("Drawing").Item("drawRRange").GetValue<Circle>().Color);
+                Render.Circle.DrawCircle(ObjectManager.Player.Position, R.Range, Menu.SubMenu("Drawing").Item("DrawR").GetValue<Circle>().Color);
             }
         }
     }

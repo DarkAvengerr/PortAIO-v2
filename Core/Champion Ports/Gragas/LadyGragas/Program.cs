@@ -6,9 +6,9 @@ using LeagueSharp.Common;
 using SharpDX;
 using Color = System.Drawing.Color;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace LadyGragas
+using EloBuddy;
+using LeagueSharp.Common;
+namespace LadyGragas
 {
     internal class Program
     {
@@ -101,7 +101,7 @@ using EloBuddy;
             Config.SubMenu("Gragas: Draw Settings")
                 .AddItem(new MenuItem("Draw Insec Position", "Draw Insec Position").SetValue(true));
             Config.SubMenu("Gragas: Draw Settings")
-                .AddItem(new MenuItem("Draw_Disabled", "Disable All Spell Drawings").SetValue(false));         
+                .AddItem(new MenuItem("Draw_Disabled", "Disable All Spell Drawings").SetValue(false));
             Config.SubMenu("Gragas: Draw Settings")
                 .AddItem(new MenuItem("Qdraw", "Draw Q Range").SetValue(new Circle(true, Color.Orange)));
             Config.SubMenu("Gragas: Draw Settings")
@@ -158,12 +158,14 @@ using EloBuddy;
             var epos = Drawing.WorldToScreen(starget.Position);
 
             if (Config.Item("Draw Insec Position").GetValue<bool>() && R.IsReady() && starget.IsValidTarget(R.Range) && R.Level > 0)
+                Drawing.DrawText(epos.X, epos.Y, Color.DarkSeaGreen, "Insec Target");
 
-            Drawing.DrawText(epos.X, epos.Y, Color.DarkSeaGreen, "Insec Target");
             if (Config.Item("Draw Insec Position").GetValue<bool>() && R.IsReady() && starget.IsValidTarget(R.Range) && R.Level > 0)
-            Render.Circle.DrawCircle(target.Position, 150, Color.LightSeaGreen);
+                Render.Circle.DrawCircle(target.Position, 150, Color.LightSeaGreen);
+
             if (Config.Item("Draw Insec Position").GetValue<bool>() && R.IsReady() && starget.IsValidTarget(R.Range) && R.Level > 0)
-            insecpos = player.Position.Extend(target.Position, player.Distance(target) + 150);
+                insecpos = player.Position.Extend(target.Position, player.Distance(target) + 150);
+
             Render.Circle.DrawCircle(insecpos, 100, Color.GreenYellow);
         }
 
@@ -181,7 +183,7 @@ using EloBuddy;
             if (R.IsReady() && sender.IsValidTarget(R.Range) && Config.Item("interrupt").GetValue<bool>())
                 R.CastIfHitchanceEquals(sender, HitChance.High);
             if (E.IsReady() && sender.IsValidTarget(E.Range) && Config.Item("interrupt").GetValue<bool>())
-                E.CastIfHitchanceEquals(sender, HitChance.High);       
+                E.CastIfHitchanceEquals(sender, HitChance.High);
         }
 
         private static void GragasBarrelNull(GameObject sender, EventArgs args) //BARREL LOCATION - GONE
@@ -268,9 +270,9 @@ using EloBuddy;
             {
                 E.Cast(target.ServerPosition);
                 Q.Cast(target.ServerPosition);
-            
-                    
-                
+
+
+
             }
         }
 
@@ -291,10 +293,10 @@ using EloBuddy;
 
             }
         }
-    
-    
 
-            private static bool IsWall(Vector3 pos)
+
+
+        private static bool IsWall(Vector3 pos)
         {
             CollisionFlags cFlags = NavMesh.GetCollisionFlags(pos);
             return (cFlags == CollisionFlags.Wall);
@@ -304,8 +306,8 @@ using EloBuddy;
 
 
 
-            private static
-            void Game_OnGameUpdate(EventArgs args)
+        private static
+        void Game_OnGameUpdate(EventArgs args)
         {
             var target = TargetSelector.GetTarget(1500, TargetSelector.DamageType.Magical);
             if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
@@ -330,7 +332,7 @@ using EloBuddy;
 
             if (Barrel.Position.CountEnemiesInRange(275) >= 1)
                 Q.Cast();
- 
+
 
         }
 
@@ -415,7 +417,7 @@ using EloBuddy;
             {
                 damage += Q.GetDamage(target);
             }
-            return (int) damage;
+            return (int)damage;
         }
 
 
@@ -442,16 +444,16 @@ using EloBuddy;
 
                 if (Config.Item("UseQ").GetValue<bool>() && target.IsValidTarget(E.Range + 100) && Q.IsReady())
                 {
-                    damage += Q.GetDamage(target)*1;
+                    damage += Q.GetDamage(target) * 1;
                 }
-                return (int) damage;
+                return (int)damage;
             }
             return 0;
         }
 
         private static void Qcast()
         {
-            
+
         }
         private static void Combo()
         {
@@ -461,7 +463,7 @@ using EloBuddy;
 
             var prediction = Q.GetPrediction(target);
 
-            if (prediction.Hitchance >= HitChance.High 
+            if (prediction.Hitchance >= HitChance.High
                 && Q.IsReady() && Config.Item("UseQ").GetValue<bool>() && target.IsValidTarget(Q.Range) && Barrel == null)
                 Q.Cast(target);
 
@@ -501,9 +503,9 @@ using EloBuddy;
         private static void Overkill()
         {
             var target = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
-  
+
             if (R.IsReady() && Config.Item("UseR").GetValue<bool>() && target.IsValidTarget(R.Range) &&
-                     R.GetDamage(target) >= target.Health && overkill(target) <= target.Health) 
+                     R.GetDamage(target) >= target.Health && overkill(target) <= target.Health)
 
                 R.Cast(target.ServerPosition);
         }
@@ -556,7 +558,7 @@ using EloBuddy;
                 {
                     E.Cast(minion.Position);
                 }
-                foreach (var minion in jungleE)
+            foreach (var minion in jungleE)
                 if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && minion.IsValidTarget(E.Range) &&
                     Ejunglepos.MinionsHit >= 1 && jungleE.Count >= 1 && Config.Item("jungleE").GetValue<bool>()
                     && player.ManaPercentage() >= junglemana)

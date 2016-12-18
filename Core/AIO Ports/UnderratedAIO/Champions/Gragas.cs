@@ -283,10 +283,12 @@ using LeagueSharp.Common;
                 HeroManager.Enemies.Where(e => e.Distance(savedQ.position) < QExplosionRange && e.IsValidTarget())
                     .OrderByDescending(e => e.Distance(savedQ.position))
                     .FirstOrDefault();
+
             if (targethero == null)
             {
                 return;
             }
+
             if (savedQ.deltaT() < 2000 &&
                 Prediction.GetPrediction(targethero, 0.1f).UnitPosition.Distance(savedQ.position) < QExplosionRange &&
                 HeroManager.Enemies.Count(

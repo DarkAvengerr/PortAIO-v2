@@ -9,15 +9,15 @@ using System.Threading;
 using SharpDX;
 
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Original_Gragas
+using EloBuddy;
+using LeagueSharp.Common;
+namespace Original_Gragas
 {
     class Program
     {
         public static Orbwalking.Orbwalker orbwalker;
         public static Menu menu;
-        public static Menu R_Insec, R_Barrel,  Q_LANECLEAR, Q_Auto, E_Menu, barrel, Ult, W_Menu;
+        public static Menu R_Insec, R_Barrel, Q_LANECLEAR, Q_Auto, E_Menu, barrel, Ult, W_Menu;
 
         public static void Main()
         {
@@ -26,7 +26,7 @@ using EloBuddy;
 
         static void Game_OnGameLoad()
         {
-            
+
             menu = new Menu("Original Gragas", "menu", true);
 
             Menu TargetMenu = menu.AddSubMenu(new Menu("Target Selector", "ts"));
@@ -82,11 +82,11 @@ using EloBuddy;
             R_Insec.AddItem(new MenuItem("force_key", "Force insec key").SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press)));
             R_Insec.AddItem(new MenuItem("focus_unit", "Force insec unit").SetValue(new StringList(list.ToArray(), 0)));
             R_Insec.AddItem(new MenuItem("barrel_use", "Do ult barrel in combo").SetValue(true));
-            
+
             R_Barrel = Ult.AddSubMenu(new Menu("Q -> R combo settings", "R_Barrel"));
             R_Barrel.AddItem(new MenuItem("focus_unit", "Force windygragas combo unit").SetValue(new StringList(list.ToArray(), 0)));
             R_Barrel.AddItem(new MenuItem("auto_combo", "Automatically perform combo if will kill").SetValue(true));
-            
+
             menu.AddToMainMenu();
 
             Game.OnUpdate += OnUpdate;
@@ -110,40 +110,17 @@ using EloBuddy;
 
         private static void OnCreateObj(GameObject sender, EventArgs args)
         {
-            if (!sender.IsValid || sender == null)
+            if (sender.Name == "Gragas_Base_Q_Ally.troy")
             {
-                return;
-            }
-
-            var missile = sender as MissileClient;
-            
-            if (!missile.IsValid || missile == null || missile.SpellCaster == null)
-            {
-                return;
-            }
-
-            var unit = missile.SpellCaster as AIHeroClient;
-
-            if (unit == null || missile.SData == null || !unit.IsValid)
-            {
-                return;
-            }
-
-            if (unit.IsValid && (unit.IsMe) && missile.SData.Name == "GragasQMissile")
-            {
-                Q.qPosition = missile.EndPosition;
+                Q.qPosition = sender.Position;
             }
         }
 
         private static void OnDeleteObj(GameObject sender, EventArgs args)
         {
-
-            if (sender.Position.Distance(HeroManager.Player.Position) <= 1000)
+            if (sender.Name == "Gragas_Base_Q_Ally.troy")
             {
-                if (sender.Name == "Gragas_Base_Q_Ally.troy")
-                {
-                    Q.qPosition = new Vector3(0, 0, 0);
-                }
+                Q.qPosition = new Vector3(0, 0, 0);
             }
         }
 

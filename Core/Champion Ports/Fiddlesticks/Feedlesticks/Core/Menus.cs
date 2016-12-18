@@ -76,8 +76,8 @@ namespace Feedlesticks.Core
                     eMenu.AddSubMenu(eWhite);
 
                     eMenu.AddItem(new MenuItem("e.enemy.count", "(E) Min. Enemy").SetValue(new Slider(2, 1, 5)));
-                    eMenu.AddItem(new MenuItem("auto.e.enemy.immobile", "Auto (E) If Enemy Immobile").SetValue(true));
-                    eMenu.AddItem(new MenuItem("auto.e.enemy.channeling", "Auto (E) If Enemy Casting Channeling Spell").SetValue(true));
+                    eMenu.AddItem(new MenuItem("auto.e.immobile", "Auto (E) If Enemy Immobile").SetValue(true));
+                    eMenu.AddItem(new MenuItem("auto.e.channeling", "Auto (E) If Enemy Casting Channeling Spell").SetValue(true));
                     Config.AddSubMenu(eMenu);
                 }
 

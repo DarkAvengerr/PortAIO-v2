@@ -15,7 +15,7 @@ namespace Feedlesticks
         /// <summary>
         /// Fiddle (easy)
         /// </summary>
-        public static readonly AIHeroClient FiddleStick = ObjectManager.Player;
+        public static AIHeroClient FiddleStick = ObjectManager.Player;
 
         /// <summary>
         /// OnLoad section
@@ -23,6 +23,7 @@ namespace Feedlesticks
         /// <param name="args"></param>
         public static void Game_OnGameLoad()
         {
+            FiddleStick = ObjectManager.Player;
             Menus.Config = new Menu("Feedlestick", "Feedlestick", true);
             {
                 Spells.Init();
@@ -30,11 +31,43 @@ namespace Feedlesticks
                 Menus.Init();
             }
 
-            Spellbook.OnCastSpell += Spellbook_OnCastSpell;
-            Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += Spellbook_OnCastSpell;
             Game.OnUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += OnDraw;
+            Player.OnIssueOrder += Obj_AI_Base_OnIssueOrder;
+            Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
+            Obj_AI_Base.OnBuffLose += OnBuffLose;
+            Spellbook.OnCastSpell += Spellbook_OnCastSpell1;
         }
+
+        private static void Spellbook_OnCastSpell1(Spellbook sender, SpellbookCastSpellEventArgs args)
+        {
+            if (sender.Owner.IsMe && IsWActive)
+            {
+                args.Process = false;
+            }
+        }
+
+        private static void Orbwalking_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
+        {
+            if (IsWActive)
+                args.Process = false;
+        }
+
+        private static bool IsWActive
+        {
+            get
+            {
+                return Player.HasBuff("Drain") || Spells.W.IsChanneling || Player.Instance.Spellbook.IsChanneling;
+            }
+        }
+
+        private static void Obj_AI_Base_OnIssueOrder(Obj_AI_Base sender, PlayerIssueOrderEventArgs args)
+        {
+           // if (IsWActive)
+                //args.Process = false;
+        }
+
         /// <summary>
         /// Drawing Stuff
         /// </summary>
@@ -47,7 +80,7 @@ namespace Feedlesticks
             }
             if (Spells.Q.IsReady() && Helper.Active("q.draw"))
             {
-                Helper.Circle("q.draw",Spells.Q.Range);
+                Helper.Circle("q.draw", Spells.Q.Range);
             }
             if (Spells.W.IsReady() && Helper.Active("w.draw"))
             {
@@ -62,24 +95,30 @@ namespace Feedlesticks
                 Helper.Circle("r.draw", Spells.R.Range);
             }
         }
-        /// <summary>
-        ///  Process spell cast. thats need for last w game time
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        private static void OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
-        {
-            Helper.OnProcessSpellCast(sender, args);
-        }
+
         /// <summary>
         /// W lock
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="args"></param>
-        private static void Spellbook_OnCastSpell(Spellbook sender, SpellbookCastSpellEventArgs args)
+        private static void Spellbook_OnCastSpell(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            Helper.Spellbook_OnCastSpell(sender, args);
+            if (sender.IsMe && args.SData.Name == "Drain")
+            {
+                Menus.Orbwalker.SetAttack(false);
+                Menus.Orbwalker.SetAttack(false);
+            }
         }
+
+        private static void OnBuffLose(Obj_AI_Base sender, Obj_AI_BaseBuffLoseEventArgs args)
+        {
+            if (sender.IsMe && args.Buff.DisplayName == "Drain")
+            {
+                Menus.Orbwalker.SetAttack(true);
+                Menus.Orbwalker.SetAttack(true);
+            }
+        }
+
         /// <summary>
         /// Combo stuff and immobile stuff
         /// </summary>
@@ -91,59 +130,72 @@ namespace Feedlesticks
                 return;
             }
 
-            switch (Menus.Orbwalker.ActiveMode)
+            if (IsWActive)
             {
-                case Orbwalking.OrbwalkingMode.Combo:
-                    Combo();
-                    break;
-                case Orbwalking.OrbwalkingMode.Mixed:
-                    Harass();
-                    break;
-                case Orbwalking.OrbwalkingMode.LaneClear:
-                    Jungle();
-                    WaveClear();
-                    
-                    break;
-                
+                Menus.Orbwalker.SetAttack(false);
+                Menus.Orbwalker.SetMovement(false);
             }
-            if (Helper.Enabled("auto.q.immobile"))
+            else
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.Q.Range) && Helper.Enabled("q.enemy." + x.ChampionName) && Helper.IsEnemyImmobile(x)))
+                Menus.Orbwalker.SetAttack(true);
+                Menus.Orbwalker.SetMovement(true);
+                switch (Menus.Orbwalker.ActiveMode)
                 {
-                    Spells.Q.Cast(enemy);
+                    case Orbwalking.OrbwalkingMode.Combo:
+                        Combo();
+                        break;
+                    case Orbwalking.OrbwalkingMode.Mixed:
+                        Harass();
+                        break;
+                    case Orbwalking.OrbwalkingMode.LaneClear:
+                        Jungle();
+                        WaveClear();
+
+                        break;
+
+                }
+
+                if (Helper.Enabled("auto.q.immobile"))
+                {
+                    foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.Q.Range) && Helper.Enabled("q.enemy." + x.ChampionName) && Helper.IsEnemyImmobile(x)))
+                    {
+                        Spells.Q.Cast(enemy);
+                    }
+                }
+                if (Helper.Enabled("auto.q.channeling"))
+                {
+                    foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.Q.Range) && Helper.Enabled("q.enemy." + x.ChampionName) && x.IsChannelingImportantSpell()))
+                    {
+                        Spells.Q.Cast(enemy);
+                    }
+                }
+                if (Helper.Enabled("auto.e.immobile"))
+                {
+                    foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.E.Range) && Helper.Enabled("e.enemy." + x.ChampionName) && Helper.IsEnemyImmobile(x)))
+                    {
+                        Spells.E.Cast(enemy);
+                    }
+                }
+                if (Helper.Enabled("auto.e.channeling"))
+                {
+                    foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.E.Range) && Helper.Enabled("e.enemy." + x.ChampionName) && x.IsChannelingImportantSpell()))
+                    {
+                        Spells.E.Cast(enemy);
+                    }
                 }
             }
-            if (Helper.Enabled("auto.q.channeling"))
-            {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.Q.Range) && Helper.Enabled("q.enemy." + x.ChampionName) && x.IsChannelingImportantSpell()))
-                {
-                    Spells.Q.Cast(enemy);
-                }
-            }
-            if (Helper.Enabled("auto.e.immobile"))
-            {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.E.Range) && Helper.Enabled("e.enemy." + x.ChampionName) && Helper.IsEnemyImmobile(x)))
-                {
-                    Spells.E.Cast(enemy);
-                }
-            }
-            if (Helper.Enabled("auto.e.channeling"))
-            {
-                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Spells.E.Range) && Helper.Enabled("e.enemy." + x.ChampionName) && x.IsChannelingImportantSpell()))
-                {
-                    Spells.E.Cast(enemy);
-                }
-            } 
         }
 
         private static void Harass()
         {
+            if (IsWActive)
+                return;
             if (ObjectManager.Player.ManaPercent < Helper.Slider("harass.mana"))
             {
                 return;
             }
 
-            if (Spells.Q.IsReady() && Helper.Enabled("q.harass"))
+            if (Spells.Q.IsReady() && Helper.Enabled("q.harass") && !IsWActive)
             {
                 foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(Spells.Q.Range) && !o.IsDead && !o.IsZombie))
                 {
@@ -153,7 +205,7 @@ namespace Feedlesticks
                     }
                 }
             }
-            if (Spells.E.IsReady() && Helper.Enabled("e.harass"))
+            if (Spells.E.IsReady() && Helper.Enabled("e.harass") && !IsWActive)
             {
                 foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(Spells.E.Range) && !o.IsDead && !o.IsZombie))
                 {
@@ -167,6 +219,8 @@ namespace Feedlesticks
 
         private static void Jungle()
         {
+            if (IsWActive)
+                return;
             if (ObjectManager.Player.ManaPercent < Helper.Slider("jungle.mana"))
             {
                 return;
@@ -175,7 +229,7 @@ namespace Feedlesticks
             var mob = MinionManager.GetMinions(ObjectManager.Player.ServerPosition, Spells.Q.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth);
             if (mob.Count > 0)
             {
-                if (Spells.Q.IsReady() && Helper.Enabled("q.jungle"))
+                if (Spells.Q.IsReady() && Helper.Enabled("q.jungle") && !IsWActive)
                 {
                     Spells.Q.CastOnUnit(mob[0]);
                 }
@@ -183,11 +237,11 @@ namespace Feedlesticks
                 {
                     Spells.W.CastOnUnit(mob[0]);
                 }
-                if (Spells.E.IsReady() && Helper.Enabled("e.jungle"))
+                if (Spells.E.IsReady() && Helper.Enabled("e.jungle") && !IsWActive)
                 {
                     Spells.E.CastOnUnit(mob[0]);
                 }
-                
+
             }
         }
         /// <summary>
@@ -195,11 +249,13 @@ namespace Feedlesticks
         /// </summary>
         private static void Combo()
         {
-            if (Spells.Q.IsReady() && Helper.Enabled("q.combo"))
+            if (IsWActive)
+                return;
+            if (Spells.Q.IsReady() && Helper.Enabled("q.combo") && !IsWActive)
             {
-                foreach (var enemy in HeroManager.Enemies.Where(o=> o.IsValidTarget(Spells.Q.Range) && !o.IsDead && !o.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(Spells.Q.Range) && !o.IsDead && !o.IsZombie))
                 {
-                    if (Helper.Enabled("q.enemy."+enemy.ChampionName))
+                    if (Helper.Enabled("q.enemy." + enemy.ChampionName))
                     {
                         Spells.Q.CastOnUnit(enemy);
                     }
@@ -207,17 +263,17 @@ namespace Feedlesticks
             }
             if (Spells.W.IsReady() && Helper.Enabled("w.combo"))
             {
-                foreach (var enemy in HeroManager.Enemies.Where(o=> o.IsValidTarget(Spells.W.Range) && !o.IsDead && !o.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(Spells.W.Range) && !o.IsDead && !o.IsZombie))
                 {
-                    if (Helper.Enabled("w.enemy."+enemy.ChampionName))
+                    if (Helper.Enabled("w.enemy." + enemy.ChampionName))
                     {
                         Spells.W.CastOnUnit(enemy);
                     }
                 }
             }
-            if (Spells.E.IsReady() && Helper.Enabled("e.combo"))
+            if (Spells.E.IsReady() && Helper.Enabled("e.combo") && !IsWActive)
             {
-                foreach (var enemy in HeroManager.Enemies.Where(o=> o.IsValidTarget(Spells.E.Range) && !o.IsDead && !o.IsZombie))
+                foreach (var enemy in HeroManager.Enemies.Where(o => o.IsValidTarget(Spells.E.Range) && !o.IsDead && !o.IsZombie))
                 {
                     if (Helper.Enabled("e.enemy." + enemy.ChampionName) && enemy.CountEnemiesInRange(Spells.E.Range) >= Helper.Slider("e.enemy.count"))
                     {
@@ -231,13 +287,15 @@ namespace Feedlesticks
         /// </summary>
         private static void WaveClear()
         {
+            if (IsWActive)
+                return;
             if (ObjectManager.Player.ManaPercent < Helper.Slider("clear.mana"))
             {
                 return;
             }
 
             var min = MinionManager.GetMinions(ObjectManager.Player.Position, Spells.Q.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.MaxHealth);
-            if (Spells.E.IsReady() && Helper.Enabled("e.clear"))
+            if (Spells.E.IsReady() && Helper.Enabled("e.clear") && !IsWActive)
             {
                 if (min.Count > Helper.Slider("e.minion.hit.count"))
                 {
@@ -248,7 +306,7 @@ namespace Feedlesticks
             {
                 Spells.W.CastOnUnit(min[0]);
             }
-            
+
         }
 
     }

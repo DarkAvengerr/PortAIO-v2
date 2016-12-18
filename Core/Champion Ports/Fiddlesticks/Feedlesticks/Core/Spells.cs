@@ -12,10 +12,6 @@ namespace Feedlesticks.Core
     class Spells
     {
         /// <summary>
-        /// last w game time
-        /// </summary>
-        public static float LastW;
-        /// <summary>
         /// Spells
         /// </summary>
         public static Spell Q, W, E, R;
@@ -48,11 +44,6 @@ namespace Feedlesticks.Core
             {
                 return Q.IsReady() && W.IsReady() && E.IsReady() && R.IsReady();
             }
-        }
-
-        public static bool Wable 
-        {
-            get { return Game.Time - LastW > 2; }
         }
         
         /// <summary>

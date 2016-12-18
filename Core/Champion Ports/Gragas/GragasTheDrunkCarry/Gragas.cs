@@ -108,66 +108,61 @@ namespace GragasTheDrunkCarry
 
         static void Game_OnUpdate(EventArgs args)
         {
-            var vTarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-            var target = Orbwalker.GetTarget() as AIHeroClient;
             if (Config.Item("JF").GetValue<KeyBind>().Active)
             {
                 JungleFarm();
             }
+
             if (Config.Item("WF").GetValue<KeyBind>().Active)
             {
                 WaveClear();
             }
+
             if (Orbwalker.ActiveMode.ToString().ToLower() == "combo")
             {
-
-                if (Config.Item("UseQ").GetValue<bool>() && Q.IsReady() && ((Environment.TickCount - LastMove) > 50))
+                var vTarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
+                if (vTarget != null)
                 {
-                    Qcast(vTarget);
-                    LastMove = Environment.TickCount;
+                    if (Config.Item("UseQ").GetValue<bool>() && Q.IsReady() && ((Environment.TickCount - LastMove) > 50))
+                    {
+                        Qcast(vTarget);
+                        LastMove = Environment.TickCount;
+                    }
+                    if (E.IsReady() && Player.Distance(vTarget) <= E.Range && Config.Item("UseE").GetValue<bool>() && ((Environment.TickCount - LastMove) > 50))
+                    {
+                        E.Cast(vTarget, true);
+                        LastMove = Environment.TickCount;
+                    }
+
+                    if (Config.Item("UseW").GetValue<bool>() && W.IsReady() && ((Environment.TickCount - LastMove) > 50))
+                    {
+                        W.Cast();
+                        LastMove = Environment.TickCount;
+                    }
+
+                    if (Config.Item("UseR").GetValue<bool>() && R.IsReady() && GetCDamage(vTarget) >= vTarget.Health && ((Environment.TickCount - LastMove) > 50))
+                    {
+                        R.Cast(vTarget);
+                        LastMove = Environment.TickCount;
+                    }
                 }
-
-
-                if (E.IsReady() && Player.Distance(vTarget) <= E.Range && Config.Item("UseE").GetValue<bool>() && ((Environment.TickCount - LastMove) > 50))
-                {
-                    E.Cast(vTarget, true);
-                    LastMove = Environment.TickCount;
-                }
-
-                if (Config.Item("UseW").GetValue<bool>() && W.IsReady() && ((Environment.TickCount - LastMove) > 50))
-                {
-                    W.Cast();
-                    LastMove = Environment.TickCount;
-                }
-
-                if (Config.Item("UseR").GetValue<bool>() && R.IsReady() && GetCDamage(vTarget) >= vTarget.Health && ((Environment.TickCount - LastMove) > 50))
-                {
-                    R.Cast(vTarget);
-                    LastMove = Environment.TickCount;
-                }
-
-
-
-
-
-
-
-
-
             }
 
             if (Orbwalker.ActiveMode.ToString().ToLower() == "mixed")
             {
-                if (Config.Item("UseQH").GetValue<bool>() && Q.IsReady())
+                var vTarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
+                if (vTarget != null)
                 {
-                    Qcast(vTarget);
-                }
+                    if (Config.Item("UseQH").GetValue<bool>() && Q.IsReady())
+                    {
+                        Qcast(vTarget);
+                    }
 
-                if (Config.Item("UseEH").GetValue<bool>() && E.IsReady() && Player.Distance(vTarget) <= E.Range)
-                {
-                    E.Cast(vTarget, true);
+                    if (Config.Item("UseEH").GetValue<bool>() && E.IsReady() && Player.Distance(vTarget) <= E.Range)
+                    {
+                        E.Cast(vTarget, true);
+                    }
                 }
-
             }
 
 
@@ -181,7 +176,11 @@ namespace GragasTheDrunkCarry
 
             if (Config.Item("Insec").GetValue<KeyBind>().Active)
             {
-                Insec(vTarget);
+                var vTarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
+                if (vTarget != null)
+                {
+                    Insec(vTarget);
+                }
             }
 
         }
@@ -209,6 +208,7 @@ namespace GragasTheDrunkCarry
         {
             if (!Config.Item("UseQ").GetValue<bool>()) return;
             if (!(target.Distance(Player) <= Q.Range)) return;
+
             if (Bomb == null)
             {
                 Q.Cast(target, true);
@@ -240,7 +240,7 @@ namespace GragasTheDrunkCarry
         public static void Insec(AIHeroClient target)
         {
             Rpos = Player.Position.To2D().Extend(target.Position.To2D(), Player.Distance(target) + 300);
-            if (Rpos.Distance(Player.Position) < R.Range-20)
+            if (Rpos.Distance(Player.Position) < R.Range - 20)
             {
                 if (Player.Distance(Rpos.Extend(target.Position.To2D(), 900 - target.Distance(Rpos))) < E.Range && !IsWall(Rpos.To3D()) && target.IsFacing(Player))
                 {
@@ -256,10 +256,15 @@ namespace GragasTheDrunkCarry
         static void Drawing_OnEndScene(EventArgs args)
         {
             var vTarget = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
-            if (vTarget != null && R.IsReady() && Config.Item("DrawIN").GetValue<bool>())
+
+            if (vTarget != null)
             {
-                Render.Circle.DrawCircle(Rpos.To3D(), 50, Color.Red);
+                if (R.IsReady() && Config.Item("DrawIN").GetValue<bool>())
+                {
+                    Render.Circle.DrawCircle(Rpos.To3D(), 50, Color.Red);
+                }
             }
+
             if (Config.Item("DrawQ").GetValue<bool>())
             {
                 Render.Circle.DrawCircle(Player.Position, Q.Range, Color.DarkSlateGray);
@@ -336,9 +341,9 @@ namespace GragasTheDrunkCarry
                 LastMove = Environment.TickCount;
             }
 
-        } 
+        }
 
-    
+
 
         public static void WaveClear()
         {

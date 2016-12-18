@@ -303,7 +303,7 @@ namespace Two_Girls_One_Donger
                     }
                     if (W.IsReady() && Config.Item("UseWRCombo").GetValue<bool>() && Config.Item("UseRCombo").GetValue<bool>() &&
                         R.IsReady() && target.IsValidTarget(W.Range) &&
-                        wpred.Hitchance >= HitChance.High && CalcDamage(target) >= target.Health)
+                        wpred.Hitchance >= HitChance.High && W.GetDamage(target) >= target.Health)
                     {
                         R.Cast();
 

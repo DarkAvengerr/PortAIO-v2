@@ -20,21 +20,7 @@ using LeagueSharp.Common;
 
         public static bool CheckCounter()
         {
-            if (!CommonMenu.Item("EnabledFps").GetValue<bool>())
-            {
-                return false;
-            }
-            var rate = CommonMenu.Item("requeredRefresh").GetValue<Slider>().Value;
-            if (fps < CommonMenu.Item("autoFpsBalancer").GetValue<Slider>().Value)
-            {
-                rate = Math.Min(10, CommonMenu.Item("requeredRefresh").GetValue<Slider>().Value);
-            }
-            if (delay > 1000f / rate)
-            {
-                delay = 0;
-                return false;
-            }
-            return true;
+            return false;
         }
 
         public static Menu AddToMenu(Menu menu)
@@ -48,7 +34,7 @@ using LeagueSharp.Common;
                 .SetValue(new Slider(35, 1, 350));
             menuFps.AddItem(new MenuItem("EnabledFps", "Enable"))
                 .SetTooltip("Enable update limiter in THIS assembly")
-                .SetValue(true);
+                .SetValue(false);
             menu.AddSubMenu(menuFps);
             CommonMenu = menu;
             Game.OnUpdate += Game_OnUpdate;
