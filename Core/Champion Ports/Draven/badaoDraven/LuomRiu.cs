@@ -132,7 +132,7 @@ using EloBuddy;
             }
             else if (Program.RiuNo1 != null && Player.Distance(Program.RiuNo1.Position) <= 70 && Orbwalking.CanMove(40))
             {
-                EloBuddy.Player.IssueOrder(GameObjectOrder.HoldPosition,Player);
+                EloBuddy.Player.IssueOrder(GameObjectOrder.Stop,Player);
                 Orbwalker.SetOrbwalkingPoint(Program.RiuNo1.Position);
                 Orbwalker.SetMovement(false);
                 if (Qbuff == null) { Program.Orbwalker.SetAttack(true); }

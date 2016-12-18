@@ -207,7 +207,7 @@ using EloBuddy;
             if (MyHero.ServerPosition.Distance(position) < holdAreaRadius)
             {
                 if (MyHero.Path.Count() > 1)
-                    EloBuddy.Player.IssueOrder(GameObjectOrder.HoldPosition, MyHero.ServerPosition);
+                    EloBuddy.Player.IssueOrder(GameObjectOrder.Stop, MyHero.ServerPosition);
                 return;
             }
             if (position.Distance(MyHero.Position) < 200)

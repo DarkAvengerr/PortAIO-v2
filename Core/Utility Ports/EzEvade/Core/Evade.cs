@@ -803,7 +803,7 @@ namespace ezEvade
             /*
             if (isDodging && playerInDanger == false) //serverpos test
             {
-                EloBuddy.Player.IssueOrder(GameObjectOrder.HoldPosition, myHero, false);
+                EloBuddy.Player.IssueOrder(GameObjectOrder.Stop, myHero, false);
             }*/
 
             if (isDodging)

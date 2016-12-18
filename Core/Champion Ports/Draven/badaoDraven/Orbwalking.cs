@@ -293,7 +293,7 @@ using EloBuddy;
                 if (Player.Path.Count() > 1)
                 {
                     //EloBuddy.Player.IssueOrder((GameObjectOrder)10, Player.Position);
-                    EloBuddy.Player.IssueOrder(GameObjectOrder.HoldPosition, Player.Position);
+                    EloBuddy.Player.IssueOrder(GameObjectOrder.Stop, Player.Position);
                     LastMoveCommandPosition = Player.Position;
                 }
                 return;

@@ -280,7 +280,7 @@ using EloBuddy;
             if (MyHero.ServerPosition.Distance(position) < holdAreaRadius)
             {
                 if (MyHero.Path.Count() > 1)
-                    EloBuddy.Player.IssueOrder(GameObjectOrder.HoldPosition, MyHero.Position);
+                    EloBuddy.Player.IssueOrder(GameObjectOrder.Stop, MyHero.Position);
                 return;
             }
             var point = MyHero.ServerPosition +
