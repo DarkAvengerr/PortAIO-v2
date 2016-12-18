@@ -195,7 +195,7 @@ using LeagueSharp.Common;
             {
                 orbwalker.SetAttack(false);
                 orbwalker.SetMovement(false);
-                EloBuddy.Player.IssueOrder(GameObjectOrder.HoldPosition, player.ServerPosition);
+                EloBuddy.Player.IssueOrder(GameObjectOrder.Stop, player.ServerPosition);
                 Console.WriteLine("Castolni kéne");
                 if (E.Cast(thirdEpos))
                 {
