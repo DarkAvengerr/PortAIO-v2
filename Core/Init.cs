@@ -155,6 +155,16 @@ namespace PortAIO
                 }
             }
 
+            if (Misc.menu.Item("enableCamera").GetValue<bool>())
+            {
+                switch (Misc.menu.Item("Camera").GetValue<StringList>().SelectedIndex)
+                {
+                    case 0: // HSCamera
+                        hsCamera.Program.Main();
+                        break;
+                }
+            }
+
             if (Misc.menu.Item("ShadowTracker").GetValue<bool>())
             {
                 ShadowTracker.Program.Game_OnGameLoad();

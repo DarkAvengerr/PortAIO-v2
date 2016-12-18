@@ -6364,6 +6364,10 @@
     <Compile Include="Core\Utility Ports\GodJungleTrackerReborn\Classes\Jungle.cs" />
     <Compile Include="Core\Utility Ports\GodJungleTrackerReborn\Classes\Packets.cs" />
     <Compile Include="Core\Utility Ports\GodJungleTrackerReborn\Program.cs" />
+    <Compile Include="Core\Utility Ports\HSCamera\AllModes\AllModes.cs" />
+    <Compile Include="Core\Utility Ports\HSCamera\Handlers\CameraMovement.cs" />
+    <Compile Include="Core\Utility Ports\HSCamera\Handlers\Modes.cs" />
+    <Compile Include="Core\Utility Ports\HSCamera\Program.cs" />
     <Compile Include="Core\Utility Ports\OKTWPredictioner\EventHandlers.cs" />
     <Compile Include="Core\Utility Ports\OKTWPredictioner\OKTWPredictioner.cs" />
     <Compile Include="Core\Utility Ports\OKTWPredictioner\Program.cs" />
@@ -6978,10 +6982,6 @@
     <Compile Include="Core\SDK Ports\[SBTW] The Queen of the Ice Ashe\Program.cs" />
     <Compile Include="Core\SDK Ports\[SBTW] Vladimir The Rivers Will Run Red\HpBarDraw.cs" />
     <Compile Include="Core\SDK Ports\[SBTW] Vladimir The Rivers Will Run Red\Program.cs" />
-    <Compile Include="Core\Utility Ports\`WIP\HSCamera\AllModes\AllModes.cs" />
-    <Compile Include="Core\Utility Ports\`WIP\HSCamera\Handlers\CameraMovement.cs" />
-    <Compile Include="Core\Utility Ports\`WIP\HSCamera\Handlers\Modes.cs" />
-    <Compile Include="Core\Utility Ports\`WIP\HSCamera\Program.cs" />
     <Compile Include="Core\Utility Ports\`WIP\ProFlash\Program.cs" />
     <Compile Include="Core\Utility Ports\ElUtilitySuite\Entry.cs" />
     <Compile Include="Core\Utility Ports\ElUtilitySuite\IPlugin.cs" />
