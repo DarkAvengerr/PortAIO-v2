@@ -241,6 +241,9 @@ using EloBuddy;
 
         private static void Drawing_OnDraw(EventArgs args)
         {
+            bool enabled = MenuLocal.Item("Draw.E1nable").GetValue<bool>();
+            if (!enabled)
+                return;
             DrawSpells();
             DrawMinionLastHit();
             KillableEnemy();
