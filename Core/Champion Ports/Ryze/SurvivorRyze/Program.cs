@@ -597,48 +597,24 @@ namespace SurvivorRyze
 
         private static void SebbySpell(Spell QR, Obj_AI_Base target)
         {
-            var CoreType2 = SebbyLib.Prediction.SkillshotType.SkillshotLine;
-            var aoe2 = false;
-
-            if (QR.Type == SkillshotType.SkillshotCircle)
-            {
-                CoreType2 = SebbyLib.Prediction.SkillshotType.SkillshotCircle;
-                aoe2 = true;
-            }
-
-            if ((QR.Width > 80) && !QR.Collision)
-                aoe2 = true;
-
-            var predInput2 = new PredictionInput
-            {
-                Aoe = aoe2,
-                Collision = QR.Collision,
-                Speed = QR.Speed,
-                Delay = QR.Delay,
-                Range = QR.Range,
-                From = Player.ServerPosition,
-                Radius = QR.Width,
-                Unit = target,
-                Type = CoreType2
-            };
-            var poutput2 = SebbyLib.Prediction.Prediction.GetPrediction(predInput2);
+            var poutput2 = QR.GetPrediction(target);
 
             if (OktwCommon.CollisionYasuo(Player.ServerPosition, poutput2.CastPosition))
                 return;
 
             if (Menu.Item("HitChance").GetValue<StringList>().SelectedIndex == 0)
             {
-                if (poutput2.Hitchance >= HitChance.Medium)
+                if (poutput2.Hitchance >= LeagueSharp.Common.HitChance.Medium)
                     QR.Cast(poutput2.CastPosition);
             }
             else if (Menu.Item("HitChance").GetValue<StringList>().SelectedIndex == 1)
             {
-                if (poutput2.Hitchance >= HitChance.High)
+                if (poutput2.Hitchance >= LeagueSharp.Common.HitChance.High)
                     QR.Cast(poutput2.CastPosition);
             }
             else if (Menu.Item("HitChance").GetValue<StringList>().SelectedIndex == 2)
             {
-                if (poutput2.Hitchance >= HitChance.VeryHigh)
+                if (poutput2.Hitchance >= LeagueSharp.Common.HitChance.VeryHigh)
                     QR.Cast(poutput2.CastPosition);
             }
         }

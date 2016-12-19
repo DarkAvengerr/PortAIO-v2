@@ -1016,7 +1016,7 @@ using EloBuddy;
 
         private static void KillSteal()
         {
-            foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsEnemy))
+            foreach (var hero in ObjectManager.Get<AIHeroClient>().Where(hero => hero.IsEnemy && !hero.IsDead))
             {
                 var igniteDmg = Player.GetSummonerSpellDamage(hero, Damage.SummonerSpell.Ignite);
                 if (hero.IsValidTarget(600) && Config.Item("UseIgnitekill").GetValue<bool>() &&
@@ -1024,7 +1024,7 @@ using EloBuddy;
                     Player.Spellbook.CanUseSpell(_igniteSlot) == SpellState.Ready)
                 {
                     if (igniteDmg > hero.Health)
-                    {
+                    {   
                         Player.Spellbook.CastSpell(_igniteSlot, hero);
                     }
                 }

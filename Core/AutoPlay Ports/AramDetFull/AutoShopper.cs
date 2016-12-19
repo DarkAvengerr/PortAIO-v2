@@ -49,7 +49,7 @@ using EloBuddy; namespace ARAMDetFull
 
         public static void init()
         {
-            string itemJson = "http://ddragon.leagueoflegends.com/cdn/6.21.1/data/en_US/item.json";
+            string itemJson = "http://ddragon.leagueoflegends.com/cdn/6.24.1/data/en_US/item.json";
             string itemsData = Request(itemJson);
             string itemArray = itemsData.Split(new[] { "data" }, StringSplitOptions.None)[1];
             MatchCollection itemIdArray = Regex.Matches(itemArray, "[\"]\\d*[\"][:][{].*?(?=},\"\\d)");
