@@ -65,7 +65,7 @@ using EloBuddy;
         static void DoCombo(bool useQ, bool useQG, bool useW, bool useE, bool useR)
         {
             AIHeroClient target = TargetSelector.GetTarget(e.Range, TargetSelector.DamageType.Magical);
-            var Ghost = ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(x => x.Name == target.Name);
+            var Ghost = target != null ? ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(x => x.Name == target.Name) : null;
             if (target != null && target.IsValidTarget())
             {
                 if (player.Distance(target.Position) < w.Range)//W>>EQ(R)>>W

@@ -194,27 +194,24 @@ namespace Illaoi___Tentacle_Kitty
         {
             if (Q.IsReady() && Config.Item("q.combo").GetValue<bool>())
             {
-                var enemy = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget(Q.Range));
-                var enemyGhost = ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(x=> x.Name == enemy.Name);
+                var enemy = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
+                var enemyGhost = enemy != null ? ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(x => x.Name == enemy.Name) : null;
                 if (enemy != null && enemyGhost == null )
                 {
-                    if (Q.CanCast(enemy) && Q.GetPrediction(enemy).Hitchance >= HitChance.High
-                        && Q.GetPrediction(enemy).CollisionObjects.Count == 0)
+                    if (Q.CanCast(enemy) && Q.GetPrediction(enemy).Hitchance >= HitChance.High)
                     {
-                        Q.Cast(enemy);
+                        Q.Cast(Q.GetPrediction(enemy).CastPosition);
                     }
                 }
                 if (enemy == null && enemyGhost != null && Config.Item("q.ghost.combo").GetValue<bool>())
                 {
-                    if (Q.CanCast(enemyGhost) && Q.GetPrediction(enemyGhost).Hitchance >= HitChance.High
-                        && Q.GetPrediction(enemyGhost).CollisionObjects.Count == 0)
+                    if (Q.CanCast(enemyGhost) && Q.GetPrediction(enemyGhost).Hitchance >= HitChance.High)
                     {
                         Q.Cast(enemyGhost);
                     }
                 }
-                   
-                
             }
+
             if (W.IsReady() && Config.Item("w.combo").GetValue<bool>())
             {
                 var tentacle = ObjectManager.Get<Obj_AI_Minion>().First(x=> x.Name == "God");
@@ -258,7 +255,7 @@ namespace Illaoi___Tentacle_Kitty
             if (Q.IsReady() && Config.Item("q.harass").GetValue<bool>())
             {
                 var enemy = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget(Q.Range));
-                var enemyGhost = ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(x => x.Name == enemy.Name);
+                var enemyGhost = ObjectManager.Get<Obj_AI_Minion>().FirstOrDefault(x => x.Name == enemy.Name) ?? null;
                 if (enemy != null && enemyGhost == null)
                 {
                     if (Q.CanCast(enemy) && Q.GetPrediction(enemy).Hitchance >= HitChance.High
