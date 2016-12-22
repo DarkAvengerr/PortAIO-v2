@@ -113,13 +113,13 @@ using EloBuddy;
             if (spell.Name == "FizzSeastonePassive")
             {
             }
-            if (spell.Name == "FizzJump")
+            if (spell.Name == "FizzE")
             {
                 blockmovecount = Utils.GameTimeTickCount;
                 blockmovebool = true;
                 Orbwalker.SetMovement(false);
             }
-            if (spell.Name == "fizzjumptwo")
+            if (spell.Name == "FizzETwo")
             {
                 blockmovebool = false;
                 Orbwalker.SetMovement(true);
@@ -176,7 +176,7 @@ using EloBuddy;
                 // E1  slow target
                 {
                     var target = TargetSelector.GetTarget(E.Range + 200 + 330, TargetSelector.DamageType.Magical);
-                    if (E.Instance.Name == "FizzJump" && E.IsReady() && target.IsValidTarget() && !target.IsZombie)
+                    if (E.Instance.Name == "FizzE" && E.IsReady() && target.IsValidTarget() && !target.IsZombie)
                     {
                         if (Prediction.GetPrediction(target, 1.5f).UnitPosition.Distance(Player.Position) <= E.Range + 200 + 330)
                         {
@@ -231,7 +231,7 @@ using EloBuddy;
                 // E fast target
                 {
                     var target = TargetSelector.GetTarget(E.Range + E2.Range + 50, TargetSelector.DamageType.Magical);
-                    if (E.Instance.Name == "FizzJump" && E.IsReady() && target.IsValidTarget() && !target.IsZombie)
+                    if (E.Instance.Name == "FizzE" && E.IsReady() && target.IsValidTarget() && !target.IsZombie)
                     {
                         if (Prediction.GetPrediction(target, 1f).UnitPosition.Distance(Player.Position) <= E.Range + E2.Range + 150)
                         {
@@ -257,7 +257,7 @@ using EloBuddy;
                 // E1  slow target
                 {
                     var target = TargetSelector.GetTarget(E.Range + 200 + 330, TargetSelector.DamageType.Magical);
-                    if (E.Instance.Name == "FizzJump" && E.IsReady() && target.IsValidTarget() && !target.IsZombie)
+                    if (E.Instance.Name == "FizzE" && E.IsReady() && target.IsValidTarget() && !target.IsZombie)
                     {
                         if (Prediction.GetPrediction(target, 1.5f).UnitPosition.Distance(Player.Position) <= E.Range + 200 + 330)
                         {
@@ -312,7 +312,7 @@ using EloBuddy;
                 // E fast target
                 {
                     var target = TargetSelector.GetTarget(E.Range + E2.Range + 50, TargetSelector.DamageType.Magical);
-                    if (E.Instance.Name == "FizzJump" && E.IsReady() && target.IsValidTarget() && !target.IsZombie)
+                    if (E.Instance.Name == "FizzE" && E.IsReady() && target.IsValidTarget() && !target.IsZombie)
                     {
                         if (Prediction.GetPrediction(target, 1f).UnitPosition.Distance(Player.Position) <= E.Range + E2.Range + 150)
                         {
@@ -358,7 +358,7 @@ using EloBuddy;
                 }
             }
             // Q gap selected E ready
-            if (QcomboGap && E.IsReady() && E.Instance.Name == "FizzJump")
+            if (QcomboGap && E.IsReady() && E.Instance.Name == "FizzE")
             {
                 var target = TargetSelector.GetSelectedTarget();
                 if (Q.IsReady() && target.IsValidTarget() && !target.IsZombie)

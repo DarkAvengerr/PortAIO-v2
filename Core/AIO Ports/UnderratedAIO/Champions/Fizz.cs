@@ -167,7 +167,7 @@ using LeagueSharp.Common;
 
         private bool OnTrident
         {
-            get { return player.Spellbook.GetSpell(SpellSlot.E).Name == "fizzjumptwo"; }
+            get { return player.Spellbook.GetSpell(SpellSlot.E).Name == "FizzETwo"; }
         }
 
 

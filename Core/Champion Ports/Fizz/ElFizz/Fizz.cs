@@ -566,7 +566,7 @@ using EloBuddy;
                 }
 
                 if (IsActive("ElFizz.Combo.E") && E.IsReady() && target.IsValidTarget(E.Range)
-                    && E.Instance.Name.ToLower() == "fizzjump")
+                    && E.Instance.Name.ToLower() == "fizze")
                 {
                     if (Prediction.GetPrediction(target, 0.5f).UnitPosition.Distance(Player.Position) <= E.Range + 450)
                     {
@@ -836,7 +836,7 @@ using EloBuddy;
         {
             if (sender.IsMe)
             {
-                if (args.SData.Name.ToLower() == "fizzjump" || args.SData.Name.ToLower() == "fizzpiercingstrike")
+                if (args.SData.Name.ToLower() == "fizze" || args.SData.Name.ToLower() == "fizzpiercingstrike")
                 {
                     if (IsActive("ElFizz.Combo.W") && W.IsReady()
                         && (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo

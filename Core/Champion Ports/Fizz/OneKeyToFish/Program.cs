@@ -204,7 +204,7 @@ using EloBuddy;
                 }
             }
 
-            if (args.SData.Name == "fizzjumptwo" || args.SData.Name == "fizzjumpbuffer")
+            if (args.SData.Name == "FizzETwo" || args.SData.Name == "fizzjumpbuffer")
             {
                 LastHarassPos = null;
                 JumpBack = false;

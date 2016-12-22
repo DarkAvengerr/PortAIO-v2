@@ -118,7 +118,7 @@ namespace NoobFizz
                     {
                         if (ondash)
                         {
-                            if (useE && !R.IsReady() && E.Instance.Name == "FizzJump" && Player.Distance(target.Position) < E.Range) E.Cast(Game.CursorPos);
+                            if (useE && !R.IsReady() && E.Instance.Name == "FizzE" && Player.Distance(target.Position) < E.Range) E.Cast(Game.CursorPos);
                         }
                         if (afterdash)
                         {
@@ -210,7 +210,7 @@ namespace NoobFizz
                     W.Cast(minion);
                 }
             }
-            if (Menu.Item("laneclearE").GetValue<bool>() && E.Instance.Name == "FizzJump" && E.IsReady())
+            if (Menu.Item("laneclearE").GetValue<bool>() && E.Instance.Name == "FizzE" && E.IsReady())
             {
                 var allMinionsE = MinionManager.GetMinions(Player.Position, E.Range, MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health).ToList();
                 foreach (var minion in allMinionsE)
@@ -268,7 +268,7 @@ namespace NoobFizz
              {
                  if (ondash)
                  {
-                     if (useE && !R.IsReady() && E.Instance.Name == "FizzJump" && Player.Distance(m.Position) < E.Range) E.Cast(Game.CursorPos);
+                     if (useE && !R.IsReady() && E.Instance.Name == "FizzE" && Player.Distance(m.Position) < E.Range) E.Cast(Game.CursorPos);
                  }
                  if (afterdash)
                  {
@@ -315,7 +315,7 @@ namespace NoobFizz
             {
                 if (useW && Player.Distance(m.Position) < Q.Range) W.Cast();
                 if (useQ && Player.Distance(m.Position) > 175) Q.CastOnBestTarget();
-                if (useE && !R.IsReady() && E.Instance.Name == "FizzJump" && Player.Distance(m.Position) < E.Range) E.Cast(Game.CursorPos);
+                if (useE && !R.IsReady() && E.Instance.Name == "FizzE" && Player.Distance(m.Position) < E.Range) E.Cast(Game.CursorPos);
                 if (hydra.IsOwned() && Player.Distance(m) < hydra.Range && hydra.IsReady() && !E.IsReady()) hydra.Cast();
                 if (tiamat.IsOwned() && Player.Distance(m) < tiamat.Range && tiamat.IsReady() && !E.IsReady()) tiamat.Cast();
             }
@@ -324,7 +324,7 @@ namespace NoobFizz
                 if (useR) R.CastIfWillHit(target);
                 if (useQ && Player.Distance(m.Position) > 175) Q.CastOnUnit(m);
                 if (useW && Player.Distance(m.Position) < Q.Range) W.Cast();
-                if (useE && !R.IsReady() && E.Instance.Name == "FizzJump" && Player.Distance(m.Position) < E.Range) E.Cast(Game.CursorPos);
+                if (useE && !R.IsReady() && E.Instance.Name == "FizzE" && Player.Distance(m.Position) < E.Range) E.Cast(Game.CursorPos);
                 if (hydra.IsOwned() && Player.Distance(m) < hydra.Range && hydra.IsReady() && !E.IsReady()) hydra.Cast();
                 if (tiamat.IsOwned() && Player.Distance(m) < tiamat.Range && tiamat.IsReady() && !E.IsReady()) tiamat.Cast();
             }
