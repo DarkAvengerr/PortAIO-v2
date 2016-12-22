@@ -22,6 +22,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using EloBuddy;
+using System.Linq;
 
 namespace SPrediction
 {
@@ -51,11 +52,11 @@ namespace SPrediction
             switch (s.Type)
             {
                 case SkillshotType.SkillshotLine:
-                    return LinePrediction.GetPrediction(target, s.Width, s.Delay, s.Speed, s.Range, s.Collision, target.GetWaypoints(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), target.LastAngleDiff(), s.From.To2D(), s.RangeCheckFrom.To2D());
+                    return LinePrediction.GetPrediction(target, s.Width, s.Delay, s.Speed, s.Range, s.Collision, target.Path.ToList().To2D(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), target.LastAngleDiff(), s.From.To2D(), s.RangeCheckFrom.To2D());
                 case SkillshotType.SkillshotCircle:
-                    return CirclePrediction.GetPrediction(target, s.Width, s.Delay, s.Speed, s.Range, s.Collision, target.GetWaypoints(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), target.LastAngleDiff(), s.From.To2D(), s.RangeCheckFrom.To2D());
+                    return CirclePrediction.GetPrediction(target, s.Width, s.Delay, s.Speed, s.Range, s.Collision, target.Path.ToList().To2D(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), target.LastAngleDiff(), s.From.To2D(), s.RangeCheckFrom.To2D());
                 case SkillshotType.SkillshotCone:
-                    return ConePrediction.GetPrediction(target, s.Width, s.Delay, s.Speed, s.Range, s.Collision, target.GetWaypoints(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), target.LastAngleDiff(), s.From.To2D(), s.RangeCheckFrom.To2D());
+                    return ConePrediction.GetPrediction(target, s.Width, s.Delay, s.Speed, s.Range, s.Collision, target.Path.ToList().To2D(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), target.LastAngleDiff(), s.From.To2D(), s.RangeCheckFrom.To2D());
             }
 
             throw new NotSupportedException("Unknown skill shot type");
@@ -68,7 +69,7 @@ namespace SPrediction
         /// <returns>Prediction result as <see cref="Prediction.Result"/></returns>
         public static Prediction.Result GetArcSPrediction(this Spell s, AIHeroClient target)
         {
-            return ArcPrediction.GetPrediction(target, s.Width, s.Delay, s.Speed, s.Range, s.Collision, target.GetWaypoints(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), target.LastAngleDiff(), s.From.To2D(), s.RangeCheckFrom.To2D());
+            return ArcPrediction.GetPrediction(target, s.Width, s.Delay, s.Speed, s.Range, s.Collision, target.Path.ToList().To2D(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), target.LastAngleDiff(), s.From.To2D(), s.RangeCheckFrom.To2D());
         }
 
         /// <summary>
@@ -79,7 +80,7 @@ namespace SPrediction
         /// <returns>Prediction result as <see cref="Prediction.Vector.Result"/></returns>
         public static VectorPrediction.Result GetVectorSPrediction(this Spell s, AIHeroClient target, float vectorLenght)
         {
-            return VectorPrediction.GetPrediction(target, s.Width, s.Delay, s.Speed, s.Range, vectorLenght, target.GetWaypoints(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), s.RangeCheckFrom.To2D());
+            return VectorPrediction.GetPrediction(target, s.Width, s.Delay, s.Speed, s.Range, vectorLenght, target.Path.ToList().To2D(), target.AvgMovChangeTime(), target.LastMovChangeTime(), target.AvgPathLenght(), s.RangeCheckFrom.To2D());
         }
 
         /// <summary>
@@ -304,7 +305,7 @@ namespace SPrediction
             float avgt = t.AvgMovChangeTime() + reactionIgnoreDelay;
             float movt = t.LastMovChangeTime();
             float avgp = t.AvgPathLenght();
-            var waypoints = t.GetWaypoints();
+            var waypoints = t.Path.ToList().To2D();
 
             Prediction.Result result;
 
@@ -367,7 +368,7 @@ namespace SPrediction
             float avgt = t.AvgMovChangeTime() + reactionIgnoreDelay;
             float movt = t.LastMovChangeTime();
             float avgp = t.AvgPathLenght();
-            var result = ArcPrediction.GetPrediction(t, s.Width, s.Delay, s.Speed, s.Range, s.Collision, t.GetWaypoints(), avgt, movt, avgp, t.LastAngleDiff(), s.From.To2D(), s.RangeCheckFrom.To2D(), arconly);
+            var result = ArcPrediction.GetPrediction(t, s.Width, s.Delay, s.Speed, s.Range, s.Collision, t.Path.ToList().To2D(), avgt, movt, avgp, t.LastAngleDiff(), s.From.To2D(), s.RangeCheckFrom.To2D(), arconly);
 
             if (result.HitChance >= hc)
             {
@@ -409,7 +410,7 @@ namespace SPrediction
             float avgt = t.AvgMovChangeTime() + reactionIgnoreDelay;
             float movt = t.LastMovChangeTime();
             float avgp = t.AvgPathLenght();
-            var result = VectorPrediction.GetPrediction(t, s.Width, s.Delay, s.Speed, s.Range, vectorLenght, t.GetWaypoints(), avgt, movt, avgp, s.RangeCheckFrom.To2D());
+            var result = VectorPrediction.GetPrediction(t, s.Width, s.Delay, s.Speed, s.Range, vectorLenght, t.Path.ToList().To2D(), avgt, movt, avgp, s.RangeCheckFrom.To2D());
 
             if (result.HitChance >= hc)
             {
@@ -452,9 +453,9 @@ namespace SPrediction
             float avgp = t.AvgPathLenght();
             Prediction.Result result;
             if (onlyEdge)
-                result = RingPrediction.GetPrediction(t, s.Width, ringRadius, s.Delay, s.Speed, s.Range, s.Collision, t.GetWaypoints(), avgt, movt, avgp, s.From.To2D(), rangeCheckFrom.Value.To2D());
+                result = RingPrediction.GetPrediction(t, s.Width, ringRadius, s.Delay, s.Speed, s.Range, s.Collision, t.Path.ToList().To2D(), avgt, movt, avgp, s.From.To2D(), rangeCheckFrom.Value.To2D());
             else
-                result = CirclePrediction.GetPrediction(t, s.Width, s.Delay, s.Speed, s.Range + ringRadius, s.Collision, t.GetWaypoints(), avgt, movt, avgp, 360, s.From.To2D(), rangeCheckFrom.Value.To2D());
+                result = CirclePrediction.GetPrediction(t, s.Width, s.Delay, s.Speed, s.Range + ringRadius, s.Collision, t.Path.ToList().To2D(), avgt, movt, avgp, 360, s.From.To2D(), rangeCheckFrom.Value.To2D());
 
             Drawings.s_DrawTick = Utils.TickCount;
             Drawings.s_DrawPos = result.CastPosition;

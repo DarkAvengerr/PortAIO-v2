@@ -345,7 +345,7 @@ namespace SebbyLib.Movement
                 return HitChance.Medium;
             }
 
-            var wayPoint = input.Unit.GetWaypoints().Last().To3D();
+            var wayPoint = input.Unit.Path.ToList().To2D().Last().To3D();
             var delay = input.Delay
                         + (Math.Abs(input.Speed - float.MaxValue) > float.Epsilon
                                ? hero.Distance(input.From) / input.Speed
@@ -504,13 +504,13 @@ namespace SebbyLib.Movement
                 //input.Delay /= 2;
                 speed /= 1.5f;
             }
-            return GetPositionOnPath(input, input.Unit.GetWaypoints(), speed);
+            return GetPositionOnPath(input, input.Unit.Path.ToList().To2D(), speed);
         }
 
         internal static double GetAngle(Vector3 from, Obj_AI_Base target)
         {
             var C = target.ServerPosition.To2D();
-            var A = target.GetWaypoints().Last();
+            var A = target.Path.ToList().To2D().Last();
 
             if (C == A)
                 return 60;

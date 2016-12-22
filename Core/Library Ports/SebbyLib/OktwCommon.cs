@@ -265,12 +265,12 @@ namespace SebbyLib
 
         public static bool IsMovingInSameDirection(Obj_AI_Base source, Obj_AI_Base target)
         {
-            var sourceLW = source.GetWaypoints().Last().To3D();
+            var sourceLW = source.Path.ToList().To2D().Last().To3D();
 
             if (sourceLW == source.Position || !source.IsMoving)
                 return false;
 
-            var targetLW = target.GetWaypoints().Last().To3D();
+            var targetLW = target.Path.ToList().To2D().Last().To3D();
 
             if (targetLW == target.Position || !target.IsMoving)
                 return false;

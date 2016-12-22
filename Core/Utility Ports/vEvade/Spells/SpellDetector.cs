@@ -40,6 +40,7 @@ using LeagueSharp.Common;
             GameObject.OnCreate += OnCreateMissile;
             GameObject.OnDelete += OnDeleteMissile;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
 
             if (!Configs.Debug)
             {

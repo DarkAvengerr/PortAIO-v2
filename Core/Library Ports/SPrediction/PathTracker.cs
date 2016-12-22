@@ -80,7 +80,7 @@ namespace SPrediction
 
             AIHeroClient.OnNewPath += AIHeroClient_OnNewPath;
             AIHeroClient.OnSpellCast += AIHeroClient_OnDoCast;
-            AIHeroClient.OnSpellCast += AIHeroClient_OnProcessSpellCast;
+            AIHeroClient.OnBasicAttack += AIHeroClient_OnProcessSpellCast;
         }
 
 
@@ -176,7 +176,7 @@ namespace SPrediction
         /// </summary>
         private static void AIHeroClient_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (args.SData.IsAutoAttack() && sender.IsEnemy && sender.IsChampion())
+            if (sender.IsEnemy && sender.IsChampion())
             {
                 EnemyData enemy = EnemyInfo[sender.NetworkId];
 
