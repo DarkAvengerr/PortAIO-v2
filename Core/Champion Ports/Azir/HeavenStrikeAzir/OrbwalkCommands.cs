@@ -15,18 +15,31 @@ namespace HeavenStrikeAzir
 {
     public static class OrbwalkCommands
     {
-        public static AIHeroClient Player { get{ return ObjectManager.Player; } }
+        public static AIHeroClient Player { get { return ObjectManager.Player; } }
         private static float lastAA;
         private static bool OnFinishAttack;
         private static int lastAAcommandTick;
         private static int lastMovecommandTick;
+
         public static void Initialize()
         {
             Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            EloBuddy.Player.OnBasicAttack += Player_OnBasicAttack;
             Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnDoCast;
             Game.OnUpdate += Game_OnUpdate;
             Program._orbwalker.SetAttack(false);
             Program._orbwalker.SetMovement(false);
+        }
+
+        private static void Player_OnBasicAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (!sender.IsMe)
+                return;
+            if (args.SData.Name.ToLower().Contains("attack"))
+            {
+                lastAA = Utils.GameTimeTickCount - Game.Ping / 2 + 50;
+                Console.WriteLine("lastAA set");
+            }
         }
 
         private static void Game_OnUpdate(EventArgs args)
@@ -42,16 +55,20 @@ namespace HeavenStrikeAzir
             if (!sender.IsMe)
                 return;
             if (args.SData.IsAutoAttack())
+            {
                 LeagueSharp.Common.Utility.DelayAction.Add(50 - Game.Ping, () => OnFinishAttack = true);
+                Console.WriteLine("IsAutoAttack");
+            }
         }
 
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!sender.IsMe) return;
-            if (args.SData.Name.ToLower().Contains("attack"))
-                lastAA = Utils.GameTimeTickCount - Game.Ping / 2 + 50;
             if (args.SData.Name.ToLower().Contains("attacksoldier"))
+            {
+                Console.WriteLine("AttackSolider");
                 OnFinishAttack = true;
+            }
         }
 
         public static bool CanDoAttack()
@@ -64,6 +81,7 @@ namespace HeavenStrikeAzir
 
             return false;
         }
+
         public static void MoveTo(Vector3 Position)
         {
             if (Utils.GameTimeTickCount - lastMovecommandTick < 150)
@@ -73,6 +91,7 @@ namespace HeavenStrikeAzir
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Position);
             lastMovecommandTick = Utils.GameTimeTickCount;
         }
+
         public static bool CanMove()
         {
             if (OnFinishAttack)
@@ -80,6 +99,7 @@ namespace HeavenStrikeAzir
             return (Utils.GameTimeTickCount + Game.Ping / 2 >= lastAA + Player.AttackCastDelay * 1000 + 80)
                                     && Utils.GameTimeTickCount - lastAAcommandTick >= Game.Ping + 250;
         }
+
         public static void AttackTarget(AttackableUnit target)
         {
             Orbwalking.LastAATick = Utils.GameTimeTickCount + Game.Ping;
@@ -91,6 +111,7 @@ namespace HeavenStrikeAzir
                 OnFinishAttack = false;
             EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, target);
         }
+
         private static bool ShouldWait()
         {
             var attackcastdelay = Player.AttackCastDelay * 1000 + Game.Ping;
