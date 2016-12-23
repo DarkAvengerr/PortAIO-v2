@@ -465,7 +465,6 @@ namespace PortAIO.Dual_Port
             utility.AddItem(new MenuItem("xAwareness", "Enable xAwareness?").SetValue(false));
             utility.AddItem(new MenuItem("RandomUlt", "Enable RandomUlt?").SetValue(false));
             utility.AddItem(new MenuItem("BaseUlt3", "Enable BaseUlt3?").SetValue(false));
-            utility.AddItem(new MenuItem("ControlSharp", "Enable ControlSharp?").SetValue(false));
             utility.AddItem(new MenuItem("UniversalRecallTracker", "Enable UniversalRecallTracker?").SetValue(false));
             utility.AddItem(new MenuItem("UniversalMinimapHack", "Enable UniversalMinimapHack?").SetValue(false));
             utility.AddItem(new MenuItem("StandaloneOrbwalker", "Enable StandaloneOrbwalker?").SetValue(false));
