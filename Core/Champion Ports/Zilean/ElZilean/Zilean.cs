@@ -10,7 +10,7 @@
     using LeagueSharp.Common;
     using SebbyLib;
 
-    using Orbwalking = SebbyLib.Orbwalking;
+    
 
     internal class Zilean
     {

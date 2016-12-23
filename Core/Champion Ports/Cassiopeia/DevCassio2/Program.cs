@@ -41,7 +41,7 @@ namespace DevCassio
     {
         public static Items.Item Zhonya = new Items.Item(3157, 0);
         private static Menu Config;
-        private static SebbyLib.Orbwalking.Orbwalker Orbwalker;
+        private static Orbwalking.Orbwalker Orbwalker;
         private static readonly List<Spell> SpellList = new List<Spell>();
         private static AIHeroClient Player;
         private static Spell Q;
@@ -131,7 +131,7 @@ namespace DevCassio
 
             var orbMenu = Config.AddSubMenu(new Menu("Orbwalking", "Orbwalking"));
             {
-                Orbwalker = new SebbyLib.Orbwalking.Orbwalker(orbMenu);
+                Orbwalker = new Orbwalking.Orbwalker(orbMenu);
             }
 
             var comboMenu = Config.AddSubMenu(new Menu("Combo", "Combo").SetFontStyle(
@@ -357,8 +357,8 @@ namespace DevCassio
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
-            SebbyLib.Orbwalking.BeforeAttack += BeforeAttack;
-            /*SebbyLib.Orbwalking.OnNonKillableMinion += OnNonKillableMinion;*/
+            Orbwalking.BeforeAttack += BeforeAttack;
+            /*Orbwalking.OnNonKillableMinion += OnNonKillableMinion;*/
             Drawing.OnDraw += OnDraw;
         }
 
@@ -411,20 +411,20 @@ namespace DevCassio
             }
             switch (Orbwalker.ActiveMode)
             {
-                case SebbyLib.Orbwalking.OrbwalkingMode.Combo:
+                case Orbwalking.OrbwalkingMode.Combo:
                     Combo();
                     BurstCombo();
                     break;
-                case SebbyLib.Orbwalking.OrbwalkingMode.Mixed:
+                case Orbwalking.OrbwalkingMode.Mixed:
                     Harass();
                     /*LastHit();*/
                     break;
-                case SebbyLib.Orbwalking.OrbwalkingMode.LaneClear:
+                case Orbwalking.OrbwalkingMode.LaneClear:
                     WaveClear();
                     JungleClear();
                     LastHit();
                     break;
-                case SebbyLib.Orbwalking.OrbwalkingMode.LastHit:
+                case Orbwalking.OrbwalkingMode.LastHit:
                     LastHit();
                     break;
             }
@@ -472,7 +472,7 @@ namespace DevCassio
 
         /*private static void OnNonKillableMinion(AttackableUnit sender)
         {
-            if (Player.IsDead || Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Combo)
+            if (Player.IsDead || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 return;
             }
@@ -522,9 +522,9 @@ namespace DevCassio
                 }
             }
 
-            if (SebbyLib.Orbwalking.CanMove(100))
+            if (Orbwalking.CanMove(100))
             {
-                SebbyLib.Orbwalking.MoveTo(Game.CursorPos, 80f);
+                Orbwalking.MoveTo(Game.CursorPos, 80f);
 
                 Combo();
             }
@@ -549,7 +549,7 @@ namespace DevCassio
 
         private static void Flee()
         {
-            SebbyLib.Orbwalking.MoveTo(Game.CursorPos);
+            Orbwalking.MoveTo(Game.CursorPos);
             var eTarget = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Magical);
 
             if (eTarget == null)
@@ -994,7 +994,7 @@ namespace DevCassio
             var UseELastHitLaneClearNonPoisoned = Config.Item("UseELastHitLaneClearNonPoisoned").GetValue<bool>();
             /*var packetCast = Config.Item("PacketCast").GetValue<bool>();*/
             var LaneClearMinMana = Config.Item("LaneClearMinMana").GetValue<Slider>().Value;
-            var orb = Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.LaneClear;
+            var orb = Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear;
 
             if (Q.IsReady() && useQ && Player.GetManaPerc() >= LaneClearMinMana)
             {
@@ -1094,7 +1094,7 @@ namespace DevCassio
             if (Orbwalker.GetTarget() != null)
                 orbTarget = Orbwalker.GetTarget().NetworkId;
 
-            if (UseELastHitLaneClear == true && orb && !SebbyLib.Orbwalking.CanAttack() && Player.ManaPercent > Config.Item("LaneClearMinMana", true).GetValue<Slider>().Value)
+            if (UseELastHitLaneClear == true && orb && !Orbwalking.CanAttack() && Player.ManaPercent > Config.Item("LaneClearMinMana", true).GetValue<Slider>().Value)
             {
                 var LCP = Config.Item("FLC", true).GetValue<bool>();
 
@@ -1234,7 +1234,7 @@ namespace DevCassio
                     return;
 
                 var minions2 = Cache.GetMinions(Player.ServerPosition, E.Range);
-                var orb = Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.LastHit;
+                var orb = Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit;
 
                 int orbTarget = 0;
                 if (Orbwalker.GetTarget() != null)
@@ -1249,7 +1249,7 @@ namespace DevCassio
 
         private static void Stack()
         {
-            if (Player.InFountain() ||(Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.None))
+            if (Player.InFountain() ||(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None))
                 if (Items.HasItem(3004, Player) || Items.HasItem(3003, Player) || Items.HasItem(3070, Player) ||
                     Items.HasItem(3073, Player) || Items.HasItem(3008, Player))
                     Q.Cast(Player.ServerPosition);
@@ -1331,9 +1331,9 @@ namespace DevCassio
             }
         }
 
-        private static void BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
+        private static void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
-            if (Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Combo)
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 args.Process = Config.Item("UseAACombo").GetValue<bool>();
 
@@ -1348,7 +1348,7 @@ namespace DevCassio
                 }
             }
 
-            if (Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.LastHit)
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit)
             {
                 args.Process = Config.Item("UseAaFarm").GetValue<bool>();
 
@@ -1363,7 +1363,7 @@ namespace DevCassio
                 }
             }
 
-            if (Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.LaneClear)
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
                 args.Process = Config.Item("UseAaFarmLC").GetValue<bool>();
 

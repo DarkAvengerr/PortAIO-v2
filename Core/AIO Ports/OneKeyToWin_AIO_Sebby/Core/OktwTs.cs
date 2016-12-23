@@ -14,7 +14,7 @@ using EloBuddy;
     class OktwTs
     {
         private Menu Config = Program.Config;
-        private static SebbyLib.Orbwalking.Orbwalker Orbwalker = Program.Orbwalker;
+        private static Orbwalking.Orbwalker Orbwalker = Program.Orbwalker;
         private AIHeroClient Player { get { return ObjectManager.Player; } }
 
         private AIHeroClient FocusTarget, DrawInfo = null;
@@ -37,8 +37,8 @@ using EloBuddy;
                 Config.SubMenu("Target Selector OKTW©").AddItem(new MenuItem("TsAaPriority" + enemy.ChampionName, enemy.ChampionName).SetValue(new Slider(i, 0, 5))).DontSave();
                 i--;
             }
-            SebbyLib.Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
-            SebbyLib.Orbwalking.AfterAttack += Orbwalking_AfterAttack;
+            Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
+            Orbwalking.AfterAttack += Orbwalking_AfterAttack;
             Game.OnUpdate += OnUpdate;
             Game.OnWndProc += Game_OnWndProc;
             Drawing.OnDraw += OnDraw;
@@ -105,7 +105,7 @@ using EloBuddy;
             }
         }
 
-        private void Orbwalking_BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
+        private void Orbwalking_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
             if (Config.Item("TsAa").GetValue<StringList>().SelectedIndex != 0 || !Config.Item("extraFocus").GetValue<bool>() || !Program.Combo)
             {
@@ -146,7 +146,7 @@ using EloBuddy;
 
         private void OnUpdate(EventArgs args)
         {
-            if (Config.Item("TsAa").GetValue<StringList>().SelectedIndex == 2 || !SebbyLib.Orbwalking.CanAttack() || !Program.Combo)
+            if (Config.Item("TsAa").GetValue<StringList>().SelectedIndex == 2 || !Orbwalking.CanAttack() || !Program.Combo)
             {
                 return;
             }

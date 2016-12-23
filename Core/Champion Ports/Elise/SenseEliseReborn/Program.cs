@@ -12,7 +12,7 @@ using LeagueSharp.Common;
 using SebbyLib;
 using SharpDX;
 using Color = System.Drawing.Color;
-using Orbwalking = SebbyLib.Orbwalking;
+
 using Prediction = SebbyLib.Prediction.Prediction;
 using PredictionInput = SebbyLib.Prediction.PredictionInput;
 

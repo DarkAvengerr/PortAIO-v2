@@ -23,7 +23,7 @@ using EloBuddy;
             get
             {
                 return Config.Item("spellFarm").GetValue<bool>()
-                    && Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.LaneClear
+                    && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear
                     && Player.ManaPercent > Config.Item("Mana", true).GetValue<Slider>().Value;
             }
         }
@@ -55,7 +55,7 @@ using EloBuddy;
             Config.Item("spellFarm").Permashow(true);
             Config.Item("harassMixed").Permashow(true);
 
-            SebbyLib.Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
+            Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
             Game.OnWndProc += Game_OnWndProc;
             Drawing.OnDraw += OnDraw;
         }
@@ -109,7 +109,7 @@ using EloBuddy;
             }
         }
 
-        private static void Orbwalking_BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
+        private static void Orbwalking_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
             if (Combo && Config.Item("comboDisableMode", true).GetValue<bool>())
             {
@@ -123,7 +123,7 @@ using EloBuddy;
                 args.Process = false;
             }
 
-            if (Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Mixed && Config.Item("supportMode", true).GetValue<bool>())
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && Config.Item("supportMode", true).GetValue<bool>())
             {
                 if (args.Target.Type == GameObjectType.obj_AI_Minion) args.Process = false;
             }

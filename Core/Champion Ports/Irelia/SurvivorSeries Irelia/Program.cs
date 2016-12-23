@@ -11,7 +11,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SebbyLib;
 using Color = SharpDX.Color;
-using Orbwalking = SebbyLib.Orbwalking;
+
 
 using EloBuddy; 
 using LeagueSharp.Common; 

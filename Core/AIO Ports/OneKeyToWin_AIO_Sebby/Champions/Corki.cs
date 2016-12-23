@@ -46,10 +46,10 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
             Game.OnUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
-            SebbyLib.Orbwalking.BeforeAttack += BeforeAttack;
+            Orbwalking.BeforeAttack += BeforeAttack;
         }
 
-        private void BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
+        private void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
             if (E.IsReady() && Sheen() && args.Target.IsValid<AIHeroClient>())
             {

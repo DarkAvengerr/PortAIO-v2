@@ -71,8 +71,8 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Drawing.OnDraw += Drawing_OnDraw;
             Drawing.OnEndScene +=Drawing_OnEndScene;
-            SebbyLib.Orbwalking.BeforeAttack +=Orbwalking_BeforeAttack;
-            SebbyLib.Orbwalking.AfterAttack +=Orbwalking_AfterAttack;
+            Orbwalking.BeforeAttack +=Orbwalking_BeforeAttack;
+            Orbwalking.AfterAttack +=Orbwalking_AfterAttack;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             EloBuddy.Player.OnIssueOrder += Obj_AI_Base_OnIssueOrder;
@@ -124,7 +124,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             }
         }
 
-        private void Orbwalking_BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
+        private void Orbwalking_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
             if (args.Target.IsValid<Obj_AI_Minion>() && !Player.HasBuff("xerathascended2onhit") && Program.Combo)
             {
@@ -161,8 +161,8 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 OktwCommon.blockAttack = true;
                 OktwCommon.blockAttack = true;
                 OktwCommon.blockMove = true;
-                SebbyLib.Orbwalking.Attack = false;
-                SebbyLib.Orbwalking.Move = false;
+                Orbwalking.Attack = false;
+                Orbwalking.Move = false;
                 return;
             }
             else
@@ -171,8 +171,8 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 OktwCommon.blockAttack = false;
                 OktwCommon.blockAttack = false;
                 OktwCommon.blockMove = false;
-                SebbyLib.Orbwalking.Attack = true;
-                SebbyLib.Orbwalking.Move = true;
+                Orbwalking.Attack = true;
+                Orbwalking.Move = true;
             }
 
             if (Q.IsCharging && (int)(Game.Time * 10) % 2 == 0)

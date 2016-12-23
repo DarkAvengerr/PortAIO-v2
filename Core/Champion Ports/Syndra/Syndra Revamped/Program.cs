@@ -23,7 +23,7 @@ namespace SyndraRevamped
         public const string ChampionName = "Syndra";
 
         //Orbwalker instance
-        public static SebbyLib.Orbwalking.Orbwalker Orbwalker;
+        public static Orbwalking.Orbwalker Orbwalker;
 
         //Spells
         public static List<Spell> SpellList = new List<Spell>();
@@ -98,7 +98,7 @@ namespace SyndraRevamped
             //AssassinManager.Initialize();
 
             //Initialize the orbwalker and add it to the menu as submenu.
-            Orbwalker = new SebbyLib.Orbwalking.Orbwalker(Config.SubMenu("Orbwalking"));
+            Orbwalker = new Orbwalking.Orbwalker(Config.SubMenu("Orbwalking"));
 
             //var menuKeys = new Menu("Keys", "Keys").SetFontStyle(FontStyle.Regular, Color.Aqua);
             Config.AddSubMenu(new Menu("Keys", "Keys").SetFontStyle(FontStyle.Regular, Color.Aqua));
@@ -256,7 +256,7 @@ namespace SyndraRevamped
             //Add the events we are going to use:
             Game.OnUpdate += Game_OnGameUpdate;
             Game.OnWndProc += Game_OnWndProc;
-            SebbyLib.Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
+            Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
 
             Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
@@ -294,7 +294,7 @@ namespace SyndraRevamped
         }
 
         // ReSharper disable once InconsistentNaming
-        private static void Orbwalking_BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
+        private static void Orbwalking_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
             if (Config.Item("Key.Combo").GetValue<KeyBind>().Active)
             {
@@ -582,7 +582,7 @@ namespace SyndraRevamped
             {
                 return;
             }
-            if (!SebbyLib.Orbwalking.CanMove(40))
+            if (!Orbwalking.CanMove(40))
             {
                 return;
             }
@@ -619,7 +619,7 @@ namespace SyndraRevamped
                         var minion in
                             allMinionsQ.Where(
                                 minion =>
-                                !SebbyLib.Orbwalking.InAutoAttackRange(minion) && minion.Health < 0.75 * Q.GetDamage(minion)))
+                                !Orbwalking.InAutoAttackRange(minion) && minion.Health < 0.75 * Q.GetDamage(minion)))
                     {
                         Q.Cast(minion);
                     }

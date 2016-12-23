@@ -16,7 +16,7 @@ using EloBuddy;
     {
         public static IChampion Load(string name, IRootMenu menu)
         {
-            var orbwalker = new SebbyLib.Orbwalking.Orbwalker(menu.Orbwalking);
+            var orbwalker = new Orbwalking.Orbwalker(menu.Orbwalking);
 
             switch (name)
             {

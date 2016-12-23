@@ -50,8 +50,8 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             Game.OnUpdate += Game_OnGameUpdate;
 
             Drawing.OnDraw += Drawing_OnDraw;
-            //SebbyLib.Orbwalking.BeforeAttack += BeforeAttack;
-            //SebbyLib.Orbwalking.AfterAttack += afterAttack;
+            //Orbwalking.BeforeAttack += BeforeAttack;
+            //Orbwalking.AfterAttack += afterAttack;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             //Spellbook.OnCastSpell += Spellbook_OnCastSpell;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
@@ -242,7 +242,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                     return;
                 }
 
-                if ((OktwCommon.GetBuffCount(t, "varuswdebuff") == 3 && CanCast && !E.IsReady()) || !SebbyLib.Orbwalking.InAutoAttackRange(t))
+                if ((OktwCommon.GetBuffCount(t, "varuswdebuff") == 3 && CanCast && !E.IsReady()) || !Orbwalking.InAutoAttackRange(t))
                 {
                     if ((Program.Combo || (OktwCommon.GetBuffCount(t, "varuswdebuff") == 3 && Program.Harass)) && Player.Mana > RMANA + QMANA)
                     {
@@ -279,7 +279,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 t = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
             if (t.IsValidTarget())
             {
-                if ((OktwCommon.GetBuffCount(t, "varuswdebuff") == 3 && CanCast) || !SebbyLib.Orbwalking.InAutoAttackRange(t))
+                if ((OktwCommon.GetBuffCount(t, "varuswdebuff") == 3 && CanCast) || !Orbwalking.InAutoAttackRange(t))
                 {
                     if (Program.Combo && Player.Mana > RMANA + QMANA)
                     {

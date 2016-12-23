@@ -29,8 +29,8 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
             Drawing.OnDraw += Drawing_OnDraw;
             Game.OnUpdate += Game_OnGameUpdate;
-            SebbyLib.Orbwalking.BeforeAttack += BeforeAttack;
-            //SebbyLib.Orbwalking.AfterAttack += afterAttack;
+            Orbwalking.BeforeAttack += BeforeAttack;
+            //Orbwalking.AfterAttack += afterAttack;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter.OnPossibleToInterrupt += OnInterruptableSpell;
         }
@@ -93,7 +93,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             }
         }
 
-        private void BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
+        private void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
             if (FarmId != args.Target.NetworkId)
                 FarmId = args.Target.NetworkId;
@@ -162,7 +162,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
         {
             if (Program.Farm && Config.Item("farmQ", true).GetValue<bool>())
                 farmQ();
-            else if (Config.Item("stack", true).GetValue<bool>() && Utils.TickCount - Q.LastCastAttemptT > 4000 && !Player.HasBuff("Recall") && Player.Mana > Player.MaxMana * 0.95 && Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.None && (Items.HasItem(Tear) || Items.HasItem(Manamune)))
+            else if (Config.Item("stack", true).GetValue<bool>() && Utils.TickCount - Q.LastCastAttemptT > 4000 && !Player.HasBuff("Recall") && Player.Mana > Player.MaxMana * 0.95 && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None && (Items.HasItem(Tear) || Items.HasItem(Manamune)))
                 Q.Cast(Player.ServerPosition);
         }
 
@@ -186,7 +186,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
             if (Program.LagFree(1))
             {
-                if (!SebbyLib.Orbwalking.CanMove(50))
+                if (!Orbwalking.CanMove(50))
                     return;
                 bool cc = !Program.None && Player.Mana > RMANA + QMANA + EMANA;
                 bool harass = Program.Harass && Player.ManaPercent > Config.Item("HarassMana", true).GetValue<Slider>().Value && OktwCommon.CanHarras();
@@ -299,7 +299,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                     return;
             }
 
-            if (Config.Item("LC", true).GetValue<bool>() && Program.LaneClear && !SebbyLib.Orbwalking.CanAttack() && FarmSpells)
+            if (Config.Item("LC", true).GetValue<bool>() && Program.LaneClear && !Orbwalking.CanAttack() && FarmSpells)
             {
                 var LCP = Config.Item("LCP", true).GetValue<bool>();
 

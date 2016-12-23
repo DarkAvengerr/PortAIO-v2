@@ -55,8 +55,8 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             Drawing.OnDraw += Drawing_OnDraw;
             Game.OnUpdate += Game_OnGameUpdate;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
-            SebbyLib.Orbwalking.BeforeAttack += BeforeAttack;
-            SebbyLib.Orbwalking.AfterAttack += afterAttack;
+            Orbwalking.BeforeAttack += BeforeAttack;
+            Orbwalking.AfterAttack += afterAttack;
             Interrupter2.OnInterruptableTarget +=Interrupter2_OnInterruptableTarget;
             //Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
         }
@@ -75,7 +75,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 E.Cast(target);
         }
 
-        private void BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
+        private void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
             if (Config.Item("visibleR", true).GetValue<bool>() && Player.HasBuff("vaynetumblefade") && Player.CountEnemiesInRange(800) > 1)
                 args.Process = false;
@@ -89,7 +89,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             {
                 foreach (var target in HeroManager.Enemies.Where(target => target.IsValidTarget(800) && GetWStacks(target) == 2))
                 {
-                    if (SebbyLib.Orbwalking.InAutoAttackRange(target) && args.Target.Health > 3 * Player.GetAutoAttackDamage(target))
+                    if (Orbwalking.InAutoAttackRange(target) && args.Target.Health > 3 * Player.GetAutoAttackDamage(target))
                     {
                         args.Process = false;
                         Orbwalker.ForceTarget(target);
@@ -197,7 +197,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 {
                     var t = TargetSelector.GetTarget(900, TargetSelector.DamageType.Physical);
 
-                    if (t.IsValidTarget() && !SebbyLib.Orbwalking.InAutoAttackRange(t) && t.Position.Distance(Game.CursorPos) < t.Position.Distance(Player.Position) &&  !t.IsFacing(Player))
+                    if (t.IsValidTarget() && !Orbwalking.InAutoAttackRange(t) && t.Position.Distance(Game.CursorPos) < t.Position.Distance(Player.Position) &&  !t.IsFacing(Player))
                     {
                         var dashPos = Dash.CastDash();
                         if (!dashPos.IsZero)

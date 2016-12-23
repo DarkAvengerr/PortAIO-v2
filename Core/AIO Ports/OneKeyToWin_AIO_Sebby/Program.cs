@@ -18,7 +18,7 @@ namespace OneKeyToWin_AIO_Sebby
         public static Menu Config;
 
         public static AIHeroClient Player { get { return ObjectManager.Player; } }
-        public static SebbyLib.Orbwalking.Orbwalker Orbwalker;
+        public static Orbwalking.Orbwalker Orbwalker;
 
         public static Spell Q, W, E, R, Q1, W1, E1, R1;
         public static float QMANA = 0, WMANA = 0, EMANA = 0, RMANA = 0;
@@ -56,7 +56,7 @@ namespace OneKeyToWin_AIO_Sebby
             if (AIOmode != 2)
             {
                 Config.AddSubMenu(new Menu("Orbwalking", "Orbwalking"));
-                Orbwalker = new SebbyLib.Orbwalking.Orbwalker(Config.SubMenu("Orbwalking"));
+                Orbwalker = new Orbwalking.Orbwalker(Config.SubMenu("Orbwalking"));
             }
 
 
@@ -226,7 +226,6 @@ namespace OneKeyToWin_AIO_Sebby
 
             Config.AddToMainMenu();
             Game.OnUpdate += OnUpdate;
-            SebbyLib.Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
             Drawing.OnDraw += OnDraw;
         }
 
@@ -287,29 +286,6 @@ namespace OneKeyToWin_AIO_Sebby
                 OktwCommon.blockAttack = false;
         }
 
-        private static void Orbwalking_BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
-        {
-            if (AIOmode == 2)
-                return;
-
-            if (Combo && Config.Item("comboDisableMode", true).GetValue<bool>())
-            {
-                var t = (AIHeroClient)args.Target;
-                if (4 * Player.GetAutoAttackDamage(t) < t.Health - OktwCommon.GetIncomingDamage(t) && !t.HasBuff("luxilluminatingfraulein") && !Player.HasBuff("sheen") && !Player.HasBuff("Mastery6261"))
-                    args.Process = false;
-            }
-
-            if (!Player.IsMelee && OktwCommon.CollisionYasuo(Player.ServerPosition, args.Target.Position) && Config.Item("collAA", true).GetValue<bool>())
-            {
-                args.Process = false;
-            }
-
-            if (Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Mixed && Config.Item("supportMode", true).GetValue<bool>())
-            {
-                if (args.Target.Type == GameObjectType.obj_AI_Minion) args.Process = false;
-            }
-        }
-
         public static bool LaneClear = false, None = false, Harass = false, Combo = false, Farm = false;
 
         private static void OnUpdate(EventArgs args)
@@ -323,16 +299,16 @@ namespace OneKeyToWin_AIO_Sebby
             }
             else
             {
-                Combo = Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Combo;
+                Combo = Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo;
 
                 if (Config.Item("harassMixed").GetValue<bool>())
-                    Harass = Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Mixed;
+                    Harass = Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed;
                 else
-                    Harass = Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.LaneClear || Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Mixed || Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Freeze;
+                    Harass = Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Freeze;
 
-                Farm = Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.LaneClear || Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Mixed || Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Freeze;
-                None = Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.None;
-                LaneClear = Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.LaneClear;
+                Farm = Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Freeze;
+                None = Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None;
+                LaneClear = Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear;
             }
 
             tickIndex++;

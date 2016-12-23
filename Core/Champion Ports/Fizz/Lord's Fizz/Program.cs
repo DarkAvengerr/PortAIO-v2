@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
-using Orbwalking = SebbyLib.Orbwalking;
+
 using Color = System.Drawing.Color;
 using System.Drawing;
 using SharpDX;

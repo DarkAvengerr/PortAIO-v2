@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Color = System.Drawing.Color;
 using SharpDX.Direct3D9;
-using Orbwalking = SebbyLib.Orbwalking;
+
 
 using EloBuddy;
 using LeagueSharp.Common;

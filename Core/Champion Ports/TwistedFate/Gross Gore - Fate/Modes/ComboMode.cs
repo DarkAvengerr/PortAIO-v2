@@ -20,7 +20,7 @@ using LeagueSharp.Common;
 
             foreach (var enemy in HeroManager.Enemies.Where(e => !e.IsDead))
             {
-                if (Config.CanKillW && enemy.IsKillableAndValidTarget(Spells._w.GetDamage(enemy), Spells._w.DamageType, SebbyLib.Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + 200))
+                if (Config.CanKillW && enemy.IsKillableAndValidTarget(Spells._w.GetDamage(enemy), Spells._w.DamageType, Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + 200))
                 {
                     if (Spells._w.IsReadyPerfectly())
                     {

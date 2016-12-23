@@ -49,7 +49,7 @@ using LeagueSharp.Common;
             TwistedFateMenu.AddSubMenu(TargetSelectorMenu);
 
             OrbwalkMenu = new Menu("Sebby's Orbwalker", "orbwalker");
-            Mainframe.Orbwalker = new SebbyLib.Orbwalking.Orbwalker(OrbwalkMenu);
+            Mainframe.Orbwalker = new Orbwalking.Orbwalker(OrbwalkMenu);
 
             TwistedFateMenu.AddSubMenu(OrbwalkMenu);
 

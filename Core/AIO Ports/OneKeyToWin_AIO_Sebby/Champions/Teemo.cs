@@ -53,7 +53,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
-            SebbyLib.Orbwalking.AfterAttack += Orbwalking_AfterAttack;
+            Orbwalking.AfterAttack += Orbwalking_AfterAttack;
 
         }
 
@@ -161,7 +161,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 R.Range = 150 + 250 * R.Level;
             }
             
-            if (Q.IsReady() && SebbyLib.Orbwalking.CanMove(50) && Config.Item("autoQ", true).GetValue<bool>())
+            if (Q.IsReady() && Orbwalking.CanMove(50) && Config.Item("autoQ", true).GetValue<bool>())
                 LogicQ();
 
             if (Program.LagFree(4) && W.IsReady() && Player.IsMoving)
@@ -191,7 +191,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
         {
             if (Player.Mana > RMANA + QMANA && (Player.IsMoving || !Program.None))
             {
-                if (Program.LagFree(1) && SebbyLib.Orbwalking.CanMove(50))
+                if (Program.LagFree(1) && Orbwalking.CanMove(50))
                 {
                     foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(R.Range + 100)))
                     {
@@ -225,7 +225,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                         R.Cast(trapPos);
                 }
 
-                if (Program.LagFree(3) && SebbyLib.Orbwalking.CanMove(50) && Player.Mana > RMANA + QMANA + WMANA && Config.Item("bushR2", true).GetValue<bool>() && Utils.TickCount - R.LastCastAttemptT > 2000)
+                if (Program.LagFree(3) && Orbwalking.CanMove(50) && Player.Mana > RMANA + QMANA + WMANA && Config.Item("bushR2", true).GetValue<bool>() && Utils.TickCount - R.LastCastAttemptT > 2000)
                 {
                     if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.R).Ammo > 1 + Player.CountEnemiesInRange(1200) && Player.CountEnemiesInRange(800) == 0)
                     {

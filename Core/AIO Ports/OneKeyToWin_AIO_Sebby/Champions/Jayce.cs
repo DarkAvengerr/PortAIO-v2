@@ -88,7 +88,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
             Drawing.OnDraw += Drawing_OnDraw;
             Game.OnUpdate += OnUpdate;
-            SebbyLib.Orbwalking.BeforeAttack += BeforeAttack;
+            Orbwalking.BeforeAttack += BeforeAttack;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
@@ -174,7 +174,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             }
         }
 
-        private void BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
+        private void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
             if (W.IsReady() && Config.Item("autoW", true).GetValue<bool>() && Range && args.Target is AIHeroClient)
             {
@@ -201,9 +201,9 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             {
                 
                 if (Config.Item("autoWmove", true).GetValue<bool>() && Orbwalker.GetTarget() != null && Player.HasBuff("jaycehyperchargevfx"))
-                    SebbyLib.Orbwalking.Move = false;
+                    Orbwalking.Move = false;
                 else
-                    SebbyLib.Orbwalking.Move = true;
+                    Orbwalking.Move = true;
 
                 if (Program.LagFree(1) && Q.IsReady() && Config.Item("autoQ", true).GetValue<bool>())
                     LogicQ();
@@ -213,7 +213,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             }
             else
             {
-                SebbyLib.Orbwalking.Move = true;
+                Orbwalking.Move = true;
                 if (Program.LagFree(1) && E1.IsReady() && Config.Item("autoEm", true).GetValue<bool>())
                     LogicE2();
 
@@ -482,7 +482,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                         }
                         if (W.IsReady() && Config.Item("jungleE", true).GetValue<bool>())
                         {
-                            if( SebbyLib.Orbwalking.InAutoAttackRange(mob))
+                            if( Orbwalking.InAutoAttackRange(mob))
                                 W.Cast();
                             return;
                         }

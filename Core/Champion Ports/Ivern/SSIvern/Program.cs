@@ -13,7 +13,7 @@ using SebbyLib;
 using SPrediction;
 using Color = SharpDX.Color;
 using HitChance = SebbyLib.Prediction.HitChance;
-using Orbwalking = SebbyLib.Orbwalking;
+
 using Prediction = SPrediction.Prediction;
 using PredictionInput = SebbyLib.Prediction.PredictionInput;
 

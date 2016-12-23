@@ -4347,7 +4347,6 @@
     <Compile Include="Core\Library Ports\SebbyLib\HealthPrediction.cs" />
     <Compile Include="Core\Library Ports\SebbyLib\Movement.cs" />
     <Compile Include="Core\Library Ports\SebbyLib\OktwCommon.cs" />
-    <Compile Include="Core\Library Ports\SebbyLib\Orbwalking.cs" />
     <Compile Include="Core\Library Ports\SebbyLib\PredictionOktw.cs" />
     <Compile Include="Core\Init.cs" />
     <Compile Include="Core\AIO Ports\SFXTargetSelector\Aggro.cs" />

@@ -60,7 +60,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             Drawing.OnDraw += Drawing_OnDraw;
             Game.OnUpdate += Game_OnGameUpdate;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
-            SebbyLib.Orbwalking.AfterAttack += Orbwalker_AfterAttack;
+            Orbwalking.AfterAttack += Orbwalker_AfterAttack;
         }
 
         public void Orbwalker_AfterAttack(AttackableUnit unit, AttackableUnit target)
@@ -210,7 +210,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 }
                 else if (Program.Combo && Player.Mana > RMANA + WMANA + QMANA)
                 {
-                    if (!SebbyLib.Orbwalking.InAutoAttackRange(t) || Player.CountEnemiesInRange(300) > 0 || t.CountEnemiesInRange(250) > 1 || Player.HealthPercent < 50)
+                    if (!Orbwalking.InAutoAttackRange(t) || Player.CountEnemiesInRange(300) > 0 || t.CountEnemiesInRange(250) > 1 || Player.HealthPercent < 50)
                         W.Cast(t, true, true);
                     else if (Player.Mana > RMANA + WMANA + QMANA + EMANA)
                     {
@@ -252,7 +252,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
                 if (Config.Item("overkillR", true).GetValue<bool>() && target.Health < Player.Health)
                 {
-                    if(SebbyLib.Orbwalking.InAutoAttackRange(target))
+                    if(Orbwalking.InAutoAttackRange(target))
                         continue;
                     if (target.CountAlliesInRange(400) > 0)
                         continue;

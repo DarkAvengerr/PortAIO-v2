@@ -48,26 +48,26 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             Game.OnUpdate += Game_OnGameUpdate;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Drawing.OnDraw += Drawing_OnDraw;
-            SebbyLib.Orbwalking.AfterAttack += afterAttack;
+            Orbwalking.AfterAttack += afterAttack;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
-            SebbyLib.Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
+            Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
         }
 
-        private void Orbwalking_BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
+        private void Orbwalking_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
             if(args.Target.Type == GameObjectType.AIHeroClient && Config.Item("focusP", true).GetValue<bool>() && args.Target.HealthPercent > 40)
             {
                 var orbTarget = args.Target as AIHeroClient;
                 if (!orbTarget.HasBuff("quinnw"))
                 {
-                    var best = HeroManager.Enemies.FirstOrDefault(enemy => enemy.IsValidTarget() && SebbyLib.Orbwalking.InAutoAttackRange(enemy) && enemy.HasBuff("quinnw"));
+                    var best = HeroManager.Enemies.FirstOrDefault(enemy => enemy.IsValidTarget() && Orbwalking.InAutoAttackRange(enemy) && enemy.HasBuff("quinnw"));
                     if(best != null)
                         Orbwalker.ForceTarget(best);
                 }
             }
             else if(Program.LaneClear && args.Target.Type == GameObjectType.obj_AI_Minion && Config.Item("farmP", true).GetValue<bool>())
             {
-                var bestMinion = Cache.GetMinions(Player.Position, Player.AttackRange).FirstOrDefault(minion => minion.IsValidTarget() && SebbyLib.Orbwalking.InAutoAttackRange(minion) && minion.HasBuff("quinnw"));
+                var bestMinion = Cache.GetMinions(Player.Position, Player.AttackRange).FirstOrDefault(minion => minion.IsValidTarget() && Orbwalking.InAutoAttackRange(minion) && minion.HasBuff("quinnw"));
 
                 if (bestMinion != null)
                     Orbwalker.ForceTarget(bestMinion);
@@ -178,7 +178,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             var t = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
             if (t.IsValidTarget())
             {
-                if (SebbyLib.Orbwalking.InAutoAttackRange(t) && t.HasBuff("quinnw"))
+                if (Orbwalking.InAutoAttackRange(t) && t.HasBuff("quinnw"))
                     return;
                 if (Program.Combo && Player.Mana > RMANA + QMANA)
                     Program.CastSpell(Q, t);

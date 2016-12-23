@@ -185,16 +185,16 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
                 if (qDmg > t.Health && eDmg < t.Health && Player.Mana > QMANA + EMANA)
                     castQ(cast, t);
-                else if ((qDmg * 1.1) + eDmg > t.Health && eDmg < t.Health && Player.Mana > QMANA + EMANA && SebbyLib.Orbwalking.InAutoAttackRange(t))
+                else if ((qDmg * 1.1) + eDmg > t.Health && eDmg < t.Health && Player.Mana > QMANA + EMANA && Orbwalking.InAutoAttackRange(t))
                     castQ(cast, t);
                 else if (Program.Combo && Player.Mana > RMANA +  QMANA + EMANA )
                 {
                     if(Config.Item("qMode", true).GetValue<StringList>().SelectedIndex == 0)
                         castQ(cast, t);
-                    else if (!SebbyLib.Orbwalking.InAutoAttackRange(t) || CountMeleeInRange(400) > 0)
+                    else if (!Orbwalking.InAutoAttackRange(t) || CountMeleeInRange(400) > 0)
                         castQ(cast, t);
                 }
-                else if (Program.Harass && !SebbyLib.Orbwalking.InAutoAttackRange(t) && Config.Item("Harass" + t.ChampionName).GetValue<bool>() && !Player.UnderTurret(true) && Player.ManaPercent > Config.Item("qMana", true).GetValue<Slider>().Value)
+                else if (Program.Harass && !Orbwalking.InAutoAttackRange(t) && Config.Item("Harass" + t.ChampionName).GetValue<bool>() && !Player.UnderTurret(true) && Player.ManaPercent > Config.Item("qMana", true).GetValue<Slider>().Value)
                     castQ(cast, t);
                 if ((Program.Combo || Program.Harass) && Player.Mana > RMANA + QMANA + EMANA)
                 {
@@ -258,7 +258,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                     if (GetPassiveTime(minion) > 0.5 && SebbyLib.HealthPrediction.GetHealthPrediction(minion, 300) > minion.GetAutoAttackDamage(minion) && !minion.HasBuff("kindredrnodeathbuff"))
                     {
                         count++;
-                        if (!SebbyLib.Orbwalking.InAutoAttackRange(minion))
+                        if (!Orbwalking.InAutoAttackRange(minion))
                         {
                             outRange++;
                         }

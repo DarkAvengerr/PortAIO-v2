@@ -50,8 +50,8 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             Config.SubMenu(Player.ChampionName).SubMenu("Draw").AddItem(new MenuItem("onlyRdy", "Draw when skill rdy", true).SetValue(true));
 
             Game.OnUpdate += Game_OnGameUpdate;
-            SebbyLib.Orbwalking.BeforeAttack += BeforeAttack;
-            SebbyLib.Orbwalking.AfterAttack += afterAttack;
+            Orbwalking.BeforeAttack += BeforeAttack;
+            Orbwalking.AfterAttack += afterAttack;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -76,7 +76,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
         {
             if (sender.IsMe && args.SData.Name == "RocketGrabMissile")
             {
-                LeagueSharp.Common.Utility.DelayAction.Add(500, SebbyLib.Orbwalking.ResetAutoAttackTimer);
+                LeagueSharp.Common.Utility.DelayAction.Add(500, Orbwalking.ResetAutoAttackTimer);
                 grab++;
             }
         }
@@ -138,7 +138,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             }
         }
 
-        private void BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
+        private void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
             if (E.IsReady() && args.Target.IsValid<AIHeroClient>() && Config.Item("autoE", true).GetValue<bool>())
                 E.Cast();   

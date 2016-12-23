@@ -56,7 +56,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             
             Game.OnUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
-            SebbyLib.Orbwalking.AfterAttack += afterAttack;
+            Orbwalking.AfterAttack += afterAttack;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Spellbook.OnCastSpell +=Spellbook_OnCastSpell;
         }
@@ -183,7 +183,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             var t = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
             if (t.IsValidTarget())
             {
-                if (Config.Item("ignoreCol", true).GetValue<bool>() && SebbyLib.Orbwalking.InAutoAttackRange(t))
+                if (Config.Item("ignoreCol", true).GetValue<bool>() && Orbwalking.InAutoAttackRange(t))
                     W.Collision=false;
                 else
                     W.Collision=true;
@@ -191,7 +191,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 var qDmg = Q.GetDamage(t);
                 var wDmg = OktwCommon.GetKsDamage(t, W);
 
-                if (SebbyLib.Orbwalking.InAutoAttackRange(t))
+                if (Orbwalking.InAutoAttackRange(t))
                 {
                     qDmg += (float)AaDamage(t);
                     wDmg += (float)AaDamage(t);
@@ -216,7 +216,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 }
 
                 
-                if (Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Combo && Player.Mana > RMANA + WMANA + EMANA + QMANA)
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Player.Mana > RMANA + WMANA + EMANA + QMANA)
                     Program.CastSpell(W, t);
                 else if (Program.Harass && Config.Item("Harass" + t.ChampionName).GetValue<bool>() && !Player.UnderTurret(true) && Player.Mana > Player.MaxMana * 0.8 && Player.Mana > RMANA + WMANA + EMANA + QMANA + WMANA)
                     Program.CastSpell(W, t);
@@ -232,7 +232,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
         {
             var t = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Physical);
 
-            if (t.IsValidTarget(R.Range) && t.CountAlliesInRange(500) == 0 && OktwCommon.ValidUlt(t) && !SebbyLib.Orbwalking.InAutoAttackRange(t))
+            if (t.IsValidTarget(R.Range) && t.CountAlliesInRange(500) == 0 && OktwCommon.ValidUlt(t) && !Orbwalking.InAutoAttackRange(t))
             {
                 var rDmg = R.GetDamage(t,1) * (10 + 5 * R.Level);
 

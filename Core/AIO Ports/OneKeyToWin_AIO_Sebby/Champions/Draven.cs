@@ -60,7 +60,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
             GameObject.OnCreate += SpellMissile_OnCreateOld;
             GameObject.OnDelete += Obj_SpellMissile_OnDelete;
-            SebbyLib.Orbwalking.BeforeAttack += BeforeAttack;
+            Orbwalking.BeforeAttack += BeforeAttack;
             GameObject.OnCreate += GameObjectOnOnCreate;
             GameObject.OnDelete += GameObjectOnOnDelete;
             Drawing.OnDraw += Drawing_OnDraw;
@@ -111,7 +111,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             }
         }
 
-        private void BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
+        private void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
             //Program.debug("" + OktwCommon.GetBuffCount(Player, "dravenspinningattack"));
             if (Q.IsReady())
@@ -165,16 +165,16 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                     var BuffTime = OktwCommon.GetPassiveTime(Player, "dravenspinningattack");
                     if (BuffTime < 1)
                     {
-                        Orbwalker.ActiveMode = SebbyLib.Orbwalking.OrbwalkingMode.LaneClear;
+                        Orbwalker.ActiveMode = Orbwalking.OrbwalkingMode.LaneClear;
                     }
                     else
                     {
-                        Orbwalker.ActiveMode = SebbyLib.Orbwalking.OrbwalkingMode.None;
+                        Orbwalker.ActiveMode = Orbwalking.OrbwalkingMode.None;
                     }
                 }
                 else
                 {
-                    Orbwalker.ActiveMode = SebbyLib.Orbwalking.OrbwalkingMode.None;
+                    Orbwalker.ActiveMode = Orbwalking.OrbwalkingMode.None;
                 }
             }
             
@@ -200,7 +200,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
         private void LogicE()
         {
-            foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(E.Range) && !SebbyLib.Orbwalking.InAutoAttackRange(enemy) && E.GetDamage(enemy) > enemy.Health))
+            foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(E.Range) && !Orbwalking.InAutoAttackRange(enemy) && E.GetDamage(enemy) > enemy.Health))
             {
                 Program.CastSpell(E, enemy);
                 return;
@@ -213,7 +213,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 {
                     if (Player.Mana > RMANA + EMANA)
                     {
-                        if (!SebbyLib.Orbwalking.InAutoAttackRange(t))
+                        if (!Orbwalking.InAutoAttackRange(t))
                             Program.CastSpell(E, t);
                         if (Player.Health < Player.MaxHealth * 0.5)
                             Program.CastSpell(E, t);
@@ -260,12 +260,12 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
                     var qDmg = Q.GetDamage(target);
                     var eDmg = E.GetDamage(target);
-                    if (Rdmg > predictedHealth && !SebbyLib.Orbwalking.InAutoAttackRange(target))
+                    if (Rdmg > predictedHealth && !Orbwalking.InAutoAttackRange(target))
                     {
                         castR(target);
                         Program.debug("R normal");
                     }
-                    else if (Program.Combo && Config.Item("comboR", true).GetValue<bool>() && SebbyLib.Orbwalking.InAutoAttackRange(target) && Rdmg * 2 + Player.GetAutoAttackDamage(target) > predictedHealth)
+                    else if (Program.Combo && Config.Item("comboR", true).GetValue<bool>() && Orbwalking.InAutoAttackRange(target) && Rdmg * 2 + Player.GetAutoAttackDamage(target) > predictedHealth)
                     {
                         castR(target);
                         Program.debug("R normal");

@@ -86,7 +86,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
-            SebbyLib.Orbwalking.AfterAttack += afterAttack;
+            Orbwalking.AfterAttack += afterAttack;
             Obj_AI_Base.OnBuffGain += Obj_AI_Base_OnBuffAdd;
         }
 
@@ -182,7 +182,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
         {
             if (Program.LagFree(1))
             {
-                if (!SebbyLib.Orbwalking.CanMove(50) )
+                if (!Orbwalking.CanMove(50) )
                     return;
                 bool cc = !Program.None && Player.Mana > RMANA + QMANA + EMANA;
                 bool harass = Program.Harass && Player.ManaPercent > Config.Item("HarassMana", true).GetValue<Slider>().Value && OktwCommon.CanHarras();
@@ -275,7 +275,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 }
             }
 
-            if (t.IsValidTarget() && Program.Combo && Config.Item("EKsCombo", true).GetValue<bool>() && Player.HealthPercent > 40 && t.Distance(Game.CursorPos) + 300 < t.Position.Distance(Player.Position) && !SebbyLib.Orbwalking.InAutoAttackRange(t) && !Player.UnderTurret(true) && (Game.Time - OverKill > 0.3) )
+            if (t.IsValidTarget() && Program.Combo && Config.Item("EKsCombo", true).GetValue<bool>() && Player.HealthPercent > 40 && t.Distance(Game.CursorPos) + 300 < t.Position.Distance(Player.Position) && !Orbwalking.InAutoAttackRange(t) && !Player.UnderTurret(true) && (Game.Time - OverKill > 0.3) )
             {
                 var dashPosition = Player.Position.Extend(Game.CursorPos, E.Range);
 
@@ -418,7 +418,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 }
             }
 
-            if (!SebbyLib.Orbwalking.CanMove(50) || (Orbwalker.ShouldWait() && SebbyLib.Orbwalking.CanAttack()))
+            if (!Orbwalking.CanMove(50) || (Orbwalker.ShouldWait() && Orbwalking.CanAttack()))
             {
                 return;
             }
@@ -443,7 +443,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 }
             }
 
-            if (Config.Item("farmQ", true).GetValue<bool>() && !SebbyLib.Orbwalking.CanAttack() && FarmSpells)
+            if (Config.Item("farmQ", true).GetValue<bool>() && !Orbwalking.CanAttack() && FarmSpells)
             {
                 var LCP = Config.Item("LCP", true).GetValue<bool>();
                 var PT = Game.Time - GetPassiveTime() > -1.5 || !E.IsReady();

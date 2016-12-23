@@ -63,7 +63,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
             Game.OnUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
-            SebbyLib.Orbwalking.AfterAttack += afterAttack;
+            Orbwalking.AfterAttack += afterAttack;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
         }
 
@@ -87,8 +87,8 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             {
                 RCastTime = Game.Time;
                 Program.debug(args.SData.Name);
-                SebbyLib.Orbwalking.Attack = false;
-                SebbyLib.Orbwalking.Move = false;
+                Orbwalking.Attack = false;
+                Orbwalking.Move = false;
                 if (Config.Item("forceBlockMove", true).GetValue<bool>())
                 {
                     OktwCommon.blockMove = true;
@@ -118,7 +118,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 }
                 if (W.IsReady())
                 {
-                    if (Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Combo && Player.Mana > RMANA + WMANA && Config.Item("autoW", true).GetValue<bool>())
+                    if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo && Player.Mana > RMANA + WMANA && Config.Item("autoW", true).GetValue<bool>())
                         W.Cast();
                     else if (Player.Mana > RMANA + WMANA + QMANA && Config.Item("harassW", true).GetValue<bool>())
                         W.Cast();
@@ -148,7 +148,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 if (mobs.Count > 0)
                 {
                     var mob = mobs[0];
-                    if (Q.IsReady() && Config.Item("jungleQ", true).GetValue<bool>() && !SebbyLib.Orbwalking.CanAttack() && !ObjectManager.Player.Spellbook.IsAutoAttacking)
+                    if (Q.IsReady() && Config.Item("jungleQ", true).GetValue<bool>() && !Orbwalking.CanAttack() && !ObjectManager.Player.Spellbook.IsAutoAttacking)
                     {
                         Q.Cast(mob);
                         return;
@@ -171,8 +171,8 @@ namespace OneKeyToWin_AIO_Sebby.Champions
         {
             if (Config.Item("disableBlock", true).GetValue<KeyBind>().Active)
             {
-                SebbyLib.Orbwalking.Attack = true;
-                SebbyLib.Orbwalking.Move = true;
+                Orbwalking.Attack = true;
+                Orbwalking.Move = true;
                 OktwCommon.blockSpells = false;
                 OktwCommon.blockAttack = false;
                 OktwCommon.blockMove = false;
@@ -187,16 +187,16 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                     OktwCommon.blockSpells = true;
                 }
 
-                SebbyLib.Orbwalking.Attack = false;
-                SebbyLib.Orbwalking.Move = false;
+                Orbwalking.Attack = false;
+                Orbwalking.Move = false;
                
                 Program.debug("cast R");
                 return;
             }
             else
             {
-                SebbyLib.Orbwalking.Attack = true;
-                SebbyLib.Orbwalking.Move = true;
+                Orbwalking.Attack = true;
+                Orbwalking.Move = true;
                 if (Config.Item("forceBlockMove", true).GetValue<bool>())
                 {
                     OktwCommon.blockAttack = false;
@@ -227,7 +227,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 if (t2.IsValidTarget() && t2.NetworkId == LastAttackId)
                 {
                     var ta = HeroManager.Enemies.Where(enemy => 
-                        enemy.IsValidTarget() && SebbyLib.Orbwalking.InAutoAttackRange(enemy) 
+                        enemy.IsValidTarget() && Orbwalking.InAutoAttackRange(enemy) 
                             && (enemy.NetworkId != LastAttackId || enemy.Health < Player.GetAutoAttackDamage(enemy) * 2) ).FirstOrDefault();
 
                     if (ta!=null)
@@ -329,7 +329,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                     Program.CastSpell(E, t);
                 else if (Program.Combo && Player.Mana > RMANA + WMANA + QMANA + EMANA)
                 {
-                    if (!SebbyLib.Orbwalking.InAutoAttackRange(t) || Player.CountEnemiesInRange(300) > 0 || t.CountEnemiesInRange(250) > 1)
+                    if (!Orbwalking.InAutoAttackRange(t) || Player.CountEnemiesInRange(300) > 0 || t.CountEnemiesInRange(250) > 1)
                         Program.CastSpell(E, t);
                     else 
                     {

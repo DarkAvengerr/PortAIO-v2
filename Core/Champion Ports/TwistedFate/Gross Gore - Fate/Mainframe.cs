@@ -17,7 +17,7 @@ using LeagueSharp.Common;
     {
         #region Properties
 
-        internal static SebbyLib.Orbwalking.Orbwalker Orbwalker { get; set; }
+        internal static Orbwalking.Orbwalker Orbwalker { get; set; }
 
         #endregion
 
@@ -30,7 +30,7 @@ using LeagueSharp.Common;
             Obj_AI_Base.OnProcessSpellCast += Computed.OnProcessSpellCast;
             Obj_AI_Base.OnProcessSpellCast += Computed.YellowIntoQ;
             Obj_AI_Base.OnProcessSpellCast += Computed.RedIntoQ;
-            SebbyLib.Orbwalking.BeforeAttack += Computed.OnBeforeAttack;
+            Orbwalking.BeforeAttack += Computed.OnBeforeAttack;
             AntiGapcloser.OnEnemyGapcloser += Computed.Gapcloser_OnGapCloser;
             Interrupter2.OnInterruptableTarget += Computed.InterruptableSpell_OnInterruptableTarget;
         }
@@ -41,17 +41,17 @@ using LeagueSharp.Common;
             {
                 switch(Orbwalker.ActiveMode)
                 {
-                    case SebbyLib.Orbwalking.OrbwalkingMode.Combo:
+                    case Orbwalking.OrbwalkingMode.Combo:
                     {
                             ComboMode.Execute();
                             break;
                     }
-                    case SebbyLib.Orbwalking.OrbwalkingMode.Mixed:
+                    case Orbwalking.OrbwalkingMode.Mixed:
                     {
                             MixedMode.Execute();
                             break;
                     }
-                    case SebbyLib.Orbwalking.OrbwalkingMode.LaneClear:
+                    case Orbwalking.OrbwalkingMode.LaneClear:
                     {
                             Clear.Execute();
                             break;

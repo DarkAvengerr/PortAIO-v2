@@ -20,7 +20,7 @@ using EloBuddy;
         private static AIHeroClient p { get { return ObjectManager.Player; } }
         private static Spell Q, W, E, R, useYumu, Recall;
         private static LeagueSharp.Common.Orbwalking.Orbwalker orb;
-       // private static SebbyLib.Orbwalking.Orbwalker sebbyOrb;
+       // private static Orbwalking.Orbwalker sebbyOrb;
         private static Menu m;
 
         public static void Main()
@@ -46,7 +46,7 @@ using EloBuddy;
             m = new Menu("SNTwitch by SnRolls", "Twitch", true);
 
            // if (m.Item("useSebbyOrb").IsActive())
-//      sebbyOrb = new SebbyLib.Orbwalking.Orbwalker(m.SubMenu("Orbwalker"));
+//      sebbyOrb = new Orbwalking.Orbwalker(m.SubMenu("Orbwalker"));
            // else
                 orb = new LeagueSharp.Common.Orbwalking.Orbwalker(m.SubMenu("Orbwalker"));
 

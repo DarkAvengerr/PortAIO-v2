@@ -14,7 +14,7 @@ using EloBuddy;
     {
         private static string ChampionName = "Jinx";
 
-        public static SebbyLib.Orbwalking.Orbwalker Orbwalker;
+        public static Orbwalking.Orbwalker Orbwalker;
         public static Menu Config;
 
         private static AIHeroClient Player { get { return ObjectManager.Player; } }
@@ -60,7 +60,7 @@ using EloBuddy;
             }
 
             Game.OnUpdate += Game_OnGameUpdate;
-            SebbyLib.Orbwalking.BeforeAttack += BeforeAttack;
+            Orbwalking.BeforeAttack += BeforeAttack;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Drawing.OnDraw += Drawing_OnDraw;
             Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
@@ -74,7 +74,7 @@ using EloBuddy;
             TargetSelector.AddToMenu(targetSelectorMenu);
             Config.AddSubMenu(targetSelectorMenu);
             Config.AddSubMenu(new Menu("Orbwalking", "Orbwalking"));
-            Orbwalker = new SebbyLib.Orbwalking.Orbwalker(Config.SubMenu("Orbwalking"));
+            Orbwalker = new Orbwalking.Orbwalker(Config.SubMenu("Orbwalking"));
             Config.AddToMainMenu();
 
             Config.SubMenu("Draw").AddItem(new MenuItem("qRange", "Q range").SetValue(false));
@@ -168,7 +168,7 @@ using EloBuddy;
             }
         }
 
-        private static void BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
+        private static void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
             if (!FishBoneActive)
                 return;
@@ -185,7 +185,7 @@ using EloBuddy;
             if (!Combo && args.Target is Obj_AI_Minion)
             {
                 var t = (Obj_AI_Minion)args.Target;
-                if (Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.LaneClear && Player.ManaPercent > Config.Item("QmanaLC").GetValue<Slider>().Value && CountMinionsInRange(250, t.Position) >= Config.Item("Qlaneclear").GetValue<Slider>().Value)
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Player.ManaPercent > Config.Item("QmanaLC").GetValue<Slider>().Value && CountMinionsInRange(250, t.Position) >= Config.Item("Qlaneclear").GetValue<Slider>().Value)
                 {
                     
                 }
@@ -260,7 +260,7 @@ using EloBuddy;
                 bool cast = false;
                 
 
-                if (Config.Item("RoverAA").GetValue<bool>() && (!SebbyLib.Orbwalking.CanAttack() || Player.Spellbook.IsAutoAttacking))
+                if (Config.Item("RoverAA").GetValue<bool>() && (!Orbwalking.CanAttack() || Player.Spellbook.IsAutoAttacking))
                     return;
 
                 foreach (var target in Enemies.Where(target => target.IsValidTarget(R.Range) && OktwCommon.ValidUlt(target) ))
@@ -337,7 +337,7 @@ using EloBuddy;
             }
             else if (Config.Item("Rmode").GetValue<StringList>().SelectedIndex == 2)
             {
-                if (range > Config.Item("Rcustome").GetValue<Slider>().Value && !SebbyLib.Orbwalking.InAutoAttackRange(t))
+                if (range > Config.Item("Rcustome").GetValue<Slider>().Value && !Orbwalking.InAutoAttackRange(t))
                     return true;
                 else
                     return false;
@@ -450,7 +450,7 @@ using EloBuddy;
                 {
                     CastSpell(W, t);
                 }
-                else if (Farm && SebbyLib.Orbwalking.CanAttack() && !Player.Spellbook.IsAutoAttacking && Config.Item("Wharass").GetValue<bool>() && Player.ManaPercent > Config.Item("WmanaHarass").GetValue<Slider>().Value)
+                else if (Farm && Orbwalking.CanAttack() && !Player.Spellbook.IsAutoAttacking && Config.Item("Wharass").GetValue<bool>() && Player.ManaPercent > Config.Item("WmanaHarass").GetValue<Slider>().Value)
                 {
                     if (Config.Item("Wts").GetValue<StringList>().SelectedIndex == 0)
                     {
@@ -472,7 +472,7 @@ using EloBuddy;
             if (FishBoneActive)
             {
                 var orbT = Orbwalker.GetTarget();
-                if (Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.LaneClear && Player.ManaPercent > Config.Item("QmanaLC").GetValue<Slider>().Value && orbT.IsValid<Obj_AI_Minion>())
+                if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Player.ManaPercent > Config.Item("QmanaLC").GetValue<Slider>().Value && orbT.IsValid<Obj_AI_Minion>())
                 {
                     
                 }
@@ -483,7 +483,7 @@ using EloBuddy;
                 }  
                 else
                 {
-                    if (!Combo && Orbwalker.ActiveMode != SebbyLib.Orbwalking.OrbwalkingMode.None)
+                    if (!Combo && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
                         Q.Cast();
                 }
             }
@@ -492,13 +492,13 @@ using EloBuddy;
                 var t = TargetSelector.GetTarget(Q.Range + 40, TargetSelector.DamageType.Physical);
                 if (t.IsValidTarget())
                 {
-                    if ((!SebbyLib.Orbwalking.InAutoAttackRange(t) || t.CountEnemiesInRange(250) >= Config.Item("Qaoe").GetValue<Slider>().Value))
+                    if ((!Orbwalking.InAutoAttackRange(t) || t.CountEnemiesInRange(250) >= Config.Item("Qaoe").GetValue<Slider>().Value))
                     {
                         if (Combo && Config.Item("Qcombo").GetValue<bool>() && (Player.ManaPercent > Config.Item("QmanaCombo").GetValue<Slider>().Value || Player.GetAutoAttackDamage(t) * Config.Item("QmanaIgnore").GetValue<Slider>().Value > t.Health))
                         {
                             Q.Cast();
                         }
-                        if (Farm && SebbyLib.Orbwalking.CanAttack() && !Player.Spellbook.IsAutoAttacking && Config.Item("harasQ" + t.ChampionName).GetValue<bool>() && Config.Item("Qharass").GetValue<bool>() && (Player.ManaPercent > Config.Item("QmanaHarass").GetValue<Slider>().Value || Player.GetAutoAttackDamage(t) * Config.Item("QmanaIgnore").GetValue<Slider>().Value > t.Health))
+                        if (Farm && Orbwalking.CanAttack() && !Player.Spellbook.IsAutoAttacking && Config.Item("harasQ" + t.ChampionName).GetValue<bool>() && Config.Item("Qharass").GetValue<bool>() && (Player.ManaPercent > Config.Item("QmanaHarass").GetValue<Slider>().Value || Player.GetAutoAttackDamage(t) * Config.Item("QmanaIgnore").GetValue<Slider>().Value > t.Health))
                         {
                             Q.Cast();
                         }
@@ -510,17 +510,17 @@ using EloBuddy;
                     {
                         Q.Cast();
                     }
-                    else if (Farm && !Player.Spellbook.IsAutoAttacking && Config.Item("farmQout").GetValue<bool>() && SebbyLib.Orbwalking.CanAttack())
+                    else if (Farm && !Player.Spellbook.IsAutoAttacking && Config.Item("farmQout").GetValue<bool>() && Orbwalking.CanAttack())
                     {
                         foreach (var minion in MinionManager.GetMinions(Q.Range + 30).Where(
-                        minion => !SebbyLib.Orbwalking.InAutoAttackRange(minion) && minion.Health < Player.GetAutoAttackDamage(minion) * 1.2 && GetRealPowPowRange(minion) < GetRealDistance(minion) && Q.Range < GetRealDistance(minion)))
+                        minion => !Orbwalking.InAutoAttackRange(minion) && minion.Health < Player.GetAutoAttackDamage(minion) * 1.2 && GetRealPowPowRange(minion) < GetRealDistance(minion) && Q.Range < GetRealDistance(minion)))
                         {
                             Orbwalker.ForceTarget(minion);
                             Q.Cast();
                             return;
                         }
                     }
-                    if(Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.LaneClear && Player.ManaPercent > Config.Item("QmanaLC").GetValue<Slider>().Value)
+                    if(Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Player.ManaPercent > Config.Item("QmanaLC").GetValue<Slider>().Value)
                     {
                         var orbT = Orbwalker.GetTarget();
                         if (orbT.IsValid<Obj_AI_Minion>() && CountMinionsInRange(250, orbT.Position) >= Config.Item("Qlaneclear").GetValue<Slider>().Value)
@@ -699,15 +699,15 @@ using EloBuddy;
             else
                 FishBoneActive = false;
 
-            if (Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Combo)
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                 Combo = true;
             else
                 Combo = false;
 
             if (
-                (Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.LaneClear && Config.Item("LaneClearHarass").GetValue<bool>()) ||
-                (Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.LastHit && Config.Item("LaneClearHarass").GetValue<bool>()) || 
-                (Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Mixed && Config.Item("MixedHarass").GetValue<bool>())
+                (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear && Config.Item("LaneClearHarass").GetValue<bool>()) ||
+                (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit && Config.Item("LaneClearHarass").GetValue<bool>()) || 
+                (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed && Config.Item("MixedHarass").GetValue<bool>())
                )
                 Farm = true;
             else

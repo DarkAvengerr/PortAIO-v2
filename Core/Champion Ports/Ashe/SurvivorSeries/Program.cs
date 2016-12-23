@@ -12,7 +12,7 @@ using LeagueSharp.Common;
 using SebbyLib;
 using Color = SharpDX.Color;
 using HitChance = SebbyLib.Prediction.HitChance;
-using Orbwalking = SebbyLib.Orbwalking;
+
 using Prediction = SebbyLib.Prediction.Prediction;
 using PredictionInput = SebbyLib.Prediction.PredictionInput;
 
@@ -173,7 +173,7 @@ namespace SurvivorAshe
             Drawing.OnDraw += Drawing_OnDraw;
             Obj_AI_Base.OnLevelUp += Obj_AI_Base_OnLevelUp;
             Game.OnUpdate += Game_OnUpdate;
-            //SebbyLib.Orbwalking.AfterAttack += Orbwalking_AfterAttack;
+            //Orbwalking.AfterAttack += Orbwalking_AfterAttack;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpell;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
@@ -297,15 +297,15 @@ namespace SurvivorAshe
         {
             if (unit.IsMe)
             {
-                if (SebbyLib.Orbwalking.InAutoAttackRange(target))
+                if (Orbwalking.InAutoAttackRange(target))
                 {
                     switch (Orbwalker.ActiveMode)
                     {
-                        case SebbyLib.Orbwalking.OrbwalkingMode.LaneClear:
+                        case Orbwalking.OrbwalkingMode.LaneClear:
                             {
                                 if (Q.IsReady() && Menu.Item("LaneClearUseQ").GetValue<bool>())
                                 {
-                                    var Minions = MinionManager.GetMinions(SebbyLib.Orbwalking.GetRealAutoAttackRange(Player), MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health);
+                                    var Minions = MinionManager.GetMinions(Orbwalking.GetRealAutoAttackRange(Player), MinionTypes.All, MinionTeam.Enemy, MinionOrderTypes.Health);
                                     {
 
                                     }

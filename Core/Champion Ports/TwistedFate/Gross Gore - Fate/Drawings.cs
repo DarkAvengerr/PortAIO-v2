@@ -79,12 +79,12 @@ using LeagueSharp.Common;
 
                 if(Config.DrawRotate)
                 {
-                    Render.Circle.DrawCircle(ObjectManager.Player.Position, SebbyLib.Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + Config.RotateRange, System.Drawing.Color.BlueViolet);
+                    Render.Circle.DrawCircle(ObjectManager.Player.Position, Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + Config.RotateRange, System.Drawing.Color.BlueViolet);
                 }
 
                 if(Config.DrawLock)
                 {
-                    Render.Circle.DrawCircle(ObjectManager.Player.Position, SebbyLib.Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + Config.RotateLock, System.Drawing.Color.LightSteelBlue);
+                    Render.Circle.DrawCircle(ObjectManager.Player.Position, Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + Config.RotateLock, System.Drawing.Color.LightSteelBlue);
                 }     
 
                 #region Timers

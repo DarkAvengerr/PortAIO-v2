@@ -40,8 +40,8 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
             Game.OnUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
-            SebbyLib.Orbwalking.BeforeAttack += BeforeAttack;
-            SebbyLib.Orbwalking.AfterAttack += afterAttack;
+            Orbwalking.BeforeAttack += BeforeAttack;
+            Orbwalking.AfterAttack += afterAttack;
             Interrupter.OnPossibleToInterrupt += OnInterruptableSpell;
         }
 
@@ -64,7 +64,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
         }
 
-        private void BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
+        private void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
 
 
@@ -86,7 +86,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
             if (Program.LagFree(1) && W.IsReady())
                 LogicW();
-            if (Program.LagFree(2) && Q.IsReady() && SebbyLib.Orbwalking.CanMove(50) && !ObjectManager.Player.Spellbook.IsAutoAttacking)
+            if (Program.LagFree(2) && Q.IsReady() && Orbwalking.CanMove(50) && !ObjectManager.Player.Spellbook.IsAutoAttacking)
                 LogicQ();
             if (Program.LagFree(3) && E.IsReady())
                 LogicE();
@@ -119,7 +119,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
                 if (target.IsValidTarget() && Config.Item("Eon" + target.ChampionName, true).GetValue<bool>() && ((Player.UnderTurret(false) && !Player.UnderTurret(true)) || Program.Combo) )
                 {
-                    if (!SebbyLib.Orbwalking.InAutoAttackRange(target))
+                    if (!Orbwalking.InAutoAttackRange(target))
                     {
                         E.Cast(target);
                     }
@@ -132,7 +132,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             var t = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
             if (t.IsValidTarget())
             {
-                if (!Config.Item("qOutRange", true).GetValue<bool>() || SebbyLib.Orbwalking.InAutoAttackRange(t))
+                if (!Config.Item("qOutRange", true).GetValue<bool>() || Orbwalking.InAutoAttackRange(t))
                 {
                     if (Player.Mana > RMANA + QMANA && Program.Combo)
                         Q.Cast();

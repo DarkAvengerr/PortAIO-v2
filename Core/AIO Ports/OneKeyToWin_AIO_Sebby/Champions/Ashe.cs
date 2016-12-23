@@ -65,7 +65,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
-            SebbyLib.Orbwalking.AfterAttack += Orbwalking_AfterAttack; ;
+            Orbwalking.AfterAttack += Orbwalking_AfterAttack; ;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             Game.OnWndProc += Game_OnWndProc;

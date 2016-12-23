@@ -12,7 +12,7 @@ using LeagueSharp.Common;
 using SebbyLib;
 using Color = SharpDX.Color;
 using HitChance = SebbyLib.Prediction.HitChance;
-using Orbwalking = SebbyLib.Orbwalking;
+
 using PredictionInput = SebbyLib.Prediction.PredictionInput;
 
 using EloBuddy; 

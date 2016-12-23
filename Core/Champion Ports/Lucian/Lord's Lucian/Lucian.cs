@@ -31,7 +31,7 @@ using LeagueSharp.Common;
         public Spell W;
         public bool RBuffWait;
         public static Menu Menu;
-        public static SebbyLib.Orbwalking.Orbwalker Orbwalker;
+        public static Orbwalking.Orbwalker Orbwalker;
         private static HpBar Indicator = new HpBar();
         public static List<string> ManaManagerList = new List<string>();
         bool ismixed;
@@ -69,11 +69,11 @@ using LeagueSharp.Common;
 
             if (ObjectManager.Player.ChampionName == "Lucian")
             {
-                ismixed = Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Mixed &&
+                ismixed = Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed &&
                           ManaManagerList.Contains("ManaManager_Harass");
-                islasthit = Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.LastHit &&
+                islasthit = Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit &&
                             ManaManagerList.Contains("ManaManager_LastHit");
-                islaneclear = Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.LaneClear &&
+                islaneclear = Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear &&
                               ManaManagerList.Contains("ManaManager_LaneClear");
             }
 
@@ -125,7 +125,7 @@ using LeagueSharp.Common;
             TargetSelector.AddToMenu(targetSelectorMenu);
             Menu.AddSubMenu(targetSelectorMenu);
             var orbwalkerMenu = Menu.AddSubMenu(new Menu("Orbwalker", "Orbwalker"));
-            Orbwalker = new SebbyLib.Orbwalking.Orbwalker(orbwalkerMenu);
+            Orbwalker = new Orbwalking.Orbwalker(orbwalkerMenu);
             Menu.Item("FarmDelay").SetValue(new Slider(125, 100, 200));
             Menu.AddSubMenu(new Menu("Combo", "Combo"));  
             Menu.SubMenu("Combo").SubMenu("Q Extended settings").AddItem(new MenuItem("QExtendedhero", "Q Only Certain Champions").SetValue(false));
@@ -192,7 +192,7 @@ using LeagueSharp.Common;
 
             switch (Orbwalker.ActiveMode)
             {
-                case SebbyLib.Orbwalking.OrbwalkingMode.Combo:
+                case Orbwalking.OrbwalkingMode.Combo:
                     if (Menu.Item("useE_Combo").GetValue<bool>())
                     {
                         CastE();
@@ -211,7 +211,7 @@ using LeagueSharp.Common;
                         CastREnemy();
                     }
                     break;
-                case SebbyLib.Orbwalking.OrbwalkingMode.Mixed:
+                case Orbwalking.OrbwalkingMode.Mixed:
                     if (Menu.Item("useQ_Harass").GetValue<bool>() && ManaManagerAllowCast(Q))
                     {
                         CastQEnemy();
@@ -221,7 +221,7 @@ using LeagueSharp.Common;
                         CastWEnemy();
                     }
                     break;
-                case SebbyLib.Orbwalking.OrbwalkingMode.LaneClear:
+                case Orbwalking.OrbwalkingMode.LaneClear:
                     if (Menu.Item("useE_LaneClear").GetValue<bool>() && ManaManagerAllowCast(E))
                     {
                         CastE();
@@ -237,7 +237,7 @@ using LeagueSharp.Common;
                         CastWMinion();
                     }
                     break;
-                case SebbyLib.Orbwalking.OrbwalkingMode.LastHit:
+                case Orbwalking.OrbwalkingMode.LastHit:
                     if (Menu.Item("useQ_LastHit").GetValue<bool>() && ManaManagerAllowCast(Q))
                     {
                         CastQMinion();
@@ -251,7 +251,7 @@ using LeagueSharp.Common;
                 if (cerco)
                 {
                     var manc = Menu.Item("manac").GetValue<Slider>().Value;
-                    if (Q.IsReady() && (ObjectManager.Player.Mana / ObjectManager.Player.MaxMana) * 100 > manc && Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Combo)
+                    if (Q.IsReady() && (ObjectManager.Player.Mana / ObjectManager.Player.MaxMana) * 100 > manc && Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                     {
                         var tcc = HeroManager.Enemies.Where(hero => hero.IsValidTarget(1150)).Where(hero => hero.Distance(ObjectManager.Player) > 675).FirstOrDefault(hero => Menu.Item("autocom" + hero.ChampionName).GetValue<bool>());
                         QExtendedCast(tcc);
@@ -348,8 +348,8 @@ using LeagueSharp.Common;
             {
                 return;
             }
-            var lastHit = Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.LastHit;
-            var laneClear = Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.LaneClear;
+            var lastHit = Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LastHit;
+            var laneClear = Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear;
             var allMinions = MinionManager.GetMinions(
                 ObjectManager.Player.Position, Q.Range, MinionTypes.All, MinionTeam.NotAlly);
             if (lastHit)
@@ -448,10 +448,10 @@ using LeagueSharp.Common;
             {
                 return;
             }
-            var combo = Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.Combo;
+            var combo = Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo;
             var comboRange = Menu.Item("useE_Combo_Range").GetValue<Slider>().Value;
 
-            var laneClear = Orbwalker.ActiveMode == SebbyLib.Orbwalking.OrbwalkingMode.LaneClear;
+            var laneClear = Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear;
             var laneClearRange = Menu.Item("useE_LaneClear_Range").GetValue<Slider>().Value;
 
 

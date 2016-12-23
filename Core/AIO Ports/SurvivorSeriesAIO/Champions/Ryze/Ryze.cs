@@ -15,7 +15,7 @@ using SebbyLib;
 using SurvivorSeriesAIO.Core;
 using SurvivorSeriesAIO.SurvivorMain;
 using SurvivorSeriesAIO.Utility;
-using Orbwalking = SebbyLib.Orbwalking;
+
 
 #pragma warning disable CS0649
 

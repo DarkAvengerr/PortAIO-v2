@@ -144,8 +144,8 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 OktwCommon.blockMove = true;
                 OktwCommon.blockAttack = true;
                 OktwCommon.blockSpells = true;
-                SebbyLib.Orbwalking.Attack = false;
-                SebbyLib.Orbwalking.Move = false;
+                Orbwalking.Attack = false;
+                Orbwalking.Move = false;
                 return;
             }
             else
@@ -153,8 +153,8 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 OktwCommon.blockSpells = false;
                 OktwCommon.blockMove = false;
                 OktwCommon.blockAttack = false;
-                SebbyLib.Orbwalking.Attack = true;
-                SebbyLib.Orbwalking.Move = true;
+                Orbwalking.Attack = true;
+                Orbwalking.Move = true;
             }
 
             

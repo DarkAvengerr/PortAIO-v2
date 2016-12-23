@@ -59,8 +59,8 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
-            SebbyLib.Orbwalking.BeforeAttack += BeforeAttack;
-            SebbyLib.Orbwalking.AfterAttack += afterAttack;
+            Orbwalking.BeforeAttack += BeforeAttack;
+            Orbwalking.AfterAttack += afterAttack;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
         }
 
@@ -93,7 +93,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             }
         }
 
-        private void BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
+        private void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
             attackNow = false;
         }
@@ -154,7 +154,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 {
                     
 
-                    if (Config.Item("Raa", true).GetValue<bool>() && SebbyLib.Orbwalking.InAutoAttackRange(target))
+                    if (Config.Item("Raa", true).GetValue<bool>() && Orbwalking.InAutoAttackRange(target))
                         return;
 
                     var harasStack = Config.Item("harasStack", true).GetValue<Slider>().Value;

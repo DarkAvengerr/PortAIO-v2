@@ -60,7 +60,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             Game.OnUpdate += Game_OnGameUpdate;
             Drawing.OnEndScene += Drawing_OnEndScene;
             Drawing.OnDraw += Drawing_OnDraw;
-            SebbyLib.Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
+            Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
             Game.OnWndProc += Game_OnWndProc;
             GameObject.OnCreate += Obj_AI_Base_OnCreate;
         }
@@ -82,7 +82,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             }
         }
 
-        private void Orbwalking_BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
+        private void Orbwalking_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
             if(Program.Combo && W.IsReady() && FindCard == 1 && W.Instance.Name != "PickACard" &&  Config.Item("WblockAA", true).GetValue<bool>())
             {
@@ -338,7 +338,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             var t = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Magical);
             if (t.IsValidTarget())
             {
-                    if (OktwCommon.GetKsDamage(t, Q)> t.Health && !SebbyLib.Orbwalking.InAutoAttackRange(t))
+                    if (OktwCommon.GetKsDamage(t, Q)> t.Health && !Orbwalking.InAutoAttackRange(t))
                         Program.CastSpell(Q, t);
 
                     if (W.Instance.CooldownExpires - Game.Time < W.Instance.Cooldown - 1.3 && !Player.HasBuff("pickacard_tracker") && (W.Instance.CooldownExpires - Game.Time > 3 || Player.CountEnemiesInRange(950) == 0))

@@ -154,13 +154,13 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             if (Program.Combo && Config.Item("AACombo", true).GetValue<bool>())
             {
                 if (!E.IsReady())
-                    SebbyLib.Orbwalking.Attack = true;
+                    Orbwalking.Attack = true;
 
                 else
-                    SebbyLib.Orbwalking.Attack = false;
+                    Orbwalking.Attack = false;
             }
             else
-                SebbyLib.Orbwalking.Attack = true;
+                Orbwalking.Attack = true;
 
             if (Marked.IsValidTarget())
             {

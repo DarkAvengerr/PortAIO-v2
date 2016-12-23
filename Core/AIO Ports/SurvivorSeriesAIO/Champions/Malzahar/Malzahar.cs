@@ -14,7 +14,7 @@ using SebbyLib;
 using SurvivorSeriesAIO.Core;
 using SurvivorSeriesAIO.SurvivorMain;
 using SurvivorSeriesAIO.Utility;
-using Orbwalking = SebbyLib.Orbwalking;
+
 
 using EloBuddy; 
  using LeagueSharp.Common; 

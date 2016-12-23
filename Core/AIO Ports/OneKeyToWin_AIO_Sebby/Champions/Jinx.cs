@@ -58,13 +58,13 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("farmQ", "Q LaneClear Q", true).SetValue(true));
 
             Game.OnUpdate += Game_OnUpdate;
-            SebbyLib.Orbwalking.BeforeAttack += BeforeAttack;
+            Orbwalking.BeforeAttack += BeforeAttack;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Drawing.OnDraw += Drawing_OnDraw;
         }
 
-        private void BeforeAttack(SebbyLib.Orbwalking.BeforeAttackEventArgs args)
+        private void BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
             if (!Q.IsReady() || !Config.Item("autoQ", true).GetValue<bool>() || !FishBoneActive)
                 return;
@@ -162,10 +162,10 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
         private void LogicQ()
         {
-            if (Program.Farm && !FishBoneActive && !ObjectManager.Player.Spellbook.IsAutoAttacking && Orbwalker.GetTarget() == null && SebbyLib.Orbwalking.CanAttack() && Config.Item("farmQout", true).GetValue<bool>() && Player.Mana > RMANA + WMANA + EMANA + 10)
+            if (Program.Farm && !FishBoneActive && !ObjectManager.Player.Spellbook.IsAutoAttacking && Orbwalker.GetTarget() == null && Orbwalking.CanAttack() && Config.Item("farmQout", true).GetValue<bool>() && Player.Mana > RMANA + WMANA + EMANA + 10)
             {
                 foreach (var minion in Cache.GetMinions(Player.Position, bonusRange() + 30).Where(
-                minion => !SebbyLib.Orbwalking.InAutoAttackRange(minion) && GetRealPowPowRange(minion) < GetRealDistance(minion) && bonusRange() < GetRealDistance(minion)))
+                minion => !Orbwalking.InAutoAttackRange(minion) && GetRealPowPowRange(minion) < GetRealDistance(minion) && bonusRange() < GetRealDistance(minion)))
                 {
                     var hpPred = SebbyLib.HealthPrediction.GetHealthPrediction(minion, 400, 70);
                     if (hpPred < Player.GetAutoAttackDamage(minion) * 1.1 && hpPred > 5)
@@ -180,12 +180,12 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             var t = TargetSelector.GetTarget(bonusRange() + 60, TargetSelector.DamageType.Physical);
             if (t.IsValidTarget())
             {
-                if (!FishBoneActive && (!SebbyLib.Orbwalking.InAutoAttackRange(t) || t.CountEnemiesInRange(250) > 2) && Orbwalker.GetTarget() == null)
+                if (!FishBoneActive && (!Orbwalking.InAutoAttackRange(t) || t.CountEnemiesInRange(250) > 2) && Orbwalker.GetTarget() == null)
                 {
                     var distance = GetRealDistance(t);
                     if (Program.Combo && (Player.Mana > RMANA + WMANA + 10 || Player.GetAutoAttackDamage(t) * 3 > t.Health))
                         Q.Cast();
-                    else if (Program.Harass && !ObjectManager.Player.Spellbook.IsAutoAttacking && SebbyLib.Orbwalking.CanAttack() && Config.Item("Qharras", true).GetValue<bool>() && !ObjectManager.Player.UnderTurret(true) && Player.Mana > RMANA + WMANA + EMANA + 20 && distance < bonusRange() + t.BoundingRadius + Player.BoundingRadius)
+                    else if (Program.Harass && !ObjectManager.Player.Spellbook.IsAutoAttacking && Orbwalking.CanAttack() && Config.Item("Qharras", true).GetValue<bool>() && !ObjectManager.Player.UnderTurret(true) && Player.Mana > RMANA + WMANA + EMANA + 20 && distance < bonusRange() + t.BoundingRadius + Player.BoundingRadius)
                         Q.Cast();
                 }
             }
