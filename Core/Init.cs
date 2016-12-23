@@ -175,11 +175,6 @@ namespace PortAIO
                 UniversalPings.Program.Main();
             }
 
-            if (Misc.menu.Item("GodJungleTrackerReborn").GetValue<bool>())
-            {
-                GodJungleTracker.Program.Main();
-            }
-
             if (Misc.menu.Item("PerfectWardReborn").GetValue<bool>())
             {
                 PerfectWardReborn.Program.Main();
