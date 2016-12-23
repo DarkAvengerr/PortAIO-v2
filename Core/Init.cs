@@ -180,11 +180,6 @@ namespace PortAIO
                 PerfectWardReborn.Program.Main();
             }
 
-            if (Misc.menu.Item("xAwareness").GetValue<bool>())
-            {
-                xAwareness.Program.Main();
-            }
-
             if (Misc.menu.Item("RandomUlt").GetValue<bool>())
             {
                 RandomUlt.Program.Game_OnGameLoad();

@@ -461,7 +461,6 @@ namespace PortAIO.Dual_Port
             utility.AddItem(new MenuItem("ShadowTracker", "Enable ShadowTracker?").SetValue(false));
             utility.AddItem(new MenuItem("UniversalPings", "Enable UniversalPings?").SetValue(false));
             utility.AddItem(new MenuItem("PerfectWardReborn", "Enable PerfectWardReborn?").SetValue(false));
-            utility.AddItem(new MenuItem("xAwareness", "Enable xAwareness?").SetValue(false));
             utility.AddItem(new MenuItem("RandomUlt", "Enable RandomUlt?").SetValue(false));
             utility.AddItem(new MenuItem("BaseUlt3", "Enable BaseUlt3?").SetValue(false));
             utility.AddItem(new MenuItem("UniversalRecallTracker", "Enable UniversalRecallTracker?").SetValue(false));
