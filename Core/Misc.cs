@@ -471,10 +471,10 @@ namespace PortAIO.Dual_Port
             utility.AddItem(new MenuItem("StandaloneOrbwalker", "Enable StandaloneOrbwalker?").SetValue(false));
             menu.AddSubMenu(utility);
 
-            var autoPlay = new Menu("Auto Play", "PortAIOAUTOPLAY");
-            autoPlay.AddItem(new MenuItem("AutoPlay", "Enable AutoPlay?").SetValue(false));
-            autoPlay.AddItem(new MenuItem("selectAutoPlay", "Which AutoPlay?").SetValue(new StringList(new[] { "AramDETFull", "AutoJungle", "SharpAI" })));
-            menu.AddSubMenu(autoPlay);
+            //var autoPlay = new Menu("Auto Play", "PortAIOAUTOPLAY");
+            //autoPlay.AddItem(new MenuItem("AutoPlay", "Enable AutoPlay?").SetValue(false));
+            //autoPlay.AddItem(new MenuItem("selectAutoPlay", "Which AutoPlay?").SetValue(new StringList(new[] { "AramDETFull", "AutoJungle", "SharpAI" })));
+            //menu.AddSubMenu(autoPlay);
 
             menu.AddItem(new MenuItem("UtilityOnly", "Utility Only?").SetValue(false));
             menu.AddItem(new MenuItem("ChampsOnly", "Champs Only?").SetValue(false));

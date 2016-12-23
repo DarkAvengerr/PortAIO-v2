@@ -81,6 +81,7 @@ namespace PortAIO
                 }
             }
 
+            /*
             if (Misc.menu.Item("AutoPlay").GetValue<bool>())
             {
                 switch (Misc.menu.Item("selectAutoPlay").GetValue<StringList>().SelectedIndex)
@@ -95,7 +96,7 @@ namespace PortAIO
                         SharpAI.Program.Main();
                         break;
                 }
-            }
+            }*/
 
             if (Misc.menu.Item("enableTracker").GetValue<bool>())
             {
@@ -3859,7 +3860,7 @@ namespace PortAIO
                             break;
                         case 13: // GosuMechanicsYasuo Rebirth
                             FloraGosYasuo.Program.Main();
-                            break; 
+                            break;
                     }
                     break;
                 case Champion.Yorick:
