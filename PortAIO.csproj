@@ -6877,7 +6877,6 @@
     <Compile Include="Core\Utility Ports\`WIP\imAsharpHuman\Program.cs" />
     <Compile Include="Core\Utility Ports\RandomUlt\Helpers\LastPositions.cs" />
     <Compile Include="Core\Utility Ports\RandomUlt\Program.cs" />
-    <Compile Include="Core\Utility Ports\SebbyBanWars\Program.cs" />
     <Compile Include="Core\Utility Ports\`WIP\SFXHumanizer\CryptoRandom.cs" />
     <Compile Include="Core\Utility Ports\`WIP\SFXHumanizer\Helpers.cs" />
     <Compile Include="Core\Utility Ports\`WIP\SFXHumanizer\Sequence.cs" />

@@ -122,9 +122,6 @@ namespace PortAIO
                     case 0: // Humanizer#
                         HumanizerSharp.Program.Game_OnGameLoad();
                         break;
-                    case 1: // SebbyBanWars
-                        Sebby_Ban_War.Program.Game_OnGameLoad();
-                        break;
                 }
             }
 

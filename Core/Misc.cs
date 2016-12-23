@@ -447,7 +447,7 @@ namespace PortAIO.Dual_Port
             dutility.AddItem(new MenuItem("Evade", "Which Evade?").SetValue(new StringList(new[] { "EzEvade", "Evade", "vEvade" })));
 
             dutility.AddItem(new MenuItem("enableHuman", "Enable Humanizer?").SetValue(false));
-            dutility.AddItem(new MenuItem("Humanizer", "Which Humanizer?").SetValue(new StringList(new[] { "Humanizer#", "Sebby Ban Wars" })));
+            dutility.AddItem(new MenuItem("Humanizer", "Which Humanizer?").SetValue(new StringList(new[] { "Humanizer#" })));
 
             dutility.AddItem(new MenuItem("enablePredictioner", "Enable Predictioner?").SetValue(false));
             dutility.AddItem(new MenuItem("Predictioner", "Which Predictioner?").SetValue(new StringList(new[] { "SPredictioner", "OKTWPredictioner" })));
