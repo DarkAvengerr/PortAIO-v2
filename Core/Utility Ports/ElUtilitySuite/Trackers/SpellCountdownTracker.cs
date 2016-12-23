@@ -163,7 +163,7 @@ using LeagueSharp.Common;
             menu.AddItem(new MenuItem("AddTestCard", "Draw Test Card").SetValue(false).DontSave());
             menu.AddItem(new MenuItem("empty-line-3000", string.Empty));
 
-            foreach (var enemy in HeroManager.AllHeroes)
+            foreach (var enemy in HeroManager.Enemies)
             {
                 menu.AddItem(new MenuItem($"Track.{enemy.BaseSkinName}", "Track " + enemy.ChampionName))
                     .SetValue(true);
@@ -231,7 +231,7 @@ using LeagueSharp.Common;
             var neededSpells =
                  Data.Get<SpellDatabase>().Spells.Where(
                         x =>
-                        HeroManager.AllHeroes.Any(
+                        HeroManager.Enemies.Any(
                             y => x.ChampionName.Equals(y.ChampionName, StringComparison.InvariantCultureIgnoreCase))).Select(x => x.SpellName).ToList();
 
             foreach (var name in names)
@@ -418,7 +418,7 @@ using LeagueSharp.Common;
             var i = 0;
 
             // TODO clean this shit up LMAO
-            foreach (var enemy in HeroManager.AllHeroes)
+            foreach (var enemy in HeroManager.Enemies)
             {
                 List<SpellSlot> slots;
                 if (!this.ChampionSpells.TryGetValue(enemy.ChampionName, out slots))
