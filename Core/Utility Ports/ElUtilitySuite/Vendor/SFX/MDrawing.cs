@@ -26,9 +26,10 @@
 
 #endregion
 
+#pragma warning disable 414
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ElUtilitySuite.Vendor.SFX
+namespace ElUtilitySuite.Vendor.SFX
 {
     using System;
     using System.Collections.Generic;

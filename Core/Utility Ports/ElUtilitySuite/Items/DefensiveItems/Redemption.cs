@@ -11,14 +11,14 @@ namespace ElUtilitySuite.Items.DefensiveItems
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    internal class Locket : Item
+    internal class Redemption : Item
     {
         #region Constructors and Destructors
 
         /// <summary>
         ///     Loads this instance.
         /// </summary>
-        public Locket()
+        public Redemption()
         {
             IncomingDamageManager.RemoveDelay = 500;
             IncomingDamageManager.Skillshots = true;
@@ -35,7 +35,7 @@ namespace ElUtilitySuite.Items.DefensiveItems
         /// <value>
         ///     The identifier.
         /// </value>
-        public override ItemId Id => ItemId.Locket_of_the_Iron_Solari;
+        public override ItemId Id => (ItemId)3107;
 
         /// <summary>
         ///     Gets or sets the name of the item.
@@ -43,7 +43,7 @@ namespace ElUtilitySuite.Items.DefensiveItems
         /// <value>
         ///     The name of the item.
         /// </value>
-        public override string Name => "Locket of the Iron Solari";
+        public override string Name => "Redemption";
 
         #endregion
 
@@ -54,12 +54,12 @@ namespace ElUtilitySuite.Items.DefensiveItems
         /// </summary>
         public override void CreateMenu()
         {
-            this.Menu.AddItem(new MenuItem("UseLocketCombo", "Activate").SetValue(true));
-            this.Menu.AddItem(new MenuItem("Mode-locket", "Activation mode: "))
+            this.Menu.AddItem(new MenuItem("UseRedemptionCombo", "Activate").SetValue(true));
+            this.Menu.AddItem(new MenuItem("Mode-Redemption", "Activation mode: "))
                 .SetValue(new StringList(new[] { "Use always", "Use in combo" }, 1));
-            this.Menu.AddItem(new MenuItem("locket-min-health", "Health percentage").SetValue(new Slider(50, 1)));
+            this.Menu.AddItem(new MenuItem("Redemption-min-health", "Health percentage").SetValue(new Slider(50, 1)));
             this.Menu.AddItem(
-                new MenuItem("locket-min-damage", "Incoming damage percentage").SetValue(new Slider(50, 1)));
+                new MenuItem("Redemption-min-damage", "Incoming damage percentage").SetValue(new Slider(50, 1)));
         }
 
         #endregion
@@ -74,36 +74,36 @@ namespace ElUtilitySuite.Items.DefensiveItems
         {
             try
             {
-                if (!this.Menu.Item("UseLocketCombo").IsActive() || !Items.HasItem((int)this.Id) || !Items.CanUseItem((int)this.Id))
+                if (!this.Menu.Item("UseRedemptionCombo").IsActive() || !Items.HasItem((int)this.Id) || !Items.CanUseItem((int)this.Id))
                 {
                     return;
                 }
 
-                if (this.Menu.Item("Mode-locket").GetValue<StringList>().SelectedIndex == 1 && !this.ComboModeActive)
+                if (this.Menu.Item("Mode-Redemption").GetValue<StringList>().SelectedIndex == 1 && !this.ComboModeActive)
                 {
                     return;
                 }
 
-                foreach (var ally in HeroManager.Allies.Where(a => a.IsValidTarget(600f, false) && !a.IsRecalling()))
+                foreach (var ally in HeroManager.Allies.Where(a => a.IsValidTarget(2500f, false) && !a.IsRecalling()))
                 {
-                    var enemies = ally.CountEnemiesInRange(600f);
+                    var enemies = ally.CountEnemiesInRange(800f);
                     var totalDamage = IncomingDamageManager.GetDamage(ally) * 1.1f;
 
-                    if (ally.HealthPercent <= this.Menu.Item("locket-min-health").GetValue<Slider>().Value
+                    if (ally.HealthPercent <= this.Menu.Item("Redemption-min-health").GetValue<Slider>().Value
                         && enemies >= 1)
                     {
                         if ((int)(totalDamage / ally.Health)
-                            > this.Menu.Item("locket-min-damage").GetValue<Slider>().Value
-                            || ally.HealthPercent < this.Menu.Item("locket-min-health").GetValue<Slider>().Value)
+                            > this.Menu.Item("Redemption-min-damage").GetValue<Slider>().Value
+                            || ally.HealthPercent < this.Menu.Item("Redemption-min-health").GetValue<Slider>().Value)
                         {
-                            Items.UseItem((int)this.Id, ally);
+                            Items.UseItem((int)this.Id, Prediction.GetPrediction(ObjectManager.Player, 2500f).UnitPosition);
                         }
                     }
                 }
             }
             catch (Exception e)
             {
-                Logging.AddEntry(LoggingEntryType.Error, "@Locket.cs: An error occurred: {0}", e);
+                Logging.AddEntry(LoggingEntryType.Error, "@Redemtpion.cs: An error occurred: {0}", e);
             }
         }
 

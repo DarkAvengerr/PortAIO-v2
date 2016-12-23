@@ -1,11 +1,12 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ElUtilitySuite.Utility
+namespace ElUtilitySuite.Utility
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
 
+    using ElUtilitySuite.Logging;
     using ElUtilitySuite.Vendor.SFX;
 
     using LeagueSharp;
@@ -128,8 +129,6 @@ using LeagueSharp.Common;
             var protectMenu = menu.AddSubMenu(new Menu("Anti-Stealth", "AntiStealth"));
             {
                 protectMenu.AddItem(new MenuItem("AntiStealthActive", "Place Pink Ward on Unit Stealth").SetValue(true));
-                /*protectMenu.AddItem(new MenuItem("Antistealth.Mode", "Mode: "))
-                    .SetValue(new StringList(new[] { "Always", "Combo", }, 0));*/
             }
 
             this.Menu = protectMenu;
@@ -220,7 +219,7 @@ using LeagueSharp.Common;
             }
             catch (Exception e)
             {
-                Console.WriteLine("An error occurred: '{0}'", e);
+                Logging.AddEntry(LoggingEntryType.Error, "@AntiStealth.cs: An error occurred: {0}", e);
             }
         }
 
@@ -295,7 +294,7 @@ using LeagueSharp.Common;
             }
             catch (Exception e)
             {
-                Console.WriteLine($"An error occurred: '{0}'", e);
+                Logging.AddEntry(LoggingEntryType.Error, "@AntiStealth.cs: An error occurred: {0}", e);
             }
         }
 

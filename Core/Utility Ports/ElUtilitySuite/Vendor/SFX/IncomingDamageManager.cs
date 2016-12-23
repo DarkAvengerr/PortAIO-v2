@@ -45,6 +45,8 @@ using LeagueSharp.Common;
         static IncomingDamageManager()
         {
             Obj_AI_Base.OnProcessSpellCast += OnObjAiBaseProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnObjAiBaseProcessSpellCast;
+            Obj_AI_Base.OnBasicAttack += OnObjAiBaseProcessSpellCast;
         }
 
         public static bool Skillshots { get; set; }

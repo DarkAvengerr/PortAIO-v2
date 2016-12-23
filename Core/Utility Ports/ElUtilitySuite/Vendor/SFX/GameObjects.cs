@@ -31,6 +31,7 @@ using LeagueSharp.Common;
 #endregion
 
 using EloBuddy;
+using LeagueSharp.Common;
 namespace ElUtilitySuite.Vendor.SFX
 {
     /// <summary>
@@ -436,7 +437,6 @@ namespace ElUtilitySuite.Vendor.SFX
                 }
 
                 _initialized = true;
-
                 Player = ObjectManager.Player;
 
                 AllyNexus = ObjectManager.Get<Obj_HQ>().FirstOrDefault(o => o.IsAlly);
@@ -448,9 +448,9 @@ namespace ElUtilitySuite.Vendor.SFX
                         .Where(
                             o =>
                                 o.Team != GameObjectTeam.Neutral &&
-                                !o.CharData.BaseSkinName.ToLower().Contains("jarvanivstandard") &&
-                                !o.CharData.BaseSkinName.ToLower().Contains("ward") &&
-                                !o.CharData.BaseSkinName.ToLower().Contains("trinket")));
+                                !o.BaseSkinName.ToLower().Contains("jarvanivstandard") &&
+                                !o.BaseSkinName.ToLower().Contains("ward") &&
+                                !o.BaseSkinName.ToLower().Contains("trinket")));
                 InhibitorsList.UnionWith(ObjectManager.Get<Obj_BarracksDampener>());
                 TurretsList.UnionWith(ObjectManager.Get<Obj_AI_Turret>());
                 JungleList.UnionWith(
@@ -458,13 +458,13 @@ namespace ElUtilitySuite.Vendor.SFX
                         .Where(
                             o =>
                                 o.Team == GameObjectTeam.Neutral &&
-                                !o.CharData.BaseSkinName.ToLower().Contains("barrel")));
+                                !o.BaseSkinName.ToLower().Contains("barrel")));
                 WardsList.UnionWith(
                     ObjectManager.Get<Obj_AI_Minion>()
                         .Where(
                             o =>
-                                o.CharData.BaseSkinName.ToLower().Contains("ward") ||
-                                o.CharData.BaseSkinName.ToLower().Contains("trinket")));
+                                o.BaseSkinName.ToLower().Contains("ward") ||
+                                o.BaseSkinName.ToLower().Contains("trinket")));
                 ShopsList.UnionWith(ObjectManager.Get<Obj_Shop>());
                 SpawnPointsList.UnionWith(ObjectManager.Get<Obj_SpawnPoint>());
                 GameObjectsList.UnionWith(ObjectManager.Get<GameObject>());
@@ -534,12 +534,12 @@ namespace ElUtilitySuite.Vendor.SFX
             }
 
             var minion = sender as Obj_AI_Minion;
-            if (minion != null && !minion.CharData.BaseSkinName.ToLower().Contains("jarvanivstandard"))
+            if (minion != null && !minion.BaseSkinName.ToLower().Contains("jarvanivstandard"))
             {
                 if (minion.Team != GameObjectTeam.Neutral)
                 {
-                    if (!minion.CharData.BaseSkinName.Contains("ward") ||
-                        !minion.CharData.BaseSkinName.Contains("trinket"))
+                    if (!minion.BaseSkinName.Contains("ward") ||
+                        !minion.BaseSkinName.Contains("trinket"))
                     {
                         MinionsList.Add(minion);
                         if (minion.IsEnemy)
@@ -566,7 +566,7 @@ namespace ElUtilitySuite.Vendor.SFX
                         }
                     }
                 }
-                else if (!minion.CharData.BaseSkinName.ToLower().Contains("barrel"))
+                else if (!minion.BaseSkinName.ToLower().Contains("barrel"))
                 {
                     JungleList.Add(minion);
                 }
@@ -670,12 +670,12 @@ namespace ElUtilitySuite.Vendor.SFX
             }
 
             var minion = sender as Obj_AI_Minion;
-            if (minion != null && !minion.CharData.BaseSkinName.ToLower().Contains("jarvanivstandard"))
+            if (minion != null && !minion.BaseSkinName.ToLower().Contains("jarvanivstandard"))
             {
                 if (minion.Team != GameObjectTeam.Neutral)
                 {
-                    if (!minion.CharData.BaseSkinName.Contains("ward") ||
-                        !minion.CharData.BaseSkinName.Contains("trinket"))
+                    if (!minion.BaseSkinName.Contains("ward") ||
+                        !minion.BaseSkinName.Contains("trinket"))
                     {
                         MinionsList.Remove(minion);
                         if (minion.IsEnemy)
@@ -709,7 +709,7 @@ namespace ElUtilitySuite.Vendor.SFX
                         AllyList.Remove(minion);
                     }
                 }
-                else if (!minion.CharData.BaseSkinName.ToLower().Contains("barrel"))
+                else if (!minion.BaseSkinName.ToLower().Contains("barrel"))
                 {
                     JungleList.Remove(minion);
                 }

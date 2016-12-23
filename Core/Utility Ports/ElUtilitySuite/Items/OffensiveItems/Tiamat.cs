@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ElUtilitySuite.Items.OffensiveItems
+namespace ElUtilitySuite.Items.OffensiveItems
 {
     using System;
     using System.Linq;

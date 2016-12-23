@@ -1,10 +1,12 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ElUtilitySuite.Others
+namespace ElUtilitySuite.Others
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
+    using ElUtilitySuite.Logging;
 
     using LeagueSharp;
     using LeagueSharp.Common;
@@ -120,7 +122,7 @@ using LeagueSharp.Common;
             }
             catch (Exception e)
             {
-                Console.WriteLine("An error occurred: '{0}'", e);
+                Logging.AddEntry(LoggingEntryType.Error, "@TurnAround.cs: An error occurred: {0}", e);
             }
         }
 
@@ -174,7 +176,7 @@ using LeagueSharp.Common;
             }
             catch (Exception e)
             {
-                Console.WriteLine("An error occurred: '{0}'", e);
+                Logging.AddEntry(LoggingEntryType.Error, "@TurnAround.cs: An error occurred: {0}", e);
             }
         }
 

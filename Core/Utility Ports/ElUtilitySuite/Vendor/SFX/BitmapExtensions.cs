@@ -22,7 +22,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ElUtilitySuite.Vendor.SFX
+namespace ElUtilitySuite.Vendor.SFX
 {
     using System;
     using System.Drawing;

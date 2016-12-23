@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ElUtilitySuite.Items.OffensiveItems
+namespace ElUtilitySuite.Items.OffensiveItems
 {
     using System.Linq;
 
@@ -37,8 +37,8 @@ using LeagueSharp.Common;
         public override void CreateMenu()
         {
             this.Menu.AddItem(new MenuItem("UseBotrkCombo", "Use on Combo").SetValue(true));
-            this.Menu.AddItem(new MenuItem("BotrkEnemyHp", "Use on Enemy Hp %").SetValue(new Slider(100))); //for myo
-            this.Menu.AddItem(new MenuItem("BotrkMyHp", "Use on My Hp %").SetValue(new Slider(100))); //for myo
+            this.Menu.AddItem(new MenuItem("BotrkEnemyHp", "Use on Enemy Hp %").SetValue(new Slider(100)));
+            this.Menu.AddItem(new MenuItem("BotrkMyHp", "Use on My Hp %").SetValue(new Slider(100)));
         }
 
         /// <summary>

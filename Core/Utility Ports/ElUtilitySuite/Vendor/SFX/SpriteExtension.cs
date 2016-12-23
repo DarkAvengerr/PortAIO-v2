@@ -28,7 +28,7 @@
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ElUtilitySuite.Vendor.SFX
+namespace ElUtilitySuite.Vendor.SFX
 {
     using global::SharpDX;
     using global::SharpDX.Direct3D9;

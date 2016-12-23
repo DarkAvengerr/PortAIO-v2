@@ -1,11 +1,13 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ElUtilitySuite.Summoners
+namespace ElUtilitySuite.Summoners
 {
     using System;
     using System.Collections.Generic;
     using System.Drawing;
     using System.Linq;
+
+    using ElUtilitySuite.Logging;
 
     using LeagueSharp;
     using LeagueSharp.Common;
@@ -193,11 +195,6 @@ using LeagueSharp.Common;
         {
             this.CreateItems();
             this.BuffsToCleanse = this.Items.SelectMany(x => x.WorksOn).Distinct();
-
-            //var predicate = new Func<Menu, bool>(x => x.Name == "SummonersMenu");
-            //var menu = rootMenu.Children.Any(predicate)
-            //               ? rootMenu.Children.First(predicate)
-            //               : rootMenu.AddSubMenu(new Menu("Summoners", "SummonersMenu"));
 
             Menu = new Menu("Cleanse/QSS", "BuffTypeStyleCleanser").SetFontStyle(FontStyle.Bold, Color.Red);
             {
@@ -388,7 +385,7 @@ using LeagueSharp.Common;
                     ally.Buffs.Where(
                         x =>
                             this.BuffsToCleanse.Contains(x.Type) && x.Caster.Type == GameObjectType.AIHeroClient
-                            && x.Caster.IsEnemy && x.Type != BuffType.Knockback && x.Type != BuffType.Knockup))
+                            && x.Caster.IsEnemy))
                 {
                     if (!Menu.Item($"3Cleanse{buff.Type}").IsActive()
                         || Menu.Item("MinDuration").GetValue<Slider>().Value / 1000f > buff.EndTime - buff.StartTime
@@ -396,12 +393,11 @@ using LeagueSharp.Common;
                         || Spells.Any(
                             b =>
                                 buff.Name.Equals(b.Spellname, StringComparison.InvariantCultureIgnoreCase)
-                                || !Menu.Item($"3cleanseon{ally.ChampionName}").IsActive()))
+                                || !Menu.Item($"3cleanseon{ally.ChampionName}").IsActive()) || buff.Type == BuffType.Knockback || buff.Type == BuffType.Knockup)
                     {
                         continue;
                     }
 
-                    // FIXME: Are you sure this works?
                     if (buff.Type == BuffType.Snare
                         && InvalidRootCasters.Contains(
                             ((AIHeroClient)buff.Caster).ChampionName,

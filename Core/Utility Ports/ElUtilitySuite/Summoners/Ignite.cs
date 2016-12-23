@@ -1,9 +1,11 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ElUtilitySuite.Summoners
+namespace ElUtilitySuite.Summoners
 {
     using System;
     using System.Linq;
+
+    using ElUtilitySuite.Logging;
 
     using LeagueSharp;
     using LeagueSharp.Common;
@@ -89,7 +91,7 @@ using LeagueSharp.Common;
             }
             catch (Exception e)
             {
-                Console.WriteLine("An error occurred: '{0}'", e);
+                Logging.AddEntry(LoggingEntryType.Error, "@Ignite.cs: An error occurred: {0}", e);
             }
         }
 
@@ -135,12 +137,6 @@ using LeagueSharp.Common;
 
                 if (kSableEnemy != null)
                 {
-                   /* if (this.Player.CanAttack && this.Player.Distance(kSableEnemy) < Orbwalking.GetAttackRange(this.Player) 
-                        && this.Player.GetAutoAttackDamage(kSableEnemy) * 2 > kSableEnemy.Health)
-                    {
-                        return;
-                    }
-                    */
                     if (!Menu.Item($"igniteon{kSableEnemy.ChampionName}").IsActive())
                     {
                         return;
@@ -151,7 +147,7 @@ using LeagueSharp.Common;
             }
             catch (Exception e)
             {
-                Console.WriteLine("An error occurred: '{0}'", e);
+                Logging.AddEntry(LoggingEntryType.Error, "@Ignite.cs: An error occurred: {0}", e);
             }
         }
 
@@ -172,7 +168,7 @@ using LeagueSharp.Common;
             }
             catch (Exception e)
             {
-                Console.WriteLine("An error occurred: '{0}'", e);
+                Logging.AddEntry(LoggingEntryType.Error, "@Ignite.cs: An error occurred: {0}", e);
             }
         }
 

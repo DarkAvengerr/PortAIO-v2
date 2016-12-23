@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ElUtilitySuite.Summoners
+namespace ElUtilitySuite.Summoners
 {
     using System;
     using System.Drawing;

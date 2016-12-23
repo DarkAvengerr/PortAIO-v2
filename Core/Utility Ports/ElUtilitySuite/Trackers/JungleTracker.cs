@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ElUtilitySuite.Trackers
+namespace ElUtilitySuite.Trackers
 {
     using System;
     using System.Collections.Generic;
