@@ -26,7 +26,7 @@ using EloBuddy;
         private static int qTick;
         private static int hookTick;
         private static Obj_AI_Base hookedUnit;
-
+        public static Orbwalking.Orbwalker Orbwalker;
 
         private static List<Vector3> escapeSpots = new List<Vector3>();
         private static readonly List<GameObject> soulList = new List<GameObject>();
@@ -64,7 +64,7 @@ using EloBuddy;
 
             Config = new Menu("yol0 Thresh", "Thresh", true);
             Config.AddSubMenu(new Menu("Orbwalking", "Orbwalking"));
-            xSLxOrbwalker.AddToMenu(Config.SubMenu("Orbwalking"));
+            Orbwalker = new Orbwalking.Orbwalker(Config.SubMenu("Orbwalking"));
 
             Config.AddSubMenu(new Menu("Target Selector", "Target Selector"));
             TargetSelector.AddToMenu(Config.SubMenu("Target Selector"));
@@ -199,10 +199,10 @@ using EloBuddy;
             UpdateSouls();
             UpdateBuffs();
 
-            if (xSLxOrbwalker.CurrentMode == xSLxOrbwalker.Mode.Combo)
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
                 Combo();
 
-            if (xSLxOrbwalker.CurrentMode == xSLxOrbwalker.Mode.Harass)
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
                 Harass();
 
             if (Config.SubMenu("Flay").Item("pullEnemy").GetValue<KeyBind>().Active)
@@ -311,7 +311,7 @@ using EloBuddy;
 
             if (args.SData.Name == "ThreshE")
             {
-                xSLxOrbwalker.ResetAutoAttackTimer();
+                Orbwalking.ResetAutoAttackTimer();
             }
         }
 

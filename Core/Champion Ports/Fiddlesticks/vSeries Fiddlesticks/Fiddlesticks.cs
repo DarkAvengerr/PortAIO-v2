@@ -4,7 +4,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using vSupport_Series.Core.Plugins;
 using Color = System.Drawing.Color;
-using Orbwalking = vSupport_Series.Core.Plugins.Orbwalking;
+
 
 using EloBuddy; 
  using LeagueSharp.Common; 
@@ -14,7 +14,7 @@ using EloBuddy;
     {
         public static Menu Config;
         public static Spell Q, W, E, R;
-        public static vSupport_Series.Core.Plugins.Orbwalking.Orbwalker Orbwalker;
+        public static Orbwalking.Orbwalker Orbwalker;
         public static float LastW;
 
         public Fiddlesticks()

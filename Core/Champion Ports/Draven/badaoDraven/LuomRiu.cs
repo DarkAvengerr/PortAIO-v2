@@ -21,7 +21,7 @@ using EloBuddy;
         private static List<Riu> Riu { get { return Program.Riu; } }
         public static void lumriu()
         {
-            if (Orbwalker._orbwalkingPoint.Distance(Player.Position) <= 50)
+            if (Orbwalker.GetOrbwalkingPoint().Distance(Player.Position) <= 50)
             {
                 Orbwalker.SetMovement(false);
             }

@@ -42,6 +42,60 @@ using EloBuddy;
             }
         }
 
+        public static bool IsOnHit(this string name)
+        {
+            return !name.ToLower().Contains("tower") && !name.ToLower().Contains("turret") && !name.ToLower().Contains("mini") && !name.ToLower().Contains("minion") && name.ToLower().Contains("attack") && !NoAttacks.Contains(name.ToLower()) ||
+            Attacks.Contains(name.ToLower()) || AttackResets.Contains(name.ToLower()) || OHSP.Contains(name.ToLower());
+        }
+
+        /// <summary>
+        /// Spells that reset the attack timer.
+        /// </summary>
+        private static readonly string[] AttackResets =
+        {
+            "dariusnoxiantacticsonh", "fioraflurry", "garenq","gravesmove",
+            "hecarimrapidslash", "jaxempowertwo", "jaycehypercharge", "leonashieldofdaybreak", "luciane", "lucianq",
+            "monkeykingdoubleattack", "mordekaisermaceofspades", "nasusq", "nautiluspiercinggaze", "netherblade",
+            "gangplankqwrapper", "poppydevastatingblow", "powerfist", "renektonpreexecute", "rengarq", "shyvanadoubleattack",
+            "sivirw", "takedown", "talonnoxiandiplomacy", "trundletrollsmash", "vaynetumble", "vie", "volibearq",
+            "xenzhaocombotarget", "yorickspectral", "reksaiq", "itemtitanichydracleave", "masochism","ilaoiw"
+        };
+
+
+        /// <summary>
+        /// Spells that are not attacks even if they have the "attack" word in their name.
+        /// </summary>
+        private static readonly string[] NoAttacks =
+        {
+            "volleyattack", "volleyattackwithsound", "jarvanivcataclysmattack",
+            "monkeykingdoubleattack", "shyvanadoubleattack",
+            "shyvanadoubleattackdragon", "zyragraspingplantattack",
+            "zyragraspingplantattack2", "zyragraspingplantattackfire",
+            "zyragraspingplantattack2fire", "viktorpowertransfer",
+            "sivirwattackbounce", "asheqattacknoonhit",
+            "elisespiderlingbasicattack", "heimertyellowbasicattack",
+            "heimertyellowbasicattack2", "heimertbluebasicattack",
+            "annietibbersbasicattack", "annietibbersbasicattack2",
+            "yorickdecayedghoulbasicattack", "yorickravenousghoulbasicattack",
+            "yorickspectralghoulbasicattack", "malzaharvoidlingbasicattack",
+            "malzaharvoidlingbasicattack2", "malzaharvoidlingbasicattack3",
+            "kindredwolfbasicattack", "kindredbasicattackoverridelightbombfinal"
+        };
+
+
+        /// <summary>
+        /// Spells that are attacks even if they dont have the "attack" word in their name.
+        /// </summary>
+        private static readonly string[] Attacks =
+        {
+            "caitlynheadshotmissile", "frostarrow", "garenslash2",
+            "kennenmegaproc", "lucianpassiveattack", "masteryidoublestrike", "quinnwenhanced", "renektonexecute",
+            "renektonsuperexecute", "rengarnewpassivebuffdash", "trundleq", "xenzhaothrust", "xenzhaothrust2",
+            "xenzhaothrust3", "viktorqbuff"
+        };
+
+        private static readonly string[] OHSP = { "parley", "ezrealmysticshot" };
+
         internal static void AIHeroClient_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (Player.IsDead)
@@ -55,12 +109,12 @@ using EloBuddy;
             if (HeroSender == null)
                 return;
 
-            if (HeroSender != null && Target != null && !Orbwalking.IsOnHit(args.SData.Name) && Target.IsAlly && !HeroSender.IsAlly && Target.Distance(Player.ServerPosition) <= 1000)
+            if (HeroSender != null && Target != null && !IsOnHit(args.SData.Name) && Target.IsAlly && !HeroSender.IsAlly && Target.Distance(Player.ServerPosition) <= 1000)
             {
                 ShieldTarget = Target;
                 AttackTime = Utils.GameTimeTickCount;
             }
-            if (HeroSender != null && !Orbwalking.IsOnHit(args.SData.Name) && HeroManager.Allies.Where(x => x.Distance(args.End) <= 80 && x.Distance(Player.ServerPosition) <= 1000).Count() > 0)
+            if (HeroSender != null && !IsOnHit(args.SData.Name) && HeroManager.Allies.Where(x => x.Distance(args.End) <= 80 && x.Distance(Player.ServerPosition) <= 1000).Count() > 0)
             {
                 ShieldTarget = HeroManager.Allies.Where(x => x.Distance(args.End) <= 80).FirstOrDefault();
                 AttackTime = Utils.GameTimeTickCount;

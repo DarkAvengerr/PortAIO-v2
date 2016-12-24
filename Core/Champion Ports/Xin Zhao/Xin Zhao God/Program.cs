@@ -49,7 +49,7 @@ using EloBuddy;
             Config = new Menu("Xin Zhao God", "XinZhaoGod", true);
 
             var orbwalkerMenu = new Menu("Orbwalker", "Orbwalker");
-            Orbwalker = new Xin.Orbwalking.Orbwalker(orbwalkerMenu);
+            Orbwalker = new Orbwalking.Orbwalker(orbwalkerMenu);
             Config.AddSubMenu(orbwalkerMenu);
 
             var targetSelectorMenu = new Menu("Target Selector", "Target Selector");

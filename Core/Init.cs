@@ -2687,13 +2687,10 @@ namespace PortAIO
                         case 9: // HeavenStrikeRiven
                             HeavenStrikeRiven.Program.Main();
                             break;
-                        case 10: // RivenSharpV2
-                            RivenSharp.Program.Main();
-                            break;
-                        case 11: // yol0Riven
+                        case 10: // yol0Riven
                             yol0Riven.Program.Main();
                             break;
-                        case 12: // RivenToTheChallenger  
+                        case 11: // RivenToTheChallenger  
                             RivenToTheChallenger.Program.Main();
                             break;
                     }

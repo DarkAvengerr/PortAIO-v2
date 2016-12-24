@@ -67,7 +67,7 @@ using EloBuddy;
             {
                 if (args.SData.Name == "KalistaExpungeWrapper")
                 {
-                    LeagueSharp.Common.Utility.DelayAction.Add(250, MyOrbwalker.ResetAutoAttackTimer);
+                    LeagueSharp.Common.Utility.DelayAction.Add(250, Orbwalking.ResetAutoAttackTimer);
                 }
             }
         }

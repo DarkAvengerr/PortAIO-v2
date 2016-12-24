@@ -78,36 +78,14 @@ namespace MoonDiana
             misc.AddItem(new MenuItem("MINTERRUPTE", "Use E For Interrupt").SetValue(true));
             misc.AddItem(new MenuItem("MINTERRUPTRE", "Use R->E to Interrupt Important Spells").SetValue(true));
             misc.AddItem(new MenuItem("MGAPCLOSEW", "Use W For Gapcloser").SetValue(true));
-            misc.AddItem(new MenuItem("MLXORBWALKER", "Use LXOrbwalker").SetValue(false))
+            misc.AddItem(new MenuItem("MLXORBWALKER", "?").SetValue(false))
                         .ValueChanged += (s, ar) =>
                         {
-                            if (ar.GetNewValue<bool>())
-                            {
-                                //Orbwalker.Disable();
-                                OrbwalkingFunctions[(int)Orbwalking.OrbwalkingMode.Combo] -= Combo;
-                                OrbwalkingFunctions[(int)Orbwalking.OrbwalkingMode.Mixed] -= Harass;
-                                OrbwalkingFunctions[(int)Orbwalking.OrbwalkingMode.LaneClear] -= LaneClear;
-
-                                OrbwalkingFunctions[(int)LXOrbwalker.Mode.Combo] += Combo;
-                                OrbwalkingFunctions[(int)LXOrbwalker.Mode.Harass] += Harass;
-                                OrbwalkingFunctions[(int)LXOrbwalker.Mode.LaneClear] += LaneClear;
-                                LXOrbwalker.Enable();
-                            }
-                            else
-                            {
-                                LXOrbwalker.Disable();
-                                OrbwalkingFunctions[(int)LXOrbwalker.Mode.Combo] -= Combo;
-                                OrbwalkingFunctions[(int)LXOrbwalker.Mode.Harass] -= Harass;
-                                OrbwalkingFunctions[(int)LXOrbwalker.Mode.LaneClear] -= LaneClear;
-
-                                OrbwalkingFunctions[(int)Orbwalking.OrbwalkingMode.Combo] += Combo;
-                                OrbwalkingFunctions[(int)Orbwalking.OrbwalkingMode.Mixed] += Harass;
-                                OrbwalkingFunctions[(int)Orbwalking.OrbwalkingMode.LaneClear] += LaneClear;
-                                //Orbwalker.Enable();
-                            }
+                            OrbwalkingFunctions[(int)Orbwalking.OrbwalkingMode.Combo] += Combo;
+                            OrbwalkingFunctions[(int)Orbwalking.OrbwalkingMode.Mixed] += Harass;
+                            OrbwalkingFunctions[(int)Orbwalking.OrbwalkingMode.LaneClear] += LaneClear;
                         };
             misc.AddItem(new MenuItem("MKILLABLEDRAW", "Disable Notifier Drawings").SetValue(false));
-            LXOrbwalker.AddToMenu(misc.SubMenu("LXOrbwalker Settings"));
 
             Config.AddSubMenu(combo);
             Config.AddSubMenu(harass);
@@ -117,19 +95,10 @@ namespace MoonDiana
 
             BeforeOrbWalking += BeforeOrbwalk;
             BeforeDrawing += BeforeDraw;
-            if (!LXOrbwalkerEnabled)
-            {
-                OrbwalkingFunctions[(int)Orbwalking.OrbwalkingMode.Combo] += Combo;
-                OrbwalkingFunctions[(int)Orbwalking.OrbwalkingMode.Mixed] += Harass;
-                OrbwalkingFunctions[(int)Orbwalking.OrbwalkingMode.LaneClear] += LaneClear;
-            }
-            else
-            {
-                OrbwalkingFunctions[(int)LXOrbwalker.Mode.Combo] += Combo;
-                OrbwalkingFunctions[(int)LXOrbwalker.Mode.Harass] += Harass;
-                OrbwalkingFunctions[(int)LXOrbwalker.Mode.LaneClear] += LaneClear;
-                LXOrbwalker.Enable();
-            }
+
+            OrbwalkingFunctions[(int)Orbwalking.OrbwalkingMode.Combo] += Combo;
+            OrbwalkingFunctions[(int)Orbwalking.OrbwalkingMode.Mixed] += Harass;
+            OrbwalkingFunctions[(int)Orbwalking.OrbwalkingMode.LaneClear] += LaneClear;
         }
 
         public override void SetSpells()
@@ -160,10 +129,7 @@ namespace MoonDiana
             if (m_target == null && Spells[Q].IsReady() && Spells[R].IsReady())
                 m_target = TargetSelector.GetTarget(1500, TargetSelector.DamageType.Magical);
 
-            if (!LXOrbwalkerEnabled)
-                Orbwalking.Orbwalk(m_target, Game.CursorPos);
-            else
-                LXOrbwalker.Orbwalk(Game.CursorPos, m_target);
+            Orbwalking.Orbwalk(m_target, Game.CursorPos);
 
             if (m_target != null)
             {
@@ -207,10 +173,7 @@ namespace MoonDiana
             if (m_target == null && ComboReady())
                 m_target = TargetSelector.GetTarget(2000, TargetSelector.DamageType.Magical);
 
-            if (!LXOrbwalkerEnabled)
-                Orbwalking.Orbwalk(m_target, Game.CursorPos);
-            else
-                LXOrbwalker.Orbwalk(Game.CursorPos, m_target);
+            Orbwalking.Orbwalk(m_target, Game.CursorPos);
 
             if (m_target != null)
             {
@@ -527,13 +490,11 @@ namespace MoonDiana
 
             if (!LXOrbwalkerEnabled && Orbwalker.ActiveMode != LeagueSharp.Common.Orbwalking.OrbwalkingMode.None && OrbwalkingFunctions[(int)Orbwalker.ActiveMode] != null)
                 OrbwalkingFunctions[(int)Orbwalker.ActiveMode]();
-            else if (LXOrbwalkerEnabled && LXOrbwalker.CurrentMode != LXOrbwalker.Mode.None && OrbwalkingFunctions[(int)LXOrbwalker.CurrentMode] != null)
-                OrbwalkingFunctions[(int)LXOrbwalker.CurrentMode]();
         }
 
         private bool LXOrbwalkerEnabled
         {
-            get { return Config.Item("MLXORBWALKER").GetValue<bool>(); }
+            get { return false; }
         }
     }
 }

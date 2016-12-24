@@ -47,7 +47,7 @@ using EloBuddy;
             Game.OnUpdate += Champion.Game_OnUpdate;
             Drawing.OnDraw += Champion.Drawing_OnDraw;                                                                                          
             //MoonDiana.Orbwalking.BeforeAttack += Champion.Orbwalking_BeforeAttack;
-            MoonDiana.Orbwalking.AfterAttack += Champion.Orbwalking_AfterAttack;
+            Orbwalking.AfterAttack += Champion.Orbwalking_AfterAttack;
             AntiGapcloser.OnEnemyGapcloser += Champion.AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Champion.Interrupter_OnPossibleToInterrupt;
             Obj_AI_Base.OnBuffGain += Champion.Obj_AI_Base_OnBuffAdd;

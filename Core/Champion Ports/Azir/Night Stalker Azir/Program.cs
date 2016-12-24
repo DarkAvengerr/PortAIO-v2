@@ -117,7 +117,7 @@ using EloBuddy;
         /// </value>
         [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", 
             Justification = "Reviewed. Suppression is OK here.")]
-        private static AzirOrbwalker Orbwalker { get; set; }
+        private static Orbwalking.Orbwalker Orbwalker { get; set; }
 
         /// <summary>
         ///     Gets the player.
@@ -192,7 +192,7 @@ using EloBuddy;
             Menu.AddSubMenu(targetSelectorMenu);
 
             var orbalkerMenu = new Menu("Orbwalker", "Orbwalker");
-            Orbwalker = new AzirOrbwalker(orbalkerMenu);
+            Orbwalker = new Orbwalking.Orbwalker(orbalkerMenu);
             Menu.AddSubMenu(orbalkerMenu);
 
             var comboMenu = new Menu("Combo Settings", "Combo");
