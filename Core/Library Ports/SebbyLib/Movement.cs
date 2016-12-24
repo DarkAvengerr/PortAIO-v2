@@ -1154,10 +1154,10 @@ namespace SebbyLib.Movement
 
             info.NewPathTick = Utils.TickCount;
 
-            if (args.Path.Count() == 1 && !sender.IsMoving) // STOP MOVE DETECTION
+            if (sender.Path.Count() == 1 && !sender.IsMoving) // STOP MOVE DETECTION
                 UnitTrackerInfoList.Find(x => x.NetworkId == sender.NetworkId).StopMoveTick = Utils.TickCount;
             else // SPAM CLICK LOGIC
-                info.PathBank.Add(new PathInfo() { Position = args.Path.Last().To2D(), Time = Game.Time });
+                info.PathBank.Add(new PathInfo() { Position = sender.Path.Last().To2D(), Time = Game.Time });
 
             if (info.PathBank.Count > 3)
                 info.PathBank.Remove(info.PathBank.First());

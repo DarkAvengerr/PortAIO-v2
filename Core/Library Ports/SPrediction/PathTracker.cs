@@ -78,16 +78,20 @@ namespace SPrediction
             foreach (AIHeroClient enemy in HeroManager.Enemies)
                 EnemyInfo.Add(enemy.NetworkId, new EnemyData(new List<Vector2>()));
 
-            AIHeroClient.OnNewPath += AIHeroClient_OnNewPath;
-            AIHeroClient.OnSpellCast += AIHeroClient_OnDoCast;
-            AIHeroClient.OnBasicAttack += AIHeroClient_OnProcessSpellCast;
+            Game.OnUpdate += OnUpdate;
+
+            Obj_AI_Base.OnBasicAttack += AIHeroClient_OnDoCast;
+            Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnDoCast;
+            Obj_AI_Base.OnSpellCast += AIHeroClient_OnDoCast;
+
+            Obj_AI_Base.OnBasicAttack += AIHeroClient_OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast+= AIHeroClient_OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
+
+            Obj_AI_Base.OnNewPath += Obj_AI_Hero_OnNewPath;
         }
 
-
-        /// <summary>
-        /// OnNewPath event for average reaction time calculations
-        /// </summary>
-        private static void AIHeroClient_OnNewPath(Obj_AI_Base sender, GameObjectNewPathEventArgs args)
+        private static void Obj_AI_Hero_OnNewPath(Obj_AI_Base sender, GameObjectNewPathEventArgs args)
         {
             if (!sender.IsEnemy || !sender.IsChampion() || args.IsDash)
                 return;
@@ -154,6 +158,79 @@ namespace SPrediction
             }
 
             EnemyInfo[sender.NetworkId] = enemy;
+        }
+
+
+        /// <summary>
+        /// OnNewPath event for average reaction time calculations
+        /// </summary>
+        private static void OnUpdate(EventArgs args)
+        {
+            foreach (var sender in HeroManager.Enemies.Where(x => x.IsVisible && x.IsHPBarRendered))
+            {
+                EnemyData enemy = EnemyInfo[sender.NetworkId];
+
+
+                if (sender.Path.Length <= 1)
+                {
+                    if (!enemy.IsStopped)
+                    {
+                        enemy.StopTick = Environment.TickCount;
+                        enemy.LastWaypointTick = Environment.TickCount;
+                        enemy.IsStopped = true;
+                        enemy.Count = 0;
+                        enemy.AvgTick = 0;
+                        enemy.AvgPathLenght = 0;
+                        enemy.LastAngleDiff = 360;
+                    }
+                }
+                else
+                {
+                    List<Vector2> wp = sender.Path.ToList().To2D();
+                    List<Vector2> sample1 = new List<Vector2>();
+                    wp.Insert(0, sender.ServerPosition.To2D());
+
+                    for (int i = 0; i < wp.Count - 1; i++)
+                    {
+                        Vector2 direction = (wp[i + 1] - wp[i]).Normalized();
+                        sample1.Add(direction);
+                    }
+
+                    List<Vector2> sample2 = new List<Vector2>();
+                    for (int i = 0; i < enemy.LastWaypoints.Count - 1; i++)
+                    {
+                        Vector2 direction = (enemy.LastWaypoints[i + 1] - enemy.LastWaypoints[i]).Normalized();
+                        sample2.Add(direction);
+                    }
+
+                    if (sample1.Count() > 0 && sample2.Count() > 0)
+                    {
+                        float sample1_avg = sample1.Average(p => p.AngleBetween(Vector2.Zero));
+                        float sample2_avg = sample2.Average(p => p.AngleBetween(Vector2.Zero));
+                        enemy.LastAngleDiff = Math.Abs(sample2_avg - sample1_avg);
+                    }
+                    if (!enemy.LastWaypoints.SequenceEqual(wp))
+                    {
+                        if (!enemy.IsStopped)
+                        {
+                            enemy.AvgTick = (enemy.Count * enemy.AvgTick + (Environment.TickCount - enemy.LastWaypointTick)) / ++enemy.Count;
+                            enemy.AvgPathLenght = ((enemy.Count - 1) * enemy.AvgPathLenght + wp.PathLength()) / enemy.Count;
+                        }
+                        enemy.LastWaypointTick = Environment.TickCount;
+                        enemy.IsStopped = false;
+                        enemy.LastWaypoints = wp;
+
+                        if (!enemy.IsWindupChecked)
+                        {
+                            if (Environment.TickCount - enemy.LastAATick < 300)
+                                enemy.AvgOrbwalkTime = (enemy.AvgOrbwalkTime * enemy.OrbwalkCount + (enemy.LastWaypointTick - enemy.LastWindupTick)) / ++enemy.OrbwalkCount;
+                            enemy.IsWindupChecked = true;
+                        }
+                    }
+                }
+
+                EnemyInfo[sender.NetworkId] = enemy;
+            }
         }
 
         /// <summary>

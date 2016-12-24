@@ -156,7 +156,7 @@ namespace SPrediction
             {
                 this.CollisionResult = Collision.GetCollisions(this.Input.From.To2D(), this.CastPosition, this.Input.SpellRange, this.Input.SpellWidth, this.Input.SpellDelay, this.Input.SpellMissileSpeed);
                 this.CheckCollisions();
-                this.CheckOutofRange(checkDodge);
+                //this.CheckOutofRange(checkDodge);
             }
 
             #endregion
@@ -171,7 +171,7 @@ namespace SPrediction
 
             private void CheckOutofRange(bool checkDodge)
             {
-                if (this.Input.RangeCheckFrom.To2D().Distance(this.CastPosition) > this.Input.SpellRange - (checkDodge ? GetArrivalTime(this.Input.From.To2D().Distance(this.CastPosition), this.Input.SpellDelay, this.Input.SpellMissileSpeed) * this.Unit.MoveSpeed * (100 - ConfigMenu.MaxRangeIgnore) / 100f : 0))
+                if (ObjectManager.Player.Distance(Input.Target) > Input.SpellRange)
                     this.HitChance = HitChance.OutOfRange;
             }
 
@@ -255,7 +255,6 @@ namespace SPrediction
         }
 
         #endregion
-
         #region Internal Methods
 
         /// <summary>
@@ -355,7 +354,7 @@ namespace SPrediction
                     if (avgp < 400 && movt < 100 && path.PathLength() <= avgp)
                     {
                         result.HitChance = HitChance.High;
-                        result.CastPosition = path.Last();
+                        result.CastPosition = target.Path.ToList().To2D().Last();
                         result.UnitPosition = result.CastPosition;
                         result.Lock();
 
@@ -488,7 +487,7 @@ namespace SPrediction
             {
                 if (movt > 50)
                 {
-                    if (avgt >= t * 1.25f)
+                    if (avgt >= t + Game.Ping)
                     {
                         if (anglediff < 30)
                             return HitChance.VeryHigh;
@@ -556,6 +555,8 @@ namespace SPrediction
             float pathTime = 0f;
             int[] pathBounds = new int[] { -1, -1 };
 
+            path = target.Path.ToList().To2D();
+
             //find bounds
             for (int i = 0; i < path.Count - 1; i++)
             {
@@ -579,7 +580,7 @@ namespace SPrediction
                 {
                     Vector2 direction = (path[k + 1] - path[k]).Normalized();
                     float distance = width;
-                    float extender = 0;
+                    float extender = target.BoundingRadius;
 
                     if (type == SkillshotType.SkillshotLine)
                         extender = width;
@@ -591,10 +592,10 @@ namespace SPrediction
                         Vector2 pCenter = path[k] + (direction * distance * i);
                         Vector2 pA = pCenter - (direction * extender);
                         Vector2 pB = pCenter + (direction * extender);
-                        
+
                         float flytime = missileSpeed != 0 ? from.Distance(pCenter) / missileSpeed : 0f;
                         float t = flytime + delay + Game.Ping / 2000f + ConfigMenu.SpellDelay / 1000f;
-                        
+
                         Vector2 currentPosition = target.ServerPosition.To2D();
 
                         float arriveTimeA = currentPosition.Distance(pA) / moveSpeed;
@@ -618,6 +619,7 @@ namespace SPrediction
         }
 
         #endregion
+
 
         #region Public Methods
 

@@ -353,7 +353,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
         private float GetRealDistance(GameObject target)
         {
-            return Player.ServerPosition.Distance(target.Position) + ObjectManager.Player.BoundingRadius + target.BoundingRadius;
+            return Player.ServerPosition.Distance(target.Position);
         }
         public float bonusRange()
         {
