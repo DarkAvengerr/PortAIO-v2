@@ -10,7 +10,7 @@ namespace DetuksSharp
     {
         public static void Main()
         {
-            new DeathWalker();
+            //new DeathWalker();
         }
     }
 }

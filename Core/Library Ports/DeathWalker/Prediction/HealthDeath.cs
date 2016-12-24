@@ -27,7 +27,7 @@ namespace DetuksSharp.Prediction
 
         public static int now
         {
-            get { return (int) DateTime.Now.TimeOfDay.TotalMilliseconds; }
+            get { return (int)DateTime.Now.TimeOfDay.TotalMilliseconds; }
         }
 
         static HealthDeath()
@@ -57,7 +57,7 @@ namespace DetuksSharp.Prediction
             if (args.Target != null && args.Target is Obj_AI_Base && !sender.IsMe)
             {
 
-                var tar = (Obj_AI_Base) args.Target;
+                var tar = (Obj_AI_Base)args.Target;
                 if (damagerSources.ContainsKey(sender.NetworkId))
                 {
                     damagerSources[sender.NetworkId].setTarget(tar);
@@ -69,12 +69,12 @@ namespace DetuksSharp.Prediction
             }
 
 
-            if(!sender.IsMelee())
+            if (!sender.IsMelee())
                 return;
 
             if (sender is AIHeroClient)
             {
-                DeathWalker.lastDmg = now;
+                //DeathWalker.lastDmg = now;
             }
 
             if (args.Target is Obj_AI_Base)
@@ -110,8 +110,8 @@ namespace DetuksSharp.Prediction
 
             foreach (var minion in minionsAround)
             {
-                if(!damagerSources.ContainsKey(minion.NetworkId))
-                    damagerSources.Add(minion.NetworkId,new Damager(minion,null));
+                if (!damagerSources.ContainsKey(minion.NetworkId))
+                    damagerSources.Add(minion.NetworkId, new Damager(minion, null));
             }
 
             damagerSources.ToList()
@@ -141,11 +141,11 @@ namespace DetuksSharp.Prediction
             //most likely AA
             if (sender is MissileClient)
             {
-                var mis = (MissileClient) sender;
+                var mis = (MissileClient)sender;
                 if (mis.Target is Obj_AI_Base)
                 {
                     var dMake = new DamageMaker(mis.SpellCaster,
-                        (Obj_AI_Base) mis.Target,
+                        (Obj_AI_Base)mis.Target,
                         mis,
                         mis.SData);
 
@@ -167,7 +167,7 @@ namespace DetuksSharp.Prediction
                     activeDamageMakers.Remove(sender.NetworkId);
             }
 
-            if (sender is Obj_AI_Base )
+            if (sender is Obj_AI_Base)
             {
                 int i = 0;
                 foreach (var dmgMk in activeDamageMakers)
@@ -216,7 +216,7 @@ namespace DetuksSharp.Prediction
             {
 
                 var hitingUnitDamage = misslesHeadedOnDamage(unit);
-               // if (unit.Health < hitingUnitDamage * 0.65)
+                // if (unit.Health < hitingUnitDamage * 0.65)
                 //    Console.WriteLine("Ignore cus almost dead!");
 
                 return unit.Health < hitingUnitDamage * 0.65;
@@ -240,11 +240,11 @@ namespace DetuksSharp.Prediction
                 int hitOn = 0;
                 if (attacks.missle == null || attacks.sData.MissileSpeed == 0)
                 {
-                    hitOn = (int)(attacks.createdTick + attacks.source.AttackCastDelay*1000);
+                    hitOn = (int)(attacks.createdTick + attacks.source.AttackCastDelay * 1000);
                 }
                 else
                 {
-                    hitOn = now +  (int)((attacks.missle.Position.Distance(unit.Position)*1000) / attacks.sData.MissileSpeed)+100;
+                    hitOn = now + (int)((attacks.missle.Position.Distance(unit.Position) * 1000) / attacks.sData.MissileSpeed) + 100;
                 }
 
                 if (now < hitOn && hitOn < now + msTime)
@@ -277,7 +277,7 @@ namespace DetuksSharp.Prediction
 
                 int timeTo = now + msTime;
 
-                int hits = (attacks.cycle == 0 )?0:(int)((timeTo - hitOn)/attacks.cycle) +1;
+                int hits = (attacks.cycle == 0) ? 0 : (int)((timeTo - hitOn) / attacks.cycle) + 1;
 
                 if (now < hitOn && hitOn <= now + msTime)
                 {
@@ -293,10 +293,10 @@ namespace DetuksSharp.Prediction
             var damageDoneTill = now + msTime;
             foreach (var damager in damagerSources.Values)
             {
-                if(!damager.isValidDamager() || !(unit is Obj_AI_Base))
+                if (!damager.isValidDamager() || !(unit is Obj_AI_Base))
                     continue;
                 var target = damager.getTarget();
-                if(target == null || target.NetworkId != unit.NetworkId || (ignoreAlmostDead && almostDead(damager.source)))
+                if (target == null || target.NetworkId != unit.NetworkId || (ignoreAlmostDead && almostDead(damager.source)))
                     continue;
                 if (damager.firstHitAt > damageDoneTill)
                     continue;
@@ -312,7 +312,7 @@ namespace DetuksSharp.Prediction
                 }
             }
             //if (predictedDamage > 0)
-               // Console.WriteLine("dmg: " + predictedDamage);
+            // Console.WriteLine("dmg: " + predictedDamage);
             return unit.Health - predictedDamage;
         }
 
@@ -323,7 +323,7 @@ namespace DetuksSharp.Prediction
 
         public static float misslesHeadedOnDamage(AttackableUnit unit)
         {
-            return activeDamageMakers.Where(un => un.Value.target.NetworkId == unit.NetworkId).Sum(un=> un.Value.dealDamage);
+            return activeDamageMakers.Where(un => un.Value.target.NetworkId == unit.NetworkId).Sum(un => un.Value.dealDamage);
         }
         //Used for laneclear
         public class Damager
@@ -383,7 +383,7 @@ namespace DetuksSharp.Prediction
             {
                 if (isValidTarget())
                     return target;
-                var predTarget = minionsAround.Where(min => !min.IsDead && min.Distance(source,true)<650*650)
+                var predTarget = minionsAround.Where(min => !min.IsDead && min.Distance(source, true) < 650 * 650)
                         .OrderBy(min => min.Distance(source.Position, true))
                         .FirstOrDefault();
                 setTarget(predTarget);
@@ -395,31 +395,29 @@ namespace DetuksSharp.Prediction
                 var tar = getTarget();
                 if (tar == null || source == null)
                     return 0;
-               // Console.WriteLine("Return damge");
+                // Console.WriteLine("Return damge");
                 return (float)source.GetAutoAttackDamage(tar, true);
             }
 
             private int hitOnTar(Obj_AI_Base tar)
             {
-                if (tar == null)
-                    return int.MaxValue;
-                int addTime = 0;
-                if (DeathWalker.inAutoAttackRange(source, tar))//+ check if want to move to killabel minion and range it wants to
-                {
-                    var realDist = DeathWalker.realDistanceTill(source, target);
-                    var aaRange = DeathWalker.getRealAutoAttackRange(source, tar);
+                return int.MaxValue;
+                //if (DeathWalker.inAutoAttackRange(source, tar))//+ check if want to move to killabel minion and range it wants to
+                //{
+                //    var realDist = DeathWalker.realDistanceTill(source, target);
+                //    var aaRange = DeathWalker.getRealAutoAttackRange(source, tar);
 
-                    addTime += (int)(((realDist - aaRange) * 1000) / source.MoveSpeed);
-                }
+                //    addTime += (int)(((realDist - aaRange) * 1000) / source.MoveSpeed);
+                //}
 
-                if (source.IsMelee || DeathWalker.azir)
-                {
-                    return (int)(createdTick + source.AttackCastDelay * 1000) + addTime;
-                }
-                else
-                {
-                    return createdTick + (int)((source.Position.Distance(tar.Position) * 1000) / (source.BasicAttack.MissileSpeed)) + ((source is Obj_AI_Turret) ? towerDamageDelay : 0) + addTime;//lil delay cus dunno l8er could try to values what says delay of dmg dealing
-                }
+                //if (source.IsMelee || DeathWalker.azir)
+                //{
+                //    return (int)(createdTick + source.AttackCastDelay * 1000) + addTime;
+                //}
+                //else
+                //{
+                //    return createdTick + (int)((source.Position.Distance(tar.Position) * 1000) / (source.BasicAttack.MissileSpeed)) + ((source is Obj_AI_Turret) ? towerDamageDelay : 0) + addTime;//lil delay cus dunno l8er could try to values what says delay of dmg dealing
+                //}
             }
 
             private int hitOn
@@ -473,13 +471,13 @@ namespace DetuksSharp.Prediction
                     {
                         if (source == null || !source.IsValid)
                             return int.MaxValue;
-                        if (missle == null || DeathWalker.azir)
+                        //if (missle == null || DeathWalker.azir)
+                        //{
+                        //    return (int)(createdTick + source.AttackCastDelay * 1000);
+                        //}
+                        //else
                         {
-                            return (int)(createdTick + source.AttackCastDelay * 1000);
-                        }
-                        else
-                        {
-                            return now + (int)((missle.Position.Distance(target.Position) * 1000) / (sData.MissileSpeed)) + ((source is Obj_AI_Turret)?towerDamageDelay:0);//lil delay cus dunno l8er could try to values what says delay of dmg dealing
+                            return now + (int)((missle.Position.Distance(target.Position) * 1000) / (sData.MissileSpeed)) + ((source is Obj_AI_Turret) ? towerDamageDelay : 0);//lil delay cus dunno l8er could try to values what says delay of dmg dealing
                         }
 
                     }
@@ -503,9 +501,9 @@ namespace DetuksSharp.Prediction
                 if (isAutoAtack)
                 {
 
-                    dealDamage = (float) source.GetAutoAttackDamage(target, true);
+                    dealDamage = (float)source.GetAutoAttackDamage(target, true);
                     if (source.IsMelee)
-                        cycle = (int) (source.AttackDelay*1000);
+                        cycle = (int)(source.AttackDelay * 1000);
                     else
                     {
                         //var dist = source.Distance(target);

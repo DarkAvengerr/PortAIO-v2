@@ -10,11 +10,17 @@ namespace PortAIO.Dual_Port
 {
     class Misc
     {
-        public static Menu menu;
+        public static Menu menu, info;
 
         public static void Load()
         {
-            (menu = new Menu("PortAIO Misc", "PAIOMisc", true)).AddToMainMenu();
+            (info = new Menu("[~] PortAIO - Info", "PAIOInfo", true)).AddToMainMenu();
+            info.AddItem(new MenuItem("aioBerb", "PortAIO - By Berb"));
+            info.AddItem(new MenuItem("aioVersion", "Version : " + Game.Version));
+            info.AddItem(new MenuItem("aioNote", "Note : Make sure you're in Borderless!"));
+            info.AddItem(new MenuItem("aioNote1", "Note : Remember to disable EB Orbwalker!"));
+
+            (menu = new Menu("[~] PortAIO - Ports", "PAIOMisc", true)).AddToMainMenu();
 
             var dualPort = new Menu("Dual-Port", "DualPAIOPort");
             menu.AddSubMenu(dualPort);
@@ -24,6 +30,7 @@ namespace PortAIO.Dual_Port
             string[] champ = new string[] { };
             switch (ObjectManager.Player.Hero)
             {
+                #region Dual-Ports
                 case EloBuddy.Champion.Aatrox:
                     champ = new string[] { "BrianSharp", "KappaSeries", "SAutoCarry", "NoobAatrox" };
                     break;
@@ -429,6 +436,7 @@ namespace PortAIO.Dual_Port
                     dualPort.AddItem(new MenuItem("info1", "There are no dual-port for this champion."));
                     dualPort.AddItem(new MenuItem("info2", "Feel free to request one."));
                     break;
+                    #endregion
             }
 
             if (hasDualPort)

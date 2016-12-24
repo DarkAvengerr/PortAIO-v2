@@ -40,6 +40,8 @@ using EloBuddy;
 
         public static HpBarIndicator hpi = new HpBarIndicator();
 
+        internal static Orbwalking.Orbwalker Orbwalker;
+
 
         public JayceSharp()
         {
@@ -59,7 +61,7 @@ using EloBuddy;
                 Config = new Menu("Jayce - Sharp", "Jayce", true);
                 //Orbwalker
                 Config.AddSubMenu(new Menu("Orbwalker", "Orbwalker"));
-                DeathWalker.AddToMenu(Config.SubMenu("Orbwalker"));
+                Orbwalker = new Orbwalking.Orbwalker(Config.SubMenu("Orbwalker"));
                 //TS
                 Menu targetSelectorMenu = new Menu("Target Selector", "Target Selector");
                 TargetSelector.AddToMenu(targetSelectorMenu);
@@ -189,7 +191,7 @@ using EloBuddy;
             {
                 Jayce.shootQE(Game.CursorPos,true);
             }
-            if (Jayce.myCastedQ != null && (Config.Item("fullDMG").GetValue<KeyBind>().Active || DeathWalker.CurrentMode == DeathWalker.Mode.Combo))
+            if (Jayce.myCastedQ != null && (Config.Item("fullDMG").GetValue<KeyBind>().Active || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo))
             {
                     Jayce.castEonSpell(Jayce.myCastedQ);
             }
@@ -240,7 +242,7 @@ using EloBuddy;
            // if (Jayce.castEonQ != null && (Jayce.castEonQ. - 2) > Game.Time)
             //    Jayce.castEonQ = null;
 
-            if (DeathWalker.CurrentMode == DeathWalker.Mode.Combo)
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {
                 Jayce.activateMura();
                 AIHeroClient target = TargetSelector.GetTarget(Jayce.getBestRange(), TargetSelector.DamageType.Physical);
@@ -250,12 +252,12 @@ using EloBuddy;
             if (Config.Item("killSteal").GetValue<bool>())
                 Jayce.doKillSteal();
 
-            if (DeathWalker.CurrentMode == DeathWalker.Mode.Harass)
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
                 Jayce.deActivateMura();
             }
 
-            if (DeathWalker.CurrentMode == DeathWalker.Mode.LaneClear)
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear)
             {
                 Jayce.deActivateMura();
             }

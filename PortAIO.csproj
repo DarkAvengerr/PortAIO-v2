@@ -3972,7 +3972,6 @@
     <Compile Include="Core\Champion Ports\Zyra\D_Zyra\Program.cs" />
     <Compile Include="Core\Library Ports\DeathWalker\DeathDraw.cs" />
     <Compile Include="Core\Library Ports\DeathWalker\DeathMath.cs" />
-    <Compile Include="Core\Library Ports\DeathWalker\DeathWalker.cs" />
     <Compile Include="Core\Library Ports\DeathWalker\Prediction\HealthDeath.cs" />
     <Compile Include="Core\Library Ports\DeathWalker\Prediction\TargetSpell.cs" />
     <Compile Include="Core\Library Ports\DeathWalker\Prediction\TargetSpellDatabase.cs" />

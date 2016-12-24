@@ -81,26 +81,26 @@ namespace DetuksSharp
 
         public void draw(int percent)
         {
-            if ((DeathWalker.menu.Item("nobar").GetValue<bool>()))
-                return;
-            dxLine.Begin();
-            var tPos = sPos + new Vector2(((windowsW * percent) / (500)), 0);
-            var tPosFull = sPos + new Vector2(windowsW/5-5, 0);
-            dxLine.Draw(new[]
-                                    {
-                                        new Vector2((int)sPos.X, (int)sPos.Y + 6f),
-                                        new Vector2( (int)tPosFull.X, (int)tPosFull.Y + 6f)
-                                    }, new ColorBGRA(200, 0, 0, 220));
-            dxLine.Draw(new[]
-                                    {
-                                        new Vector2((int)sPos.X, (int)sPos.Y + 6f),
-                                        new Vector2( (int)tPos.X, (int)tPos.Y + 6f)
-                                    }, new ColorBGRA(0, 200, 0, 220));
+            //if ((DeathWalker.menu.Item("nobar").GetValue<bool>()))
+            //    return;
+            //dxLine.Begin();
+            //var tPos = sPos + new Vector2(((windowsW * percent) / (500)), 0);
+            //var tPosFull = sPos + new Vector2(windowsW/5-5, 0);
+            //dxLine.Draw(new[]
+            //                        {
+            //                            new Vector2((int)sPos.X, (int)sPos.Y + 6f),
+            //                            new Vector2( (int)tPosFull.X, (int)tPosFull.Y + 6f)
+            //                        }, new ColorBGRA(200, 0, 0, 220));
+            //dxLine.Draw(new[]
+            //                        {
+            //                            new Vector2((int)sPos.X, (int)sPos.Y + 6f),
+            //                            new Vector2( (int)tPos.X, (int)tPos.Y + 6f)
+            //                        }, new ColorBGRA(0, 200, 0, 220));
             
-            // Vector2 sPos = startPosition;
-            //Drawing.DrawLine((int)from.X, (int)from.Y + 9f, (int)to.X, (int)to.Y + 9f, 9f, color);
+            //// Vector2 sPos = startPosition;
+            ////Drawing.DrawLine((int)from.X, (int)from.Y + 9f, (int)to.X, (int)to.Y + 9f, 9f, color);
 
-            dxLine.End();
+            //dxLine.End();
         }
 
     }
