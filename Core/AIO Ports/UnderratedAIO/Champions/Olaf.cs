@@ -23,7 +23,7 @@ using LeagueSharp.Common;
     {
         public static Menu config;
         public static Orbwalking.Orbwalker orbwalker;
-        public static AutoLeveler autoLeveler;
+        
         public static Spell Q, W, E, R;
         public static Vector3 lastQpos, lastQCast;
         public static readonly AIHeroClient player = ObjectManager.Player;
@@ -39,7 +39,7 @@ using LeagueSharp.Common;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Obj_AI_Base.OnDelete += Obj_AI_Base_OnDelete;
             Obj_AI_Base.OnCreate += Obj_AI_Base_OnCreate;
-            HpBarDamageIndicator.DamageToUnit = ComboDamage;
+            
             Console.WriteLine(Game.IP);
         }
 
@@ -84,12 +84,12 @@ using LeagueSharp.Common;
             }
             DrawHelper.DrawCircle(config.Item("drawqq", true).GetValue<Circle>(), Q.Range);
             DrawHelper.DrawCircle(config.Item("drawee", true).GetValue<Circle>(), E.Range);
-            HpBarDamageIndicator.Enabled = config.Item("drawcombo", true).GetValue<bool>();
+            
         }
 
         private void Game_OnUpdate(EventArgs args)
         {
-            if (FpsBalancer.CheckCounter())
+            if(false)
             {
                 return;
             }

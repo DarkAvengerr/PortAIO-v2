@@ -17,7 +17,7 @@ using LeagueSharp.Common;
     {
         public static Menu config;
         public static Orbwalking.Orbwalker orbwalker;
-        public static AutoLeveler autoLeveler;
+        
         public static Spell P, Q, W, E, R;
         public static int[] rRanges = new int[] { 2500, 3250, 4000 };
         private static float lastR;
@@ -31,13 +31,13 @@ using LeagueSharp.Common;
             Drawing.OnDraw += Game_OnDraw;
             Game.OnUpdate += Game_OnGameUpdate;
             Helpers.Jungle.setSmiteSlot();
-            HpBarDamageIndicator.DamageToUnit = ComboDamage;
+            
             Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
         }
 
         private void Game_OnGameUpdate(EventArgs args)
         {
-            if (FpsBalancer.CheckCounter())
+            if(false)
             {
                 return;
             }
@@ -240,7 +240,7 @@ using LeagueSharp.Common;
             DrawHelper.DrawCircle(config.Item("drawee", true).GetValue<Circle>(), E.Range);
             DrawHelper.DrawCircle(
                 config.Item("drawrr", true).GetValue<Circle>(), R.Level >= 1 ? rRanges[R.Level - 1] : rRanges[0]);
-            HpBarDamageIndicator.Enabled = config.Item("drawcombo").GetValue<bool>();
+            
             if (!config.Item("bestpospas", true).GetValue<bool>())
             {
                 return;

@@ -21,7 +21,7 @@ using LeagueSharp.Common;
         private static Orbwalking.Orbwalker orbwalker;
         public static readonly AIHeroClient player = ObjectManager.Player;
         public static Spell Q, W, E, R;
-        public static AutoLeveler autoLeveler;
+        
 
         public Garen()
         {
@@ -32,7 +32,7 @@ using LeagueSharp.Common;
             Orbwalking.AfterAttack += AfterAttack;
             Drawing.OnDraw += Game_OnDraw;
             Jungle.setSmiteSlot();
-            HpBarDamageIndicator.DamageToUnit = ComboDamage;
+            
         }
 
         private void Game_OnGameUpdate(EventArgs args)
@@ -51,7 +51,7 @@ using LeagueSharp.Common;
                 orbwalker.SetAttack(true);
                 orbwalker.SetMovement(true);
             }
-            if (FpsBalancer.CheckCounter())
+            if(false)
             {
                 return;
             }
@@ -193,7 +193,7 @@ using LeagueSharp.Common;
             DrawHelper.DrawCircle(config.Item("drawaa", true).GetValue<Circle>(), player.AttackRange);
             DrawHelper.DrawCircle(config.Item("drawee", true).GetValue<Circle>(), E.Range);
             DrawHelper.DrawCircle(config.Item("drawrr", true).GetValue<Circle>(), R.Range);
-            HpBarDamageIndicator.Enabled = config.Item("drawcombo").GetValue<bool>();
+            
             if (R.IsReady() && config.Item("drawrkillable", true).GetValue<bool>())
             {
                 foreach (var e in HeroManager.Enemies.Where(e => e.IsValid && e.IsHPBarRendered))

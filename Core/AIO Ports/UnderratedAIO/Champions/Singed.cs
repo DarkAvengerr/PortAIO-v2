@@ -20,7 +20,7 @@ using LeagueSharp.Common;
     {
         public static Menu config;
         public static Orbwalking.Orbwalker orbwalker;
-        public static AutoLeveler autoLeveler;
+        
         public static Spell Q, Qp, W, E, R;
         public static readonly AIHeroClient player = ObjectManager.Player;
         public static bool justW, ChaseFix, ToCursor;
@@ -39,7 +39,7 @@ using LeagueSharp.Common;
             Helpers.Jungle.setSmiteSlot();
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             CustomEvents.Unit.OnDash += Unit_OnDash;
-            HpBarDamageIndicator.DamageToUnit = ComboDamage;
+            
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
             AIHeroClient.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
         }
@@ -168,7 +168,7 @@ using LeagueSharp.Common;
 
         private void Game_OnGameUpdate(EventArgs args)
         {
-            if (FpsBalancer.CheckCounter())
+            if(false)
             {
                 return;
             }
@@ -456,7 +456,7 @@ using LeagueSharp.Common;
         {
             DrawHelper.DrawCircle(config.Item("drawww", true).GetValue<Circle>(), W.Range);
             DrawHelper.DrawCircle(config.Item("drawrr", true).GetValue<Circle>(), R.Range);
-            HpBarDamageIndicator.Enabled = config.Item("drawcombo", true).GetValue<bool>();
+            
             AIHeroClient target = DrawHelper.GetBetterTarget(W.Range, TargetSelector.DamageType.Magical);
             if (target != null && config.Item("targCircle", true).GetValue<Circle>().Active)
             {

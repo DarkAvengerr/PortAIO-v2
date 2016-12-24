@@ -17,7 +17,7 @@ using LeagueSharp.Common;
     {
         public static Menu config;
         public static Orbwalking.Orbwalker orbwalker;
-        public static AutoLeveler autoLeveler;
+        
         public static Spell Q, W, E, R;
         public static float[] MsBuff = new float[5] { 0.3f, 0.35f, 0.4f, 0.45f, 0.5f };
         private float passivetime = 0f;
@@ -32,7 +32,7 @@ using LeagueSharp.Common;
             Drawing.OnDraw += Game_OnDraw;
             Game.OnUpdate += Game_OnGameUpdate;
             Jungle.setSmiteSlot();
-            HpBarDamageIndicator.DamageToUnit = ComboDamage;
+            
         }
 
         private void Game_OnGameUpdate(EventArgs args)
@@ -48,7 +48,7 @@ using LeagueSharp.Common;
                 passivecd = false;
                 passivetime = 0f;
             }
-            if (FpsBalancer.CheckCounter())
+            if(false)
             {
                 return;
             }
@@ -231,7 +231,7 @@ using LeagueSharp.Common;
                 DrawPassive();
             }
             DrawHelper.DrawCircle(config.Item("drawrr", true).GetValue<Circle>(), 300);
-            HpBarDamageIndicator.Enabled = config.Item("drawcombo").GetValue<bool>();
+            
         }
 
         private void DrawPassive()

@@ -21,7 +21,7 @@ using LeagueSharp.Common;
         public static Spell Q, W, E, R;
         public static bool justE, hasGhost = false;
         public static int LastAATick;
-        public static AutoLeveler autoLeveler;
+        
         public List<Obj_AI_Base> souls = new List<Obj_AI_Base>();
 
         public Yorick()
@@ -37,7 +37,7 @@ using LeagueSharp.Common;
             Obj_AI_Base.OnCreate += Obj_AI_Base_OnCreate;
             Obj_AI_Base.OnDelete += Obj_AI_Base_OnDelete;
             Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
-            HpBarDamageIndicator.DamageToUnit = ComboDamage;
+            
             foreach (var obj in
                 ObjectManager.Get<Obj_AI_Base>().Where(o => o.IsAlly && o.Name.ToLower().Contains("yorickmarker")))
             {
@@ -80,7 +80,7 @@ using LeagueSharp.Common;
 
         private void Game_OnGameUpdate(EventArgs args)
         {
-            if (FpsBalancer.CheckCounter())
+            if(false)
             {
                 return;
             }
@@ -302,7 +302,7 @@ using LeagueSharp.Common;
             DrawHelper.DrawCircle(config.Item("drawww", true).GetValue<Circle>(), W.Range);
             DrawHelper.DrawCircle(config.Item("drawee", true).GetValue<Circle>(), 700);
             DrawHelper.DrawCircle(config.Item("drawrr", true).GetValue<Circle>(), R.Range);
-            HpBarDamageIndicator.Enabled = config.Item("drawcombo").GetValue<bool>();
+            
         }
 
         private float ComboDamage(AIHeroClient hero)

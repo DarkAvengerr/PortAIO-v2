@@ -300,8 +300,6 @@ namespace SPrediction
             if (t.HealthPercent > filterHPPercent)
                 return false;
 
-
-
             float avgt = t.AvgMovChangeTime() + reactionIgnoreDelay;
             float movt = t.LastMovChangeTime();
             float avgp = t.AvgPathLenght();

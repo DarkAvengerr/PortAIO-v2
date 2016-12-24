@@ -15,7 +15,7 @@ using LeagueSharp.Common;
     {
         public static Menu config;
         public static Orbwalking.Orbwalker orbwalker;
-        public static AutoLeveler autoLeveler;
+        
         public static Spell Q, W, E, R;
         public static readonly AIHeroClient player = ObjectManager.Player;
 
@@ -28,7 +28,7 @@ using LeagueSharp.Common;
             Drawing.OnDraw += Drawing_OnDraw;
             Jungle.setSmiteSlot();
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
-            HpBarDamageIndicator.DamageToUnit = ComboDamage;
+            
         }
 
         private void Interrupter2_OnInterruptableTarget(AIHeroClient sender,
@@ -51,12 +51,12 @@ using LeagueSharp.Common;
             DrawHelper.DrawCircle(
                 config.Item("drawee", true).GetValue<Circle>(), config.Item("useeRange", true).GetValue<Slider>().Value);
             DrawHelper.DrawCircle(config.Item("drawrr", true).GetValue<Circle>(), R.Range);
-            HpBarDamageIndicator.Enabled = config.Item("drawcombo", true).GetValue<bool>();
+            
         }
 
         private void Game_OnUpdate(EventArgs args)
         {
-            if (FpsBalancer.CheckCounter())
+            if(false)
             {
                 return;
             }

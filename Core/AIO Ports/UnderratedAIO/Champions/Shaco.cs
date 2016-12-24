@@ -22,7 +22,7 @@ using LeagueSharp.Common;
         public static bool hasGhost = false;
         public static bool GhostDelay = false;
         public static int GhostRange = 2200;
-        public static AutoLeveler autoLeveler;
+        
 
 
         public Shaco()
@@ -32,7 +32,7 @@ using LeagueSharp.Common;
             //Chat.Print("<font color='#9933FF'>Soresu </font><font color='#FFFFFF'>- Shaco</font>");
             Game.OnUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += Game_OnDraw;
-            HpBarDamageIndicator.DamageToUnit = ComboDamage;
+            
             Helpers.Jungle.setSmiteSlot();
         }
 
@@ -50,7 +50,7 @@ using LeagueSharp.Common;
             {
                 orbwalker.SetAttack(true);
             }
-            if (FpsBalancer.CheckCounter())
+            if(false)
             {
                 return;
             }
@@ -289,7 +289,7 @@ using LeagueSharp.Common;
             DrawHelper.DrawCircle(config.Item("drawqq", true).GetValue<Circle>(), Q.Range);
             DrawHelper.DrawCircle(config.Item("drawww", true).GetValue<Circle>(), W.Range);
             DrawHelper.DrawCircle(config.Item("drawee", true).GetValue<Circle>(), E.Range);
-            HpBarDamageIndicator.Enabled = config.Item("drawcombo").GetValue<bool>();
+            
         }
 
         private float ComboDamage(AIHeroClient hero)

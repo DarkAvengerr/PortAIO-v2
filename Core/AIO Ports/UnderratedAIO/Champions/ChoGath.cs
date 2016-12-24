@@ -22,7 +22,7 @@ using LeagueSharp.Common;
         public static List<int> silence = new List<int>(new int[] { 1500, 1750, 2000, 2250, 2500 });
         public static int knockUp = 1000;
         public static bool flashRblock = false;
-        public static AutoLeveler autoLeveler;
+        
 
         public Chogath()
         {
@@ -34,7 +34,7 @@ using LeagueSharp.Common;
             AntiGapcloser.OnEnemyGapcloser += OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += OnPossibleToInterrupt;
             Helpers.Jungle.setSmiteSlot();
-            HpBarDamageIndicator.DamageToUnit = ComboDamage;
+            
         }
 
 
@@ -68,7 +68,7 @@ using LeagueSharp.Common;
             {
                 Jungle();
             }
-            if (FpsBalancer.CheckCounter())
+            if(false)
             {
                 return;
             }
@@ -351,7 +351,7 @@ using LeagueSharp.Common;
             DrawHelper.DrawCircle(config.Item("drawww", true).GetValue<Circle>(), W.Range);
             DrawHelper.DrawCircle(config.Item("drawee", true).GetValue<Circle>(), E.Range);
             DrawHelper.DrawCircle(config.Item("drawrrflash", true).GetValue<Circle>(), RFlash.Range);
-            HpBarDamageIndicator.Enabled = config.Item("drawcombo", true).GetValue<bool>();
+            
         }
 
         public static float ComboDamage(AIHeroClient hero)

@@ -1157,17 +1157,13 @@
     <Compile Include="Core\AIO Ports\UnderratedAIO\Champions\Volibear.cs" />
     <Compile Include="Core\AIO Ports\UnderratedAIO\Champions\Yorick.cs" />
     <Compile Include="Core\AIO Ports\UnderratedAIO\Champions\Zac.cs" />
-    <Compile Include="Core\AIO Ports\UnderratedAIO\Helpers\AutoLeveler.cs" />
     <Compile Include="Core\AIO Ports\UnderratedAIO\Helpers\CombatHelper.cs" />
     <Compile Include="Core\AIO Ports\UnderratedAIO\Helpers\DrawHelper.cs" />
     <Compile Include="Core\AIO Ports\UnderratedAIO\Helpers\DynamicInitializer.cs" />
     <Compile Include="Core\AIO Ports\UnderratedAIO\Helpers\Environment.cs" />
-    <Compile Include="Core\AIO Ports\UnderratedAIO\Helpers\FpsBalancer.cs" />
-    <Compile Include="Core\AIO Ports\UnderratedAIO\Helpers\HpBarDamageIndicator.cs" />
     <Compile Include="Core\AIO Ports\UnderratedAIO\Helpers\IncomingDamage.cs" />
     <Compile Include="Core\AIO Ports\UnderratedAIO\Helpers\ItemHandler.cs" />
     <Compile Include="Core\AIO Ports\UnderratedAIO\Helpers\Jungle.cs" />
-    <Compile Include="Core\AIO Ports\UnderratedAIO\Helpers\LastPositions.cs" />
     <Compile Include="Core\AIO Ports\UnderratedAIO\Helpers\PetHandler.cs" />
     <Compile Include="Core\AIO Ports\UnderratedAIO\Helpers\SkillShot\Collision.cs" />
     <Compile Include="Core\AIO Ports\UnderratedAIO\Helpers\SkillShot\Geometry.cs" />

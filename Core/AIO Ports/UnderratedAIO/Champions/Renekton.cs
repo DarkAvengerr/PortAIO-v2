@@ -24,7 +24,7 @@ using LeagueSharp.Common;
         private static float lastE;
         private static Vector3 lastEpos;
         private static Bool wChancel = false;
-        public static AutoLeveler autoLeveler;
+        
 
         public Renekton()
         {
@@ -36,7 +36,7 @@ using LeagueSharp.Common;
             Orbwalking.AfterAttack += afterAttack;
             Drawing.OnDraw += Game_OnDraw;
             Jungle.setSmiteSlot();
-            HpBarDamageIndicator.DamageToUnit = ComboDamage;
+            
         }
 
 
@@ -46,7 +46,7 @@ using LeagueSharp.Common;
             {
                 lastE = 0;
             }
-            if (FpsBalancer.CheckCounter())
+            if(false)
             {
                 return;
             }
@@ -381,7 +381,7 @@ using LeagueSharp.Common;
             DrawHelper.DrawCircle(config.Item("drawqq", true).GetValue<Circle>(), Q.Range);
             DrawHelper.DrawCircle(config.Item("drawee", true).GetValue<Circle>(), E.Range);
             DrawHelper.DrawCircle(config.Item("drawrr", true).GetValue<Circle>(), R.Range);
-            HpBarDamageIndicator.Enabled = config.Item("drawcombo").GetValue<bool>();
+            
         }
 
         private float ComboDamage(AIHeroClient hero)

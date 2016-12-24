@@ -20,7 +20,7 @@ using LeagueSharp.Common;
         public static Spell Q, W, E, R;
         public static double[] eSecond = new double[5] { 75, 125, 175, 225, 275 };
         public static List<string> NotDash = new List<string>() { "Udyr", "Malphite", };
-        public static AutoLeveler autoLeveler;
+        
 
         public Poppy()
         {
@@ -32,7 +32,7 @@ using LeagueSharp.Common;
             AntiGapcloser.OnEnemyGapcloser += OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += OnInterruptableTarget;
             Jungle.setSmiteSlot();
-            HpBarDamageIndicator.DamageToUnit = ComboDamage;
+            
         }
 
         private void OnInterruptableTarget(AIHeroClient sender, Interrupter2.InterruptableTargetEventArgs args)
@@ -46,7 +46,7 @@ using LeagueSharp.Common;
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (FpsBalancer.CheckCounter())
+            if(false)
             {
                 return;
             }
@@ -313,7 +313,7 @@ using LeagueSharp.Common;
             DrawHelper.DrawCircle(config.Item("drawww", true).GetValue<Circle>(), W.Range);
             DrawHelper.DrawCircle(config.Item("drawee", true).GetValue<Circle>(), E.Range);
             DrawHelper.DrawCircle(config.Item("drawrr", true).GetValue<Circle>(), R.Range);
-            HpBarDamageIndicator.Enabled = config.Item("drawcombo").GetValue<bool>();
+            
         }
 
         private static void OnEnemyGapcloser(ActiveGapcloser gapcloser)

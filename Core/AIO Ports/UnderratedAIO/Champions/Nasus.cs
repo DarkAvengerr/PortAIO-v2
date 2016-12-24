@@ -16,7 +16,7 @@ using LeagueSharp.Common;
     {
         public static Menu config;
         public static Orbwalking.Orbwalker orbwalker;
-        public static AutoLeveler autoLeveler;
+        
         public static Spell Q, W, E, R;
         public static readonly AIHeroClient player = ObjectManager.Player;
 
@@ -28,7 +28,7 @@ using LeagueSharp.Common;
             Drawing.OnDraw += Game_OnDraw;
             Game.OnUpdate += Game_OnGameUpdate;
             Helpers.Jungle.setSmiteSlot();
-            HpBarDamageIndicator.DamageToUnit = ComboDamage;
+            
             Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
             Orbwalking.OnAttack += Orbwalking_OnAttack;
             Orbwalking.AfterAttack += Orbwalking_AfterAttack;
@@ -72,7 +72,7 @@ using LeagueSharp.Common;
 
         private void Game_OnGameUpdate(EventArgs args)
         {
-            if (FpsBalancer.CheckCounter())
+            if(false)
             {
                 return;
             }
@@ -268,7 +268,7 @@ using LeagueSharp.Common;
             DrawHelper.DrawCircle(config.Item("drawee", true).GetValue<Circle>(), E.Range);
             DrawHelper.DrawCircle(config.Item("drawww", true).GetValue<Circle>(), W.Range);
             DrawHelper.DrawCircle(config.Item("drawrr", true).GetValue<Circle>(), R.Range);
-            HpBarDamageIndicator.Enabled = config.Item("drawcombo").GetValue<bool>();
+            
         }
 
         private void InitNocturne()

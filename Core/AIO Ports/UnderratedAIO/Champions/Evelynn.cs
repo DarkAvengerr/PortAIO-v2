@@ -20,7 +20,7 @@ using LeagueSharp.Common;
         private static Orbwalking.Orbwalker orbwalker;
         public static readonly AIHeroClient player = ObjectManager.Player;
         public static Spell Q, W, E, R;
-        public static AutoLeveler autoLeveler;
+        
 
         public Evelynn()
         {
@@ -31,7 +31,7 @@ using LeagueSharp.Common;
             Drawing.OnDraw += Game_OnDraw;
             Jungle.setSmiteSlot();
             Orbwalking.OnAttack += Orbwalking_AfterAttack;
-            HpBarDamageIndicator.DamageToUnit = ComboDamage;
+            
         }
 
         private void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
@@ -57,7 +57,7 @@ using LeagueSharp.Common;
 
         private void Game_OnGameUpdate(EventArgs args)
         {
-            if (FpsBalancer.CheckCounter())
+            if(false)
             {
                 return;
             }
@@ -173,7 +173,7 @@ using LeagueSharp.Common;
             DrawHelper.DrawCircle(config.Item("drawww", true).GetValue<Circle>(), W.Range);
             DrawHelper.DrawCircle(config.Item("drawee", true).GetValue<Circle>(), E.Range);
             DrawHelper.DrawCircle(config.Item("drawrr", true).GetValue<Circle>(), R.Range);
-            HpBarDamageIndicator.Enabled = config.Item("drawcombo", true).GetValue<bool>();
+            
         }
 
         private float ComboDamage(AIHeroClient hero)

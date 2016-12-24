@@ -38,8 +38,6 @@ using LeagueSharp.Common;
             main = Events(main);
             main.AddSubMenu(Program.SPredictionMenu);
             main = Jungle.addJungleOptions(main);
-            main = AutoLeveler.AddToMenu(main);
-            main = FpsBalancer.AddToMenu(main);
             if (HeroesWithPet.Any(a => a == ObjectManager.Player.ChampionName))
             {
                 main = PetHandler.addItemOptons(main);

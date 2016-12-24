@@ -21,7 +21,7 @@ using LeagueSharp.Common;
     {
         public static Menu config;
         public static Orbwalking.Orbwalker orbwalker;
-        public static AutoLeveler autoLeveler;
+        
         public static Spell Q, W, E, R;
         public static readonly AIHeroClient player = ObjectManager.Player;
         public static bool justQ, justE, chain, blockedE, movingToBarrel, comboWithMiddle;
@@ -43,7 +43,7 @@ using LeagueSharp.Common;
             Drawing.OnDraw += Game_OnDraw;
             Game.OnUpdate += Game_OnGameUpdate;
             Jungle.setSmiteSlot();
-            HpBarDamageIndicator.DamageToUnit = ComboDamage;
+            
             Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
             GameObject.OnCreate += GameObjectOnOnCreate;
             GameObject.OnDelete += GameObject_OnDelete;
@@ -170,7 +170,7 @@ using LeagueSharp.Common;
 
         private void Game_OnGameUpdate(EventArgs args)
         {
-            if (FpsBalancer.CheckCounter())
+            if(false)
             {
                 return;
             }
@@ -985,7 +985,7 @@ using LeagueSharp.Common;
                         config.Item("movetoBarrelDist", true).GetValue<Slider>().Value + 200 - player.BoundingRadius -
                         60, 250), Color.DarkSlateGray, 5);
             }
-            HpBarDamageIndicator.Enabled = config.Item("drawcombo", true).GetValue<bool>();
+            
             if (config.Item("drawW", true).GetValue<bool>())
             {
                 if (W.IsReady() && player.HealthPercent < 100)

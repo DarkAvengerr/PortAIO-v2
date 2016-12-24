@@ -22,7 +22,7 @@ using LeagueSharp.Common;
     {
         public static Menu config;
         public static Orbwalking.Orbwalker orbwalker;
-        public static AutoLeveler autoLeveler;
+        
         public static Spell Q, W, E, R;
         public static readonly AIHeroClient player = ObjectManager.Player;
         public bool justR, justQ, justE;
@@ -36,7 +36,7 @@ using LeagueSharp.Common;
             Game.OnUpdate += Game_OnGameUpdate;
             Helpers.Jungle.setSmiteSlot();
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
-            HpBarDamageIndicator.DamageToUnit = ComboDamage;
+            
             Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
         }
@@ -84,7 +84,7 @@ using LeagueSharp.Common;
                 orbwalker.SetAttack(true);
                 orbwalker.SetMovement(true);
             }
-            if (FpsBalancer.CheckCounter())
+            if(false)
             {
                 return;
             }
@@ -354,7 +354,7 @@ using LeagueSharp.Common;
             DrawHelper.DrawCircle(config.Item("drawww", true).GetValue<Circle>(), W.Range);
             DrawHelper.DrawCircle(config.Item("drawee", true).GetValue<Circle>(), E.Range);
             DrawHelper.DrawCircle(config.Item("drawrr", true).GetValue<Circle>(), R.Range);
-            HpBarDamageIndicator.Enabled = config.Item("drawcombo", true).GetValue<bool>();
+            
         }
 
         private static float ComboDamage(AIHeroClient hero)

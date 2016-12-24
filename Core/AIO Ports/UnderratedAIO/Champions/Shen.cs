@@ -33,7 +33,7 @@ using LeagueSharp.Common;
         private static readonly Render.Text Text = new Render.Text(
             0, 0, "", 11, new ColorBGRA(255, 0, 0, 255), "monospace");
 
-        public static AutoLeveler autoLeveler;
+        
 
         public Shen()
         {
@@ -47,7 +47,7 @@ using LeagueSharp.Common;
             Obj_AI_Base.OnDamage += Obj_AI_Base_OnDamage;
             Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
             Jungle.setSmiteSlot();
-            HpBarDamageIndicator.DamageToUnit = ComboDamage;
+            
         }
 
         private void Obj_AI_Base_OnDamage(AttackableUnit sender, AttackableUnitDamageEventArgs args)
@@ -96,7 +96,7 @@ using LeagueSharp.Common;
             {
                 Render.Circle.DrawCircle(blade, bladeRadius, Color.BlueViolet, 7);
             }
-            HpBarDamageIndicator.Enabled = config.Item("drawcombo", true).GetValue<bool>();
+            
         }
 
         private static void DrawHealths()
@@ -164,7 +164,7 @@ using LeagueSharp.Common;
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (FpsBalancer.CheckCounter())
+            if(false)
             {
                 return;
             }

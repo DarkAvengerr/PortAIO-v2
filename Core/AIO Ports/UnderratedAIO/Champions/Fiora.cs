@@ -19,7 +19,7 @@ using LeagueSharp.Common;
         private static Orbwalking.Orbwalker orbwalker;
         public static readonly AIHeroClient player = ObjectManager.Player;
         public static Spell Q, W, E, R;
-        public static AutoLeveler autoLeveler;
+        
         public List<PassiveManager> passives = new List<PassiveManager>();
         public float Qradius = 175f;
 
@@ -33,7 +33,7 @@ using LeagueSharp.Common;
             Orbwalking.AfterAttack += AfterAttack;
             Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
             Jungle.setSmiteSlot();
-            HpBarDamageIndicator.DamageToUnit = ComboDamage;
+            
             GameObject.OnCreate += GameObject_OnCreate;
             GameObject.OnDelete += GameObject_OnDelete;
         }
@@ -96,7 +96,7 @@ using LeagueSharp.Common;
 
         private void Game_OnGameUpdate(EventArgs args)
         {
-            if (FpsBalancer.CheckCounter())
+            if(false)
             {
                 return;
             }
@@ -343,7 +343,7 @@ using LeagueSharp.Common;
             DrawHelper.DrawCircle(config.Item("drawqq", true).GetValue<Circle>(), Q.Range);
             DrawHelper.DrawCircle(config.Item("drawww", true).GetValue<Circle>(), W.Range);
             DrawHelper.DrawCircle(config.Item("drawrr", true).GetValue<Circle>(), R.Range);
-            HpBarDamageIndicator.Enabled = config.Item("drawcombo").GetValue<bool>();
+            
             return;
             AIHeroClient target = DrawHelper.GetBetterTarget(W.Range, TargetSelector.DamageType.Physical);
             if (target == null)

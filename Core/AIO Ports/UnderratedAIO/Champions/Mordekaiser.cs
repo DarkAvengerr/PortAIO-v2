@@ -20,7 +20,7 @@ using LeagueSharp.Common;
         public static Spell Q, W, E, R;
         public static bool justW;
         public static int wWidth = 300;
-        public static AutoLeveler autoLeveler;
+        
         public AIHeroClient IgniteTarget;
 
         public Mordekaiser()
@@ -33,7 +33,7 @@ using LeagueSharp.Common;
             Orbwalking.BeforeAttack += BeforeAttack;
             Drawing.OnDraw += Game_OnDraw;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
-            HpBarDamageIndicator.DamageToUnit = ComboDamage;
+            
             Helpers.Jungle.setSmiteSlot();
         }
 
@@ -52,7 +52,7 @@ using LeagueSharp.Common;
 
         private void Game_OnGameUpdate(EventArgs args)
         {
-            if (FpsBalancer.CheckCounter())
+            if(false)
             {
                 return;
             }
@@ -259,7 +259,7 @@ using LeagueSharp.Common;
             DrawHelper.DrawCircle(config.Item("drawww", true).GetValue<Circle>(), W.Range);
             DrawHelper.DrawCircle(config.Item("drawee", true).GetValue<Circle>(), E.Range);
             DrawHelper.DrawCircle(config.Item("drawrr", true).GetValue<Circle>(), R.Range);
-            HpBarDamageIndicator.Enabled = config.Item("drawcombo").GetValue<bool>();
+            
         }
 
         private float ComboDamage(AIHeroClient hero)

@@ -20,7 +20,7 @@ using LeagueSharp.Common;
         private static Orbwalking.Orbwalker orbwalker;
         private static readonly AIHeroClient me = ObjectManager.Player;
         public static Spell Q, W, E, R;
-        public static AutoLeveler autoLeveler;
+        
 
         public Sejuani()
         {
@@ -33,7 +33,7 @@ using LeagueSharp.Common;
             Interrupter2.OnInterruptableTarget += OnPossibleToInterrupt;
             Orbwalking.AfterAttack += AfterAttack;
             Jungle.setSmiteSlot();
-            HpBarDamageIndicator.DamageToUnit = ComboDamage;
+            
         }
 
         private void AfterAttack(AttackableUnit unit, AttackableUnit target)
@@ -71,12 +71,12 @@ using LeagueSharp.Common;
             DrawHelper.DrawCircle(config.Item("drawee", true).GetValue<Circle>(), E.Range);
             DrawHelper.DrawCircle(config.Item("drawrr", true).GetValue<Circle>(), R.Range);
 
-            HpBarDamageIndicator.Enabled = config.Item("drawcombo").GetValue<bool>();
+            
         }
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if (FpsBalancer.CheckCounter())
+            if(false)
             {
                 return;
             }

@@ -23,7 +23,7 @@ using LeagueSharp.Common;
         private static Orbwalking.Orbwalker orbwalker;
         public static readonly AIHeroClient player = ObjectManager.Player;
         public static Spell Q, W, E, R;
-        public static AutoLeveler autoLeveler;
+        
         public static Obj_AI_Minion LastAttackedminiMinion;
         public static float LastAttackedminiMinionTime;
 
@@ -34,7 +34,7 @@ using LeagueSharp.Common;
             //Chat.Print("<font color='#9933FF'>Soresu </font><font color='#FFFFFF'>- Kennen</font>");
             Game.OnUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += Game_OnDraw;
-            HpBarDamageIndicator.DamageToUnit = ComboDamage;
+            
             Orbwalking.OnAttack += Orbwalking_OnAttack;
         }
 
@@ -58,7 +58,7 @@ using LeagueSharp.Common;
             {
                 orbwalker.SetAttack(true);
             }
-            if (FpsBalancer.CheckCounter())
+            if(false)
             {
                 return;
             }
@@ -335,7 +335,7 @@ using LeagueSharp.Common;
             DrawHelper.DrawCircle(config.Item("drawrr", true).GetValue<Circle>(), R.Range);
             DrawHelper.DrawCircle(
                 config.Item("drawrrr", true).GetValue<Circle>(), config.Item("userrange", true).GetValue<Slider>().Value);
-            HpBarDamageIndicator.Enabled = config.Item("drawcombo").GetValue<bool>();
+            
             if (config.Item("ShowState", true).GetValue<bool>())
             {
                 config.Item("KenAutoQ", true).Permashow(true, "Auto Q");

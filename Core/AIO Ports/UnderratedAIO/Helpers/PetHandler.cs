@@ -8,9 +8,9 @@ using LeagueSharp.Common;
 using SharpDX;
 using Color = System.Drawing.Color;
 
-using EloBuddy; 
-using LeagueSharp.Common; 
- namespace UnderratedAIO.Helpers
+using EloBuddy;
+using LeagueSharp.Common;
+namespace UnderratedAIO.Helpers
 {
     internal class PetHandler
     {
@@ -38,13 +38,13 @@ using LeagueSharp.Common;
             R = new Spell(SpellSlot.R);
             FarmL = new Spell(SpellSlot.Unknown, 1000);
             FarmL.SetSkillshot(0, 300, float.MaxValue, false, SkillshotType.SkillshotCircle);
-            Obj_AI_Base.OnPlayAnimation += Obj_AI_Base_OnPlayAnimation;
+            Obj_AI_Base.OnBasicAttack += Obj_AI_Base_OnPlayAnimation;
             Game.OnUpdate += Game_OnGameUpdate;
 
             return menuM;
         }
 
-        private static void Obj_AI_Base_OnPlayAnimation(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
+        private static void Obj_AI_Base_OnPlayAnimation(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (args == null || Pet == null)
             {
@@ -54,15 +54,12 @@ using LeagueSharp.Common;
             {
                 return;
             }
-            if (args.Animation.ToLower().Contains("attack"))
-            {
-                LastAATick = Utils.GameTimeTickCount;
-            }
+            LastAATick = Utils.GameTimeTickCount;
         }
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            Pet = (Obj_AI_Base) ObjectManager.Player.Pet;
+            Pet = (Obj_AI_Base)ObjectManager.Player.Pet;
             if (Pet != null && !Pet.IsValid)
             {
                 Pet = null;
@@ -79,6 +76,7 @@ using LeagueSharp.Common;
             var isFarm = Orbwalking.OrbwalkingMode.LaneClear == orbwalkingMode;
             var isLastHit = Orbwalking.OrbwalkingMode.LastHit == orbwalkingMode ||
                             Orbwalking.OrbwalkingMode.Freeze == orbwalkingMode;
+
             if (PetDelay || Pet == null)
             {
                 return;
@@ -175,7 +173,7 @@ using LeagueSharp.Common;
                 if (isFarm)
                 {
                     gtarget =
-                        otherTarget.OrderByDescending(m => Pet.GetAutoAttackDamage((Obj_AI_Base) m) > m.Health)
+                        otherTarget.OrderByDescending(m => Pet.GetAutoAttackDamage((Obj_AI_Base)m) > m.Health)
                             .ThenByDescending(m => m.MaxHealth)
                             .ThenByDescending(m => player.Distance(m))
                             .FirstOrDefault();
@@ -183,7 +181,7 @@ using LeagueSharp.Common;
                 if (isLastHit)
                 {
                     gtarget =
-                        otherTarget.Where(m => Pet.GetAutoAttackDamage((Obj_AI_Base) m) > m.Health)
+                        otherTarget.Where(m => Pet.GetAutoAttackDamage((Obj_AI_Base)m) > m.Health)
                             .OrderByDescending(m => player.Distance(m))
                             .FirstOrDefault();
                 }
@@ -198,7 +196,7 @@ using LeagueSharp.Common;
             Vector3 predictionPos = Vector3.Zero;
             try
             {
-                predictionPos = Prediction.GetPrediction((Obj_AI_Base) Gtarget, 2).UnitPosition;
+                predictionPos = Prediction.GetPrediction((Obj_AI_Base)Gtarget, 2).UnitPosition;
             }
             catch (Exception)
             {
@@ -241,23 +239,6 @@ using LeagueSharp.Common;
         {
             if (Pet != null)
             {
-                if (Pet.CharData.BaseSkinName == "Graves")
-                {
-                    var attackDelay = 1.0740296828d * 1000 * Pet.AttackDelay - 716.2381256175d;
-                    if (Utils.GameTimeTickCount + Game.Ping / 2 + 25 >= LastAATick + attackDelay &&
-                        Pet.HasBuff("GravesBasicAttackAmmo1"))
-                    {
-                        return true;
-                    }
-                    return false;
-                }
-                if (Pet.CharData.BaseSkinName == "Jhin")
-                {
-                    if (Pet.HasBuff("JhinPassiveReload"))
-                    {
-                        return false;
-                    }
-                }
                 return Utils.GameTimeTickCount >=
                        LastAATick + Game.Ping / 2 + 25 + (Pet.AttackDelay - Pet.AttackCastDelay) * 1000;
             }
@@ -272,11 +253,11 @@ using LeagueSharp.Common;
                 {
                     Console.WriteLine("attack " + gtarget.Name);
                 }
-                R.CastOnUnit(gtarget as Obj_AI_Base);
+                EloBuddy.Player.IssueOrder(GameObjectOrder.AutoAttackPet, gtarget.Position);
             }
             catch (Exception)
             {
-                EloBuddy.Player.IssueOrder(GameObjectOrder.AutoAttackPet, gtarget.Position);
+                //R.CastOnUnit(gtarget as Obj_AI_Base);
             }
         }
 
