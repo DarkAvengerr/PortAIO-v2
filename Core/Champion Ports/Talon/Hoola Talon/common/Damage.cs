@@ -5617,6 +5617,20 @@ using EloBuddy;
             return 1d;
         }
 
+        internal static bool HasBuff2(this Obj_AI_Base unit,
+            string buffName,
+            bool dontUseDisplayName = false)
+        {
+            return
+                unit.Buffs.Any(
+                    buff =>
+                        ((dontUseDisplayName &&
+                          String.Equals(buff.Name, buffName, StringComparison.CurrentCultureIgnoreCase)) ||
+                         (!dontUseDisplayName &&
+                          String.Equals(buff.DisplayName, buffName, StringComparison.CurrentCultureIgnoreCase))) &&
+                        buff.IsValidBuff());
+        }
+
         public static double GetAutoAttackDamage2(this Obj_AI_Base source, //add
             Obj_AI_Base target,
             bool includePassive = false)

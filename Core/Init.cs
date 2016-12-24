@@ -3155,6 +3155,9 @@ namespace PortAIO
                         case 7: // Tc_SDKEx AIO
                             Tc_SDKexAIO.PlaySharp.Main();
                             break;
+                        case 8: // OKTW
+                            OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
+                            break;
                     }
                     break;
                 case Champion.Thresh:

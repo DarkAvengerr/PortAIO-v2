@@ -348,7 +348,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "SkyLv_Taric", "ElEasy", "PippyTaric", "Support is Easy", "vSeries" };
                     break;
                 case EloBuddy.Champion.Teemo:
-                    champ = new string[] { "PandaTeemo", "SharpShooter", "Marksman#", "[SDK] ChallengerSeriesAIO", "[SDK] SwiftlyTeemo", "NoobTeemo", "TSM_Teemo", "[SDK] Tc_SDKexAIO" };
+                    champ = new string[] { "PandaTeemo", "SharpShooter", "Marksman#", "[SDK] ChallengerSeriesAIO", "[SDK] SwiftlyTeemo", "NoobTeemo", "TSM_Teemo", "[SDK] Tc_SDKexAIO", "OKTW" };
                     break;
                 case EloBuddy.Champion.Thresh:
                     champ = new string[] { "Danz - Chain Warden", "FreshBooster", "OKTW", "Support is Easy", "vSeries", "Dark Star Thresh", "SluttyThresh", "Thresh as The Chain Warden", "Thresh - Catch Fish", "Thresh - the Ruler of the Soul", "Thresh the Flay Maker", "yol0 Thresh" };

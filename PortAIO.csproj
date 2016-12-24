@@ -2500,7 +2500,6 @@
     <Compile Include="Core\Champion Ports\Nautilus\PlebNautilus\HPindicator.cs" />
     <Compile Include="Core\Champion Ports\Nautilus\PlebNautilus\Program.cs" />
     <Compile Include="Core\Champion Ports\Nautilus\vSeries Nautilus\Nautilus.cs" />
-    <Compile Include="Core\Champion Ports\Nidalee\HeavenStrikeNidalee\Orb.cs" />
     <Compile Include="Core\Champion Ports\Nidalee\HeavenStrikeNidalee\Program.cs" />
     <Compile Include="Core\Champion Ports\Nidalee\Nechrito Nidalee\Core.cs" />
     <Compile Include="Core\Champion Ports\Nidalee\Nechrito Nidalee\Drawings\Drawing.cs" />
@@ -2567,7 +2566,6 @@
     <Compile Include="Core\Champion Ports\Quinn\GFuel Quinn\DamageIndicator.cs" />
     <Compile Include="Core\Champion Ports\Quinn\GFuel Quinn\Quinn.cs" />
     <Compile Include="Core\Champion Ports\Rammus\Rammus is Ok\Program.cs" />
-    <Compile Include="Core\Champion Ports\Rek%27Sai\HeavenStrikeRekSai\Orb.cs" />
     <Compile Include="Core\Champion Ports\Rek%27Sai\HeavenStrikeRekSai\Program.cs" />
     <Compile Include="Core\Champion Ports\Rek%27Sai\Rek%27Sai - Winner of Fights\Activator\Hydra.cs" />
     <Compile Include="Core\Champion Ports\Rek%27Sai\Rek%27Sai - Winner of Fights\Activator\Potion.cs" />
@@ -2673,7 +2671,6 @@
     <Compile Include="Core\Champion Ports\Tahm Kench\STahmKench\Program.cs" />
     <Compile Include="Core\Champion Ports\Tahm Kench\vSeries TahmKench\TahmKench.cs" />
     <Compile Include="Core\Champion Ports\Talon\Hoola Talon\common\Damage.cs" />
-    <Compile Include="Core\Champion Ports\Talon\Hoola Talon\common\Orbwalk.cs" />
     <Compile Include="Core\Champion Ports\Talon\Hoola Talon\HpBarIndicator.cs" />
     <Compile Include="Core\Champion Ports\Talon\Hoola Talon\Program.cs" />
     <Compile Include="Core\Champion Ports\Taric\ElEasy\Taric.cs" />
@@ -3814,7 +3811,6 @@
     <Compile Include="Core\Champion Ports\Fiora\ProjectFiora\GetTargets.cs" />
     <Compile Include="Core\Champion Ports\Fiora\ProjectFiora\HINH1.cs" />
     <Compile Include="Core\Champion Ports\Fiora\ProjectFiora\MathAndExtensions.cs" />
-    <Compile Include="Core\Champion Ports\Fiora\ProjectFiora\Orbwalk.cs" />
     <Compile Include="Core\Champion Ports\Fiora\ProjectFiora\OrbwalkLastClick.cs" />
     <Compile Include="Core\Champion Ports\Fiora\ProjectFiora\Program.cs" />
     <Compile Include="Core\Champion Ports\Fizz\MathFizz\Program.cs" />
@@ -4619,7 +4615,6 @@
     <Compile Include="Core\Champion Ports\Lissandra\Lissandra the Ice Goddess\Utility\PositionalHelper.cs" />
     <Compile Include="Core\Champion Ports\Lucian\D_Lucian\Program.cs" />
     <Compile Include="Core\Champion Ports\Lucian\FuckingLucianReborn\Program.cs" />
-    <Compile Include="Core\Champion Ports\Lucian\Slutty Lucian\BadaoOrb.cs" />
     <Compile Include="Core\Champion Ports\Lucian\Slutty Lucian\Helper.cs" />
     <Compile Include="Core\Champion Ports\Lucian\Slutty Lucian\Lucian.cs" />
     <Compile Include="Core\Champion Ports\Lucian\Slutty Lucian\MenuConfig.cs" />
@@ -4762,7 +4757,6 @@
     <Compile Include="Core\Champion Ports\Rengar\Experimental ElRengar\Rengar.cs" />
     <Compile Include="Core\Champion Ports\Rengar\Experimental ElRengar\Standards.cs" />
     <Compile Include="Core\Champion Ports\Rengar\Hoola Rengar\common\Damage.cs" />
-    <Compile Include="Core\Champion Ports\Rengar\Hoola Rengar\common\Orbwalk.cs" />
     <Compile Include="Core\Champion Ports\Rengar\Hoola Rengar\HpBarIndicator.cs" />
     <Compile Include="Core\Champion Ports\Rengar\Hoola Rengar\Program.cs" />
     <Compile Include="Core\Champion Ports\Rengar\Hoola Rengar\SPrediction\ClipperWrapper.cs" />
@@ -4832,7 +4826,6 @@
     <Compile Include="Core\Champion Ports\Shen\BadaoShen\BadaoMainVariables.cs" />
     <Compile Include="Core\Champion Ports\Shen\BadaoShen\BadaoMath.cs" />
     <Compile Include="Core\Champion Ports\Shen\BadaoShen\Program.cs" />
-    <Compile Include="Core\Champion Ports\Sivir\HeavenStrikeSivir\Orb.cs" />
     <Compile Include="Core\Champion Ports\Sivir\HeavenStrikeSivir\Program.cs" />
     <Compile Include="Core\Champion Ports\Sivir\iSivir\Program.cs" />
     <Compile Include="Core\Champion Ports\Sivir\iSivir\Sivir.cs" />

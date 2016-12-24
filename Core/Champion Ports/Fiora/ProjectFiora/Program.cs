@@ -44,7 +44,7 @@ namespace FioraProject
             Menu.SetFontStyle(System.Drawing.FontStyle.Bold,SharpDX.Color.DeepPink);
 
             Menu orbwalkerMenu = new Menu("Orbwalker", "Orbwalker");
-            Orbwalker = new FioraProject.Orbwalking.Orbwalker(orbwalkerMenu);
+            Orbwalker = new Orbwalking.Orbwalker(orbwalkerMenu);
             Menu.AddSubMenu(orbwalkerMenu);
             Menu ts = Menu.AddSubMenu(new Menu("Target Selector", "Target Selector")); ;
             TargetSelector.AddToMenu(ts);
@@ -175,7 +175,7 @@ namespace FioraProject
         {
             if (!unit.IsMe)
                 return;
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.OrbwalkPassive
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Burst
                 || OrbwalkLastClickActive)
             {
                 if (Ecombo && E.IsReady())
@@ -229,7 +229,7 @@ namespace FioraProject
         {
             if (!unit.IsMe)
                 return;
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.OrbwalkPassive
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Burst
                 || OrbwalkLastClickActive)
             {
                 if (Ecombo && E.IsReady() && Player.CountEnemiesInRange(Orbwalking.GetRealAutoAttackRange(Player) + 200) >= 1)
@@ -287,7 +287,7 @@ namespace FioraProject
             FioraPassiveUpdate();
             OrbwalkToPassive();
             WallJump();
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.OrbwalkPassive)
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Burst)
             {
                 Combo();
             }
@@ -332,7 +332,7 @@ namespace FioraProject
         {
             var item = new EloBuddy.SDK.Item(ItemId.Youmuus_Ghostblade);
 
-            if (unit.IsMe && (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.OrbwalkPassive || OrbwalkLastClickActive))
+            if (unit.IsMe && (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Burst || OrbwalkLastClickActive))
             {
                 if (item.IsReady())
                     item.Cast();
@@ -609,7 +609,7 @@ namespace FioraProject
         #region OrbwalkToPassive
         private static void OrbwalkToPassive()
         {
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.OrbwalkPassive)
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Burst)
             {
                 var target = GetTarget(OrbwalkToPassiveRange);
                 if (target.IsValidTarget(OrbwalkToPassiveRange) && !target.IsZombie)
