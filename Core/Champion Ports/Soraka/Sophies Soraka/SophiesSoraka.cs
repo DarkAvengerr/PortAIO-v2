@@ -19,23 +19,23 @@
 //   The sophies soraka.
 // </summary>
 // --------------------------------------------------------------------------------------------------------------------
+
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Sophies_Soraka
+using LeagueSharp.Common; 
+namespace Sophies_Soraka
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
     using System.Drawing;
     using System.Linq;
     using System.Reflection;
-
     using LeagueSharp;
     using LeagueSharp.Common;
 
     /// <summary>
     ///     The sophies soraka.
     /// </summary>
-    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", 
+    [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
         Justification = "Reviewed. Suppression is OK here.")]
     internal class SophiesSoraka
     {
@@ -68,13 +68,7 @@ using EloBuddy;
         /// <summary>
         ///     Gets a value indicating whether to use packets.
         /// </summary>
-        public static bool Packets
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public static bool Packets => false;
 
         /// <summary>
         ///     Gets or sets the q.
@@ -110,19 +104,20 @@ using EloBuddy;
         /// <param name="args">
         ///     The args.
         /// </param>
-        public static void OnGameLoad()
+        public static void OnGameLoad(EventArgs args)
         {
             if (ObjectManager.Player.ChampionName != "Soraka")
             {
                 return;
             }
 
-            Q = new Spell(SpellSlot.Q, 750);
+            Q = new Spell(SpellSlot.Q, 970);
             W = new Spell(SpellSlot.W, 550);
-            E = new Spell(SpellSlot.E, 900);
+            E = new Spell(SpellSlot.E, 925);
             R = new Spell(SpellSlot.R);
-            
-            Q.SetSkillshot(0.3f, 125, 1750, false, SkillshotType.SkillshotCircle);
+
+            Q.SetSkillshot(0.283f, 210, 1100, false, SkillshotType.SkillshotCircle);
+
             E.SetSkillshot(0.4f, 70f, 1750, false, SkillshotType.SkillshotCircle);
 
             CreateMenu();
@@ -142,7 +137,8 @@ using EloBuddy;
         /// <param name="msg">The message.</param>
         public static void PrintChat(string msg)
         {
-            Chat.Print("<font color='#F778A1'><b>Sophie's Soraka:</b></font> <font color='#FFFFFF'>" + msg + "</font>");
+            Chat.Print("<font color='#F778A1'><b>Sophie's Soraka:</b></font> <font color='#FFFFFF'>" + msg +
+                           "</font>");
         }
 
         #endregion
@@ -155,20 +151,21 @@ using EloBuddy;
         /// <param name="gapcloser">
         ///     The gapcloser.
         /// </param>
-        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", 
+        [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly",
             Justification = "Reviewed. Suppression is OK here.")]
         private static void AntiGapcloserOnOnEnemyGapcloser(ActiveGapcloser gapcloser)
         {
             var unit = gapcloser.Sender;
+            var prediction = GetQPrediction(unit);
 
-            if (Menu.Item("useQGapcloser").GetValue<bool>() && unit.IsValidTarget(Q.Range) && Q.IsReady())
+            if (Menu.Item("useQGapcloser").GetValue<bool>() && unit.IsValidTarget(Q.Range) && Q.IsReady() && prediction.Hitchance >= HitChance.High)
             {
-                Q.Cast(unit, Packets);
+                Q.Cast(prediction.CastPosition);
             }
 
             if (Menu.Item("useEGapcloser").GetValue<bool>() && unit.IsValidTarget(E.Range) && E.IsReady())
             {
-                E.Cast(unit, Packets);
+                E.Cast(unit);
             }
         }
 
@@ -183,8 +180,8 @@ using EloBuddy;
             }
 
             if (ObjectManager.Get<AIHeroClient>()
-                    .Any(
-                        x =>
+                .Any(
+                    x =>
                         x.IsAlly && x.IsValidTarget(float.MaxValue, false)
                         && x.HealthPercent < Menu.Item("autoRPercent").GetValue<Slider>().Value))
             {
@@ -216,7 +213,13 @@ using EloBuddy;
 
             var healthPercent = Menu.Item("autoWPercent").GetValue<Slider>().Value;
 
-            var canidates = ObjectManager.Get<AIHeroClient>().Where(x => x.IsValidTarget(W.Range, false) && x.IsAlly && x.HealthPercent < healthPercent);
+            var canidates =
+                ObjectManager.Get<AIHeroClient>()
+                    .Where(
+                        x =>
+                            x.IsValidTarget(W.Range, false) && x.IsAlly && x.HealthPercent < healthPercent &&
+                            !x.IsRecalling());
+
             var wMode = Menu.Item("HealingPriority").GetValue<StringList>().SelectedValue;
 
             switch (wMode)
@@ -237,7 +240,7 @@ using EloBuddy;
 
             var target = dontWInFountain ? canidates.FirstOrDefault(x => !x.InFountain()) : canidates.FirstOrDefault();
 
-            if (target != null)
+            if (target != null && !ObjectManager.Player.IsRecalling())
             {
                 W.CastOnUnit(target);
             }
@@ -256,16 +259,25 @@ using EloBuddy;
             {
                 return;
             }
-
-            if (useQ && Q.IsReady())
+            var prediction = GetQPrediction(target);
+            if (useQ && Q.IsReady() && prediction.Hitchance >= HitChance.High)
             {
-                Q.Cast(target, Packets);
+                Q.Cast(prediction.CastPosition);
             }
 
             if (useE && E.IsReady())
             {
-                E.Cast(target, Packets);
+                E.Cast(target);
             }
+        }
+
+
+        public static PredictionOutput GetQPrediction(Obj_AI_Base target)
+        {
+            float divider = target.Position.Distance(ObjectManager.Player.Position) / Q.Range;
+            Q.Delay = 0.2f + 0.8f * divider;
+            var prediction = Q.GetPrediction(target, true);
+            return prediction;
         }
 
         /// <summary>
@@ -311,7 +323,13 @@ using EloBuddy;
             wMenu.AddItem(
                 new MenuItem("HealingPriority", "Healing Priority").SetValue(
                     new StringList(
-                        new[] { "Most AD", "Most AP", "Least Health", "Least Health (Prioritize Squishies)" }, 
+                        new[]
+                        {
+                            "Most AD",
+                            "Most AP",
+                            "Least Health",
+                            "Least Health (Prioritize Squishies)"
+                        },
                         3)));
             healingMenu.AddSubMenu(wMenu);
 
@@ -427,12 +445,12 @@ using EloBuddy;
 
             if (useQ && Q.IsReady())
             {
-                Q.Cast(target, Packets);
+                Q.Cast(target);
             }
 
             if (useE && E.IsReady())
             {
-                E.Cast(target, Packets);
+                E.Cast(target);
             }
         }
 
@@ -446,7 +464,7 @@ using EloBuddy;
         ///     The args.
         /// </param>
         private static void InterrupterOnOnPossibleToInterrupt(
-            AIHeroClient sender, 
+            AIHeroClient sender,
             Interrupter2.InterruptableTargetEventArgs args)
         {
             var unit = sender;
@@ -467,7 +485,7 @@ using EloBuddy;
                 return;
             }
 
-            E.Cast(unit, Packets);
+            E.Cast(unit);
         }
 
         /// <summary>
@@ -476,12 +494,14 @@ using EloBuddy;
         /// <param name="args">The <see cref="Orbwalking.BeforeAttackEventArgs" /> instance containing the event data.</param>
         private static void OrbwalkingOnBeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
-            if (args.Target.IsValid<Obj_AI_Minion>() && !Menu.Item("AttackMinions").IsActive() && ObjectManager.Player.CountAlliesInRange(1200) > 0)
+            if (args.Target.IsValid<Obj_AI_Minion>() && !Menu.Item("AttackMinions").IsActive() &&
+                ObjectManager.Player.CountAlliesInRange(1200) > 0)
             {
                 args.Process = false;
             }
 
-            if (args.Target.IsValid<AIHeroClient>() &&  !Menu.Item("AttackChampions").GetValue<bool>() && ObjectManager.Player.CountAlliesInRange(1000) > 0)
+            if (args.Target.IsValid<AIHeroClient>() && !Menu.Item("AttackChampions").GetValue<bool>() &&
+                ObjectManager.Player.CountAlliesInRange(1000) > 0)
             {
                 args.Process = false;
             }
