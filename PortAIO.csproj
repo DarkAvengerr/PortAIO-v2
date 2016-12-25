@@ -5834,6 +5834,17 @@
     <Compile Include="Core\SDK Ports\[SDKEx] Brand\Modes\Harass.cs" />
     <Compile Include="Core\SDK Ports\[SDKEx] Brand\Modes\Jungle.cs" />
     <Compile Include="Core\SDK Ports\[SDKEx] Brand\Modes\Killsteal.cs" />
+    <Compile Include="Core\SDK Ports\[SDKEx] Jayce\Extensions\Config.cs" />
+    <Compile Include="Core\SDK Ports\[SDKEx] Jayce\Extensions\DamageBar.cs" />
+    <Compile Include="Core\SDK Ports\[SDKEx] Jayce\Extensions\Events.cs" />
+    <Compile Include="Core\SDK Ports\[SDKEx] Jayce\Extensions\Other.cs" />
+    <Compile Include="Core\SDK Ports\[SDKEx] Jayce\Extensions\Spells.cs" />
+    <Compile Include="Core\SDK Ports\[SDKEx] Jayce\Load.cs" />
+    <Compile Include="Core\SDK Ports\[SDKEx] Jayce\Modes\Combo.cs" />
+    <Compile Include="Core\SDK Ports\[SDKEx] Jayce\Modes\Harass.cs" />
+    <Compile Include="Core\SDK Ports\[SDKEx] Jayce\Modes\JungleClear.cs" />
+    <Compile Include="Core\SDK Ports\[SDKEx] Jayce\Modes\KillSteal.cs" />
+    <Compile Include="Core\SDK Ports\[SDKEx] Jayce\Modes\LaneClear.cs" />
     <Compile Include="Core\Utility Ports\ActivatorSharp\Base\Champion.cs" />
     <Compile Include="Core\Utility Ports\ActivatorSharp\Base\Gametroy.cs" />
     <Compile Include="Core\Utility Ports\ActivatorSharp\Base\Helpers.cs" />

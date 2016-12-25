@@ -1522,6 +1522,9 @@ namespace PortAIO
                         case 4: // JayceSharpV2
                             JayceSharpV2.Program.Main();
                             break;
+                        case 5: // Shulepin's Jayce
+                            Jayce.Load.Main();
+                            break;
                     }
                     break;
                 case Champion.Jhin:
