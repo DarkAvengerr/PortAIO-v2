@@ -5,8 +5,8 @@ using SharpDX;
 using SharpDX.Direct3D9;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace PewPewTristana
+using LeagueSharp.Common; 
+namespace PewPewTristana
 {
     class HpBarIndicator
     {

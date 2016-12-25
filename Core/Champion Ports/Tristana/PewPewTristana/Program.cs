@@ -11,8 +11,8 @@ using LeagueSharp.Common.Data;
 using Color = System.Drawing.Color;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace PewPewTristana
+using LeagueSharp.Common; 
+namespace PewPewTristana
 {
     internal class Program
     {
@@ -28,7 +28,12 @@ using EloBuddy;
         private static SpellSlot Ignite;
         private static readonly AIHeroClient player = ObjectManager.Player;
 
-        public static void OnLoad()
+        public static void Main()
+        {
+            OnLoad(new EventArgs());
+        }
+
+        private static void OnLoad(EventArgs args)
         {
             if (player.ChampionName != ChampName)
                 return;

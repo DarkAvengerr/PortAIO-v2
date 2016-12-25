@@ -3234,7 +3234,7 @@ namespace PortAIO
                             OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
                             break;
                         case 5: // PewPewTristana
-                            PewPewTristana.Program.OnLoad();
+                            PewPewTristana.Program.Main();
                             break;
                         case 6: // ProSeries
                             ProSeries.Program.GameOnOnGameLoad();
