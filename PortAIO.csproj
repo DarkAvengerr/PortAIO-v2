@@ -1349,6 +1349,8 @@
     <Compile Include="Core\Champion Ports\Ezreal\HandicAPEzreal\Program.cs" />
     <Compile Include="Core\Champion Ports\Ezreal\HandicAPEzreal\Utils\Logging.cs" />
     <Compile Include="Core\Champion Ports\Ezreal\HandicAPEzreal\Utils\Misc.cs" />
+    <Compile Include="Core\Champion Ports\Ezreal\yetAnotherEzreal\Geometry.cs" />
+    <Compile Include="Core\Champion Ports\Ezreal\yetAnotherEzreal\Program.cs" />
     <Compile Include="Core\Champion Ports\Fiora\Flower%27s Fiora\Common\Common.cs" />
     <Compile Include="Core\Champion Ports\Fiora\Flower%27s Fiora\Common\HpBarDraw.cs" />
     <Compile Include="Core\Champion Ports\Fiora\Flower%27s Fiora\Evade\Collision\Collision.cs" />

@@ -1138,6 +1138,9 @@ namespace PortAIO
                         case 28: // HandicAPEzreal
                             HandicapEzreal.Program.Main();
                             break;
+                        case 29: //yetAnotherEzreal
+                            yetAnotherEzreal.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.FiddleSticks:
