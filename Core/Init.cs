@@ -1209,6 +1209,9 @@ namespace PortAIO
                         case 2: // Galio#
                             GalioSharp.Program.Main();
                             break;
+                        case 3: // AlqoholicGalio
+                            AlqoholicGalio.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Gangplank:
