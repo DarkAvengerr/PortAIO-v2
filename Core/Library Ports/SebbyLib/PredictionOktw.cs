@@ -380,7 +380,7 @@ namespace SebbyLib.Prediction
             }
 
             // PREPARE MATH ///////////////////////////////////////////////////////////////////////////////////
-            var path = input.Unit.GetWaypoints();
+            var path = input.Unit.Path.ToList().To2D();
 
 
             var lastWaypiont = path.Last().To3D();
@@ -473,7 +473,7 @@ namespace SebbyLib.Prediction
 
 
 
-            if (input.Unit.GetWaypoints().Count == 1)
+            if (input.Unit.Path.ToList().To2D().Count == 1)
             {
                 if (UnitTracker.GetLastAutoAttackTime(input.Unit) < 0.1d && totalDelay < 0.7)
                 {
