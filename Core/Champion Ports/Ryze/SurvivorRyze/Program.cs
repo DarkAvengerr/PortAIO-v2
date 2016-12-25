@@ -10,9 +10,9 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SebbyLib;
+using SharpDX;
 using Color = SharpDX.Color;
 using HitChance = SebbyLib.Prediction.HitChance;
-
 using PredictionInput = SebbyLib.Prediction.PredictionInput;
 
 using EloBuddy; 
@@ -21,7 +21,12 @@ namespace SurvivorRyze
 {
     internal class Program
     {
-        public static void Game_OnGameLoad()
+        public static void Main()
+        {
+            Game_OnGameLoad(new EventArgs());
+        }
+
+        private static void Game_OnGameLoad(EventArgs args)
         {
             if (Player.ChampionName != ChampionName)
                 return;
@@ -160,7 +165,10 @@ namespace SurvivorRyze
             //UltimateMenu.AddItem(new MenuItem("DontRIfAlly", "Don't R if Ally is Near Target 'X' Range").SetValue(new Slider(700, 0, 2000)));
             //UltimateMenu.AddItem(new MenuItem("DontRUnderTurret", "Don't use R if enemy is Under Turret").SetValue(true));
             UltimateMenu.AddItem(
-                new MenuItem("UseR", "Use R Automatically (Beta)").SetValue(new KeyBind("G".ToCharArray()[0],
+                new MenuItem("UseRAndZhonyaEscape", "Use R + Zhonya to Escape (Untouched)").SetValue(false)
+                    .SetFontStyle(FontStyle.Bold, Color.Chartreuse));
+            UltimateMenu.AddItem(
+                new MenuItem("UseR", "Use R Automatically (Beta)").SetValue(new KeyBind("T".ToCharArray()[0],
                         KeyBindType.Press))
                     .SetTooltip("It'll Use the Ultimate if there's Ally turret nearby to teleport you to it"));
             //UltimateMenu.AddItem(new MenuItem("EnemiesAroundTarget", "Dont R If 'X' Enemies are around the Target").SetValue(new Slider(3, 0, 5)));
@@ -475,6 +483,7 @@ namespace SurvivorRyze
                 case Orbwalking.OrbwalkingMode.None:
                     Orbwalker.SetMovement(true);
                     Orbwalker.SetAttack(true);
+                    RZhonya();
                     break;
             }
             if (Menu.Item("UseR").GetValue<KeyBind>().Active)
@@ -597,24 +606,48 @@ namespace SurvivorRyze
 
         private static void SebbySpell(Spell QR, Obj_AI_Base target)
         {
-            var poutput2 = QR.GetPrediction(target);
+            var CoreType2 = SebbyLib.Prediction.SkillshotType.SkillshotLine;
+            var aoe2 = false;
+
+            if (QR.Type == SkillshotType.SkillshotCircle)
+            {
+                CoreType2 = SebbyLib.Prediction.SkillshotType.SkillshotCircle;
+                aoe2 = true;
+            }
+
+            if ((QR.Width > 80) && !QR.Collision)
+                aoe2 = true;
+
+            var predInput2 = new PredictionInput
+            {
+                Aoe = aoe2,
+                Collision = QR.Collision,
+                Speed = QR.Speed,
+                Delay = QR.Delay,
+                Range = QR.Range,
+                From = Player.ServerPosition,
+                Radius = QR.Width,
+                Unit = target,
+                Type = CoreType2
+            };
+            var poutput2 = SebbyLib.Prediction.Prediction.GetPrediction(predInput2);
 
             if (OktwCommon.CollisionYasuo(Player.ServerPosition, poutput2.CastPosition))
                 return;
 
             if (Menu.Item("HitChance").GetValue<StringList>().SelectedIndex == 0)
             {
-                if (poutput2.Hitchance >= LeagueSharp.Common.HitChance.Medium)
+                if (poutput2.Hitchance >= HitChance.Medium)
                     QR.Cast(poutput2.CastPosition);
             }
             else if (Menu.Item("HitChance").GetValue<StringList>().SelectedIndex == 1)
             {
-                if (poutput2.Hitchance >= LeagueSharp.Common.HitChance.High)
+                if (poutput2.Hitchance >= HitChance.High)
                     QR.Cast(poutput2.CastPosition);
             }
             else if (Menu.Item("HitChance").GetValue<StringList>().SelectedIndex == 2)
             {
-                if (poutput2.Hitchance >= LeagueSharp.Common.HitChance.VeryHigh)
+                if (poutput2.Hitchance >= HitChance.VeryHigh)
                     QR.Cast(poutput2.CastPosition);
             }
         }
@@ -715,9 +748,9 @@ namespace SurvivorRyze
         private static float QDefaultDamage(Obj_AI_Base target)
         {
             var damage = Player.CalcDamage(target, Damage.DamageType.Magical,
-                    (float)new[] { 60, 85, 110, 135, 160, 185 }[Player.GetSpell(SpellSlot.Q).Level - 1] +
-                    Player.TotalMagicalDamage / 45 * 100 + Player.Mana / 3 * 100);
-            return (float)damage;
+                new[] {60, 85, 110, 135, 160, 185}[Player.GetSpell(SpellSlot.Q).Level - 1] +
+                Player.TotalMagicalDamage/45*100 + Player.Mana/3*100);
+            return (float) damage;
         }
 
         private static void Combo()
@@ -971,10 +1004,11 @@ namespace SurvivorRyze
                                     Q.Cast(ryzeebuffed);
                             }
                         }
-                        else if (ryzeebuffed == null)
+                        else if (ryzenotebuffed != null)
                         {
                             if ((ryzenotebuffed.Health <
-                                 QDefaultDamage(ryzenotebuffed) + E.GetDamage(ryzenotebuffed) + QDefaultDamage(ryzenotebuffed)) &&
+                                 QDefaultDamage(ryzenotebuffed) + E.GetDamage(ryzenotebuffed) +
+                                 QDefaultDamage(ryzenotebuffed)) &&
                                 ryzenotebuffed.IsValidTarget(E.Range))
                             {
                                 Q.Cast(ryzenotebuffed);
@@ -989,6 +1023,55 @@ namespace SurvivorRyze
                         }
                 }
         } // LaneClear End
+
+        private static void RZhonya()
+        {
+            if ((Player.HealthPercent < 50) && Menu.Item("UseRAndZhonyaEscape").GetValue<bool>() && R.Instance.IsReady() &&
+                Zhonya.IsOwned(Player))
+                if (Zhonya.IsReady())
+                {
+                    switch (R.Level)
+                    {
+                        case 1:
+                            RangeR = 1750f;
+                            break;
+                        case 2:
+                            RangeR = 3000f;
+                            break;
+                    }
+                    if (GrabDefensePosition() == Player.ServerPosition)
+                        return;
+                    R.Cast(GrabDefensePosition());
+                    LeagueSharp.Common.Utility.DelayAction.Add(145, delegate
+                    {
+                        if (Player.HasBuff("RyzeRChannel")) Zhonya.Cast();
+                    });
+                }
+        }
+
+        private static Vector3 GrabDefensePosition()
+        {
+            switch (R.Level)
+            {
+                case 1:
+                    RangeR = 1750f;
+                    break;
+                case 2:
+                    RangeR = 3000f;
+                    break;
+            }
+            var NearTurret = ObjectManager.Get<Obj_AI_Turret>()
+                .FirstOrDefault(turret => turret.IsAlly && (turret.Distance(Player.Position) <= RangeR));
+
+            var NearAlly =
+                HeroManager.Allies.FirstOrDefault(
+                    ally => ally.CountEnemiesInRange(1500) <= 0 && ally.Distance(Player) <= RangeR);
+            if (NearTurret != null)
+                return NearTurret.ServerPosition;
+            if (NearAlly != null)
+                return NearAlly.ServerPosition;
+            return Player.ServerPosition;
+        }
 
         private static void REscape()
         {
@@ -1053,7 +1136,8 @@ namespace SurvivorRyze
             Protobelt = new Items.Item(3152, 850f),
             GLP800 = new Items.Item(3030, 800f),
             Hextech = new Items.Item(3146, 700f),
-            Seraph = new Items.Item(3040, 0);
+            Seraph = new Items.Item(3040, 0),
+            Zhonya = new Items.Item(3157, 0);
 
         #endregion
 

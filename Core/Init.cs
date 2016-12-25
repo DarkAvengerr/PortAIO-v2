@@ -2733,7 +2733,7 @@ namespace PortAIO
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
                         case 0: // Survivor Ryze
-                            SurvivorRyze.Program.Game_OnGameLoad();
+                            SurvivorRyze.Program.Main();
                             break;
                         case 1: // BrianSharp
                             BrianSharp.Program.Main();
