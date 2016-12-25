@@ -2433,6 +2433,9 @@ namespace PortAIO
                         case 5: // Nidalee the Beastial Huntress
                             NidaleeTheBestialHuntress.Program.Main();
                             break;
+                        case 6: // MightNidalee
+                            MightyNidalee.Mighty.Main();
+                            break;
                     }
                     break;
                 case Champion.Nocturne:

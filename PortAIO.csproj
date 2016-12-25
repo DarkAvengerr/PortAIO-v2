@@ -1563,6 +1563,10 @@
     <Compile Include="Core\Champion Ports\Nidalee\Flowers%27 Nidalee\Prediction\SDKPrediction.cs" />
     <Compile Include="Core\Champion Ports\Nidalee\Flowers%27 Nidalee\Prediction\xcsoftPrediction.cs" />
     <Compile Include="Core\Champion Ports\Nidalee\Flowers%27 Nidalee\Program.cs" />
+    <Compile Include="Core\Champion Ports\Nidalee\MightyNidalee\Damages.cs" />
+    <Compile Include="Core\Champion Ports\Nidalee\MightyNidalee\Drawings.cs" />
+    <Compile Include="Core\Champion Ports\Nidalee\MightyNidalee\MightyNidalee.cs" />
+    <Compile Include="Core\Champion Ports\Nidalee\MightyNidalee\R_Manager.cs" />
     <Compile Include="Core\Champion Ports\Rengar\Badao Rengar\Assasinate.cs" />
     <Compile Include="Core\Champion Ports\Rengar\Badao Rengar\Auto.cs" />
     <Compile Include="Core\Champion Ports\Rengar\Badao Rengar\Clear.cs" />

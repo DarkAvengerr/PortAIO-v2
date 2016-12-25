@@ -257,7 +257,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "Nautilus - Danz", "PlebNautilus", "vSeries", "[SDK] ExorAIO", "Hestia's Nautlius", "JustNautilus", "Nautilus - the Freelo Titan" };
                     break;
                 case EloBuddy.Champion.Nidalee:
-                    champ = new string[] { "KurisuNidalee", "HeavenStrikeNidalee", "NechritoNidalee", "D-Nidalee", "Flowers' Nidalee", "Nidalee - the Beastial Huntress" };
+                    champ = new string[] { "KurisuNidalee", "HeavenStrikeNidalee", "NechritoNidalee", "D-Nidalee", "Flowers' Nidalee", "Nidalee - the Beastial Huntress", "MightyNidalee" };
                     break;
                 case EloBuddy.Champion.Nocturne:
                     champ = new string[] { "UnderratedAIO", "xQx Nocturne", "[SDK] ExorAIO" };
