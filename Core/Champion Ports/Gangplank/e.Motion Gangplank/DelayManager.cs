@@ -7,8 +7,8 @@ using LeagueSharp;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace e.Motion_Gangplank
+using LeagueSharp.Common; 
+namespace e.Motion_Gangplank
 {
     class DelayManager
     {

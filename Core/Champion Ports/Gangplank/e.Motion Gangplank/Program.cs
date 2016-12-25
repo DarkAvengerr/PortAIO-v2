@@ -8,21 +8,26 @@ using System.Text;
 using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
-using LeagueSharp.Common.Data;
 using SharpDX;
 using SharpDX.Direct3D;
 using Color = System.Drawing.Color;
 
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace e.Motion_Gangplank
+using LeagueSharp.Common; 
+namespace e.Motion_Gangplank
 {
-    class Program
+    internal class Program
     {
+        public static void Main()
+        {
+            Game_OnGameLoad(new EventArgs());
+        }
+
         #region Declaration
 
         //private static int BarrelTime;
+        private static bool BarrelAAForced;
         private static Random Rand = new Random();
         private static DelayManager QDelay;
         private static AIHeroClient UltimateTarget;
@@ -59,7 +64,7 @@ using EloBuddy;
         #endregion
 
 
-        public static void Game_OnGameLoad()
+        static void Game_OnGameLoad(EventArgs args)
         {
             if (Player.ChampionName != "Gangplank")
             {
@@ -100,21 +105,27 @@ using EloBuddy;
         {
             if (sender.IsMe && args.Slot == SpellSlot.Q && E.IsReady(200) && args.Target.Name == "Barrel")
             {
-                List<Barrel> barrelsInRange = GetBarrelsInRange(AllBarrel.Find(b => b.GetNetworkID() == args.Target.NetworkId)).ToList();
+                Barrel attackedBarrel = AllBarrel.Find(b => b.GetNetworkID() == args.Target.NetworkId);
+                List<Barrel> barrelsInRange = GetBarrelsInRange(attackedBarrel).ToList();
                 if (Config.Item("combo.triplee").GetValue<bool>() && barrelsInRange.Any())
                 {
+                    
                     //Triple-Logic
-                    foreach (var enemy in HeroManager.Enemies)
+                    foreach (Barrel barrel in barrelsInRange)
                     {
-                        if (enemy.Position.Distance(args.Target.Position) >= 350 &&
-                            !barrelsInRange.Any(b => b.GetBarrel().Distance(enemy) <= 350) &&
-                             barrelsInRange.Any(b => b.GetBarrel().Distance(enemy) <= 850))
-                        {
-                            LeagueSharp.Common.Utility.DelayAction.Add(400 + Game.Ping/2, () => ForceCast(enemy,barrelsInRange.First(b => b.GetBarrel().Distance(enemy) >= 350 && b.GetBarrel().Distance(enemy) <= 850).GetBarrel().Position));
-                        }
+                        LeagueSharp.Common.Utility.DelayAction.Add(Helper.GetQTime(args.Target.Position) - 100 - Game.Ping / 2, () => InvokeTriplePlacement(barrel, AllBarrel));
                     }
+
+                    //foreach (var enemy in HeroManager.Enemies)
+                    //{
+                    //    if (enemy.Position.Distance(args.Target.Position) >= 350 &&
+                    //        !barrelsInRange.Any(b => b.GetBarrel().Distance(enemy) <= 350) &&
+                    //         barrelsInRange.Any(b => b.GetBarrel().Distance(enemy) <= 850))
+                    //    {
+                    //        LeagueSharp.Common.Utility.DelayAction.Add(400 + Game.Ping/2, () => ForceCast(enemy,barrelsInRange.First(b => b.GetBarrel().Distance(enemy) >= 350 && b.GetBarrel().Distance(enemy) <= 850).GetBarrel().Position));
+                    //    }
+                    //}
                 }
-                Barrel attackedBarrel = AllBarrel.Find(b => b.GetNetworkID() == args.Target.NetworkId);
                 if (Config.Item("combo.doublee").GetValue<bool>() && attackedBarrel.GetBarrel().Distance(Player) >= 610)
                 {
                     //Double Logic
@@ -133,9 +144,22 @@ using EloBuddy;
 
         private static void OnDraw(EventArgs args)
         {
+            DrawRanges();
             KillstealDrawing();
             Warning();
             DrawE();
+        }
+
+        private static void DrawRanges()
+        {
+            if (Config.Item("drawings.q").GetValue<bool>() && Q.IsReady())
+            {
+                Render.Circle.DrawCircle(Player.Position, Q.Range, Color.IndianRed);
+            }
+            if (Config.Item("drawings.e").GetValue<bool>() && E.IsReady())
+            {
+                Render.Circle.DrawCircle(Player.Position, E.Range, Color.IndianRed);
+            }
         }
 
         private static void KillSteal()
@@ -177,6 +201,7 @@ using EloBuddy;
                     }
                 }
             }
+            
         }
 
         private static void CleanBarrel()
@@ -217,22 +242,46 @@ using EloBuddy;
 
         private static void SemiAutomaticE()
         {
-            if (E.IsReady() && Config.Item("key.eenabled").GetValue<bool>() &&
-                Config.Item("key.e").GetValue<KeyBind>().Active)
+            if (E.IsReady() && Config.Item("key.e").GetValue<KeyBind>().Active)
             {
-                float lowest = 1600;
-                Vector3 bPos = Vector3.Zero;
-                foreach (Barrel barrel in AllBarrel)
+                if(Config.Item("key.emode").GetValue<StringList>().SelectedIndex == 1)
                 {
-                    if (barrel.GetBarrel().Distance(Game.CursorPos) < lowest)
+                    float lowest = 1600;
+                    Vector3 bPos = Vector3.Zero;
+                    foreach (Barrel barrel in AllBarrel)
                     {
-                        bPos = barrel.GetBarrel().Position;
-                        lowest = barrel.GetBarrel().Distance(Game.CursorPos);
+                        if (barrel.GetBarrel().Distance(Game.CursorPos) < lowest)
+                        {
+                            bPos = barrel.GetBarrel().Position;
+                            lowest = barrel.GetBarrel().Distance(Game.CursorPos);
+                        }
+                    }
+                    if (lowest != 1600f)
+                    {
+                        E.Cast(bPos.Extend(Game.CursorPos, Math.Min(685, lowest)));
                     }
                 }
-                if (lowest != 1600f)
+                else if(Config.Item("key.emode").GetValue<StringList>().SelectedIndex == 2 && Q.IsReady())
                 {
-                    E.Cast(bPos.Extend(Game.CursorPos, Math.Min(685, lowest)));
+                    IEnumerable<Barrel> toExplode = AllBarrel.Where(b => b.CanQNow() && b.GetBarrel().Distance(Player) <= Q.Range);
+                    if (toExplode.Any())
+                    {
+                        float lowest = 1600;
+                        Barrel bar = null;
+                        foreach (Barrel barrel in AllBarrel)
+                        {
+                            if (barrel.GetBarrel().Distance(Game.CursorPos) < lowest)
+                            {
+                                bar = barrel;
+                                lowest = barrel.GetBarrel().Distance(Game.CursorPos);
+                            }
+                        }
+                        if(bar != null)
+                        {
+                            E.Cast(bar.GetBarrel().Position.Extend(Game.CursorPos, Math.Min(685, lowest)));
+                            QDelay.Delay(bar.GetBarrel());
+                        }
+                    }
                 }
             }
         }
@@ -241,7 +290,7 @@ using EloBuddy;
         {
             if (Q.IsReady() && Config.Item("harass.q").GetValue<bool>() && Config.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Mixed)
             {
-                AIHeroClient target = TargetSelector.GetTarget(685, TargetSelector.DamageType.Physical);
+                AIHeroClient target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
                 if (target != null)
                 {
                     Q.Cast(target);
@@ -353,8 +402,24 @@ using EloBuddy;
             //        R.CastIfWillHit(RTarget, Config.Item("combo.rmin").GetValue<Slider>().Value);
             //    }
             //}
+            if(Config.Menu.Item("combo.aae").GetValue<bool>() && Orbwalking.CanAttack())
+            {
+                List<Barrel> barrelsInAutoAttackRange = AllBarrel.Where(b => b.GetBarrel().Distance(Player) <= Orbwalking.GetRealAutoAttackRange(Player) && b.CanAANow()).ToList();
+                if (barrelsInAutoAttackRange.Any() && (!Player.GetEnemiesInRange(Orbwalking.GetRealAutoAttackRange(Player)).Any() || Player.Buffs.All(buff => buff.Name != "gangplankpassiveattack")))
+                {
+                    BarrelAAForced = false;
+                    foreach(Barrel b in barrelsInAutoAttackRange)
+                    {
+                        if(HeroManager.Enemies.Any(enemy => b.GetBarrel().Position.CannotEscapeFromAA(enemy) || GetBarrelsInRange(b).Any(bar => bar.GetBarrel().Position.CannotEscapeFromAA(enemy))))
+                        {
+                            Config.Orbwalker.ForceTarget(b.GetBarrel());
+                            BarrelAAForced = true;
+                        }
+                    }
+                }
+            }
 
-            if (Config.Menu.Item("combo.qe").GetValue<bool>()  && Q.IsReady())
+            if (Config.Menu.Item("combo.qe").GetValue<bool>() && Q.IsReady() && !BarrelAAForced)
             {
                 AIHeroClient target = TargetSelector.GetTarget(1200, TargetSelector.DamageType.Physical);
                 if (target != null)
@@ -368,7 +433,7 @@ using EloBuddy;
 
                     foreach (var b in AllBarrel)
                     {
-                        if (b.CanQNow() && (b.GetBarrel().Position.CannotEscape(b.GetBarrel().Position, target, extended) || GetBarrelsInRange(b).Any(bb => bb.GetBarrel().Position.CannotEscape(b.GetBarrel().Position, target, extended, true))))
+                        if (b.CanQNow() && (b.GetBarrel().Position.CannotEscape(target, extended) || GetBarrelsInRange(b).Any(bb => bb.GetBarrel().Position.CannotEscape(target, extended, true))))
                         {
                             QDelay.Delay(b.GetBarrel());
                             break;
@@ -395,7 +460,7 @@ using EloBuddy;
                                 var castPos = b.GetBarrel().Position.ExtendToMaxRange(Helper.PredPos.To3D(),685);
 
                                 if (b.CanQNow() && castPos.Distance(Player.Position) < 1000 &&
-                                    castPos.CannotEscape(b.GetBarrel().Position, target, extended, true))
+                                    castPos.CannotEscape(target, extended, true))
                                 {
                                     E.Cast(castPos);
                                     QDelay.Delay(b.GetBarrel());
@@ -408,16 +473,32 @@ using EloBuddy;
             }
 
             //Triple - Logic
-            if (Q.IsReady() && E.Instance.Ammo >= 2 && Config.Item("combo.triplee").GetValue<bool>())
+            if (Q.IsReady() && E.IsReady() && Config.Item("combo.triplee").GetValue<bool>())
             {
-                List<Barrel> GetValidBarrels = AllBarrel.Where(b => b.CanQNow(400) && b.GetBarrel().Distance(Player) <= 625).ToList();
-                AIHeroClient target = TargetSelector.GetTarget(1200, TargetSelector.DamageType.Physical);
-                if (target != null && GetValidBarrels.Any(b => b.GetBarrel().Distance(target) <= 1200))
+                IEnumerable<Barrel> validBarrels = AllBarrel.Where(b => b.CanQNow() && b.GetBarrel().Distance(Player) <= 625);
+                foreach (Barrel validBarrel in validBarrels)
                 {
-                    E.Cast(GetValidBarrels.First(b => b.GetBarrel().Distance(target) <= 1200).GetBarrel().Position.ExtendToMaxRange(Player.Position.ExtendToMaxRange(target.Position, 980), 685));
-                    LeagueSharp.Common.Utility.DelayAction.Add(600, () => QDelay.Delay(GetValidBarrels.First().GetBarrel()));
+                    IEnumerable<Barrel> inRange = GetBarrelsInRange(validBarrel);
+                    if (
+                        inRange.Any(
+                            b =>
+                                HeroManager.Enemies.Any(
+                                    e => b.GetBarrel().Distance(e.Position) < 1100 && e.Distance(Player.Position) < 1000)))
+                    {
+                        Q.Cast(validBarrel.GetBarrel());
+                    }
                 }
             }
+            //if (Q.IsReady() && E.Instance.Ammo >= 2 && Config.Item("combo.triplee").GetValue<bool>())
+            //{
+            //    List<Barrel> GetValidBarrels = AllBarrel.Where(b => b.CanQNow(400) && b.GetBarrel().Distance(Player) <= 625).ToList();
+            //    AIHeroClient target = TargetSelector.GetTarget(1200, TargetSelector.DamageType.Physical);
+            //    if (target != null && GetValidBarrels.Any(b => b.GetBarrel().Distance(target) <= 1200))
+            //    {
+            //        E.Cast(GetValidBarrels.First(b => b.GetBarrel().Distance(target) <= 1200).GetBarrel().Position.ExtendToMaxRange(Player.Position.ExtendToMaxRange(target.Position, 980), 685));
+            //        LeagueSharp.Common.Utility.DelayAction.Add(600, () => QDelay.Delay(GetValidBarrels.First().GetBarrel()));
+            //    }
+            //}
 
             if (Config.Item("combo.q").GetValue<bool>() && Q.IsReady())
             {
@@ -441,6 +522,55 @@ using EloBuddy;
                 {
                     E.Cast(Player.Position.Extend(castPos.To3D(), 1000));
                 }
+            }
+        }
+
+        private static void InvokeTriplePlacement(Barrel connectingBarrel, IEnumerable<Barrel> hitTest)
+        {
+            if (!E.IsReady())
+            {
+                return;
+            }
+            IEnumerable<AIHeroClient> invokedEnemies = HeroManager.Enemies.Where(e => e.Position.Distance(connectingBarrel.GetBarrel().Position) < 1370 && !hitTest.Any(b => b.GetBarrel().Position.Distance(e.Position) < 340));
+            foreach (AIHeroClient enemy in invokedEnemies)
+            {
+                //Nice Algorithm with Bad Coding Style following
+                //DRY - Do Repeat Yourself
+                Vector3 tryPosition = enemy.Position;
+                if (tryPosition.Distance(connectingBarrel.GetBarrel().Position) <= 685 &&
+                    tryPosition.Distance(Player.Position) <= 1000)
+                {
+                    TriplePlacement(enemy, tryPosition);
+                    return;
+                }
+                tryPosition = Player.Position.ExtendToMaxRange(enemy.Position, 1000);
+                if (tryPosition.Distance(connectingBarrel.GetBarrel().Position) <= 685)
+                {
+                    TriplePlacement(enemy, tryPosition);
+                    return;
+                }
+                tryPosition = connectingBarrel.GetBarrel().Position.ExtendToMaxRange(enemy.Position, 685);
+                if (tryPosition.Distance(Player.Position) <= 1000)
+                {
+                    TriplePlacement(enemy, tryPosition);
+                    return;
+                }
+                List<Vector2> optimalPositions = Helper.IntersectCircles(Player.Position.To2D(), 995, connectingBarrel.GetBarrel().Position.To2D(), 680);
+                if (optimalPositions.Count == 2)
+                {
+                    TriplePlacement(enemy, 
+                        optimalPositions[0].To3D().Distance(enemy.Position) 
+                        < optimalPositions[1].To3D().Distance(enemy.Position) 
+                        ? optimalPositions[0].To3D() : optimalPositions[1].To3D());
+                }
+            }
+        }
+
+        private static void TriplePlacement(AIHeroClient enemy, Vector3 position)
+        {
+            if (position.Distance(enemy.Position) <= 340)
+            {
+                E.Cast(position);
             }
         }
 

@@ -1233,7 +1233,7 @@ namespace PortAIO
                             BePlank.Program.Main();
                             break;
                         case 4: // e.Motion Gangplank
-                            e.Motion_Gangplank.Program.Game_OnGameLoad();
+                            e.Motion_Gangplank.Program.Main();
                             break;
                     }
                     break;

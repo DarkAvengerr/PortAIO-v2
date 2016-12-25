@@ -8,8 +8,8 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace e.Motion_Gangplank
+using LeagueSharp.Common; 
+namespace e.Motion_Gangplank
 {
     internal class Barrel
     {
@@ -24,6 +24,12 @@ using EloBuddy;
         {
             return ObjectManager.GetUnitByNetworkId<Obj_AI_Minion>((uint)BarrelObjectNetworkID);
         }
+        public bool CanAANow()
+        {
+            //Console.WriteLine();
+            return Utils.TickCount >= BarrelAttackTick - Program.Player.AttackCastDelay * 1000;
+        }
+
         public bool CanQNow(int delay = 0)
         {
             if (Program.Player.Distance(GetBarrel().Position)<=625 && Helper.GetQTime(GetBarrel().Position) + delay + Utils.TickCount >= BarrelAttackTick + Config.Menu.Item("misc.additionalServerTick").GetValue<Slider>().Value)

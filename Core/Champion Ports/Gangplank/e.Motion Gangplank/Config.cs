@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace e.Motion_Gangplank
+using LeagueSharp.Common; 
+namespace e.Motion_Gangplank
 {
     class Config
     {
@@ -25,7 +25,7 @@ using EloBuddy;
             //Key
             Menu keyMenu = new Menu("Key","key");
             keyMenu.AddItem(new MenuItem("key.q", "Semi-Automatic Q").SetValue(new KeyBind(81,KeyBindType.Press)));
-            keyMenu.AddItem(new MenuItem("key.eenabled", "Enable Semi-automatic E").SetValue(false));
+            keyMenu.AddItem(new MenuItem("key.emode", "Semi Automatic E Mode").SetValue(new StringList(new[]{"Never use","Place Connecting Barrel","Place Connecting Barrel + Explode"})));
             keyMenu.AddItem(new MenuItem("key.e", "Semi-Automatic E").SetValue(new KeyBind(69, KeyBindType.Press)));
             keyMenu.AddItem(new MenuItem("key.r", "Semi-Automatic R").SetValue(new KeyBind(82, KeyBindType.Press)));
             Menu.AddSubMenu(keyMenu);
@@ -34,6 +34,7 @@ using EloBuddy;
             Menu comboMenu = new Menu("Combo", "combo");
             comboMenu.AddItem(new MenuItem("combo.q", "Use Q").SetValue(true));
             comboMenu.AddItem(new MenuItem("combo.qe", "Use Q on Barrel").SetValue(true));
+            comboMenu.AddItem(new MenuItem("combo.aae", "Use Autoattack on Barrel").SetValue(true));
             comboMenu.AddItem(new MenuItem("combo.e", "Use E").SetValue(true));
             comboMenu.AddItem(new MenuItem("combo.ex", "Use E to Extend").SetValue(true));
             comboMenu.AddItem(new MenuItem("combo.doublee", "Use Double E Combo").SetValue(false).SetTooltip("Only working with low Ping"));
@@ -65,6 +66,8 @@ using EloBuddy;
             Menu drawingMenu = new Menu("Drawings","drawings");
             drawingMenu.AddItem(new MenuItem("drawings.warning", "Remember me to Upgrade Ult").SetValue(true));
             drawingMenu.AddItem(new MenuItem("drawings.ex", "Draw extended E").SetValue(true));
+            drawingMenu.AddItem(new MenuItem("drawings.q", "Draw Q Range").SetValue(false));
+            drawingMenu.AddItem(new MenuItem("drawings.e", "Draw E Range").SetValue(false));
             Menu.AddSubMenu(drawingMenu);
 
             //Cleanse
@@ -94,7 +97,7 @@ using EloBuddy;
             //Misc
             Menu miscMenu = new Menu("Miscellanious", "misc");
             miscMenu.AddItem(new MenuItem("misc.additionalServerTick", "Additional Server Tick").SetTooltip("Don't change that if you don't know what it is").SetValue(new Slider(30)));
-            miscMenu.AddItem(new MenuItem("misc.enemyReactionTime", "enemy Reaction Time").SetTooltip("Higher = Possible not to hit enemy with Barrel, Lower = Possible to use additional Barrels").SetValue(new Slider(300,0,500)));
+            miscMenu.AddItem(new MenuItem("misc.enemyReactionTime", "enemy Reaction Time").SetTooltip("Higher = Possible not to hit enemy with Barrel, Lower = Possible to use additional Barrels").SetValue(new Slider(150,0,500)));
             miscMenu.AddItem(new MenuItem("misc.additionalReactionTime", "Additional Reaction Time on Direction Change").SetTooltip("For Calculation when enemy will change direction").SetValue(new Slider(50, 0, 200)));
             miscMenu.AddItem(new MenuItem("misc.trye", "Always extend with E").SetValue(true).SetTooltip("Will always try to Extend with E to get additional Champions"));
             miscMenu.AddItem(new MenuItem("misc.autoE", "Place Barrels automatically").SetTooltip("Will automatically place Barrels in Bushes if no other Barrels exist").SetValue(true));
