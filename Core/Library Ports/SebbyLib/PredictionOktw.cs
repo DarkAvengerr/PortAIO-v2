@@ -126,7 +126,7 @@ namespace SebbyLib.Prediction
 
         internal float RealRadius
         {
-            get { return UseBoundingRadius ? Radius + Unit.BoundingRadius : Radius; }
+            get { return UseBoundingRadius ? Radius : Radius; }
         }
     }
 
@@ -276,7 +276,6 @@ namespace SebbyLib.Prediction
                 result = GetPositionOnPath(input, input.Unit.Path.ToList().To2D(), input.Unit.MoveSpeed);
             }
 
-
             if (input.Unit is AIHeroClient && input.Radius > 1 && result.Hitchance <= HitChance.VeryHigh)
             {
                 var moveOutWall = input.Unit.BoundingRadius + input.Radius / 2 + 10;
@@ -287,7 +286,7 @@ namespace SebbyLib.Prediction
                 if (!wallPoint.IsZero)
                 {
                     result.Hitchance = HitChance.High;
-                    //result.CastPosition = wallPoint.Extend(result.CastPosition, moveOutWall);
+                    result.CastPosition = wallPoint.Extend(result.CastPosition, moveOutWall);
                     OktwCommon.debug("PRED: Near WALL");
                 }
             }
@@ -314,8 +313,8 @@ namespace SebbyLib.Prediction
                     if (result.Hitchance != HitChance.OutOfRange)
                     {
                         result.CastPosition = input.RangeCheckFrom +
-                                                 input.Range *
-                                                 (result.UnitPosition - input.RangeCheckFrom).To2D().Normalized().To3D();
+                                              input.Range *
+                                              (result.UnitPosition - input.RangeCheckFrom).To2D().Normalized().To3D();
                     }
                     else
                     {
@@ -346,6 +345,14 @@ namespace SebbyLib.Prediction
             return result;
         }
 
+        public static bool PointInLineSegment(Vector2 segmentStart, Vector2 segmentEnd, Vector2 point)
+        {
+            var distanceStartEnd = segmentStart.Distance(segmentEnd, true);
+            var distanceStartPoint = segmentStart.Distance(point, true);
+            var distanceEndPoint = segmentEnd.Distance(point, true);
+            return !(distanceEndPoint > distanceStartEnd || distanceStartPoint > distanceStartEnd);
+        }
+
         internal static PredictionOutput WayPointAnalysis(PredictionOutput result, PredictionInput input)
         {
             if (!(input.Unit is AIHeroClient) || input.Radius == 1)
@@ -373,7 +380,7 @@ namespace SebbyLib.Prediction
             }
 
             // PREPARE MATH ///////////////////////////////////////////////////////////////////////////////////
-            var path = input.Unit.Path.ToList().To2D();
+            var path = input.Unit.GetWaypoints();
 
 
             var lastWaypiont = path.Last().To3D();
@@ -466,7 +473,7 @@ namespace SebbyLib.Prediction
 
 
 
-            if (input.Unit.Path.ToList().To2D().Count == 1)
+            if (input.Unit.GetWaypoints().Count == 1)
             {
                 if (UnitTracker.GetLastAutoAttackTime(input.Unit) < 0.1d && totalDelay < 0.7)
                 {
@@ -686,20 +693,26 @@ namespace SebbyLib.Prediction
 
         internal static PredictionOutput GetPositionOnPath(PredictionInput input, List<Vector2> path, float speed = -1)
         {
-            speed = (Math.Abs(speed - (-1)) < float.Epsilon) ? input.Unit.MoveSpeed : speed;
+            if (input.Unit.Distance(input.From, true) < 230 * 230)
+            {
+                input.Delay /= 2;
+                speed /= 1.5f;
+            }
 
-            if ((input.Unit.Spellbook.IsAutoAttacking && !input.Unit.IsDashing()))
+            speed = input.Unit.MoveSpeed;
+
+            if (input.Unit.Path.ToList().To2D().Count <= 1 || (input.Unit.Spellbook.IsAutoAttacking && !input.Unit.IsDashing()))
             {
                 return new PredictionOutput
                 {
                     Input = input,
-                    CastPosition = input.Unit.ServerPosition,
                     UnitPosition = input.Unit.ServerPosition,
+                    CastPosition = input.Unit.ServerPosition,
                     Hitchance = HitChance.High
                 };
             }
 
-            var pLength = path.PathLength();
+            var pLength = input.Unit.Path.ToList().To2D().PathLength();
 
             //Skillshots with only a delay
             var tDistance = input.Delay * speed - input.RealRadius;
@@ -707,8 +720,8 @@ namespace SebbyLib.Prediction
             {
                 for (var i = 0; i < path.Count - 1; i++)
                 {
-                    var a = path[i];
-                    var b = path[i + 1];
+                    var a = input.Unit.Path.ToList().To2D()[i];
+                    var b = input.Unit.Path.ToList().To2D()[i + 1];
                     var d = a.Distance(b);
 
                     if (d >= tDistance)
@@ -716,7 +729,11 @@ namespace SebbyLib.Prediction
                         var direction = (b - a).Normalized();
 
                         var cp = a + direction * tDistance;
-                        var p = a + direction * ((i == path.Count - 2) ? Math.Min(tDistance + input.RealRadius, d) : (tDistance + input.RealRadius));
+                        var p = a +
+                                direction *
+                                ((i == path.Count - 2)
+                                    ? Math.Min(tDistance + input.RealRadius, d)
+                                    : (tDistance + input.RealRadius));
 
                         return new PredictionOutput
                         {
@@ -743,16 +760,15 @@ namespace SebbyLib.Prediction
                     }
                 }
 
-                //path = path.CutPath(d);
                 var tT = 0f;
-                for (var i = 0; i < path.Count - 1; i++)
+                for (var i = 0; i < input.Unit.Path.ToList().To2D().CutPath(d).Count - 1; i++)
                 {
-                    var a = path[i];
-                    var b = path[i + 1];
+                    var a = input.Unit.Path.ToList().To2D().CutPath(d)[i];
+                    var b = input.Unit.Path.ToList().To2D().CutPath(d)[i + 1];
                     var tB = a.Distance(b) / speed;
                     var direction = (b - a).Normalized();
                     a = a - speed * tT * direction;
-                    var sol = Geometry.VectorMovementCollision(a, b, speed, input.From.To2D(), input.Speed, tT);
+                    var sol = EloBuddy.SDK.Geometry.VectorMovementCollision(a, b, speed, input.From.To2D(), input.Speed, tT);
                     var t = (float)sol[0];
                     var pos = (Vector2)sol[1];
 
@@ -778,8 +794,8 @@ namespace SebbyLib.Prediction
             return new PredictionOutput
             {
                 Input = input,
-                CastPosition = input.Unit.Path.Last(),
-                UnitPosition = input.Unit.Path.Last(),
+                CastPosition = input.Unit.Path.ToList().Last(),
+                UnitPosition = input.Unit.Path.ToList().Last(),
                 Hitchance = HitChance.Medium
             };
         }
@@ -1277,20 +1293,8 @@ namespace SebbyLib.Prediction
             }
 
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
-            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
-
-            Obj_AI_Base.OnBasicAttack += Obj_AI_Base_OnBasicAttack;
-            AttackableUnit.OnCreate += Obj_AI_Base_OnCreate;
-
             Obj_AI_Base.OnNewPath += AIHeroClient_OnNewPath;
-        }
-
-        private static void Obj_AI_Base_OnBasicAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
-        {
-            if (sender is AIHeroClient)
-            {
-                UnitTrackerInfoList.Find(x => x.NetworkId == sender.NetworkId).AaTick = Utils.TickCount;
-            }
+            AttackableUnit.OnCreate += Obj_AI_Base_OnCreate;
         }
 
         private static void Obj_AI_Base_OnCreate(GameObject sender, EventArgs args)
@@ -1303,21 +1307,13 @@ namespace SebbyLib.Prediction
         {
             if (sender is AIHeroClient)
             {
-                var item = UnitTrackerInfoList.Find(x => x.NetworkId == sender.NetworkId);
 
-                if (sender.Path.Count() <= 1)
+                var item = UnitTrackerInfoList.Find(x => x.NetworkId == sender.NetworkId);
+                if (sender.Path.Count() == 1) // STOP MOVE DETECTION
                     item.StopMoveTick = Utils.TickCount;
 
                 item.NewPathTick = Utils.TickCount;
-
-                if (sender.Path.Count() >= 1)
-                {
-                    item.PathBank.Add(new PathInfo() { Position = sender.Path.Last().To2D(), Time = Utils.TickCount });
-                }
-                else
-                {
-                    item.PathBank.Add(new PathInfo() { Position = sender.ServerPosition.To2D(), Time = Utils.TickCount });
-                }
+                item.PathBank.Add(new PathInfo() { Position = sender.Path.Last().To2D(), Time = Utils.TickCount });
 
                 if (item.PathBank.Count > 3)
                     item.PathBank.RemoveAt(0);
@@ -1328,14 +1324,20 @@ namespace SebbyLib.Prediction
         {
             if (sender is AIHeroClient)
             {
-                var foundSpell = spells.Find(x => args.SData.Name.ToLower() == x.name.ToLower());
-                if (foundSpell != null)
+                if (args.SData.IsAutoAttack())
+                    UnitTrackerInfoList.Find(x => x.NetworkId == sender.NetworkId).AaTick = Utils.TickCount;
+                else
                 {
-                    UnitTrackerInfoList.Find(x => x.NetworkId == sender.NetworkId).SpecialSpellFinishTick = Utils.TickCount + (int)(foundSpell.duration * 1000);
-                }
-                else if (sender.Spellbook.IsAutoAttacking || sender.IsRooted || !sender.CanMove)
-                {
-                    UnitTrackerInfoList.Find(x => x.NetworkId == sender.NetworkId).SpecialSpellFinishTick = Utils.TickCount + 100;
+
+                    var foundSpell = spells.Find(x => args.SData.Name.ToLower() == x.name.ToLower());
+                    if (foundSpell != null)
+                    {
+                        UnitTrackerInfoList.Find(x => x.NetworkId == sender.NetworkId).SpecialSpellFinishTick = Utils.TickCount + (int)(foundSpell.duration * 1000);
+                    }
+                    else if (sender.Spellbook.IsAutoAttacking || sender.IsRooted || !sender.CanMove)
+                    {
+                        UnitTrackerInfoList.Find(x => x.NetworkId == sender.NetworkId).SpecialSpellFinishTick = Utils.TickCount + 100;
+                    }
                 }
             }
         }
