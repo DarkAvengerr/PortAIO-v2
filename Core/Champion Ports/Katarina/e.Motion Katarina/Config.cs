@@ -123,7 +123,7 @@ namespace e.Motion_Katarina
 
         public static int GetSliderValue(string itemName)
         {
-            if (!config.Items.Any(i => i.Name == itemName))
+            if (config.Items.All(i => i.Name != itemName))
             {
                 Console.WriteLine("Menu-Item " + itemName + " not found");
                 return -1;
