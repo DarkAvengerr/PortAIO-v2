@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using LeagueSharp;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Nocturne.Evade
+using LeagueSharp.Common; 
+namespace Nocturne.Evade
 {
     public static class SpellBlocker
     {

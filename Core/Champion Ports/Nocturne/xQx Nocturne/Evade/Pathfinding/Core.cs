@@ -13,8 +13,8 @@ using Color = System.Drawing.Color;
 using Geometry = LeagueSharp.Common.Geometry;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Nocturne.Evade.Pathfinding
+using LeagueSharp.Common; 
+namespace Nocturne.Evade.Pathfinding
 {
     public static class Pathfinding
     {

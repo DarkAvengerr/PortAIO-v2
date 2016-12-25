@@ -24,8 +24,8 @@ using LeagueSharp.Common;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Nocturne.Evade
+using LeagueSharp.Common; 
+namespace Nocturne.Evade
 {
     internal class EvadeSpellDatabase
     {

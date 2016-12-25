@@ -10,8 +10,8 @@ using Nocturne.Common;
 using Color = SharpDX.Color;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Nocturne.Modes
+using LeagueSharp.Common; 
+namespace Nocturne.Modes
 {
     internal class ModeConfig
     {

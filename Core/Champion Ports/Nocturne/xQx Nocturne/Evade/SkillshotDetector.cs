@@ -27,8 +27,8 @@ using SharpDX;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Nocturne.Evade
+using LeagueSharp.Common; 
+namespace Nocturne.Evade
 {
     internal static class SkillshotDetector
     {
@@ -41,6 +41,7 @@ using EloBuddy;
             //Detect when the skillshots are created.
             //Game.OnProcessPacket += GameOnOnGameProcessPacket; // Used only for viktor's Laser :^)
             Obj_AI_Base.OnProcessSpellCast += ObjAiHeroOnOnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += ObjAiHeroOnOnProcessSpellCast;
 
             //Detect when projectiles collide.
             GameObject.OnDelete += ObjSpellMissileOnOnDelete;
@@ -304,7 +305,15 @@ using EloBuddy;
                 }
                 
                 var enemy = (AIHeroClient) sender;
-                if ((enemy.CharData.BaseSkinName.ToLower() == "vayne" || enemy.CharData.BaseSkinName.ToLower() == "poppy") && args.Slot == SpellSlot.E &&
+                
+                if (enemy.BaseSkinName.ToLower() == "jayce" && enemy.HasBuff("JayceStanceHammer") && args.Slot == SpellSlot.E && args.Target.IsMe)
+                {
+                    PlayerSpells.W.CastOnUnit(ObjectManager.Player);
+                    DodgeMessage("Jayce's E");
+                }
+
+
+                if ((enemy.BaseSkinName.ToLower() == "vayne" || enemy.BaseSkinName.ToLower() == "poppy") && args.Slot == SpellSlot.E &&
                     args.Target.IsMe)
                 {
                     for (var i = 1; i < 8; i++)
@@ -318,38 +327,45 @@ using EloBuddy;
                         }
                     }
                 }
+                
+                if (enemy.BaseSkinName.ToLower() == "irelia" && args.Slot == SpellSlot.E && args.Target.IsMe && ObjectManager.Player.HealthPercent > enemy.HealthPercent)
+                {
+                    PlayerSpells.W.Cast();
+                    DodgeMessage("Irelia's E");
+                }
+                
 
-                if (enemy.CharData.BaseSkinName.ToLower() == "riven" && args.Slot == SpellSlot.W && enemy.Position.Distance(ObjectManager.Player.Position) < Orbwalking.GetRealAutoAttackRange(null) + 150)
+                if (enemy.BaseSkinName.ToLower() == "riven" && args.Slot == SpellSlot.W && enemy.Position.Distance(ObjectManager.Player.Position) < Orbwalking.GetRealAutoAttackRange(null) + 150)
                 {
                     PlayerSpells.W.Cast();
                     DodgeMessage("Riven's W");
                 }
 
 
-                if (enemy.CharData.BaseSkinName.ToLower() == "diana" && args.Slot == SpellSlot.E && enemy.Position.Distance(ObjectManager.Player.Position) <= 350)
+                if (enemy.BaseSkinName.ToLower() == "diana" && args.Slot == SpellSlot.E && enemy.Position.Distance(ObjectManager.Player.Position) <= 350)
                 {
                     PlayerSpells.W.Cast();
                     DodgeMessage("Diana E");
                 }
 
-                if (enemy.CharData.BaseSkinName.ToLower() == "MasterYi" && args.Slot == SpellSlot.E && enemy.Health < ObjectManager.Player.Health && args.Target.IsMe)
+                if (enemy.BaseSkinName.ToLower() == "MasterYi" && args.Slot == SpellSlot.E && enemy.Health < ObjectManager.Player.Health && args.Target.IsMe)
                 {
                     PlayerSpells.W.Cast();
                     DodgeMessage("MasterYi E");
                 }
 
-                if (enemy.CharData.BaseSkinName.ToLower() == "darius" && args.Slot == SpellSlot.E && enemy.Position.Distance(ObjectManager.Player.Position) <= 550 && enemy.Level <= 5)
+                if (enemy.BaseSkinName.ToLower() == "darius" && args.Slot == SpellSlot.E && enemy.Position.Distance(ObjectManager.Player.Position) <= 550 && enemy.Level <= 5)
                 {
                     PlayerSpells.W.Cast();
                     DodgeMessage("Darius E");
                 }
 
-                if (enemy.CharData.BaseSkinName.ToLower() == "blitzcrank" && args.Slot == SpellSlot.R && enemy.Position.Distance(ObjectManager.Player.Position) < Orbwalking.GetRealAutoAttackRange(null) + 300)
+                if (enemy.BaseSkinName.ToLower() == "blitzcrank" && args.Slot == SpellSlot.R && enemy.Position.Distance(ObjectManager.Player.Position) < Orbwalking.GetRealAutoAttackRange(null) + 300)
                 {
                     PlayerSpells.W.Cast();
                     DodgeMessage("Blitzcrank's R");
                 }
-                if (enemy.CharData.BaseSkinName.ToLower() == "lissandra" && args.Slot == SpellSlot.R && enemy.Position.Distance(ObjectManager.Player.Position) < 500)
+                if (enemy.BaseSkinName.ToLower() == "lissandra" && args.Slot == SpellSlot.R && enemy.Position.Distance(ObjectManager.Player.Position) < 500)
                 {
                     PlayerSpells.W.Cast();
                     DodgeMessage("Lissandra's R");

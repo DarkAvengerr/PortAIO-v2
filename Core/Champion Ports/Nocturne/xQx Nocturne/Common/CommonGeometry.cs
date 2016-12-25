@@ -24,8 +24,8 @@ using GamePath = System.Collections.Generic.List<SharpDX.Vector2>;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Nocturne.Common
+using LeagueSharp.Common; 
+namespace Nocturne.Common
 {
     using System;
     using System.Collections.Generic;

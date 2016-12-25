@@ -30,8 +30,8 @@ using Utils = LeagueSharp.Common.Utils;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Nocturne.Evade
+using LeagueSharp.Common; 
+namespace Nocturne.Evade
 {
     public enum CollisionObjectTypes
     {

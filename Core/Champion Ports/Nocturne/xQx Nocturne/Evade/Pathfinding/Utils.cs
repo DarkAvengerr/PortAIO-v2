@@ -7,8 +7,8 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Nocturne.Evade.Pathfinding
+using LeagueSharp.Common; 
+namespace Nocturne.Evade.Pathfinding
 {
     class Utils
     {

@@ -10,8 +10,8 @@ using SharpDX;
 using Collision = LeagueSharp.Common.Collision;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Nocturne.Modes
+using LeagueSharp.Common; 
+namespace Nocturne.Modes
 {
     internal static class ModeFlee
     {

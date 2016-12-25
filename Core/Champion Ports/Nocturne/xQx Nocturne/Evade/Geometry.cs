@@ -30,8 +30,8 @@ using GamePath = System.Collections.Generic.List<SharpDX.Vector2>;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Nocturne.Evade
+using LeagueSharp.Common; 
+namespace Nocturne.Evade
 {
     /// <summary>
     /// Class that contains the geometry related methods.

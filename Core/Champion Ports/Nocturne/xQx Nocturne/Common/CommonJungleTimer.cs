@@ -14,8 +14,8 @@ using Color = SharpDX.Color;
 using Font = SharpDX.Direct3D9.Font;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Nocturne.Common
+using LeagueSharp.Common; 
+namespace Nocturne.Common
 {
     internal class CommonJungleTimer
     {

@@ -1,13 +1,13 @@
 using LeagueSharp;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Nocturne
+using LeagueSharp.Common; 
+namespace Nocturne
 {
     internal class Program
     {
         public static string ChampionName => "Einstein Exory";
-        private static void Main(string[] args)
+        public static void Main()
         {
             if (ObjectManager.Player.ChampionName == "Nocturne")
             {

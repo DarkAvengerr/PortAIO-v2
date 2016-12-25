@@ -8,8 +8,8 @@ using LeagueSharp.Common;
 using Nocturne.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Nocturne.Champion
+using LeagueSharp.Common; 
+namespace Nocturne.Champion
 {
     internal static class PlayerSpells
     {

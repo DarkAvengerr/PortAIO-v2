@@ -28,8 +28,8 @@ using Paths = System.Collections.Generic.List<System.Collections.Generic.List<Cl
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Nocturne.Evade
+using LeagueSharp.Common; 
+namespace Nocturne.Evade
 {
     public static class Utils
     {

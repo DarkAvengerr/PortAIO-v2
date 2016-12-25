@@ -6,8 +6,8 @@ using LeagueSharp.Common;
 using Color = SharpDX.Color;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Nocturne.Common
+using LeagueSharp.Common; 
+namespace Nocturne.Common
 {
     internal class AutoLeveler
     {

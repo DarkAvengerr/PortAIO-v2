@@ -10,8 +10,8 @@ using SharpDX;
 using Color = System.Drawing.Color;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Nocturne.Evade.Pathfinding
+using LeagueSharp.Common; 
+namespace Nocturne.Evade.Pathfinding
 {
     public static class PathFollower
     {

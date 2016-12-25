@@ -7,8 +7,8 @@ using SharpDX.Direct3D9;
 using Font = SharpDX.Direct3D9.Font;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Nocturne.Common
+using LeagueSharp.Common; 
+namespace Nocturne.Common
 {
 
     public static class CommonHelper

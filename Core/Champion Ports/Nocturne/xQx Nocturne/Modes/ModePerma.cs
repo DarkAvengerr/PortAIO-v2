@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Nocturne.Modes
+using LeagueSharp.Common; 
+namespace Nocturne.Modes
 {
     class ModePerma
     {

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Nocturne.Evade.Pathfinding
+using LeagueSharp.Common; 
+namespace Nocturne.Evade.Pathfinding
 {
     public class Node
     {

@@ -7,8 +7,8 @@ using SharpDX;
 using SharpDX.Direct3D9;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Nocturne.Common
+using LeagueSharp.Common; 
+namespace Nocturne.Common
 {
     using System.Linq;
 
