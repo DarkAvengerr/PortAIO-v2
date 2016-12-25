@@ -4,6 +4,7 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using Nocturne.Champion;
+using PortAIO.Properties;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
