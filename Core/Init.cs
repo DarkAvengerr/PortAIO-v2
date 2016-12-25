@@ -3447,6 +3447,9 @@ namespace PortAIO
                         case 6: // NoodUdyr
                             NoobUdyr.Program.Main();
                             break;
+                        case 7: // yetAnotherUdyr
+                            yetAnotherUdyr.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Urgot:

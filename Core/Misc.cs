@@ -371,7 +371,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "OKTW", "iSeriesReborn", "iTwitch 2.0", "SAutoCarry", "SharpShooter", "Marksman#", "[SDK] ExorAIO", "[SDK] Flowers' Series", "[SDK] InfectedTwitch", "Flowers' Twitch", "NechritoTwitch", "SNTwitch", "theobjops's Twitch", "TheTwitch", "Twitch#", "Flowers' ADC Series" };
                     break;
                 case EloBuddy.Champion.Udyr:
-                    champ = new string[] { "BrianSharp", "D-Udyr", "EloFactory Udyr", "LCS Udyr", "UnderratedAIO", "[SDK] ExorAIO", "NoobUdyr" };
+                    champ = new string[] { "BrianSharp", "D-Udyr", "EloFactory Udyr", "LCS Udyr", "UnderratedAIO", "[SDK] ExorAIO", "NoobUdyr", "yetAnotherUdyr" };
                     break;
                 case EloBuddy.Champion.Urgot:
                     champ = new string[] { "OKTW", "xSalice", "Marksman#", "[SDK] Discaste's Urgot", "[SDK] TroopAIO", "TUrgot", "Flowers' ADC Series" };

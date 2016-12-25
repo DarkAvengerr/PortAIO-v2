@@ -1724,6 +1724,7 @@
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Pred.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Program.cs" />
     <Compile Include="Core\Champion Ports\TwistedFate\Gross Gore - Fate\Spells.cs" />
+    <Compile Include="Core\Champion Ports\Udyr\yetAnotherUdyr\Program.cs" />
     <Compile Include="Core\Champion Ports\Varus\ElVarusRevamped\Components\MyMenu.cs" />
     <Compile Include="Core\Champion Ports\Varus\ElVarusRevamped\Components\SpellManager.cs" />
     <Compile Include="Core\Champion Ports\Varus\ElVarusRevamped\Components\Spells\ISpell.cs" />
