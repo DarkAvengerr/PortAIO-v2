@@ -20,19 +20,19 @@ namespace NechritoRiven.Event.Animation
     {
         #region Public Methods and Operators
         private static bool NoStunsActive => !ObjectManager.Player.HasBuffOfType(BuffType.Stun)
-                                           && !ObjectManager.Player.HasBuffOfType(BuffType.Snare)
-                                           && !ObjectManager.Player.HasBuffOfType(BuffType.Knockback)
-                                           && !ObjectManager.Player.HasBuffOfType(BuffType.Knockup);
+                                          && !ObjectManager.Player.HasBuffOfType(BuffType.Snare)
+                                          && !ObjectManager.Player.HasBuffOfType(BuffType.Knockback)
+                                          && !ObjectManager.Player.HasBuffOfType(BuffType.Knockup);
 
         private static bool ExtraDelay => (Target != null && Target.IsMoving)
-                                        || (Mob != null && Mob.IsMoving)
-                                        || IsGameObject;
+                                       || (Mob != null && Mob.IsMoving)
+                                       || IsGameObject;
 
-        private static AIHeroClient Target => TargetSelector.GetTarget(ObjectManager.Player.AttackRange + 50,
-            TargetSelector.DamageType.Physical);
+        private static AIHeroClient Target => TargetSelector.GetTarget(ObjectManager.Player.AttackRange + 65,
+                                             TargetSelector.DamageType.Physical);
 
-        private static Obj_AI_Minion Mob => (Obj_AI_Minion)MinionManager.GetMinions(ObjectManager.Player.AttackRange + 50,
-            MinionTypes.All, MinionTeam.Neutral).FirstOrDefault();
+        private static Obj_AI_Minion Mob => (Obj_AI_Minion)MinionManager.GetMinions(ObjectManager.Player.AttackRange + 65,
+                                                           MinionTypes.All, MinionTeam.Neutral).FirstOrDefault();
 
         public static void OnPlay(Obj_AI_Base sender, GameObjectPlayAnimationEventArgs args)
         {
@@ -54,6 +54,7 @@ namespace NechritoRiven.Event.Animation
                         Console.WriteLine("Q1 Delay: " + ResetDelay(MenuConfig.Qd));
                     }
                     break;
+
                 case "Spell1b":
                     LastQ = Utils.GameTimeTickCount;
                     Qstack = 3;
@@ -65,6 +66,7 @@ namespace NechritoRiven.Event.Animation
                         Console.WriteLine("Q2 Delay: " + ResetDelay(MenuConfig.Q2D));
                     }
                     break;
+
                 case "Spell1c":
                     LastQ = Utils.GameTimeTickCount;
                     Qstack = 1;
@@ -91,47 +93,50 @@ namespace NechritoRiven.Event.Animation
             {
                 case 0:
                     EloBuddy.Player.DoEmote(Emote.Laugh);
-                    //Chat.Say("/l");
                     break;
                 case 1:
                     EloBuddy.Player.DoEmote(Emote.Taunt);
-                    //Chat.Say("/t");
                     break;
                 case 2:
                     EloBuddy.Player.DoEmote(Emote.Joke);
-                    //Chat.Say("/j");
                     break;
                 case 3:
                     EloBuddy.Player.DoEmote(Emote.Dance);
-                    //Chat.Say("/d");
                     break;
             }
         }
 
         private static int ResetDelay(int qDelay)
         {
-            if (MenuConfig.CancelPing || ExtraDelay)
+            var delay = qDelay;
+
+            if (MenuConfig.CancelPing)
             {
-                return qDelay + Game.Ping / 2;
+                delay += Game.Ping / 2;
             }
-            return qDelay;
+
+            if (ExtraDelay)
+            {
+                delay += 15;
+            }
+
+            return delay;
         }
         
         private static void Reset()
         {
             Emotes();
-            Orbwalking.LastAATick = 0;
             Orbwalking.ResetAutoAttackTimer();
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
         }
 
         private static bool SafeReset()
         {
-            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Flee
-                || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None)
+            if (Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Flee || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None)
             {
                 return false;
             }
+
             return NoStunsActive;
         }
         #endregion

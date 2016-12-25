@@ -67,12 +67,8 @@ namespace NechritoRiven.Event.OrbwalkingModes
                 Spells.E.Cast(Target.Position);
             }
 
-            if (Spells.R.IsReady() && Spells.R.Instance.Name == IsFirstR && MenuConfig.UseR1)
+            if (Spells.R.IsReady() && Spells.R.Instance.Name == IsFirstR && MenuConfig.UseR1 && (Target.HealthPercent > 15 || !Spells.Q.IsReady()))
             {
-                if (MenuConfig.SafeR1 && Target.HealthPercent < 15 && Spells.Q.IsReady())
-                {
-                    return;
-                }
                 Spells.R.Cast();
             }
 

@@ -61,6 +61,11 @@ namespace NechritoRiven.Event.OrbwalkingModes
                         {
                             BackgroundData.CastQ(target);
                         }
+
+                        if (Spells.R.IsReady() && Spells.R.Instance.Name == IsSecondR)
+                        {
+                            Spells.R.Cast(target);
+                        }
                         break;
                         case Orbwalking.OrbwalkingMode.QuickHarass:
 
