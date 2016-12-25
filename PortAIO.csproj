@@ -1468,6 +1468,7 @@
     <Compile Include="Core\Champion Ports\Kha%27Zix\SephKhaZix\SmiteManager.cs" />
     <Compile Include="Core\Champion Ports\Kha%27Zix\SSKhaZix\DrawDamage.cs" />
     <Compile Include="Core\Champion Ports\Kha%27Zix\SSKhaZix\Program.cs" />
+    <Compile Include="Core\Champion Ports\Kled\KledHighMajorCommodore\Kled.cs" />
     <Compile Include="Core\Champion Ports\LeBlanc\BadaoLeBlanc\Program.cs" />
     <Compile Include="Core\Champion Ports\LeBlanc\LeBlanc II\Champion\PlayerObjects.cs" />
     <Compile Include="Core\Champion Ports\LeBlanc\LeBlanc II\Champion\PlayerSpells.cs" />

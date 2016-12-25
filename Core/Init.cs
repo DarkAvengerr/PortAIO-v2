@@ -1916,7 +1916,15 @@ namespace PortAIO
                     }
                     break;
                 case Champion.Kled:
-                    Hiki.Kled.Program.Main();
+                    switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
+                    {
+                        case 0: // hikiKled
+                            Hiki.Kled.Program.Main();
+                            break;
+                        case 1: // KledHighMajorCommodore
+                            KledHighMajorCommodore.Kled.Main();
+                            break;
+                    }
                     break;
                 case Champion.KogMaw:
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)

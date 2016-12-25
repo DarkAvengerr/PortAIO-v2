@@ -199,7 +199,9 @@ namespace PortAIO.Dual_Port
                 case EloBuddy.Champion.Kindred:
                     champ = new string[] { "Yin & Yang", "OKTW", "SharpShooter", "Marksman#", "KindredSpirits", "SluttyKindred", "Flowers' ADC Series" };
                     break;
-                // Kled - HikiKled
+                case EloBuddy.Champion.Kled:
+                    champ = new string[] { "HikiKled", "KledHighMajorCommodore" };
+                    break;
                 case EloBuddy.Champion.KogMaw:
                     champ = new string[] { "OKTW", "D-Kog'Maw", "iSeriesReborn", "ProSeries", "SFXChallenger", "SharpShooter", "xSalice", "Marksman#", "[SDK] ChallengerSeriesAIO", "[SDK] ExorAIO", "EasyKogMaw", "Flowers' ADC Series" };
                     break;
