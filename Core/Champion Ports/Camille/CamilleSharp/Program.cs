@@ -33,17 +33,9 @@ namespace Camille
         internal static string QBuffName => "camilleqprimingstart";
         internal static string Q2BuffName => "camilleqprimingcomplete";
         internal static string RBuffName => "camillertether";
-        internal static string REmitterName => "Camille_Base_R_Indicator_Edge.troy";
         internal static string KnockBackBuffName => "camilleeknockback2";
 
-        internal static int TickLimiter;
-        internal static Dictionary<float, Obj_GeneralParticleEmitter> rPoint =
-            new Dictionary<float, Obj_GeneralParticleEmitter>();
-
-        // Camille_Base_R_tar_buf.troy, Camille_Base_R_cas_sound.troy
-        // Camille_Base_R_BA_tar.troy 
-        // camillewconeslashcharge
-        // camilleeonwall
+        internal static Dictionary<float, DangerPos> DangerPoints = new Dictionary<float, DangerPos>();
 
         public static void Main()
         {
@@ -61,7 +53,7 @@ namespace Camille
                 Q = new Spell(SpellSlot.Q, 135f);
                 W = new Spell(SpellSlot.W, 625f);
                 E = new Spell(SpellSlot.E, 975f);
-                R = new Spell(SpellSlot.R, 375f);
+                R = new Spell(SpellSlot.R, 465f);
 
                 RootMenu = new Menu("Camille#", "camille", true);
 
@@ -72,17 +64,14 @@ namespace Camille
                 var kemenu = new Menu("-] Keys", "kemenu");
                 kemenu.AddItem(new MenuItem("usecombo", "Combo [active]")).SetValue(new KeyBind(32, KeyBindType.Press));
                 kemenu.AddItem(new MenuItem("useharass", "Harass [active]")).SetValue(new KeyBind('G', KeyBindType.Press));
-                kemenu.AddItem(new MenuItem("useclear", "Clear [active]")).SetValue(new KeyBind('V', KeyBindType.Press));
+                kemenu.AddItem(new MenuItem("usewcclear", "Wave Clear [active]")).SetValue(new KeyBind('V', KeyBindType.Press));
+                kemenu.AddItem(new MenuItem("usejgclear", "Jungle Clear [active]")).SetValue(new KeyBind('V', KeyBindType.Press));
                 kemenu.AddItem(new MenuItem("useflee", "Flee [active]")).SetValue(new KeyBind('A', KeyBindType.Press));
                 RootMenu.AddSubMenu(kemenu);
 
                 var comenu = new Menu("-] Combo", "cmenu");
 
                 var tcmenu = new Menu("-] Extra", "tcmenu");
-
-                //tcmenu.AddItem(new MenuItem("autoq", "Q Killsteal")).SetValue(true);
-                //tcmenu.AddItem(new MenuItem("autoe1", "E Killsteal")).SetValue(true);
-                //tcmenu.AddItem(new MenuItem("autoeq", "E -> Q Killsteal")).SetValue(true);
 
                 var abmenu = new Menu("-] Skills", "abmenu");
 
@@ -109,17 +98,27 @@ namespace Camille
                     revade.AddItem(new MenuItem("revade" + spell.SDataName.ToLower(), "-> " + spell.ChampionName + " R"))
                         .SetValue(true);
                 }
-                
-                tcmenu.AddItem(new MenuItem("r33", "Focus R Target")).SetValue(true);
+
+                var mmenu = new Menu("-] Magnet", "mmenu");
+                mmenu.AddItem(new MenuItem("lockw", "Magnet W [Beta]")).SetValue(true);
+                mmenu.AddItem(new MenuItem("lockwcombo", "-> Combo")).SetValue(true);
+                mmenu.AddItem(new MenuItem("lockwharass", "-> Harass")).SetValue(true);
+                mmenu.AddItem(new MenuItem("lockwclear", "-> Clear")).SetValue(true);
+                mmenu.AddItem(new MenuItem("lockorbwalk", "Magnet Orbwalking"))
+                    .SetValue(false).SetTooltip("Coming Soon").ValueChanged +=
+                    (sender, eventArgs) => eventArgs.Process = false;
+
+
                 tcmenu.AddItem(new MenuItem("r55", "Only R Selected Target")).SetValue(false);
+                tcmenu.AddItem(new MenuItem("r33", "Orbwalk Focus R Target")).SetValue(true);
                 tcmenu.AddItem(new MenuItem("eturret", "Dont E Under Turret")).SetValue(new KeyBind('L', KeyBindType.Toggle, true)).Permashow();
-                tcmenu.AddItem(new MenuItem("blocke", "Dont E Leave Ultimatum")).SetValue(true);
                 tcmenu.AddItem(new MenuItem("minerange", "Minimum E Range")).SetValue(new Slider(165, 0, (int) E.Range));
                 tcmenu.AddItem(new MenuItem("enhancede", "Enhanced E Precision")).SetValue(false);
                 tcmenu.AddItem(new MenuItem("www", "Expirimental Combo")).SetValue(false).SetTooltip("W -> E");
                 comenu.AddSubMenu(tcmenu);
 
                 comenu.AddSubMenu(revade);
+                comenu.AddSubMenu(mmenu);
                 comenu.AddSubMenu(abmenu);
 
 
@@ -133,14 +132,24 @@ namespace Camille
                 RootMenu.AddSubMenu(hamenu);
 
                 var clmenu = new Menu("-] Clear", "clmenu");
+
+                var jgmenu = new Menu("Jungle", "jgmenu");
+                jgmenu.AddItem(new MenuItem("jgclearmana", "Minimum Mana %")).SetValue(new Slider(35));
+                jgmenu.AddItem(new MenuItem("useqjgclear", "Use Q")).SetValue(true);
+                jgmenu.AddItem(new MenuItem("usewjgclear", "Use W")).SetValue(true);
+                jgmenu.AddItem(new MenuItem("useejgclear", "Use E")).SetValue(true);
+                clmenu.AddSubMenu(jgmenu);
+
+                var wcmenu = new Menu("WaveClear", "wcmenu");
+                wcmenu.AddItem(new MenuItem("wcclearmana", "Minimum Mana %")).SetValue(new Slider(55));
+                wcmenu.AddItem(new MenuItem("useqwcclear", "Use Q")).SetValue(true);
+                wcmenu.AddItem(new MenuItem("usewwcclear", "Use W")).SetValue(true);
+                wcmenu.AddItem(new MenuItem("usewwcclearhit", "-> Min Hit >=")).SetValue(new Slider(3, 1, 6));
+                clmenu.AddSubMenu(wcmenu);
+
                 clmenu.AddItem(new MenuItem("clearnearenemy", "Dont Clear Near Enemy")).SetValue(true);
                 clmenu.AddItem(new MenuItem("t11", "Use Hydra")).SetValue(true);
-                clmenu.AddItem(new MenuItem("useqclear", "Use Q")).SetValue(true);
-                clmenu.AddItem(new MenuItem("usewclear", "Use W")).SetValue(true);
-                clmenu.AddItem(new MenuItem("usewlane", "-> Use In Lane")).SetValue(false);
-                clmenu.AddItem(new MenuItem("usewlanehit", "-> Minimum Hit in Lane")).SetValue(new Slider(3, 1, 6));
-                clmenu.AddItem(new MenuItem("useeclear", "Use E")).SetValue(true);
-                clmenu.AddItem(new MenuItem("clearmana", "Clear Mana %")).SetValue(new Slider(35));
+
                 RootMenu.AddSubMenu(clmenu);
 
                 var fmenu = new Menu("-] Flee", "fmenu");
@@ -200,69 +209,66 @@ namespace Camille
         private static void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             var attacker = sender as AIHeroClient;
-            if (attacker != null && attacker.IsEnemy)
+            if (attacker != null && attacker.IsEnemy && attacker.Distance(Player) <= R.Range + 25)
             {
                 var aiTarget = args.Target as AIHeroClient;
 
-                var bestTarget = TargetSelector.GetTarget(R.Range + 100, TargetSelector.DamageType.Physical);
-                if (bestTarget == null)
+                var tsTarget = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Physical);
+                if (tsTarget == null)
                 {
                     return;
                 }
 
                 if (R.IsReady() && RootMenu.Item("revade").GetValue<bool>())
                 {
-                    if (attacker.Distance(Player) <= R.Range + 35)
+                    foreach (var spell in Evadeable.DangerList.Select(entry => entry.Value)
+                        .Where(spell => spell.SDataName.ToLower() == args.SData.Name.ToLower())
+                        .Where(spell => RootMenu.Item("revade" + spell.SDataName.ToLower()).GetValue<bool>()))
                     {
-                        foreach (var spell in Evadeable.DangerList.Select(entry => entry.Value)
-                            .Where(spell => spell.SDataName.ToLower() == args.SData.Name.ToLower())
-                            .Where(spell => RootMenu.Item("revade" + spell.SDataName.ToLower()).GetValue<bool>()))
+                        switch (spell.EvadeType)
                         {
-                            switch (spell.EvadeType)
-                            {
-                                case EvadeType.Target:
-                                    if (aiTarget != null && aiTarget.IsMe)
-                                    {
-                                        UseR(bestTarget, true);
-                                    }
-                                    break;
+                            case EvadeType.Target:
+                                if (aiTarget != null && aiTarget.IsMe)
+                                {
+                                    UseR(tsTarget, true);
+                                }
+                                break;
 
-                                case EvadeType.SelfCast:
-                                    if (attacker.Distance(Player) <= R.Range)
-                                    {
-                                        UseR(bestTarget, true);
-                                    }
-                                    break;
-                                case EvadeType.SkillshotLine:
-                                    var lineStart = args.Start.To2D();
-                                    var lineEnd = args.End.To2D();
+                            case EvadeType.SelfCast:
+                                if (attacker.Distance(Player) <= R.Range)
+                                {
+                                    UseR(tsTarget, true);
+                                }
+                                break;
+                            case EvadeType.SkillshotLine:
+                                var lineStart = args.Start.To2D();
+                                var lineEnd = args.End.To2D();
 
-                                    if (lineStart.Distance(lineEnd) < R.Range)
-                                        lineEnd = lineStart + (lineEnd - lineStart).Normalized() * R.Range + 25;
+                                if (lineStart.Distance(lineEnd) < R.Range)
+                                    lineEnd = lineStart + (lineEnd - lineStart).Normalized() * R.Range + 25;
 
-                                    if (lineStart.Distance(lineEnd) > R.Range)
-                                        lineEnd = lineStart + (lineEnd - lineStart).Normalized() * R.Range * 2;
+                                if (lineStart.Distance(lineEnd) > R.Range)
+                                    lineEnd = lineStart + (lineEnd - lineStart).Normalized() * R.Range * 2;
 
-                                    var spellProj = Player.ServerPosition.To2D().ProjectOn(lineStart, lineEnd);
-                                    if (spellProj.IsOnSegment)
-                                    {
-                                        UseR(bestTarget, true);
-                                    }
-                                    break;
+                                var spellProj = Player.ServerPosition.To2D().ProjectOn(lineStart, lineEnd);
+                                if (spellProj.IsOnSegment)
+                                {
+                                    UseR(tsTarget, true);
+                                }
+                                break;
 
-                                case EvadeType.SkillshotCirce:
-                                    var curStart = args.Start.To2D();
-                                    var curEnd = args.End.To2D();
+                            case EvadeType.SkillshotCirce:
+                                var curStart = args.Start.To2D();
+                                var curEnd = args.End.To2D();
 
-                                    if (curStart.Distance(curEnd) > R.Range)
-                                        curEnd = curStart + (curEnd - curStart).Normalized() * R.Range;
+                                if (curStart.Distance(curEnd) > R.Range)
+                                    curEnd = curStart + (curEnd - curStart).Normalized() * R.Range;
 
-                                    if (curEnd.Distance(Player) <= R.Range)
-                                    {
-                                        UseR(bestTarget, true);
-                                    }
-                                    break;
-                            }
+                                if (curEnd.Distance(Player) <= R.Range)
+                                {
+                                    UseR(tsTarget, true);
+                                }
+                                break;
                         }
                     }
                 }
@@ -326,9 +332,14 @@ namespace Camille
         private static void Obj_GeneralParticleEmitter_OnCreate(GameObject sender, EventArgs args)
         {
             var emitter = sender as Obj_GeneralParticleEmitter;
-            if (emitter != null && emitter.Name.ToLower() == REmitterName.ToLower())
+            if (emitter != null && emitter.Name.ToLower() == "camille_base_r_indicator_edge.troy")
             {
-                rPoint[Game.Time] = emitter;
+                DangerPoints[Game.Time] = new DangerPos(emitter, AvoidType.Outside, 450f); // 450f ?
+            }
+
+            if (emitter != null && emitter.Name.ToLower() == "veigar_base_e_cage_red.troy")
+            {
+                DangerPoints[Game.Time] = new DangerPos(emitter, AvoidType.Inside, 400f); // 400f ?
             }
         }
 
@@ -353,8 +364,40 @@ namespace Camille
                         var heroDirection = (aiHero.Position - Player.Position).To2D().Normalized();
                         if (heroDirection.AngleBetween(issueOrderDirection) > 10)
                         {
-                            var isDangerPos = aiHero.ServerPosition.UnderTurret(true) && RootMenu.Item("eturret").GetValue<KeyBind>().Active;
-                            if (isDangerPos == false)
+                            var anyDangerousPos = false;
+                            var dashEndPos = Player.Position.To2D() + heroDirection * Player.Distance(aiHero.Position);
+
+                            if (Player.Position.To2D().Distance(dashEndPos) > E.Range)
+                                dashEndPos = Player.Position.To2D() + heroDirection * E.Range;
+
+                            foreach (var x in DangerPoints)
+                            {
+                                var obj = x.Value;
+                                if (obj.Type == AvoidType.Outside && dashEndPos.Distance(obj.Emitter.Position) > obj.Radius)
+                                {
+                                    anyDangerousPos = true;
+                                    break;
+                                }
+
+                                if (obj.Type == AvoidType.Inside)
+                                {
+                                    var proj = obj.Emitter.Position.To2D().ProjectOn(Player.Position.To2D(), dashEndPos);
+                                    if (proj.IsOnSegment && proj.SegmentPoint.Distance(obj.Emitter.Position) <= obj.Radius)
+                                    {
+                                        anyDangerousPos = true;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (dashEndPos.To3D().UnderTurret(true) && RootMenu.Item("eturret").GetValue<KeyBind>().Active)
+                                anyDangerousPos = true;
+
+                            if (anyDangerousPos)
+                            {
+                                args.Process = false;
+                            }
+                            else
                             {
                                 args.Process = false;
                                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, aiHero.ServerPosition, false);
@@ -364,7 +407,7 @@ namespace Camille
                 }
             }
 
-            if (OnWall && E.IsReady() && RootMenu.Item("useclear").GetValue<KeyBind>().Active)
+            if (OnWall && E.IsReady() && RootMenu.Item("usejgclear").GetValue<KeyBind>().Active)
             {
                 var issueOrderPos = args.TargetPosition;
                 if (sender.IsMe && args.Order == GameObjectOrder.MoveTo)
@@ -376,12 +419,12 @@ namespace Camille
 
                     if (aiMob != null)
                     {
-                        var heroDirection = (aiMob.Position - Player.Position).To2D().Normalized();
-                        if (heroDirection.AngleBetween(issueOrderDirection) > 10)
-                        {
+                        //var heroDirection = (aiMob.Position - Player.Position).To2D().Normalized();
+                        //if (heroDirection.AngleBetween(issueOrderDirection) > 10)
+                        //{
                             args.Process = false;
                             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, aiMob.ServerPosition, false);
-                        }
+                        //}
                     }
                 }
             }
@@ -429,29 +472,95 @@ namespace Camille
                     }
                 }
 
-                if (RootMenu.Item("useclear").GetValue<KeyBind>().Active)
+                if (RootMenu.Item("usejgclear").GetValue<KeyBind>().Active)
                 {
                     var aiMob = args.Target as Obj_AI_Minion;
                     if (aiMob != null && aiMob.IsValidTarget())
                     {
-                        if (Player.UnderTurret(true) && Player.CountEnemiesInRange(1000) > 0)
+                        if (!Player.UnderTurret(true) || Player.CountEnemiesInRange(1000) <= 0)
                         {
-                            return;
-                        }
-
-                        if (!Q.IsReady() || HasQ && !HasQ2)
-                        {
-                            if (RootMenu.Item("t11").GetValue<bool>())
+                            if (!Q.IsReady() || HasQ && !HasQ2)
                             {
-                                if (!aiMob.IsMinion || (Player.CountEnemiesInRange(900) < 1 
-                                    || !RootMenu.Item("clearnearenemy").GetValue<bool>() || Player.UnderAllyTurret()))
+                                if (RootMenu.Item("t11").GetValue<bool>())
                                 {
-                                    if (Items.CanUseItem(3077))
-                                        Items.UseItem(3077);
-                                    if (Items.CanUseItem(3074))
-                                        Items.UseItem(3074);
-                                    if (Items.CanUseItem(3748))
-                                        Items.UseItem(3748);
+                                    if (!aiMob.IsMinion || (Player.CountEnemiesInRange(900) < 1
+                                                            || !RootMenu.Item("clearnearenemy").GetValue<bool>() ||
+                                                            Player.UnderAllyTurret()))
+                                    {
+                                        if (Items.CanUseItem(3077))
+                                            Items.UseItem(3077);
+                                        if (Items.CanUseItem(3074))
+                                            Items.UseItem(3074);
+                                        if (Items.CanUseItem(3748))
+                                            Items.UseItem(3748);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    #region AA-> Q any attackable
+                    var unit = args.Target as AttackableUnit;
+                    if (unit != null)
+                    {
+                        if (Player.CountEnemiesInRange(1000) < 1 || Player.UnderAllyTurret()
+                            || !RootMenu.Item("clearnearenemy").GetValue<bool>())
+                        {
+                            // if jungle minion
+                            var m = unit as Obj_AI_Minion;
+                            if (m != null)
+                            {
+                                if (!m.BaseSkinName.StartsWith("sru_plant") && !m.Name.StartsWith("Minion"))
+                                {
+                                    #region AA -> Q
+
+                                    if (Q.IsReady() && RootMenu.Item("useqjgclear").GetValue<bool>())
+                                    {
+                                        if (m.Position.Distance(Player.ServerPosition) <= Q.Range + 90)
+                                        {
+                                            UseQ(m);
+                                        }
+                                    }
+
+                                    #endregion
+                                }
+                            }
+
+                            if (Q.IsReady() && !unit.Name.StartsWith("Minion"))
+                            {
+                                if (RootMenu.Item("useqjgclear").GetValue<bool>())
+                                {
+                                    UseQ(unit);
+                                }
+                            }
+                        }
+                    }
+
+                    #endregion
+                }
+
+                if (RootMenu.Item("usewcclear").GetValue<KeyBind>().Active)
+                {
+                    var aiMob = args.Target as Obj_AI_Minion;
+                    if (aiMob != null && aiMob.IsValidTarget())
+                    {
+                        if (!Player.UnderTurret(true) || Player.CountEnemiesInRange(1000) <= 0)
+                        {
+                            if (!Q.IsReady() || HasQ && !HasQ2)
+                            {
+                                if (RootMenu.Item("t11").GetValue<bool>())
+                                {
+                                    if (!aiMob.IsMinion || (Player.CountEnemiesInRange(900) < 1
+                                                            || !RootMenu.Item("clearnearenemy").GetValue<bool>() ||
+                                                            Player.UnderAllyTurret()))
+                                    {
+                                        if (Items.CanUseItem(3077))
+                                            Items.UseItem(3077);
+                                        if (Items.CanUseItem(3074))
+                                            Items.UseItem(3074);
+                                        if (Items.CanUseItem(3748))
+                                            Items.UseItem(3748);
+                                    }
                                 }
                             }
                         }
@@ -470,7 +579,7 @@ namespace Camille
                                 return;
                             }
 
-                            if (Player.Mana / Player.MaxMana * 100 < RootMenu.Item("clearmana").GetValue<Slider>().Value)
+                            if (Player.Mana / Player.MaxMana * 100 < RootMenu.Item("wcclearmana").GetValue<Slider>().Value)
                             {
                                 if (Player.CountEnemiesInRange(1000) > 0 && !Player.UnderAllyTurret())
                                 {
@@ -480,7 +589,7 @@ namespace Camille
 
                             #region AA -> Q 
 
-                            if (Q.IsReady() && RootMenu.Item("useqclear").GetValue<bool>())
+                            if (Q.IsReady() && RootMenu.Item("useqwcclear").GetValue<bool>())
                             {
                                 if (aiBase.Distance(Player.ServerPosition) <= Q.Range + 90)
                                 {
@@ -507,7 +616,7 @@ namespace Camille
                             {
                                 #region AA -> Q
 
-                                if (Q.IsReady() && RootMenu.Item("useqclear").GetValue<bool>())
+                                if (Q.IsReady() && RootMenu.Item("useqwcclear").GetValue<bool>())
                                 {
                                     if (m.Position.Distance(Player.ServerPosition) <= Q.Range + 90)
                                     {
@@ -520,7 +629,7 @@ namespace Camille
 
                             if (Q.IsReady())
                             {
-                                if (RootMenu.Item("useqclear").GetValue<bool>())
+                                if (RootMenu.Item("useqwcclear").GetValue<bool>())
                                 {
                                     UseQ(unit);
                                 }
@@ -537,19 +646,19 @@ namespace Camille
         {
             Orbwalker.SetAttack(!ChargingW);
 
-            foreach (var entry in rPoint)
+            foreach (var entry in DangerPoints)
             {
-                var timestamp = entry.Key;
-                if (Game.Time - timestamp > 4f)
+                var ultimatum = entry.Value.Emitter;
+                if (ultimatum.IsValid == false || ultimatum.IsVisible == false)
                 {
-                    rPoint.Remove(timestamp);
+                    DangerPoints.Remove(entry.Key);
                     break;
                 }
 
-                var ultimatum = entry.Value;
-                if (!ultimatum.IsValid || !ultimatum.IsVisible)
+                var timestamp = entry.Key;
+                if (Game.Time - timestamp > 4f)
                 {
-                    rPoint.Remove(timestamp);
+                    DangerPoints.Remove(timestamp);
                     break;
                 }
             }
@@ -588,9 +697,17 @@ namespace Camille
                 Combo();
             }
 
-            if (RootMenu.Item("useclear").GetValue<KeyBind>().Active)
+            if (RootMenu.Item("usewcclear").GetValue<KeyBind>().Active)
             {
-                if (Player.Mana / Player.MaxMana * 100 > RootMenu.Item("clearmana").GetValue<Slider>().Value)
+                if (Player.Mana / Player.MaxMana * 100 > RootMenu.Item("wcclearmana").GetValue<Slider>().Value)
+                {
+                    Clear();
+                }
+            }
+
+            if (RootMenu.Item("usejgclear").GetValue<KeyBind>().Active)
+            {
+                if (Player.Mana / Player.MaxMana * 100 > RootMenu.Item("jgclearmana").GetValue<Slider>().Value)
                 {
                     Clear();
                 }
@@ -613,8 +730,16 @@ namespace Camille
             var target = TargetSelector.GetTarget(E.IsReady() ? E.Range * 2 : W.Range, TargetSelector.DamageType.Physical);
             if (target.IsValidTarget() && !target.IsZombie)
             {
+                if (RootMenu.Item("lockwcombo").GetValue<bool>())
+                    LockW(target);
+
                 if (RootMenu.Item("usewcombo").GetValue<bool>())
-                    UseW(target);
+                {
+                    if (!E.IsReady() || !RootMenu.Item("useecombo").GetValue<bool>())
+                    {
+                        UseW(target);
+                    }
+                }
 
                 if (RootMenu.Item("useecombo").GetValue<bool>())
                     UseE(target.ServerPosition);
@@ -629,6 +754,9 @@ namespace Camille
             var target = TargetSelector.GetTarget(W.Range, TargetSelector.DamageType.Physical);
             if (target.IsValidTarget() && !target.IsZombie)
             {
+                if (RootMenu.Item("lockwharass").GetValue<bool>())
+                    LockW(target);
+
                 if (RootMenu.Item("usewharass").GetValue<bool>())
                     UseW(target);
             }
@@ -643,29 +771,40 @@ namespace Camille
             {
                 if (!unit.Name.Contains("Mini"))
                 {
-                    if (RootMenu.Item("usewclear").GetValue<bool>())
+                    if (RootMenu.Item("lockwclear").GetValue<bool>())
+                        LockW(unit);
+
+                    if (RootMenu.Item("usewjgclear").GetValue<bool>())
                     {
                         UseW(unit);
                     }
 
-                    if (!W.IsReady() || !RootMenu.Item("usewclear").GetValue<bool>())
+                    if (!W.IsReady() || !RootMenu.Item("usewjgclear").GetValue<bool>())
                     {
-                        if (!ChargingW && RootMenu.Item("useeclear").GetValue<bool>())
-                            UseE(unit.ServerPosition, false);
+                        if (!ChargingW && RootMenu.Item("useejgclear").GetValue<bool>())
+                        {
+                            if (Player.CountEnemiesInRange(1200) <= 0 || !RootMenu.Item("clearnearenemy").GetValue<bool>())
+                            {
+                                UseE(unit.ServerPosition, false);
+                            }
+                        }
                     }
                 }
                 else
                 {
+                    if (RootMenu.Item("lockwclear").GetValue<bool>())
+                        LockW(unit);
+
                     if (Player.CountEnemiesInRange(1000) < 1 ||
                         !RootMenu.Item("clearnearenemy").GetValue<bool>())
                     {
-                        if (RootMenu.Item("usewlane").GetValue<bool>() && W.IsReady())
+                        if (RootMenu.Item("usewwcclear").GetValue<bool>() && W.IsReady())
                         {
                             var farmradius =
                                 MinionManager.GetBestCircularFarmLocation(
                                     minions.Where(x => x.IsMinion).Select(x => x.Position.To2D()).ToList(), 165f, W.Range);
 
-                            if (farmradius.MinionsHit >= RootMenu.Item("usewlanehit").GetValue<Slider>().Value)
+                            if (farmradius.MinionsHit >= RootMenu.Item("usewwcclearhit").GetValue<Slider>().Value)
                             {
                                 W.Cast(farmradius.Position);
                             }
@@ -683,7 +822,7 @@ namespace Camille
                 {
                     if (Q.Cast())
                     {
-                        //Orbwalking.ResetAutoAttackTimer(); // TEMP
+                        return;
                     }
                 }
                 else
@@ -693,7 +832,7 @@ namespace Camille
                     {
                         if (Q.Cast())
                         {
-                            //Orbwalking.ResetAutoAttackTimer(); // TEMP
+                            return;
                         }
                     }
                 }
@@ -702,12 +841,7 @@ namespace Camille
 
         static void UseW(Obj_AI_Base target)
         {
-            if (OnWall || !CanW(target))
-            {
-                return;
-            }
-
-            if (ChargingW || IsDashing)
+            if (ChargingW || IsDashing || OnWall || !CanW(target))
             {
                 return;
             }
@@ -723,6 +857,35 @@ namespace Camille
             }
         }
 
+        static void LockW(Obj_AI_Base target)
+        {
+            if (!RootMenu.Item("lockw").GetValue<bool>())
+            {
+                return;
+            }
+
+            if (OnWall || IsDashing || target == null || !CanW(target))
+            {
+                return;
+            }
+
+            if (ChargingW && Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.None)
+            {
+                Orbwalker.SetAttack(false);
+            }
+
+            if (ChargingW && target.Distance(Player) <= W.Range + 35)
+            {
+                var pos = Prediction.GetPrediction(target, Game.Ping).UnitPosition.Extend(Player.ServerPosition, W.Range - 65);
+                if (pos.UnderTurret(true) && RootMenu.Item("eturret").GetValue<KeyBind>().Active)
+                {
+                    return;
+                }
+
+                EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, pos, false);
+            }
+        }
+
         static void UseE(Vector3 p, bool combo = true)
         {
             if (IsDashing || OnWall || ChargingW || !E.IsReady())
@@ -735,14 +898,6 @@ namespace Camille
                 if (Player.Distance(p) < RootMenu.Item("minerange").GetValue<Slider>().Value)
                 {
                     return;
-                }
-
-                if (RootMenu.Item("blocke").GetValue<bool>())
-                {
-                    if (rPoint.Any(entry => p.Distance(entry.Value.Position) > 450))
-                    {
-                        return;
-                    }
                 }
 
                 if (p.UnderTurret(true) && RootMenu.Item("eturret").GetValue<KeyBind>().Active)
@@ -778,15 +933,32 @@ namespace Camille
                     var cRadians = (0x2 * Math.PI / (curCurcleChecks - 1)) * i;
                     var xPos = (float) Math.Floor(p.X + curRadius * Math.Cos(cRadians));
                     var yPos = (float) Math.Floor(p.Y + curRadius * Math.Sin(cRadians));
-
                     var desiredPos = new Vector2(xPos, yPos);
+                    var anyDangerousPos = false;
 
-                    if (RootMenu.Item("blocke").GetValue<bool>())
+                    foreach (var x in DangerPoints)
                     {
-                        if (rPoint.Any(entry => desiredPos.Distance(entry.Value.Position) > 450))
+                        var obj = x.Value;
+                        if (obj.Type == AvoidType.Outside && desiredPos.Distance(obj.Emitter.Position) > obj.Radius)
                         {
-                            continue;
+                            anyDangerousPos = true;
+                            break;
                         }
+
+                        if (obj.Type == AvoidType.Inside)
+                        {
+                            var proj = obj.Emitter.Position.To2D().ProjectOn(desiredPos, p.To2D());
+                            if (proj.IsOnSegment && proj.SegmentPoint.Distance(obj.Emitter.Position) <= obj.Radius)
+                            {
+                                anyDangerousPos = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (anyDangerousPos)
+                    {
+                        continue;
                     }
 
                     if (ChargingW)
@@ -796,7 +968,7 @@ namespace Camille
                         {
                             if (desiredPos.Distance(wtarget.ServerPosition) > W.Range)
                             {
-                                return;
+                                continue;
                             }
                         }
                     }
@@ -817,14 +989,10 @@ namespace Camille
             {
                 if (W.IsReady() && RootMenu.Item("usewcombo").GetValue<bool>())
                 {
-                    if (combo && RootMenu.Item("www").GetValue<bool>()) // dumb lol
+                    W.UpdateSourcePosition(bestWallPoint.To3D(), bestWallPoint.To3D());
+
+                    if (combo && RootMenu.Item("www").GetValue<bool>()) 
                     {
-                        var mouseDir = Player.ServerPosition + (Game.CursorPos - Player.ServerPosition).Normalized() * 265;
-                        var wallPointReversed = bestWallPoint.Extend(mouseDir.To2D(), 1000);
-
-                        // expiremental
-                        // xd
-
                         int dashSpeedEst = 1450;
                         int hookSpeedEst = 1250;
 
@@ -835,13 +1003,13 @@ namespace Camille
                         var travelTime = 250 + meToWall + wallToHero;
                         if (travelTime >= 1250 && travelTime <= 1750)
                         {
-                            W.Cast(wallPointReversed);
+                            W.Cast(p);
                         }
 
                         if (travelTime > 1750)
                         {
                             var delay = 100 + (travelTime - 1750);
-                            LeagueSharp.Common.Utility.DelayAction.Add((int) delay, () => W.Cast(wallPointReversed));
+                            LeagueSharp.Common.Utility.DelayAction.Add((int) delay, () => W.Cast(p));
                         }
                     }
                 }
@@ -897,7 +1065,7 @@ namespace Camille
 
             if (Orbwalking.InAutoAttackRange(target))
             {
-                if (Player.GetAutoAttackDamage(target, true) * 2 + Qdmg(target) >= target.Health)
+                if (Player.GetAutoAttackDamage(target, true) * 2 + Qdmg(target, false) >= target.Health)
                 {
                     return false;
                 }
@@ -928,12 +1096,15 @@ namespace Camille
             if (unit == null)
                 return 0d;
 
-            var qq = new[] { 2, 3, 4, 4 } [(Math.Min(Player.Level, 18) / 6)];
+            var extraqq = new[] { 1, 1, 2, 2, 3 };
+            var qcount = new[] { 2, 3, 4, 4 } [(Math.Min(Player.Level, 18) / 6)];
 
-            return Math.Min(qq, Player.Mana / Q.ManaCost) * Qdmg(unit, false) + Wdmg(unit) +
-                   RBonus(Player.GetAutoAttackDamage(unit, true), unit) * qq + Edmg(unit);
+            qcount += (int) Math.Abs(Player.PercentCooldownMod) * 100 / 10;
+
+            return Math.Min(qcount * extraqq[(int) (Math.Abs(Player.PercentCooldownMod) * 100/10)], 
+                    Player.Mana / Q.ManaCost) * Qdmg(unit, false) + Wdmg(unit) +
+                        RBonus(Player.GetAutoAttackDamage(unit, true), unit) * qcount + Edmg(unit);
         }
-
 
         private static double Qdmg(Obj_AI_Base target, bool includeq2 = true)
         {
