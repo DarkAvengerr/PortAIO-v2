@@ -26,7 +26,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             Q = new Spell(SpellSlot.Q, 1250f);
             Q1 = new Spell(SpellSlot.Q, 1250f);
             W = new Spell(SpellSlot.W, 800f);
-            E = new Spell(SpellSlot.E, 830f);
+            E = new Spell(SpellSlot.E, 800f);
             R = new Spell(SpellSlot.R, 3000f);
 
             Q.SetSkillshot(0.65f, 60f, 2200f, false, SkillshotType.SkillshotLine);
@@ -49,7 +49,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
             Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("autoW", "Auto W on hard CC", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("telE", "Auto W teleport", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("forceW", "Force W before E", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("forceW", "Force W before E", true).SetValue(false));
             Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("bushW", "Auto W bush after enemy enter", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("bushW2", "Auto W bush and turret if full ammo", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("W Config").AddItem(new MenuItem("Wspell", "W on special spell detection", true).SetValue(true));
@@ -219,7 +219,9 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
         private void LogicW()
         {
-            
+            var orbT = Orbwalker.GetTarget() as AIHeroClient;
+            if (orbT != null && orbT.Health - OktwCommon.GetIncomingDamage(orbT) < Player.GetAutoAttackDamage(orbT) * 2)
+                return;
             if (Player.Mana > RMANA + WMANA)
             {
                 if (Config.Item("autoW", true).GetValue<bool>())
@@ -299,6 +301,10 @@ namespace OneKeyToWin_AIO_Sebby.Champions
         {
             if (Program.Combo && ObjectManager.Player.Spellbook.IsAutoAttacking)
                 return;
+            var orbT = Orbwalker.GetTarget() as AIHeroClient;
+            if (orbT != null && orbT.Health - OktwCommon.GetIncomingDamage(orbT) < Player.GetAutoAttackDamage(orbT)*2)
+                return;
+
             if (Config.Item("autoE", true).GetValue<bool>())
             {
                 var t = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
@@ -353,7 +359,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
         private float GetRealDistance(GameObject target)
         {
-            return Player.ServerPosition.Distance(target.Position);
+            return Player.ServerPosition.Distance(target.Position) + ObjectManager.Player.BoundingRadius + target.BoundingRadius;
         }
         public float bonusRange()
         {

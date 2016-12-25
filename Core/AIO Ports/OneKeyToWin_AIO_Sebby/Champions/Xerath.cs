@@ -49,6 +49,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             Config.SubMenu(Player.ChampionName).SubMenu("E Config").AddItem(new MenuItem("autoE", "Auto E", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("E Config").AddItem(new MenuItem("harassE", "Harass E", true).SetValue(true));
 
+            Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("disableR", "Disable R", true).SetValue(false));
             Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("autoR", "Auto R 2 x dmg R", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("autoRlast", "Cast last position if no target", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("useR", "Semi-manual cast R key", true).SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press))); //32 == space
@@ -150,32 +151,34 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
         private void Game_OnGameUpdate(EventArgs args)
         {
-            if (Program.LagFree(3) && R.IsReady())
-                LogicR();
-
-
+            if (!Config.Item("disableR", true).GetValue<bool>())
+            {
+                if (R.IsReady())
+                    LogicR();
+            }
             //Program.debug(""+OktwCommon.GetPassiveTime(Player, "XerathArcanopulseChargeUp"));
             if (IsCastingR || Player.IsChannelingImportantSpell())
-            {
-                OktwCommon.blockMove = true;
-                OktwCommon.blockAttack = true;
-                OktwCommon.blockAttack = true;
-                OktwCommon.blockMove = true;
-                Orbwalking.Attack = false;
-                Orbwalking.Move = false;
-                return;
-            }
-            else
-            {
-                OktwCommon.blockMove = false;
-                OktwCommon.blockAttack = false;
-                OktwCommon.blockAttack = false;
-                OktwCommon.blockMove = false;
-                Orbwalking.Attack = true;
-                Orbwalking.Move = true;
-            }
+                {
+                    OktwCommon.blockMove = true;
+                    OktwCommon.blockAttack = true;
+                    OktwCommon.blockAttack = true;
+                    OktwCommon.blockMove = true;
+                    Orbwalking.Attack = false;
+                    Orbwalking.Move = false;
+                    return;
+                }
+                else
+                {
+                    OktwCommon.blockMove = false;
+                    OktwCommon.blockAttack = false;
+                    OktwCommon.blockAttack = false;
+                    OktwCommon.blockMove = false;
+                    Orbwalking.Attack = true;
+                    Orbwalking.Move = true;
+                }
+           
 
-            if (Q.IsCharging && (int)(Game.Time * 10) % 2 == 0)
+            if (Q.IsCharging && (int)(Game.Time * 10) % 2 == 0 && !None)
             {
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
             }
@@ -187,7 +190,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 int[] mana = new int[] { 0, 30, 33, 36, 42, 48, 54, 63, 72, 81, 90, 102, 114, 126, 138, 150, 165, 180, 195 };
                 if (!Player.HasBuff("xerathascended2onhit") || Player.Mana + mana[Player.Level] > Player.MaxMana)
                     Orbwalker.ForceTarget(null);
-                else if ((Program.Combo || Program.Harass) && Config.Item("force", true).GetValue<bool>() && Orbwalker.GetTarget() == null)
+                else if ((Program.Combo || Program.Harass) && Config.Item("force", true).GetValue<bool>() && Orbwalker.GetTarget() == null && Player.CountEnemiesInRange(1500) == 0)
                 {
                     var minion = Cache.GetMinions(Player.ServerPosition, Player.AttackRange + Player.BoundingRadius * 2).OrderByDescending(x => x.Health).FirstOrDefault();
 
@@ -213,6 +216,16 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             var t = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
             if (t.IsValidTarget() )
             {
+                if (IsCastingR)
+                {
+                    var del = (float)Config.Item("delayR", true).GetValue<Slider>().Value;
+                    if (del == 0)
+                        Program.CastSpell(R, t);
+                    else if (Game.Time - lastR > 0.001 * del)
+                        Program.CastSpell(R, t);
+                    return;
+                }
+
                 if (Config.Item("useR", true).GetValue<KeyBind>().Active && !IsCastingR)
                 {
                     R.Cast();
@@ -224,11 +237,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                         R.Cast();
                     }
                 }
-                if (Game.Time - lastR > 0.001 * (float)Config.Item("delayR", true).GetValue<Slider>().Value && IsCastingR)
-                {
-                    Program.CastSpell(R, t);
-                     
-                }
+                
                 Rtarget = R.GetPrediction(t).CastPosition;
             }
             else if (Config.Item("autoRlast", true).GetValue<bool>() && Game.Time - lastR > 0.001 * (float)Config.Item("delayR", true).GetValue<Slider>().Value && IsCastingR)
@@ -288,7 +297,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
                     return;
                 }
-                else if (t.IsValidTarget(Q.Range - 300))
+                else if (t.IsValidTarget(Q.Range - 300  + 15 * Player.Level))
                 {
                     if(t.Health < OktwCommon.GetKsDamage(t, Q))
                         Q.StartCharging();

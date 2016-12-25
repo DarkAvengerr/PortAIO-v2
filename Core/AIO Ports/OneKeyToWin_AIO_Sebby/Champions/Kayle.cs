@@ -117,7 +117,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 if (dmg == 0)
                     continue;
 
-                if (ally.Health - dmg <  ally.Level * 12)
+                if (ally.Health - dmg <  ally.Level * 20 || dmg > ally.MaxHealth * 0.4)
                     R.CastOnUnit(ally);
             }
         }
