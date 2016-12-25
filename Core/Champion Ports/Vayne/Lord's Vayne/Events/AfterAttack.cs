@@ -86,105 +86,101 @@ namespace Lord_s_Vayne.Events
                 Program.E.Cast((Obj_AI_Base)target);
                 Program.emenu.Item("UseEaa").SetValue<KeyBind>(new KeyBind("G".ToCharArray()[0], KeyBindType.Toggle));
             }
-            if ((Program.orbwalker.ActiveMode.ToString() == "Combo") && Program.qmenu.Item("UseQC").GetValue<bool>() && !Program.qmenu.Item("FastQ").GetValue<bool>()
-                    || (Program.orbwalker.ActiveMode.ToString() == "Mixed" && Program.qmenu.Item("hq").GetValue<bool>()))
 
+            //QLogic
+            if ((Program.qmenu.Item("UseQC").GetValue<bool>() && Program.orbwalker.ActiveMode.ToString() == "Combo") || (Program.orbwalker.ActiveMode.ToString() == "Mixed" && Program.qmenu.Item("hq").GetValue<bool>()))
             {
-                if (Program.qmenu.Item("restrictq").GetValue<bool>())
+                var value = Program.qmenu.Item("QMode", true).GetValue<StringList>().SelectedIndex;
+                var FastQ = Program.qmenu.Item("FastQ").GetValue<bool>();
+
+                if (value == 0)
                 {
-                    var after = ObjectManager.Player.Position
-                                + Normalize(Game.CursorPos - ObjectManager.Player.Position) * 300;
-                    //Chat.Print("After: {0}", after);
-                    var disafter = Vector3.DistanceSquared(after, Program.tar.Position);
-                    //Chat.Print("DisAfter: {0}", disafter);
-                    //Chat.Print("first calc: {0}", (disafter) - (630*630));
-                    if ((disafter < 630 * 630) && disafter > 150 * 150)
-                    {
-                        Program.Q.Cast(Game.CursorPos);
-
-
-                    }
-
-                    if (Vector3.DistanceSquared(Program.tar.Position, ObjectManager.Player.Position) > 630 * 630
-                        && disafter < 630 * 630)
-                    {
-                        Program.Q.Cast(Game.CursorPos);
-
-
-                    }
-                }
-                else
-                {
-                    Program.Q.Cast(Game.CursorPos);
-
-
+                    QLogic.Gosu.Run();
 
                 }
-                //Q.Cast(Game.CursorPos);
-            }
 
-            if ((Program.orbwalker.ActiveMode.ToString() == "Combo") && Program.qmenu.Item("UseQC").GetValue<bool>() && Program.qmenu.Item("UseQC").GetValue<bool>() && Program.qmenu.Item("FastQ").GetValue<bool>()
-                   || (Program.orbwalker.ActiveMode.ToString() == "Mixed" && Program.qmenu.Item("hq").GetValue<bool>()))
-            {
-                if (Program.qmenu.Item("restrictq").GetValue<bool>())
+                if (value == 1)
                 {
-                    var after = ObjectManager.Player.Position
-                                + Normalize(Game.CursorPos - ObjectManager.Player.Position) * 300;
-                    //Chat.Print("After: {0}", after);
-                    var disafter = Vector3.DistanceSquared(after, Program.tar.Position);
-                    //Chat.Print("DisAfter: {0}", disafter);
-                    //Chat.Print("first calc: {0}", (disafter) - (630*630));
-                    if ((disafter < 630 * 630) && disafter > 150 * 150)
+                    if (!FastQ)
+                    {
+                        Program.Q.Cast(QLogic.QLogic.SideQ(ObjectManager.Player.Position.To2D(), target.Position.To2D(), 65).To3D());
+                    }
+                    if (FastQ)
+                    {
+                        Program.Q.Cast(QLogic.QLogic.SideQ(ObjectManager.Player.Position.To2D(), target.Position.To2D(), 65).To3D());
+                        EloBuddy.Player.DoEmote(Emote.Dance);
+                    }
+                }
+
+                if (value == 2)
+                {
+                    if(FastQ)
                     {
                         Program.Q.Cast(Game.CursorPos);
                         EloBuddy.Player.DoEmote(Emote.Dance);
-
                     }
 
-                    if (Vector3.DistanceSquared(Program.tar.Position, ObjectManager.Player.Position) > 630 * 630
-                        && disafter < 630 * 630)
+                    if (!FastQ)
                     {
                         Program.Q.Cast(Game.CursorPos);
-                        EloBuddy.Player.DoEmote(Emote.Dance);
-
                     }
                 }
-                else
+
+                if (value == 3)
                 {
-                    Program.Q.Cast(Game.CursorPos);
-                    EloBuddy.Player.DoEmote(Emote.Dance);
+                    if (FastQ)
+                    {
+                        if (ObjectManager.Player.Position.Extend(Game.CursorPos, 700).CountEnemiesInRange(700) <= 1)
+                        {
+                            Program.Q.Cast(Game.CursorPos);
+                            EloBuddy.Player.DoEmote(Emote.Dance);
+                        }
+                    }
 
-
+                    if (!FastQ)
+                    {
+                        if (ObjectManager.Player.Position.Extend(Game.CursorPos, 700).CountEnemiesInRange(700) <= 1)
+                        {
+                            Program.Q.Cast(Game.CursorPos);
+                        }
+                    }
                 }
-                //Q.Cast(Game.CursorPos);
+
+                if (value == 4)
+                {
+                    if (!FastQ)
+                    {
+                        Program.Q.Cast(QLogic.QLogic.SafeQ(ObjectManager.Player.Position.To2D(), target.Position.To2D(), 65).To3D());
+                    }
+                    if (FastQ)
+                    {
+                        Program.Q.Cast(QLogic.QLogic.SafeQ(ObjectManager.Player.Position.To2D(), target.Position.To2D(), 65).To3D());
+                        EloBuddy.Player.DoEmote(Emote.Dance);
+                    }
+                }
+
+                if (value == 5)
+                {
+                    if (!FastQ)
+                    {
+                        Program.Q.Cast(QLogic.QLogic.AggresiveQ(ObjectManager.Player.Position.To2D(), target.Position.To2D(), 65).To3D());
+                    }
+                    if (FastQ)
+                    {
+                        Program.Q.Cast(QLogic.QLogic.AggresiveQ(ObjectManager.Player.Position.To2D(), target.Position.To2D(), 65).To3D());
+                        EloBuddy.Player.DoEmote(Emote.Dance);
+                    }
+                }
+
+                if (value == 6)
+                {
+                    QLogic.Bursts.Burst();
+                }              
             }
         }
-
-
-        public static Vector3 Normalize(Vector3 A)
-        {
-            double distance = Math.Sqrt(A.X * A.X + A.Y * A.Y);
-            return new Vector3(new Vector2((float)(A.X / distance)), (float)(A.Y / distance));
-
-        }
+        
     }
 }
 
-          /* if (Program.Q.IsReady())
-                {
-                switch (Program.qmenu.Item("QMode").GetValue<StringList>().SelectedIndex)
-                {
-                    case 0:
-                        {
-                            QLogic.Gosu.Run();
-                        }
-                        break;
-                    case 1:
-                        {
-                            QLogic.Cursor.Run();
-                        }
-                        break;
-                }
-            }
-            */
+       
  

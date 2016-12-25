@@ -1764,8 +1764,10 @@
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Misc\Distance.cs" />
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Misc\zzRotCondemn.cs" />
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Program.cs" />
+    <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\QLogic\Burst.cs" />
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\QLogic\Cursor.cs" />
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\QLogic\Gosu.cs" />
+    <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\QLogic\QLogic.cs" />
     <Compile Include="Core\Champion Ports\Vayne\PRADA Vayne Reborn\MyInitializer\Logic.cs" />
     <Compile Include="Core\Champion Ports\Vayne\PRADA Vayne Reborn\MyInitializer\Menu.cs" />
     <Compile Include="Core\Champion Ports\Vayne\PRADA Vayne Reborn\MyInitializer\Notifications.cs" />
