@@ -6,8 +6,8 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace CheerleaderLux.Extensions
+using LeagueSharp.Common; 
+namespace CheerleaderLux.Extensions
 {
     public class Statics
     {

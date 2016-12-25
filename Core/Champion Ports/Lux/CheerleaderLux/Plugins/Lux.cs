@@ -7,8 +7,8 @@ using SharpDX;
 
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace CheerleaderLux
+using LeagueSharp.Common; 
+namespace CheerleaderLux
 {
     // Todo List: - Combo is le finished
     // - Misc (anti-gap, anti-rengar, anti-khazix etc) - low prio
@@ -16,7 +16,7 @@ using EloBuddy;
     public class Lux : Extensions.Statics
     {
         public const string ChampName = "Lux";
-        public static void OnLoad()
+        public static void OnLoad(EventArgs args)
         {
             if (player.ChampionName != ChampName)
                 return;
@@ -180,7 +180,7 @@ using EloBuddy;
         {
             try
             {
-                if (sender.IsMe || sender == null || !sender.IsEnemy || sender.IsMinion || W1.Level < 1 || !sender.IsValid || !Config.Item("combo.W").GetValue<bool>() || Player.Spellbook.IsAutoAttacking) return;
+                if (sender.IsMe || sender == null || !sender.IsEnemy || sender.IsMinion || W1.Level < 1 || !sender.IsValid || !Config.Item("combo.W").GetValue<bool>() || ObjectManager.Player.Spellbook.IsAutoAttacking) return;
                 var lowestally = HeroManager.Allies.Where(a => !a.IsDead && a.IsValidTarget(W1.Range) && a.IsValid && !a.IsMe).OrderBy(a => a.Health).FirstOrDefault();
 
                 //Will Prioritize W cast on Allies
@@ -895,7 +895,7 @@ using EloBuddy;
             {
                 var blueBuff =
                     ObjectManager.Get<Obj_AI_Minion>()
-                        .Where(x => x.CharData.BaseSkinName == "SRU_Blue")
+                        .Where(x => x.BaseSkinName == "SRU_Blue")
                         .Where(x => player.GetSpellDamage(x, SpellSlot.R) > x.Health)
                         .FirstOrDefault(x => x.Team != player.Team); /// ---------- Check Playerteam stuff ~
 
@@ -907,7 +907,7 @@ using EloBuddy;
             {
                 var redBuff =
                     ObjectManager.Get<Obj_AI_Minion>()
-                        .Where(x => x.CharData.BaseSkinName == "SRU_Red")
+                        .Where(x => x.BaseSkinName == "SRU_Red")
                         .Where(x => player.GetSpellDamage(x, SpellSlot.R) > x.Health)
                         .FirstOrDefault(x => x.Team != player.Team);
 
@@ -919,7 +919,7 @@ using EloBuddy;
             {
                 var Baron =
                     ObjectManager.Get<Obj_AI_Minion>()
-                        .Where(x => x.CharData.BaseSkinName == "SRU_Baron")
+                        .Where(x => x.BaseSkinName == "SRU_Baron")
                         .Where(x => player.GetSpellDamage(x, SpellSlot.R) > x.Health)
                         .FirstOrDefault(x => x.Team != player.Team);
 
@@ -931,7 +931,7 @@ using EloBuddy;
             {
                 var Dragon =
                     ObjectManager.Get<Obj_AI_Minion>()
-                        .Where(x => x.CharData.BaseSkinName == "SRU_Dragon")
+                        .Where(x => x.BaseSkinName == "SRU_Dragon")
                         .Where(x => player.GetSpellDamage(x, SpellSlot.R) > x.Health)
                         .FirstOrDefault(x => x.Team != player.Team);
 

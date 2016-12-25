@@ -6,8 +6,8 @@ using System.Linq;
 
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace CheerleaderLux.Extensions
+using LeagueSharp.Common; 
+namespace CheerleaderLux.Extensions
 {
     class Drawmethods : Statics
     {
