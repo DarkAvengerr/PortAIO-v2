@@ -21,12 +21,11 @@ using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
+using EloBuddy;
 
 #endregion
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace OKTWPredictioner
+namespace OKTWPredictioner
 {
     public static class SpellDatabase
     {

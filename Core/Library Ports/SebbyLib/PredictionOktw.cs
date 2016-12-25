@@ -411,6 +411,7 @@ namespace SebbyLib.Prediction
             // FIX RANGE ///////////////////////////////////////////////////////////////////////////////////
             if (distanceFromToWaypoint <= distanceFromToUnit && distanceFromToUnit > input.Range - fixRange)
             {
+                Console.WriteLine("PRED: FIX RANGE");
                 result.Hitchance = HitChance.Medium;
                 return result;
             }
@@ -483,12 +484,13 @@ namespace SebbyLib.Prediction
                 }
                 if (input.Unit.Spellbook.IsAutoAttacking)
                 {
+                    Console.WriteLine("PRED: AA'ing");
                     result.Hitchance = HitChance.High;
                     return result;
                 }
                 else if (UnitTracker.GetLastStopMoveTime(input.Unit) < 800)
                 {
-                    //OktwCommon.debug("PRED: STOP HIGH");
+                    OktwCommon.debug("PRED: STOP HIGH");
                     result.Hitchance = HitChance.High;
                     return result;
                 }
@@ -504,6 +506,7 @@ namespace SebbyLib.Prediction
 
             if (UnitTracker.SpamSamePlace(input.Unit))
             {
+                Console.WriteLine("PRED: SAME SPOT");
                 result.Hitchance = HitChance.VeryHigh;
                 return result;
             }
@@ -716,7 +719,7 @@ namespace SebbyLib.Prediction
 
             //Skillshots with only a delay
             var tDistance = input.Delay * speed - input.RealRadius;
-            if (pLength >= tDistance && Math.Abs(input.Speed - float.MaxValue) < float.Epsilon)
+            if (pLength >= tDistance && (Math.Abs(input.Speed - float.MaxValue) < float.Epsilon || input.Speed >= 100000))
             {
                 for (var i = 0; i < path.Count - 1; i++)
                 {
@@ -1134,60 +1137,22 @@ namespace SebbyLib.Prediction
                     switch (objectType)
                     {
                         case CollisionableObjects.Minions:
-                            foreach (var minion in Cache.GetMinions(input.From, Math.Min(input.Range + input.Radius + 100, 2000)))
+                            foreach (var minion in
+                        ObjectManager.Get<Obj_AI_Minion>()
+                            .Where(
+                                minion =>
+                                minion.IsValidTarget(
+                                    Math.Min(input.Range + input.Radius + 100, 2000),
+                                    true,
+                                    input.RangeCheckFrom)))
                             {
-
-                                var distanceFromToUnit = minion.ServerPosition.Distance(input.From);
-                                var bOffset = minion.BoundingRadius + input.Unit.BoundingRadius;
-                                if (distanceFromToUnit < bOffset)
+                                input.Unit = minion;
+                                var minionPrediction = Prediction.GetPrediction(input, false, false);
+                                if (minionPrediction.UnitPosition.To2D()
+                                        .Distance(input.From.To2D(), position.To2D(), true, true)
+                                    <= Math.Pow((input.Radius + 15 + minion.BoundingRadius), 2))
                                 {
-                                    if (MinionIsDead(input, minion, distanceFromToUnit))
-                                        continue;
-                                    else
-                                        return true;
-                                }
-                                else if (minion.ServerPosition.Distance(position) < bOffset)
-                                {
-                                    if (MinionIsDead(input, minion, distanceFromToUnit))
-                                        continue;
-                                    else
-                                        return true;
-                                }
-                                else if (minion.ServerPosition.Distance(input.Unit.Position) < bOffset)
-                                {
-                                    if (MinionIsDead(input, minion, distanceFromToUnit))
-                                        continue;
-                                    else
-                                        return true;
-                                }
-                                else
-                                {
-                                    var minionPos = minion.ServerPosition;
-                                    int bonusRadius = 15;
-                                    if (minion.IsMoving)
-                                    {
-                                        var predInput2 = new PredictionInput
-                                        {
-                                            Collision = false,
-                                            Speed = input.Speed,
-                                            Delay = input.Delay,
-                                            Range = input.Range,
-                                            From = input.From,
-                                            Radius = input.Radius,
-                                            Unit = minion,
-                                            Type = input.Type
-                                        };
-                                        minionPos = Prediction.GetPrediction(predInput2).CastPosition;
-                                        bonusRadius = 50 + (int)input.Radius;
-                                    }
-
-                                    if (minionPos.To2D().Distance(input.From.To2D(), position.To2D(), true, true) <= Math.Pow((input.Radius + bonusRadius + minion.BoundingRadius), 2))
-                                    {
-                                        if (MinionIsDead(input, minion, distanceFromToUnit))
-                                            continue;
-                                        else
-                                            return true;
-                                    }
+                                    return true;
                                 }
                             }
                             break;

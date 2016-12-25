@@ -19,14 +19,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using LeagueSharp;
+using EloBuddy;
 using LeagueSharp.Common;
+using LeagueSharp.Data.Enumerations;
 
 #endregion
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace SPredictioner
+namespace SPredictioner
 {
     public static class SpellDatabase
     {
@@ -34,6 +33,8 @@ using EloBuddy;
 
         static SpellDatabase()
         {
+            //Add spells to the database 
+
             #region Aatrox
 
             Spells.Add(
@@ -141,9 +142,11 @@ using EloBuddy;
                     DangerValue = 3,
                     IsDangerous = true,
                     MissileSpellName = "AhriSeduceMissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall }
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall}
                 });
 
             #endregion Ahri
@@ -166,9 +169,29 @@ using EloBuddy;
                     DangerValue = 3,
                     IsDangerous = true,
                     MissileSpellName = "SadMummyBandageToss",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall }
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall}
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Amumu",
+                    SpellName = "CurseoftheSadMummy",
+                    Slot = SpellSlot.R,
+                    Type = SkillshotType.SkillshotCircle,
+                    Delay = 250,
+                    Range = 0,
+                    Radius = 550,
+                    MissileSpeed = int.MaxValue,
+                    FixedRange = true,
+                    AddHitbox = false,
+                    DangerValue = 5,
+                    IsDangerous = true,
+                    MissileSpellName = "",
                 });
 
             #endregion Amumu
@@ -191,6 +214,7 @@ using EloBuddy;
                     DangerValue = 3,
                     IsDangerous = true,
                     MissileSpellName = "FlashFrostSpell",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects = new[] { SpellData.CollisionObjectTypes.YasuoWall }
                 });
@@ -258,7 +282,9 @@ using EloBuddy;
                     MultipleNumber = 9,
                     MultipleAngle = 4.62f * (float)Math.PI / 180,
                     CanBeRemoved = true,
-                    CollisionObjects = new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall, SpellData.CollisionObjectTypes.Minion }
+                    CollisionObjects =
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall, SpellData.CollisionObjectTypes.Minion}
                 });
 
             Spells.Add(
@@ -277,6 +303,7 @@ using EloBuddy;
                     DangerValue = 5,
                     IsDangerous = true,
                     MissileSpellName = "EnchantedCrystalArrow",
+                    //EarlyEvade = new[] { EarlyObjects.Allies },
                     CanBeRemoved = true,
                     CollisionObjects = new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall }
                 });
@@ -302,7 +329,8 @@ using EloBuddy;
                     IsDangerous = false,
                     MissileSpellName = "AurelionSolQMissile",
                     CanBeRemoved = true,
-                    CollisionObjects = new[] { SpellData.CollisionObjectTypes.YasuoWall }
+                    CollisionObjects =
+                        new[] { SpellData.CollisionObjectTypes.YasuoWall }
                 });
 
             Spells.Add(
@@ -322,11 +350,12 @@ using EloBuddy;
                     IsDangerous = true,
                     MissileSpellName = "AurelionSolRBeamMissile",
                     CanBeRemoved = true,
-                    CollisionObjects = new[] { SpellData.CollisionObjectTypes.YasuoWall }
+                    CollisionObjects =
+                        new[] { SpellData.CollisionObjectTypes.YasuoWall }
                 });
 
-            #endregion
-            
+            #endregion Aurelion Sol
+
             #region Bard
 
             Spells.Add(
@@ -345,6 +374,7 @@ using EloBuddy;
                     DangerValue = 3,
                     IsDangerous = true,
                     MissileSpellName = "BardQMissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects = new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall }
                 });
@@ -369,7 +399,7 @@ using EloBuddy;
 
             #endregion
 
-            #region Blatzcrink
+            #region Blatzcrank
 
             Spells.Add(
                 new SpellData
@@ -379,7 +409,7 @@ using EloBuddy;
                     Slot = SpellSlot.Q,
                     Type = SkillshotType.SkillshotLine,
                     Delay = 250,
-                    Range = 925,
+                    Range = 1050,
                     Radius = 70,
                     MissileSpeed = 1800,
                     FixedRange = true,
@@ -387,9 +417,11 @@ using EloBuddy;
                     DangerValue = 4,
                     IsDangerous = true,
                     MissileSpellName = "RocketGrabMissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall }
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall}
                 });
 
             Spells.Add(
@@ -418,7 +450,7 @@ using EloBuddy;
                 new SpellData
                 {
                     ChampionName = "Brand",
-                    SpellName = "BrandBlaze",
+                    SpellName = "BrandQ",
                     Slot = SpellSlot.Q,
                     Type = SkillshotType.SkillshotLine,
                     Delay = 250,
@@ -429,25 +461,27 @@ using EloBuddy;
                     AddHitbox = true,
                     DangerValue = 3,
                     IsDangerous = true,
-                    MissileSpellName = "BrandBlazeMissile",
+                    MissileSpellName = "BrandQMissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall }
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall}
                 });
 
             Spells.Add(
                 new SpellData
                 {
                     ChampionName = "Brand",
-                    SpellName = "BrandFissure",
+                    SpellName = "BrandW",
                     Slot = SpellSlot.W,
                     Type = SkillshotType.SkillshotCircle,
                     Delay = 850,
                     Range = 900,
-                    Radius = 240,
+                    Radius = 260,
                     MissileSpeed = int.MaxValue,
                     FixedRange = false,
-                    AddHitbox = true,
+                    AddHitbox = false,
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "",
@@ -473,9 +507,11 @@ using EloBuddy;
                     DangerValue = 3,
                     IsDangerous = true,
                     MissileSpellName = "BraumQMissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall }
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall}
                 });
 
             Spells.Add(
@@ -529,8 +565,8 @@ using EloBuddy;
                     Type = SkillshotType.SkillshotLine,
                     Delay = 125,
                     Range = 1000,
-                    Radius = 80,
-                    MissileSpeed = 2000,
+                    Radius = 70,
+                    MissileSpeed = 1600,
                     FixedRange = true,
                     AddHitbox = true,
                     DangerValue = 1,
@@ -538,7 +574,8 @@ using EloBuddy;
                     MissileSpellName = "CaitlynEntrapmentMissile",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall }
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall}
                 });
 
             #endregion Caitlyn
@@ -642,9 +679,11 @@ using EloBuddy;
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "MissileBarrageMissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall }
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall}
                 });
 
             Spells.Add(
@@ -663,9 +702,11 @@ using EloBuddy;
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "MissileBarrageMissile2",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall }
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall}
                 });
 
             #endregion Corki
@@ -681,7 +722,7 @@ using EloBuddy;
                     Type = SkillshotType.SkillshotCircle,
                     Delay = 750,
                     Range = 0,
-                    Radius = 425,
+                    Radius = 425 - 50,
                     MissileSpeed = int.MaxValue,
                     FixedRange = true,
                     AddHitbox = true,
@@ -712,6 +753,52 @@ using EloBuddy;
 
             #endregion Darius
 
+            #region Diana
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Diana",
+                    SpellName = "DianaArc",
+                    Slot = SpellSlot.Q,
+                    Type = SkillshotType.SkillshotCircle,
+                    Delay = 250,
+                    Range = 895,
+                    Radius = 195,
+                    MissileSpeed = 1400,
+                    FixedRange = false,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    MissileSpellName = "DianaArcArc",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.AllyObjects },
+                    CollisionObjects = new[] { SpellData.CollisionObjectTypes.YasuoWall }
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Diana",
+                    SpellName = "DianaArcArc",
+                    Slot = SpellSlot.Q,
+                    Type = SkillshotType.SkillshotCircle,
+                    Delay = 250,
+                    Range = 895,
+                    Radius = 195,
+                    DontCross = true,
+                    MissileSpeed = 1400,
+                    FixedRange = false,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    MissileSpellName = "DianaArcArc",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.AllyObjects },
+                    TakeClosestPath = true,
+                    CollisionObjects = new[] { SpellData.CollisionObjectTypes.YasuoWall }
+                });
+
+            #endregion Diana
+
             #region DrMundo
 
             Spells.Add(
@@ -730,9 +817,11 @@ using EloBuddy;
                     DangerValue = 3,
                     IsDangerous = false,
                     MissileSpellName = "InfectedCleaverMissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall }
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall}
                 });
 
             #endregion DrMundo
@@ -863,9 +952,11 @@ using EloBuddy;
                     DangerValue = 4,
                     IsDangerous = true,
                     MissileSpellName = "EliseHumanE",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall }
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall}
                 });
 
             #endregion Elise
@@ -911,9 +1002,11 @@ using EloBuddy;
                     IsDangerous = false,
                     MissileSpellName = "EzrealMysticShotMissile",
                     ExtraMissileNames = new[] { "EzrealMysticShotPulseMissile" },
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall},
                     Id = 229,
                 });
 
@@ -967,7 +1060,7 @@ using EloBuddy;
                     SpellName = "FioraW",
                     Slot = SpellSlot.W,
                     Type = SkillshotType.SkillshotLine,
-                    Delay = 700,
+                    Delay = 500,
                     Range = 800,
                     Radius = 70,
                     MissileSpeed = 3200,
@@ -987,18 +1080,19 @@ using EloBuddy;
                 new SpellData
                 {
                     ChampionName = "Fizz",
-                    SpellName = "FizzMarinerDoom",
+                    SpellName = "FizzR",
                     Slot = SpellSlot.R,
                     Type = SkillshotType.SkillshotLine,
                     Delay = 250,
-                    Range = 1300,
-                    Radius = 120,
-                    MissileSpeed = 1350,
+                    Range = 1275,
+                    Radius = 110,
+                    MissileSpeed = 1300,
                     FixedRange = false,
                     AddHitbox = true,
                     DangerValue = 5,
                     IsDangerous = true,
-                    MissileSpellName = "FizzMarinerDoomMissile",
+                    MissileSpellName = "FizzRMissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies },
                     CollisionObjects = new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall },
                     CanBeRemoved = true,
                 });
@@ -1023,6 +1117,7 @@ using EloBuddy;
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "GalioResoluteSmite",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                 });
 
             Spells.Add(
@@ -1132,6 +1227,7 @@ using EloBuddy;
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "GnarBigQMissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CollisionObjects = new[] { SpellData.CollisionObjectTypes.YasuoWall },
                 });
 
@@ -1248,6 +1344,7 @@ using EloBuddy;
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "GragasE",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     ExtraRange = 300,
                     CollisionObjects = new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion },
@@ -1280,21 +1377,19 @@ using EloBuddy;
                 new SpellData
                 {
                     ChampionName = "Graves",
-                    SpellName = "GravesClusterShot",
+                    SpellName = "GravesQLineSpell",
                     Slot = SpellSlot.Q,
                     Type = SkillshotType.SkillshotLine,
                     Delay = 250,
-                    Range = 1000,
-                    Radius = 50,
-                    MissileSpeed = 2000,
+                    Range = 808,
+                    Radius = 40,
+                    MissileSpeed = 3000,
                     FixedRange = true,
                     AddHitbox = true,
                     DangerValue = 2,
                     IsDangerous = false,
-                    MissileSpellName = "GravesClusterShotAttack",
+                    MissileSpellName = "GravesQLineMis",
                     CollisionObjects = new[] { SpellData.CollisionObjectTypes.YasuoWall },
-                    MultipleNumber = 3,
-                    MultipleAngle = 15 * (float)Math.PI / 180,
                 });
 
             Spells.Add(
@@ -1314,7 +1409,8 @@ using EloBuddy;
                     IsDangerous = true,
                     MissileSpellName = "GravesChargeShotShot",
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Graves
@@ -1361,49 +1457,132 @@ using EloBuddy;
 
             #endregion Heimerdinger
 
-            #region Irelia
+            #region Illaoi
 
             Spells.Add(
                 new SpellData
                 {
-                    ChampionName = "Irelia",
-                    SpellName = "IreliaTranscendentBlades",
-                    Slot = SpellSlot.R,
+                    ChampionName = "Illaoi",
+                    SpellName = "IllaoiQ",
+                    Slot = SpellSlot.Q,
                     Type = SkillshotType.SkillshotLine,
-                    Delay = 0,
-                    Range = 1200,
-                    Radius = 65,
-                    MissileSpeed = 1600,
+                    Delay = 750,
+                    Range = 850,
+                    Radius = 100,
+                    MissileSpeed = int.MaxValue,
                     FixedRange = true,
                     AddHitbox = true,
-                    DangerValue = 2,
-                    IsDangerous = false,
-                    MissileSpellName = "IreliaTranscendentBlades",
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    MissileSpellName = "illaoiemis",
                     CollisionObjects = new[] { SpellData.CollisionObjectTypes.YasuoWall },
                 });
 
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Illaoi",
+                    SpellName = "IllaoiE",
+                    Slot = SpellSlot.E,
+                    Type = SkillshotType.SkillshotLine,
+                    Delay = 250,
+                    Range = 950,
+                    Radius = 50,
+                    MissileSpeed = 1900,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    MissileSpellName = "illaoiemis",
+                    CollisionObjects = new[] { SpellData.CollisionObjectTypes.YasuoWall },
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Illaoi",
+                    SpellName = "IllaoiR",
+                    Slot = SpellSlot.R,
+                    Type = SkillshotType.SkillshotCircle,
+                    Delay = 500,
+                    Range = 0,
+                    Radius = 450,
+                    MissileSpeed = int.MaxValue,
+                    FixedRange = true,
+                    AddHitbox = false,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    MissileSpellName = "",
+                });
+
+            #endregion Illaoi
+
+            #region Irelia
+
+            Spells.Add(
+            new SpellData
+            {
+                ChampionName = "Irelia",
+                SpellName = "IreliaTranscendentBlades",
+                Slot = SpellSlot.R,
+                Type = SkillshotType.SkillshotLine,
+                Delay = 0,
+                Range = 1200,
+                Radius = 65,
+                MissileSpeed = 1600,
+                FixedRange = true,
+                AddHitbox = true,
+                DangerValue = 2,
+                IsDangerous = false,
+                MissileSpellName = "IreliaTranscendentBlades",
+                CollisionObjects = new[] { SpellData.CollisionObjectTypes.YasuoWall },
+            });
+
             #endregion Irelia
+
+            #region Ivern
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Ivern",
+                    SpellName = "IvernQ",
+                    Slot = SpellSlot.Q,
+                    Type = SkillshotType.SkillshotLine,
+                    Delay = 250,
+                    Range = 1100,
+                    Radius = 65,
+                    MissileSpeed = 1300,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    MissileSpellName = "IvernQ",
+                    CollisionObjects = new[] { SpellData.CollisionObjectTypes.YasuoWall, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.Champions, },
+                });
+
+            #endregion Ivern
 
             #region Janna
 
             Spells.Add(
-                new SpellData
-                {
-                    ChampionName = "Janna",
-                    SpellName = "JannaQ",
-                    Slot = SpellSlot.Q,
-                    Type = SkillshotType.SkillshotLine,
-                    Delay = 250,
-                    Range = 1700,
-                    Radius = 120,
-                    MissileSpeed = 900,
-                    FixedRange = false,
-                    AddHitbox = true,
-                    DangerValue = 2,
-                    IsDangerous = false,
-                    MissileSpellName = "HowlingGaleSpell",
-                    CollisionObjects = new[] { SpellData.CollisionObjectTypes.YasuoWall },
-                });
+            new SpellData
+            {
+                ChampionName = "Janna",
+                SpellName = "JannaQ",
+                Slot = SpellSlot.Q,
+                Type = SkillshotType.SkillshotLine,
+                Delay = 250,
+                Range = 1700,
+                Radius = 120,
+                MissileSpeed = 900,
+                FixedRange = false,
+                AddHitbox = true,
+                DangerValue = 2,
+                IsDangerous = false,
+                MissileSpellName = "HowlingGaleSpell",
+                CollisionObjects = new[] { SpellData.CollisionObjectTypes.YasuoWall },
+            });
 
             #endregion Janna
 
@@ -1424,6 +1603,23 @@ using EloBuddy;
                     AddHitbox = true,
                     DangerValue = 3,
                     IsDangerous = false,
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "JarvanIV",
+                    SpellName = "JarvanIVEQ",
+                    Slot = SpellSlot.Q,
+                    Type = SkillshotType.SkillshotLine,
+                    Delay = 250,
+                    Range = 880,
+                    Radius = 70,
+                    MissileSpeed = 1450,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = true,
                 });
 
             Spells.Add(
@@ -1464,9 +1660,11 @@ using EloBuddy;
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "JayceShockBlastMis",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -1485,12 +1683,63 @@ using EloBuddy;
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "JayceShockBlastWallMis",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Jayce
+
+            #region Jhin
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Jhin",
+                    SpellName = "JhinW",
+                    Slot = SpellSlot.W,
+                    Type = SkillshotType.SkillshotLine,
+                    Delay = 750,
+                    Range = 2550,
+                    Radius = 40,
+                    MissileSpeed = 5000,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    MissileSpellName = "JhinWMissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.AllyObjects },
+                    CanBeRemoved = true,
+                    CollisionObjects =
+                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall },
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Jhin",
+                    SpellName = "JhinRShot",
+                    Slot = SpellSlot.R,
+                    Type = SkillshotType.SkillshotLine,
+                    Delay = 250,
+                    Range = 3500,
+                    Radius = 80,
+                    MissileSpeed = 5000,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    MissileSpellName = "JhinRShotMis",
+                    ExtraMissileNames = new[] { "JhinRShotMis4" },
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
+                    CanBeRemoved = true,
+                    CollisionObjects =
+                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall },
+                });
+
+            #endregion Jhin
 
             #region Jinx
 
@@ -1511,9 +1760,11 @@ using EloBuddy;
                     DangerValue = 3,
                     IsDangerous = true,
                     MissileSpellName = "JinxWMissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -1532,6 +1783,7 @@ using EloBuddy;
                     DangerValue = 5,
                     IsDangerous = true,
                     MissileSpellName = "JinxR",
+                    //EarlyEvade = new[] { EarlyObjects.Allies },
                     CanBeRemoved = true,
                     CollisionObjects = new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall },
                 });
@@ -1557,9 +1809,11 @@ using EloBuddy;
                     IsDangerous = false,
                     MissileSpellName = "kalistamysticshotmis",
                     ExtraMissileNames = new[] { "kalistamysticshotmistrue" },
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Kalista
@@ -1582,9 +1836,11 @@ using EloBuddy;
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "KarmaQMissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             //TODO: add the circle at the end.
@@ -1604,9 +1860,11 @@ using EloBuddy;
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "KarmaQMissileMantra",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Karma
@@ -1679,9 +1937,11 @@ using EloBuddy;
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "KennenShurikenHurlMissile1",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Kennen
@@ -1705,11 +1965,13 @@ using EloBuddy;
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "KhazixWMissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     MultipleNumber = 3,
                     MultipleAngle = 22f * (float)Math.PI / 180,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -1732,6 +1994,74 @@ using EloBuddy;
 
             #endregion Khazix
 
+            #region Kled
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Kled",
+                    SpellName = "KledQ",
+                    Slot = SpellSlot.Q,
+                    Type = SkillshotType.SkillshotLine,
+                    Delay = 250,
+                    Range = 800,
+                    Radius = 45,
+                    MissileSpeed = 1600,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 2,
+                    IsDangerous = true,
+                    MissileSpellName = "KledQMissile",
+                    CanBeRemoved = true,
+                    CollisionObjects =
+                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall },
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Kled",
+                    SpellName = "KledE",
+                    Slot = SpellSlot.E,
+                    Type = SkillshotType.SkillshotLine,
+                    Delay = 0,
+                    Range = 750,
+                    Radius = 125,
+                    MissileSpeed = 945,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 2,
+                    IsDangerous = true,
+                    MissileSpellName = "",
+                    CanBeRemoved = true,
+                    CollisionObjects =
+                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall },
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Kled",
+                    SpellName = "KledRiderQ",
+                    Slot = SpellSlot.Q,
+                    Type = SkillshotType.SkillshotLine,
+                    Delay = 250,
+                    Range = 700,
+                    Radius = 40,
+                    MissileSpeed = 3000,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 2,
+                    IsDangerous = false,
+                    MissileSpellName = "KledRiderQMissile",
+                    MultipleNumber = 5,
+                    MultipleAngle = 5 * (float)Math.PI / 180,
+                    CanBeRemoved = true,
+                    CollisionObjects = new[] { SpellData.CollisionObjectTypes.YasuoWall },
+                });
+
+            #endregion Kled
+
             #region Kogmaw
 
             Spells.Add(
@@ -1749,10 +2079,12 @@ using EloBuddy;
                     AddHitbox = true,
                     DangerValue = 2,
                     IsDangerous = false,
-                    MissileSpellName = "KogMawQMis",
+                    MissileSpellName = "KogMawQ",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -1783,7 +2115,7 @@ using EloBuddy;
                     Type = SkillshotType.SkillshotCircle,
                     Delay = 1200,
                     Range = 1800,
-                    Radius = 150,
+                    Radius = 225,
                     MissileSpeed = int.MaxValue,
                     FixedRange = false,
                     AddHitbox = true,
@@ -1841,16 +2173,18 @@ using EloBuddy;
                     Type = SkillshotType.SkillshotLine,
                     Delay = 250,
                     Range = 950,
-                    Radius = 70,
-                    MissileSpeed = 1600,
+                    Radius = 55,
+                    MissileSpeed = 1750,
                     FixedRange = true,
                     AddHitbox = true,
                     DangerValue = 3,
                     IsDangerous = true,
                     MissileSpellName = "LeblancSoulShackle",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -1862,8 +2196,8 @@ using EloBuddy;
                     Type = SkillshotType.SkillshotLine,
                     Delay = 250,
                     Range = 950,
-                    Radius = 70,
-                    MissileSpeed = 1600,
+                    Radius = 55,
+                    MissileSpeed = 1750,
                     FixedRange = true,
                     AddHitbox = true,
                     DangerValue = 3,
@@ -1871,7 +2205,8 @@ using EloBuddy;
                     MissileSpellName = "LeblancSoulShackleM",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Leblanc
@@ -1894,9 +2229,11 @@ using EloBuddy;
                     DangerValue = 3,
                     IsDangerous = true,
                     MissileSpellName = "BlindMonkQOne",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion LeeSin
@@ -1920,6 +2257,7 @@ using EloBuddy;
                     IsDangerous = true,
                     TakeClosestPath = true,
                     MissileSpellName = "LeonaZenithBladeMissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies },
                     CollisionObjects = new[] { SpellData.CollisionObjectTypes.YasuoWall },
                 });
 
@@ -1953,7 +2291,7 @@ using EloBuddy;
                     Slot = SpellSlot.Q,
                     Type = SkillshotType.SkillshotLine,
                     Delay = 250,
-                    Range = 700,
+                    Range = 825,
                     Radius = 75,
                     MissileSpeed = 2200,
                     FixedRange = true,
@@ -1972,7 +2310,7 @@ using EloBuddy;
                     Slot = SpellSlot.Q,
                     Type = SkillshotType.SkillshotLine,
                     Delay = 250,
-                    Range = 700,
+                    Range = 825,
                     Radius = 90,
                     MissileSpeed = 2200,
                     FixedRange = true,
@@ -2001,6 +2339,7 @@ using EloBuddy;
                     MissileSpellName = "LissandraEMissile",
                     CollisionObjects = new[] { SpellData.CollisionObjectTypes.YasuoWall },
                 });
+
             #endregion Lulu
 
             #region Lucian
@@ -2039,6 +2378,29 @@ using EloBuddy;
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "lucianwmissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Lucian",
+                    SpellName = "LucianRMis",
+                    Slot = SpellSlot.R,
+                    Type = SkillshotType.SkillshotLine,
+                    Delay = 500,
+                    Range = 1400,
+                    Radius = 110,
+                    MissileSpeed = 2800,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 2,
+                    IsDangerous = false,
+                    MissileSpellName = "lucianrmissileoffhand",
+                    ExtraMissileNames = new[] { "lucianrmissile" },
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
+                    DontCheckForDuplicates = true,
+                    DisabledByDefault = true,
                 });
 
             #endregion Lucian
@@ -2080,6 +2442,7 @@ using EloBuddy;
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "LuluQMissileTwo",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CollisionObjects = new[] { SpellData.CollisionObjectTypes.YasuoWall },
                 });
 
@@ -2103,6 +2466,7 @@ using EloBuddy;
                     DangerValue = 3,
                     IsDangerous = true,
                     MissileSpellName = "LuxLightBindingMis",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     //CanBeRemoved = true,
                     //CollisionObjects = new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall, },
                 });
@@ -2179,10 +2543,10 @@ using EloBuddy;
                 new SpellData
                 {
                     ChampionName = "Malzahar",
-                    SpellName = "AlZaharCalloftheVoid",
+                    SpellName = "MalzaharQ",
                     Slot = SpellSlot.Q,
                     Type = SkillshotType.SkillshotLine,
-                    Delay = 1000,
+                    Delay = 750,
                     Range = 900,
                     Radius = 85,
                     MissileSpeed = int.MaxValue,
@@ -2191,7 +2555,7 @@ using EloBuddy;
                     DangerValue = 2,
                     IsDangerous = false,
                     DontCross = true,
-                    MissileSpellName = "AlZaharCalloftheVoid",
+                    MissileSpellName = "MalzaharQ",
                 });
 
             #endregion Malzahar
@@ -2214,9 +2578,11 @@ using EloBuddy;
                     DangerValue = 3,
                     IsDangerous = true,
                     MissileSpellName = "DarkBindingMissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Morgana
@@ -2280,9 +2646,11 @@ using EloBuddy;
                     DangerValue = 3,
                     IsDangerous = true,
                     MissileSpellName = "NautilusAnchorDragMissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects, EarlyObjects.Wall },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall},
                     //walls?
                 });
 
@@ -2306,6 +2674,7 @@ using EloBuddy;
                     MissileSpellName = "NocturneDuskbringer",
                     CollisionObjects = new[] { SpellData.CollisionObjectTypes.YasuoWall }
                 });
+
             #endregion Nocturne
 
             #region Nidalee
@@ -2326,9 +2695,11 @@ using EloBuddy;
                     DangerValue = 3,
                     IsDangerous = true,
                     MissileSpellName = "JavelinToss",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Nidalee
@@ -2402,7 +2773,7 @@ using EloBuddy;
                 new SpellData
                 {
                     ChampionName = "Orianna",
-                    SpellName = "OrianaDissonanceCommand",
+                    SpellName = "OrianaDissonanceCommand-",
                     Slot = SpellSlot.W,
                     Type = SkillshotType.SkillshotCircle,
                     Delay = 250,
@@ -2413,8 +2784,9 @@ using EloBuddy;
                     AddHitbox = true,
                     DangerValue = 2,
                     IsDangerous = false,
-                    MissileSpellName = "OrianaDissonanceCommand",
+                    MissileSpellName = "OrianaDissonanceCommand-",
                     FromObject = "yomu_ring_",
+                    ////SourceObjectName = "w_dissonance_ball" //Orianna_Base_W_Dissonance_ball_green.troy & Orianna_Base_W_Dissonance_cas_green.troy
                 });
 
             Spells.Add(
@@ -2440,7 +2812,7 @@ using EloBuddy;
                 new SpellData
                 {
                     ChampionName = "Orianna",
-                    SpellName = "OrianaDetonateCommand",
+                    SpellName = "OrianaDetonateCommand-",
                     Slot = SpellSlot.R,
                     Type = SkillshotType.SkillshotCircle,
                     Delay = 700,
@@ -2451,8 +2823,9 @@ using EloBuddy;
                     AddHitbox = true,
                     DangerValue = 5,
                     IsDangerous = true,
-                    MissileSpellName = "OrianaDetonateCommand",
+                    MissileSpellName = "OrianaDetonateCommand-",
                     FromObject = "yomu_ring_",
+                    //SourceObjectName = "r_vacuumindicator", //Orianna_Base_R_VacuumIndicator.troy
                 });
 
             #endregion Orianna
@@ -2466,21 +2839,67 @@ using EloBuddy;
                     SpellName = "QuinnQ",
                     Slot = SpellSlot.Q,
                     Type = SkillshotType.SkillshotLine,
-                    Delay = 250,
+                    Delay = 313,
                     Range = 1050,
-                    Radius = 80,
+                    Radius = 60,
                     MissileSpeed = 1550,
                     FixedRange = true,
                     AddHitbox = true,
                     DangerValue = 2,
                     IsDangerous = false,
-                    MissileSpellName = "QuinnQMissile",
+                    MissileSpellName = "QuinnQ",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
+                    CanBeRemoved = true,
+                    CollisionObjects =
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall},
+                });
+
+            #endregion Quinn
+
+            #region Poppy
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Poppy",
+                    SpellName = "PoppyQ",
+                    Slot = SpellSlot.Q,
+                    Type = SkillshotType.SkillshotLine,
+                    Delay = 500,
+                    Range = 430,
+                    Radius = 100,
+                    MissileSpeed = int.MaxValue,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 2,
+                    IsDangerous = false,
+                    MissileSpellName = "PoppyQ",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Poppy",
+                    SpellName = "PoppyRSpell",
+                    Slot = SpellSlot.R,
+                    Type = SkillshotType.SkillshotLine,
+                    Delay = 300,
+                    Range = 1200,
+                    Radius = 100,
+                    MissileSpeed = 1600,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    MissileSpellName = "PoppyRMissile",
                     CanBeRemoved = true,
                     CollisionObjects =
                         new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
                 });
 
-            #endregion Quinn
+            #endregion Poppy
 
             #region Rengar
 
@@ -2500,9 +2919,11 @@ using EloBuddy;
                     DangerValue = 3,
                     IsDangerous = true,
                     MissileSpellName = "RengarEFinal",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Rengar
@@ -2525,8 +2946,10 @@ using EloBuddy;
                     DangerValue = 3,
                     IsDangerous = false,
                     MissileSpellName = "RekSaiQBurrowedMis",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion RekSai
@@ -2574,9 +2997,11 @@ using EloBuddy;
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "RumbleGrenade",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -2597,7 +3022,7 @@ using EloBuddy;
                     IsDangerous = false,
                     MissileSpellName = "RumbleCarpetBombMissile",
                     CanBeRemoved = false,
-                    CollisionObjects = new SpellData.CollisionObjectTypes[] { },
+                    //CollisionObjects = new CollisionObjectTypes[] { },
                 });
 
             #endregion Rumble
@@ -2620,31 +3045,13 @@ using EloBuddy;
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "RyzeQ",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
-            Spells.Add(
-                new SpellData
-                {
-                    ChampionName = "Ryze",
-                    SpellName = "ryzerq",
-                    Slot = SpellSlot.Q,
-                    Type = SkillshotType.SkillshotLine,
-                    Delay = 250,
-                    Range = 900,
-                    Radius = 50,
-                    MissileSpeed = 1700,
-                    FixedRange = true,
-                    AddHitbox = true,
-                    DangerValue = 2,
-                    IsDangerous = false,
-                    MissileSpellName = "ryzerq",
-                    CanBeRemoved = true,
-                    CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
-                });
             #endregion
 
             #region Sejuani
@@ -2665,9 +3072,11 @@ using EloBuddy;
                     DangerValue = 3,
                     IsDangerous = true,
                     MissileSpellName = "",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     ExtraRange = 200,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.YasuoWall},
                 });
             //TODO: fix?
             Spells.Add(
@@ -2729,9 +3138,11 @@ using EloBuddy;
                     AddHitbox = true,
                     DangerValue = 3,
                     IsDangerous = true,
+                    //EarlyEvade = new[] { EarlyObjects.Allies },
                     CollisionObjects =
                         new[] { SpellData.CollisionObjectTypes.Champions },
                 });
+
             #endregion Sion
 
             #region Soraka
@@ -2745,7 +3156,7 @@ using EloBuddy;
                     Type = SkillshotType.SkillshotCircle,
                     Delay = 500,
                     Range = 950,
-                    Radius = 280,
+                    Radius = 300,
                     MissileSpeed = 1750,
                     FixedRange = false,
                     AddHitbox = true,
@@ -2776,7 +3187,9 @@ using EloBuddy;
                     IsDangerous = true,
                     MissileSpellName = "ShenE",
                     ExtraRange = 200,
-                    CollisionObjects = new[] { SpellData.CollisionObjectTypes.Champions },
+                    CollisionObjects =
+                        new[]
+                        {SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             #endregion Shen
@@ -2799,8 +3212,10 @@ using EloBuddy;
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "ShyvanaFireballMissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -2820,6 +3235,27 @@ using EloBuddy;
                     IsDangerous = true,
                     MissileSpellName = "ShyvanaTransformCast",
                     ExtraRange = 200,
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Shyvana",
+                    SpellName = "shyvanafireballdragon2",
+                    Slot = SpellSlot.R,
+                    Type = SkillshotType.SkillshotLine,
+                    Delay = 250,
+                    Range = 850,
+                    Radius = 70,
+                    MissileSpeed = 2000,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = false,
+                    MissileSpellName = "ShyvanaFireballDragonFxMissile",
+                    ExtraRange = 200,
+                    MultipleNumber = 5,
+                    MultipleAngle = 10 * (float)Math.PI / 180
                 });
 
             #endregion Shyvana
@@ -2981,10 +3417,10 @@ using EloBuddy;
                     SpellName = "syndrae5",
                     Slot = SpellSlot.E,
                     Type = SkillshotType.SkillshotLine,
-                    Delay = 300,
+                    Delay = 0,
                     Range = 950,
-                    Radius = 90,
-                    MissileSpeed = 1601,
+                    Radius = 100,
+                    MissileSpeed = 2000,
                     FixedRange = false,
                     AddHitbox = true,
                     DangerValue = 2,
@@ -3000,10 +3436,10 @@ using EloBuddy;
                     SpellName = "SyndraE",
                     Slot = SpellSlot.E,
                     Type = SkillshotType.SkillshotLine,
-                    Delay = 300,
+                    Delay = 0,
                     Range = 950,
-                    Radius = 90,
-                    MissileSpeed = 1601,
+                    Radius = 100,
+                    MissileSpeed = 2000,
                     FixedRange = false,
                     AddHitbox = true,
                     DangerValue = 2,
@@ -3013,7 +3449,6 @@ using EloBuddy;
                 });
 
             #endregion Syndra
-
 
             #region Taliyah
 
@@ -3034,6 +3469,7 @@ using EloBuddy;
                     IsDangerous = false,
                     MissileSpellName = "TaliyahQMis",
                     CollisionObjects = new[] { SpellData.CollisionObjectTypes.YasuoWall, SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.Champions },
+                    DisabledByDefault = true,
                 });
 
             Spells.Add(
@@ -3100,6 +3536,33 @@ using EloBuddy;
 
             #endregion Riven
 
+            #region Tahm Kench
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "TahmKench",
+                    SpellName = "TahmKenchQ",
+                    Slot = SpellSlot.Q,
+                    Type = SkillshotType.SkillshotLine,
+                    Delay = 250,
+                    Range = 951,
+                    Radius = 90,
+                    MissileSpeed = 2800,
+                    FixedRange = true,
+                    AddHitbox = true,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    MissileSpellName = "tahmkenchqmissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
+                    CanBeRemoved = true,
+                    CollisionObjects =
+                        new[]
+                        {SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall},
+                });
+
+            #endregion Tahm Kench
+
             #region Taric
 
             Spells.Add(
@@ -3120,32 +3583,7 @@ using EloBuddy;
                     MissileSpellName = "TaricE"
                 });
 
-            #endregion
-
-            #region Tahm Kench
-
-            Spells.Add(
-                new SpellData
-                {
-                    ChampionName = "TahmKench",
-                    SpellName = "TahmKenchQ",
-                    Slot = SpellSlot.Q,
-                    Type = SkillshotType.SkillshotLine,
-                    Delay = 250,
-                    Range = 951,
-                    Radius = 90,
-                    MissileSpeed = 2800,
-                    FixedRange = true,
-                    AddHitbox = true,
-                    DangerValue = 3,
-                    IsDangerous = true,
-                    MissileSpellName = "tahmkenchqmissile",
-                    CanBeRemoved = true,
-                    CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall },
-                });
-
-            #endregion Tahm Kench
+            #endregion Taric
 
             #region Thresh
 
@@ -3165,9 +3603,11 @@ using EloBuddy;
                     DangerValue = 3,
                     IsDangerous = true,
                     MissileSpellName = "ThreshQMissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -3190,6 +3630,50 @@ using EloBuddy;
                 });
 
             #endregion Thresh
+
+            #region Tristana
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Tristana",
+                    SpellName = "RocketJump",
+                    Slot = SpellSlot.W,
+                    Type = SkillshotType.SkillshotCircle,
+                    Delay = 500,
+                    Range = 900,
+                    Radius = 270,
+                    MissileSpeed = 1500,
+                    FixedRange = false,
+                    AddHitbox = true,
+                    DangerValue = 2,
+                    IsDangerous = false,
+                    MissileSpellName = "RocketJump",
+                });
+
+            #endregion Tristana
+
+            #region Tryndamere
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Tryndamere",
+                    SpellName = "slashCast",
+                    Slot = SpellSlot.E,
+                    Type = SkillshotType.SkillshotLine,
+                    Delay = 0,
+                    Range = 660,
+                    Radius = 93,
+                    MissileSpeed = 1300,
+                    FixedRange = false,
+                    AddHitbox = true,
+                    DangerValue = 2,
+                    IsDangerous = false,
+                    MissileSpellName = "slashCast",
+                });
+
+            #endregion Tryndamere
 
             #region TwistedFate
 
@@ -3257,6 +3741,7 @@ using EloBuddy;
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "UrgotHeatseekingLineMissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                 });
 
@@ -3335,6 +3820,7 @@ using EloBuddy;
                     DangerValue = 3,
                     IsDangerous = true,
                     MissileSpellName = "VarusRMissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies },
                     CanBeRemoved = true,
                     CollisionObjects = new[] { SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall },
                 });
@@ -3353,12 +3839,13 @@ using EloBuddy;
                     Delay = 250,
                     Range = 950,
                     Radius = 70,
-                    MissileSpeed = 2000,
+                    MissileSpeed = 2200,
                     FixedRange = true,
                     AddHitbox = true,
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "VeigarBalefulStrikeMis",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CollisionObjects = new[] { SpellData.CollisionObjectTypes.YasuoWall },
                 });
 
@@ -3377,6 +3864,28 @@ using EloBuddy;
                     AddHitbox = true,
                     DangerValue = 2,
                     IsDangerous = false,
+                    MissileSpellName = "",
+                });
+
+            Spells.Add(
+                new SpellData
+                {
+                    ChampionName = "Veigar",
+                    SpellName = "VeigarEventHorizon",
+                    Slot = SpellSlot.E,
+                    Type = SkillshotType.SkillshotCircle,
+                    Delay = 500,
+                    Range = 700,
+                    Radius = 80,
+                    MissileSpeed = int.MaxValue,
+                    FixedRange = false,
+                    AddHitbox = false,
+                    DangerValue = 3,
+                    IsDangerous = true,
+                    DontAddExtraDuration = true,
+                    RingRadius = 350,
+                    ExtraDuration = 3300,
+                    DontCross = true,
                     MissileSpellName = "",
                 });
 
@@ -3402,7 +3911,8 @@ using EloBuddy;
                     MissileSpellName = "VelkozQMissile",
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -3421,9 +3931,11 @@ using EloBuddy;
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "VelkozQMissileSplit",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -3482,6 +3994,7 @@ using EloBuddy;
                     DangerValue = 3,
                     IsDangerous = true,
                     MissileSpellName = "ViQMissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies },
                 });
 
             #endregion Vi
@@ -3498,7 +4011,7 @@ using EloBuddy;
                     Delay = 250,
                     Range = 1500,
                     Radius = 80,
-                    MissileSpeed = 780,
+                    MissileSpeed = 1050,
                     FixedRange = false,
                     AddHitbox = true,
                     DangerValue = 2,
@@ -3521,7 +4034,7 @@ using EloBuddy;
                     Type = SkillshotType.SkillshotLine,
                     Delay = 600,
                     Range = 1600,
-                    Radius = 100,
+                    Radius = 95,
                     MissileSpeed = int.MaxValue,
                     FixedRange = true,
                     AddHitbox = true,
@@ -3564,9 +4077,11 @@ using EloBuddy;
                     DangerValue = 2,
                     IsDangerous = true,
                     MissileSpellName = "XerathMageSpearMissile",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = true,
                     CollisionObjects =
-                        new[] { SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall },
+                        new[]
+                        {SpellData.CollisionObjectTypes.Minion, SpellData.CollisionObjectTypes.Champions, SpellData.CollisionObjectTypes.YasuoWall},
                 });
 
             Spells.Add(
@@ -3578,7 +4093,7 @@ using EloBuddy;
                     Type = SkillshotType.SkillshotCircle,
                     Delay = 700,
                     Range = 5600,
-                    Radius = 120,
+                    Radius = 130,
                     MissileSpeed = int.MaxValue,
                     FixedRange = false,
                     AddHitbox = true,
@@ -3589,7 +4104,7 @@ using EloBuddy;
 
             #endregion Xerath
 
-            #region Yasuo
+            #region Yasuo 
 
             Spells.Add(
                 new SpellData
@@ -3678,7 +4193,7 @@ using EloBuddy;
                 new SpellData
                 {
                     ChampionName = "Zed",
-                    SpellName = "ZedQ", //"ZedShuriken",
+                    SpellName = "ZedQ",
                     Slot = SpellSlot.Q,
                     Type = SkillshotType.SkillshotLine,
                     Delay = 250,
@@ -3689,9 +4204,9 @@ using EloBuddy;
                     AddHitbox = true,
                     DangerValue = 2,
                     IsDangerous = false,
-                    MissileSpellName = "zedshurikenmisone",
-                    FromObjects = new[] { "Zed_Clone_idle.troy", "Zed_Clone_Idle.troy" },
-                    ExtraMissileNames = new[] { "zedshurikenmistwo", "zedshurikenmisthree" },
+                    MissileSpellName = "ZedQMissile",
+                    //FromObjects = new[] { "Zed_Clone_idle.troy", "Zed_Clone_Idle.troy" },
+                    FromObjects = new[] { "Zed_Base_W_tar.troy", "Zed_Base_W_cloneswap_buf.troy" },
                     CollisionObjects = new[] { SpellData.CollisionObjectTypes.YasuoWall },
                 });
 
@@ -3715,6 +4230,7 @@ using EloBuddy;
                     DangerValue = 2,
                     IsDangerous = false,
                     MissileSpellName = "ZiggsQSpell",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = false,
                     DisableFowDetection = true,
                 });
@@ -3736,6 +4252,7 @@ using EloBuddy;
                     IsDangerous = false,
                     MissileSpellName = "ZiggsQSpell2",
                     ExtraMissileNames = new[] { "ZiggsQSpell2" },
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = false,
                     DisableFowDetection = true,
                 });
@@ -3757,6 +4274,7 @@ using EloBuddy;
                     IsDangerous = false,
                     MissileSpellName = "ZiggsQSpell3",
                     ExtraMissileNames = new[] { "ZiggsQSpell3" },
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CanBeRemoved = false,
                     DisableFowDetection = true,
                 });
@@ -3830,10 +4348,11 @@ using EloBuddy;
                     SpellName = "ZileanQ",
                     Slot = SpellSlot.Q,
                     Type = SkillshotType.SkillshotCircle,
-                    Delay = 300,
+                    Delay = 250 + 450,
+                    ExtraDuration = 400,
                     Range = 900,
-                    Radius = 210,
-                    MissileSpeed = 2000,
+                    Radius = 140,
+                    MissileSpeed = int.MaxValue,
                     FixedRange = false,
                     AddHitbox = true,
                     DangerValue = 2,
@@ -3850,25 +4369,25 @@ using EloBuddy;
                 new SpellData
                 {
                     ChampionName = "Zyra",
-                    SpellName = "ZyraQFissure",
+                    SpellName = "ZyraQ",
                     Slot = SpellSlot.Q,
-                    Type = SkillshotType.SkillshotCircle,
+                    Type = SkillshotType.SkillshotLine,
                     Delay = 850,
                     Range = 800,
-                    Radius = 220,
+                    Radius = 140,
                     MissileSpeed = int.MaxValue,
                     FixedRange = false,
                     AddHitbox = true,
                     DangerValue = 2,
                     IsDangerous = false,
-                    MissileSpellName = "ZyraQFissure",
+                    MissileSpellName = "ZyraQ",
                 });
 
             Spells.Add(
                 new SpellData
                 {
                     ChampionName = "Zyra",
-                    SpellName = "ZyraGraspingRoots",
+                    SpellName = "ZyraE",
                     Slot = SpellSlot.E,
                     Type = SkillshotType.SkillshotLine,
                     Delay = 250,
@@ -3879,7 +4398,8 @@ using EloBuddy;
                     AddHitbox = true,
                     DangerValue = 3,
                     IsDangerous = true,
-                    MissileSpellName = "ZyraGraspingRoots",
+                    MissileSpellName = "ZyraE",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CollisionObjects = new[] { SpellData.CollisionObjectTypes.YasuoWall },
                 });
 
@@ -3899,53 +4419,13 @@ using EloBuddy;
                     DangerValue = 3,
                     IsDangerous = true,
                     MissileSpellName = "zyrapassivedeathmanager",
+                    //EarlyEvade = new[] { EarlyObjects.Allies, EarlyObjects.Minions, EarlyObjects.AllyObjects },
                     CollisionObjects = new[] { SpellData.CollisionObjectTypes.YasuoWall },
                 });
 
             #endregion Zyra
-        }
 
-        public static SpellData GetByName(string spellName)
-        {
-            spellName = spellName.ToLower();
-            foreach (var spellData in Spells)
-            {
-                if (spellData.SpellName.ToLower() == spellName || spellData.ExtraSpellNames.Contains(spellName))
-                {
-                    return spellData;
-                }
-            }
-
-            return null;
-        }
-
-        public static SpellData GetByMissileName(string missileSpellName)
-        {
-            missileSpellName = missileSpellName.ToLower();
-            foreach (var spellData in Spells)
-            {
-                if (spellData.MissileSpellName != null && spellData.MissileSpellName.ToLower() == missileSpellName ||
-                    spellData.ExtraMissileNames.Contains(missileSpellName))
-                {
-                    return spellData;
-                }
-            }
-
-            return null;
-        }
-
-        public static SpellData GetBySpeed(string ChampionName, int speed, int id = -1)
-        {
-            foreach (var spellData in Spells)
-            {
-                if (spellData.ChampionName == ChampionName && spellData.MissileSpeed == speed &&
-                    (spellData.Id == -1 || id == spellData.Id))
-                {
-                    return spellData;
-                }
-            }
-
-            return null;
+            //Console.WriteLine("Added " + Spells.Count + " spells.");
         }
     }
 }

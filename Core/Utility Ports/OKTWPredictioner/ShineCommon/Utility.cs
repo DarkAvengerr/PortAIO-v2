@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using LeagueSharp;
 using LeagueSharp.Common;
-using SebbyLib;
+using ShineCommon;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
@@ -85,66 +87,7 @@ using EloBuddy;
 
         public static bool IsValidSlot(SpellSlot slot)
         {
-            return slot == SpellSlot.Q || slot == SpellSlot.W || slot == SpellSlot.E || slot == SpellSlot.W;
+            return slot == SpellSlot.Q || slot == SpellSlot.W || slot == SpellSlot.E || slot == SpellSlot.R;
         }
-
-        public static void CastSebby(this Spell spell, Obj_AI_Base unit, HitChance hit, bool aoe2 = false)
-        {
-            SebbyLib.Prediction.SkillshotType CoreType2 = SebbyLib.Prediction.SkillshotType.SkillshotLine;
-
-            if (spell.Type == SkillshotType.SkillshotCircle)
-            {
-                CoreType2 = SebbyLib.Prediction.SkillshotType.SkillshotCircle;
-                aoe2 = true;
-            }
-
-            if (spell.Width > 80 && !spell.Collision)
-                aoe2 = true;
-
-            var predInput2 = new SebbyLib.Prediction.PredictionInput
-            {
-                Aoe = aoe2,
-                Collision = spell.Collision,
-                Speed = spell.Speed,
-                Delay = spell.Delay,
-                Range = spell.Range,
-                From = ObjectManager.Player.ServerPosition,
-                Radius = spell.Width,
-                Unit = unit,
-                Type = CoreType2
-            };
-            var poutput2 = SebbyLib.Prediction.Prediction.GetPrediction(predInput2);
-
-            //var poutput2 = QWER.GetPrediction(target);
-
-            if (spell.Speed != Single.MaxValue && OktwCommon.CollisionYasuo(ObjectManager.Player.ServerPosition,
-                poutput2.CastPosition))
-                return;
-
-            switch (hit)
-            {
-                case HitChance.Low:
-                    if (poutput2.Hitchance >= SebbyLib.Prediction.HitChance.Low)
-                        spell.Cast(poutput2.CastPosition);
-                    break;
-                case HitChance.Medium:
-                    if (poutput2.Hitchance >= SebbyLib.Prediction.HitChance.Medium)
-                        spell.Cast(poutput2.CastPosition);
-                    break;
-                case HitChance.High:
-                    if (poutput2.Hitchance >= SebbyLib.Prediction.HitChance.High)
-                        spell.Cast(poutput2.CastPosition);
-                    break;
-                case HitChance.VeryHigh:
-                    if (poutput2.Hitchance >= SebbyLib.Prediction.HitChance.VeryHigh)
-                        spell.Cast(poutput2.CastPosition);
-                    break;
-                case HitChance.Immobile:
-                    if (poutput2.Hitchance >= SebbyLib.Prediction.HitChance.Immobile)
-                        spell.Cast(poutput2.CastPosition);
-                    break;
-            }
-        }
-
     }
 }
