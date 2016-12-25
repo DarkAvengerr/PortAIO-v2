@@ -48,9 +48,30 @@ namespace myKatarina.Manager.Events.Games.Mode
                     HeroManager.Enemies.Any(x => x.DistanceToPlayer() <= R.Range) && !Q.IsReady() && !W.IsReady() &&
                     !E.IsReady())
                 {
-                    Orbwalker.SetAttack(false);
-                    Orbwalker.SetMovement(false);
-                    R.Cast();
+                    if (Menu.GetBool("ComboRalways"))
+                    {
+                        Orbwalker.SetAttack(false);
+                        Orbwalker.SetMovement(false);
+                        R.Cast();
+                    }
+
+                    if (Menu.GetBool("ComboRcanKill") &&
+                        (target.Health <= DamageCalculate.GetComboDamage(target) ||
+                         target.Health <= DamageCalculate.GetRDamage(target)*0.8))
+                    {
+                        Orbwalker.SetAttack(false);
+                        Orbwalker.SetMovement(false);
+                        R.Cast();
+                    }
+
+                    if (Menu.GetBool("ComboRhitCount") &&
+                        HeroManager.Enemies.Count(x => !x.IsDead && x.DistanceToPlayer() <= R.Range) >=
+                        Menu.GetSlider("ComboRhitCountcount"))
+                    {
+                        Orbwalker.SetAttack(false);
+                        Orbwalker.SetMovement(false);
+                        R.Cast();
+                    }
                 }
             }
         }

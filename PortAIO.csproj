@@ -482,6 +482,7 @@
     <Compile Include="Core\AIO Ports\mySeries\myCommon\DamageIndicator.cs" />
     <Compile Include="Core\AIO Ports\mySeries\myCommon\Distance.cs" />
     <Compile Include="Core\AIO Ports\mySeries\myCommon\HumanizerManager.cs" />
+    <Compile Include="Core\AIO Ports\mySeries\myCommon\ItemManager.cs" />
     <Compile Include="Core\AIO Ports\mySeries\myCommon\LevelsManager.cs" />
     <Compile Include="Core\AIO Ports\mySeries\myCommon\ManaManager.cs" />
     <Compile Include="Core\AIO Ports\mySeries\myCommon\MenuManager.cs" />
