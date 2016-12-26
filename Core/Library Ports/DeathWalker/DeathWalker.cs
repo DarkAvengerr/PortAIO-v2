@@ -260,14 +260,17 @@ namespace DetuksSharp
 
         public static void doAttack(AttackableUnit target)
         {
-            FireBeforeAttack(target);
-            if (EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, target))
+            if (target != null)
             {
-                playerStoped = false;
-                previousAttack = lastAutoAttack;
-                lastAutoAttack = now;
-                lastAutoAttackMove = now;
-                lastAutoAttackUnit = target;
+                FireBeforeAttack(target);
+                if (EloBuddy.Player.IssueOrder(GameObjectOrder.AttackUnit, target))
+                {
+                    playerStoped = false;
+                    previousAttack = lastAutoAttack;
+                    lastAutoAttack = now;
+                    lastAutoAttackMove = now;
+                    lastAutoAttackUnit = target;
+                }
             }
         }
 
@@ -454,9 +457,10 @@ namespace DetuksSharp
         {
             soliderHit = false;
             var target = TargetSelector.GetTarget(-1, TargetSelector.DamageType.Physical);
-            if (target != null && target.IsValidTarget() && ObjectManager.Player.Distance(target) <= Player.Instance.AttackRange)
+            if (target != null)
             {
-                return target;
+                if (target.IsValidTarget() && ObjectManager.Player.Distance(target) <= Player.Instance.AttackRange)
+                    return target;
             }
             return null;
         }
