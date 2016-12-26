@@ -55,7 +55,7 @@ namespace SPrediction
             s_Menu = new Menu("SPrediction", prefMenuName);
             s_Menu.AddItem(new MenuItem("PREDICTONLIST", "Prediction Method").SetValue(new StringList(new[] { "SPrediction", "Common Prediction" }, 0)));
             s_Menu.AddItem(new MenuItem("SPREDWINDUP", "Check for target AA Windup").SetValue(false));
-            s_Menu.AddItem(new MenuItem("SPREDMAXRANGEIGNORE", "Max Range Dodge Ignore (%)").SetValue(new Slider(0, 0, 100)));
+            s_Menu.AddItem(new MenuItem("SPREDMAXRANGEIGNORE", "Max Range Dodge Ignore (%)").SetValue(new Slider(50, 0, 100)));
             s_Menu.AddItem(new MenuItem("SPREDREACTIONDELAY", "Ignore Rection Delay").SetValue<Slider>(new Slider(0, 0, 200)));
             s_Menu.AddItem(new MenuItem("SPREDDELAY", "Spell Delay").SetValue(new Slider(0, 0, 200)));
             s_Menu.AddItem(new MenuItem("SPREDHC", "Count HitChance").SetValue(new KeyBind(32, KeyBindType.Press)));
