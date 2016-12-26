@@ -81,7 +81,6 @@ namespace PortAIO
                 }
             }
 
-            /*
             if (Misc.menu.Item("AutoPlay").GetValue<bool>())
             {
                 switch (Misc.menu.Item("selectAutoPlay").GetValue<StringList>().SelectedIndex)
@@ -89,14 +88,14 @@ namespace PortAIO
                     case 0: // AramDetFull
                         ARAMDetFull.Program.Main();
                         break;
-                    case 1: // AutoJungle
-                        AutoJungle.Program.OnGameLoad();
-                        break;
-                    case 2: // SharpAI
-                        SharpAI.Program.Main();
-                        break;
+                    //case 1: // AutoJungle
+                    //    AutoJungle.Program.OnGameLoad();
+                    //    break;
+                    //case 2: // SharpAI
+                    //    SharpAI.Program.Main();
+                    //    break;
                 }
-            }*/
+            }
 
             if (Misc.menu.Item("enableTracker").GetValue<bool>())
             {

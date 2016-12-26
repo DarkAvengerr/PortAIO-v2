@@ -1222,6 +1222,24 @@
     <Compile Include="Core\AIO Ports\xSalice_Reworked\Utilities\Initiator.cs" />
     <Compile Include="Core\AIO Ports\xSalice_Reworked\Utilities\Util.cs" />
     <Compile Include="Core\AIO Ports\xSalice_Reworked\Utilities\WardJumper.cs" />
+    <Compile Include="Core\AutoPlay Ports\AramDetFull\Aggresivity.cs" />
+    <Compile Include="Core\AutoPlay Ports\AramDetFull\ARAMDetFull.cs" />
+    <Compile Include="Core\AutoPlay Ports\AramDetFull\ARAMSimulator.cs" />
+    <Compile Include="Core\AutoPlay Ports\AramDetFull\ARAMTargetSelector.cs" />
+    <Compile Include="Core\AutoPlay Ports\AramDetFull\AutoLevel.cs" />
+    <Compile Include="Core\AutoPlay Ports\AramDetFull\AutoShopper.cs" />
+    <Compile Include="Core\AutoPlay Ports\AramDetFull\Champions\Champion.cs" />
+    <Compile Include="Core\AutoPlay Ports\AramDetFull\ErrorLogger.cs" />
+    <Compile Include="Core\AutoPlay Ports\AramDetFull\FullItem.cs" />
+    <Compile Include="Core\AutoPlay Ports\AramDetFull\ItemHandler.cs" />
+    <Compile Include="Core\AutoPlay Ports\AramDetFull\Items.cs" />
+    <Compile Include="Core\AutoPlay Ports\AramDetFull\MapControl.cs" />
+    <Compile Include="Core\AutoPlay Ports\AramDetFull\Polygon.cs" />
+    <Compile Include="Core\AutoPlay Ports\AramDetFull\Program.cs" />
+    <Compile Include="Core\AutoPlay Ports\AramDetFull\Sector.cs" />
+    <Compile Include="Core\AutoPlay Ports\AramDetFull\SpellsSDK\SpellUtility.cs" />
+    <Compile Include="Core\AutoPlay Ports\AramDetFull\SummonerItems.cs" />
+    <Compile Include="Core\AutoPlay Ports\AramDetFull\SummonerSpells.cs" />
     <Compile Include="Core\Champion Ports\Akali\QuantumAkali\DrawDamage.cs" />
     <Compile Include="Core\Champion Ports\Akali\QuantumAkali\Program.cs" />
     <Compile Include="Core\Champion Ports\Azir\Creator Of Elo\AzirMain.cs" />
@@ -3029,6 +3047,7 @@
     <Compile Include="Core\Champion Ports\Vayne\VayneHunterReborn\VHR.cs" />
     <Compile Include="Core\Champion Ports\Zilean\ElZilean\ListExtensions.cs" />
     <Compile Include="Core\Champion Ports\Zilean\ElZilean\Prediction.cs" />
+    <Compile Include="Core\Library Ports\DeathWalker\DeathWalker.cs" />
     <Compile Include="Core\Library Ports\DevCommom\AssemblyUtil.cs" />
     <Compile Include="Core\Library Ports\DevCommom\BarrierManager.cs" />
     <Compile Include="Core\Library Ports\DevCommom\DevHelper.cs" />
@@ -6714,7 +6733,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\AIO Ports\SharpyAIO\Core\" />
-    <Folder Include="Core\AutoPlay Ports\" />
     <Folder Include="Core\Champion Ports\Diana\ReformedAIO\" />
     <Folder Include="Core\Champion Ports\Gnar\ReformedAIO\" />
     <Folder Include="Core\Champion Ports\Kalista\Hikicarry Kalista\HikiOrbwalker\" />
