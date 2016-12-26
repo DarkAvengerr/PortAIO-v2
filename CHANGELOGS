@@ -1,3 +1,6 @@
+[12/26/16]
+- Temporarily switched the damage calculation from PortAIO.Common's to EB's calculator, should work perfect until we fix PortAIO.Common's Damage Calc.
+
 [12/25/16]
 - Improve Predictioners (OKTW & SPrediction)
 - Autoplay is back. Only ARAMDetFull came back. AutoJungle and SharpAI will come back later following the stabilization of ARAMDetFUll.
