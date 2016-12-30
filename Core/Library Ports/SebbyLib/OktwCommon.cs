@@ -34,10 +34,14 @@ namespace SebbyLib
                     YasuoInGame = true;
             }
             Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
-            EloBuddy.Player.OnIssueOrder += Obj_AI_Base_OnIssueOrder;
-            Spellbook.OnCastSpell += Spellbook_OnCastSpell;
-            Game.OnUpdate += OnUpdate;
             Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnDoCast;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnDoCast;
+            Obj_AI_Base.OnBasicAttack += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnBasicAttack += Obj_AI_Base_OnDoCast;
+            Spellbook.OnCastSpell += Spellbook_OnCastSpell;
+            EloBuddy.Player.OnIssueOrder += Obj_AI_Base_OnIssueOrder;
+            Game.OnUpdate += OnUpdate;
             Game.OnWndProc += Game_OnWndProc;
         }
 
