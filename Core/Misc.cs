@@ -68,7 +68,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "OKTW", "FreshBooster", "KurisuBlitz", "SAutoCarry", "SharpShooter", "ShineAIO", "Support is Easy", "vSeries", "[SDK] Flowers' Series", "[SDK] xcsoft's Blitzcrank", "JustBlitzcrank", "MoonBlitz", "SluttyBlitz", "sAIO" };
                     break;
                 case EloBuddy.Champion.Brand:
-                    champ = new string[] { "The Brand", "Hikicarry Brand", "OKTW", "[SA] SurvivorSeries", "yol0 Brand", "DevBrand", "Flowers' Brand", "Kimbaeng Brand", "sBrand", "SN Brand", "SurvivorSeriesAIO", "SergixBrand", "Shulepin's Brand" };
+                    champ = new string[] { "The Brand", "Hikicarry Brand", "OKTW", "[SA] SurvivorSeries", "yol0 Brand", "DevBrand", "Flowers' Brand", "Kimbaeng Brand", "sBrand", "SN Brand", "SurvivorSeriesAIO", "SergixBrand", "Shulepin's Brand", "ReformedAIO" };
                     break;
                 case EloBuddy.Champion.Braum:
                     champ = new string[] { "OKTW", "FreshBooster", "Support is Easy" };
@@ -353,7 +353,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "PandaTeemo", "SharpShooter", "Marksman#", "[SDK] ChallengerSeriesAIO", "[SDK] SwiftlyTeemo", "NoobTeemo", "TSM_Teemo", "[SDK] Tc_SDKexAIO", "OKTW" };
                     break;
                 case EloBuddy.Champion.Thresh:
-                    champ = new string[] { "Danz - Chain Warden", "FreshBooster", "OKTW", "Support is Easy", "vSeries", "Dark Star Thresh", "SluttyThresh", "Thresh as The Chain Warden", "Thresh - Catch Fish", "Thresh - the Ruler of the Soul", "Thresh the Flay Maker", "yol0 Thresh" };
+                    champ = new string[] { "Danz - Chain Warden", "FreshBooster", "OKTW", "Support is Easy", "vSeries", "Dark Star Thresh", "SluttyThresh", "Thresh as The Chain Warden", "Thresh - Catch Fish", "Thresh - the Ruler of the Soul", "Thresh the Flay Maker", "yol0 Thresh", "ReformedAIO" };
                     break;
                 case EloBuddy.Champion.Tristana:
                     champ = new string[] { "ElTristana", "ADCPackage", "D-Tristana", "iSeriesReborn", "OKTW", "PewPewTristana", "ProSeries", "SharpShooter", "Marksman#", "[SDK] ExorAIO", "[SDK] Flowers' Series", "Flowers' Tristana", "Geass Tristana", "SkyLV Tristana", "Tristana#", "TrooperTristana", "ProjectGeass", "Hikicarry ADC", "Flowers' ADC Series", "Tristana Hawk Mode" };
@@ -407,7 +407,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "UnderratedAIO", "2Girls1Monkey", "Hoola Wukong", "JustWukong", "mztikk's Wukong", "xQx Wukong", "NoobWukong" };
                     break;
                 case EloBuddy.Champion.Xerath:
-                    champ = new string[] { "Kortatu's Xerath", "OKTW", "SluttyXerath", "M1D 0R F33D", "ElXerath", "Xerath - the Magnus Ascendant", "Lord's Xerath" };
+                    champ = new string[] { "Kortatu's Xerath", "OKTW", "SluttyXerath", "M1D 0R F33D", "ElXerath", "Xerath - the Magnus Ascendant", "Lord's Xerath", "ReformedAIO" };
                     break;
                 case EloBuddy.Champion.XinZhao:
                     champ = new string[] { "xQx XinZhao", "BrianSharp", "XinZhao God", "mztikk's Xin Zhao", "NoobXinZhao" };

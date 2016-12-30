@@ -8,7 +8,7 @@ using LeagueSharp.Common;
 using Lee_Sin.WardManager;
 using SharpDX;
 using Color = System.Drawing.Color;
-using Prediction = Lee_Sin.Prediction;
+using Prediction = SebbyLib.Prediction;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
@@ -135,7 +135,7 @@ using EloBuddy;
             }
             #region Q Smite
 
-            var prediction = Prediction.GetPrediction(target, Q.Delay);
+            var prediction = Prediction.Prediction.GetPrediction(target, Q.Delay);
 
             var collision = Q.GetCollision(Player.Position.To2D(),
                 new List<Vector2> { prediction.UnitPosition.To2D() });

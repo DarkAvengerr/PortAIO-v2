@@ -1398,7 +1398,6 @@
     <Compile Include="Core\Champion Ports\Brand\Flowers%27 Brand\Common\Common.cs" />
     <Compile Include="Core\Champion Ports\Brand\Flowers%27 Brand\Common\HpBarDraw.cs" />
     <Compile Include="Core\Champion Ports\Brand\Flowers%27 Brand\Common\YasuoWindWall.cs" />
-    <Compile Include="Core\Champion Ports\Brand\Flowers%27 Brand\Prediction\OKTWPrediction.cs" />
     <Compile Include="Core\Champion Ports\Brand\Flowers%27 Brand\Prediction\SDKPrediction.cs" />
     <Compile Include="Core\Champion Ports\Brand\Flowers%27 Brand\Prediction\xcsoftPrediction.cs" />
     <Compile Include="Core\Champion Ports\Brand\Flowers%27 Brand\Program.cs" />
@@ -1580,7 +1579,6 @@
     <Compile Include="Core\Champion Ports\Jhin\Flowers%27 Jhin\Common\Common.cs" />
     <Compile Include="Core\Champion Ports\Jhin\Flowers%27 Jhin\Common\HpBarDraw.cs" />
     <Compile Include="Core\Champion Ports\Jhin\Flowers%27 Jhin\Common\YasuoWindWall.cs" />
-    <Compile Include="Core\Champion Ports\Jhin\Flowers%27 Jhin\Prediction\OKTWPrediction.cs" />
     <Compile Include="Core\Champion Ports\Jhin\Flowers%27 Jhin\Prediction\SDKPrediction.cs" />
     <Compile Include="Core\Champion Ports\Jhin\Flowers%27 Jhin\Prediction\xcsoftPrediction.cs" />
     <Compile Include="Core\Champion Ports\Jhin\Flowers%27 Jhin\Program.cs" />
@@ -1722,7 +1720,6 @@
     <Compile Include="Core\Champion Ports\Nidalee\Flowers%27 Nidalee\Common\Common.cs" />
     <Compile Include="Core\Champion Ports\Nidalee\Flowers%27 Nidalee\Common\HpBarDraw.cs" />
     <Compile Include="Core\Champion Ports\Nidalee\Flowers%27 Nidalee\Common\YasuoWindWall.cs" />
-    <Compile Include="Core\Champion Ports\Nidalee\Flowers%27 Nidalee\Prediction\OKTWPrediction.cs" />
     <Compile Include="Core\Champion Ports\Nidalee\Flowers%27 Nidalee\Prediction\SDKPrediction.cs" />
     <Compile Include="Core\Champion Ports\Nidalee\Flowers%27 Nidalee\Prediction\xcsoftPrediction.cs" />
     <Compile Include="Core\Champion Ports\Nidalee\Flowers%27 Nidalee\Program.cs" />
@@ -2018,7 +2015,6 @@
     <Compile Include="Core\Champion Ports\Diana\Flowers%27 Diana\Common\Common.cs" />
     <Compile Include="Core\Champion Ports\Diana\Flowers%27 Diana\Common\HpBarDraw.cs" />
     <Compile Include="Core\Champion Ports\Diana\Flowers%27 Diana\Common\YasuoWindWall.cs" />
-    <Compile Include="Core\Champion Ports\Diana\Flowers%27 Diana\Prediction\OKTWPrediction.cs" />
     <Compile Include="Core\Champion Ports\Diana\Flowers%27 Diana\Prediction\SDKPrediction.cs" />
     <Compile Include="Core\Champion Ports\Diana\Flowers%27 Diana\Prediction\xcsoftPrediction.cs" />
     <Compile Include="Core\Champion Ports\Diana\Flowers%27 Diana\Program.cs" />
@@ -2026,7 +2022,6 @@
     <Compile Include="Core\Champion Ports\Karthus\Flowers%27 Karthus\Common\EnemyTracker.cs" />
     <Compile Include="Core\Champion Ports\Karthus\Flowers%27 Karthus\Common\HpBarDraw.cs" />
     <Compile Include="Core\Champion Ports\Karthus\Flowers%27 Karthus\Common\YasuoWindWall.cs" />
-    <Compile Include="Core\Champion Ports\Karthus\Flowers%27 Karthus\Prediction\OKTWPrediction.cs" />
     <Compile Include="Core\Champion Ports\Karthus\Flowers%27 Karthus\Prediction\SDKPrediction.cs" />
     <Compile Include="Core\Champion Ports\Karthus\Flowers%27 Karthus\Prediction\xcsoftPrediction.cs" />
     <Compile Include="Core\Champion Ports\Karthus\Flowers%27 Karthus\Program.cs" />
@@ -2602,7 +2597,6 @@
     <Compile Include="Core\Champion Ports\Lee Sin\SluttyLeeSin\Misc\BubbaKush.cs" />
     <Compile Include="Core\Champion Ports\Lee Sin\SluttyLeeSin\Misc\Notifciations.cs" />
     <Compile Include="Core\Champion Ports\Lee Sin\SluttyLeeSin\Misc\VersionCheck.cs" />
-    <Compile Include="Core\Champion Ports\Lee Sin\SluttyLeeSin\OKTWPrediction.cs" />
     <Compile Include="Core\Champion Ports\Lee Sin\SluttyLeeSin\OnLoad.cs" />
     <Compile Include="Core\Champion Ports\Lee Sin\SluttyLeeSin\OnUpdate.cs" />
     <Compile Include="Core\Champion Ports\Lee Sin\SluttyLeeSin\ProcessHandler.cs" />
@@ -6873,7 +6867,6 @@
     <Folder Include="Core\Champion Ports\Diana\ReformedAIO\" />
     <Folder Include="Core\Champion Ports\Gnar\ReformedAIO\" />
     <Folder Include="Core\Champion Ports\Kalista\Hikicarry Kalista\HikiOrbwalker\" />
-    <Folder Include="Core\Champion Ports\Karthus\Flowers%27 Karthus\Orbwalking\" />
     <Folder Include="Core\Champion Ports\Veigar\PlaceboVeigar\ShineCommon\Orbwalking\" />
   </ItemGroup>
   <ItemGroup>

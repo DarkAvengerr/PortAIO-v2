@@ -10,7 +10,7 @@ using Lee_Sin.ActiveModes;
 using Lee_Sin.Drawings;
 using Lee_Sin.Misc;
 using Lee_Sin.WardManager;
-using Prediction = Lee_Sin.Prediction;
+using Prediction = SebbyLib.Prediction;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
@@ -27,9 +27,9 @@ using EloBuddy;
             {
                 case 0:
                 {
-                    const SkillshotType coreType2 = SkillshotType.SkillshotLine;
+                    const Prediction.SkillshotType coreType2 = Prediction.SkillshotType.SkillshotLine;
 
-                    var predInput2 = new PredictionInput
+                    var predInput2 = new Prediction.PredictionInput
                     {
                         Collision = qwer.Collision,
                         Speed = qwer.Speed,
@@ -40,10 +40,11 @@ using EloBuddy;
                         Unit = target,
                         Type = coreType2
                     };
-                    var poutput2 = Prediction.GetPrediction(predInput2);
+                    var poutput2 = Prediction.Prediction.GetPrediction(predInput2);
+
                     // if (poutput2 == null) return;
-                    if (poutput2.Hitchance >= HitChance.High || poutput2.Hitchance == HitChance.Immobile ||
-                        poutput2.Hitchance == HitChance.Dashing)
+                    if (poutput2.Hitchance >= Prediction.HitChance.High || poutput2.Hitchance == Prediction.HitChance.Immobile ||
+                        poutput2.Hitchance == Prediction.HitChance.Dashing)
                     {
                         qwer.Cast(poutput2.CastPosition);
                     }

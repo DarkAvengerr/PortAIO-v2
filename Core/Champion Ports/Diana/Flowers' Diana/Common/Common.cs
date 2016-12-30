@@ -39,31 +39,31 @@ using EloBuddy;
             }
         }
 
-        public static OKTWPrediction.HitChance MinOKTWHitChance
+        public static SebbyLib.Prediction.HitChance MinOKTWHitChance
         {
             get
             {
                 if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 0)
                 {
-                    return OKTWPrediction.HitChance.VeryHigh;
+                    return SebbyLib.Prediction.HitChance.VeryHigh;
                 }
 
                 if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 1)
                 {
-                    return OKTWPrediction.HitChance.High;
+                    return SebbyLib.Prediction.HitChance.High;
                 }
 
                 if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 2)
                 {
-                    return OKTWPrediction.HitChance.Medium;
+                    return SebbyLib.Prediction.HitChance.Medium;
                 }
 
                 if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 3)
                 {
-                    return OKTWPrediction.HitChance.Low;
+                    return SebbyLib.Prediction.HitChance.Low;
                 }
 
-                return OKTWPrediction.HitChance.VeryHigh;
+                return SebbyLib.Prediction.HitChance.VeryHigh;
             }
         }
 
@@ -111,14 +111,14 @@ using EloBuddy;
                     break;
                 case 1:
                     {
-                        OKTWPrediction.SkillshotType CoreType2 = OKTWPrediction.SkillshotType.SkillshotLine;
+                        SebbyLib.Prediction.SkillshotType CoreType2 = SebbyLib.Prediction.SkillshotType.SkillshotLine;
 
                         if (Spells.Type == SkillshotType.SkillshotCircle)
                         {
-                            CoreType2 = OKTWPrediction.SkillshotType.SkillshotCircle;
+                            CoreType2 = SebbyLib.Prediction.SkillshotType.SkillshotCircle;
                         }
 
-                        var predInput2 = new OKTWPrediction.PredictionInput
+                        var predInput2 = new SebbyLib.Prediction.PredictionInput
                         {
                             Aoe = AOE,
                             Collision = Spells.Collision,
@@ -131,7 +131,7 @@ using EloBuddy;
                             Type = CoreType2
                         };
 
-                        var poutput2 = OKTWPrediction.Prediction.GetPrediction(predInput2);
+                        var poutput2 = SebbyLib.Prediction.Prediction.GetPrediction(predInput2);
 
                         if (Spells.Speed != float.MaxValue && YasuoWindWall.CollisionYasuo(ObjectManager.Player.ServerPosition, poutput2.CastPosition))
                         {

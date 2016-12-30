@@ -31,14 +31,14 @@ using EloBuddy;
                     break;
                 case 1:
                     {
-                        OKTWPrediction.SkillshotType CoreType2 = OKTWPrediction.SkillshotType.SkillshotLine;
+                        SebbyLib.Prediction.SkillshotType CoreType2 = SebbyLib.Prediction.SkillshotType.SkillshotLine;
 
                         if (Spells.Type == SkillshotType.SkillshotCircle)
                         {
-                            CoreType2 = OKTWPrediction.SkillshotType.SkillshotCircle;
+                            CoreType2 = SebbyLib.Prediction.SkillshotType.SkillshotCircle;
                         }
 
-                        var predInput2 = new OKTWPrediction.PredictionInput
+                        var predInput2 = new SebbyLib.Prediction.PredictionInput
                         {
                             Aoe = AOE,
                             Collision = Spells.Collision,
@@ -51,18 +51,18 @@ using EloBuddy;
                             Type = CoreType2
                         };
 
-                        var poutput2 = OKTWPrediction.Prediction.GetPrediction(predInput2);
+                        var poutput2 = SebbyLib.Prediction.Prediction.GetPrediction(predInput2);
 
                         if (Spells.Speed != float.MaxValue && YasuoWindWall.CollisionYasuo(ObjectManager.Player.ServerPosition, poutput2.CastPosition))
                         {
                             return;
                         }
 
-                        if (poutput2.Hitchance >= OKTWPrediction.HitChance.VeryHigh)
+                        if (poutput2.Hitchance >= SebbyLib.Prediction.HitChance.VeryHigh)
                         {
                             Spells.Cast(poutput2.CastPosition, true);
                         }
-                        else if (predInput2.Aoe && poutput2.AoeTargetsHitCount > 1 && poutput2.Hitchance >= OKTWPrediction.HitChance.High)
+                        else if (predInput2.Aoe && poutput2.AoeTargetsHitCount > 1 && poutput2.Hitchance >= SebbyLib.Prediction.HitChance.High)
                         {
                             Spells.Cast(poutput2.CastPosition, true);
                         }

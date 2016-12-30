@@ -641,6 +641,9 @@ namespace PortAIO
                         case 12: // Shulepin's Brand
                             Brand.Load.Main();
                             break;
+                        case 13: // ReformedAIO
+                            ReformedAIO.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Braum:
@@ -3218,6 +3221,9 @@ namespace PortAIO
                         case 11: // yol0 Thresh
                             yol0Thresh.Program.Main();
                             break;
+                        case 12: // ReformedAIO
+                            ReformedAIO.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Tristana:
@@ -3797,6 +3803,9 @@ namespace PortAIO
                             break;
                         case 6: // Lord's Xerath
                             Lords_Xerath.Program.Main();
+                            break;
+                        case 7: // ReformedAIO
+                            ReformedAIO.Program.Main();
                             break;
                     }
                     break;
