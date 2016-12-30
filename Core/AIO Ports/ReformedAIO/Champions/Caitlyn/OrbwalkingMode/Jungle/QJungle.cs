@@ -16,12 +16,18 @@ namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Jungle
     {
         public override string Name { get; set; } = "Q";
 
-        private readonly QSpell qSpell;
+        private readonly QSpell spell;
 
-        public QJungle(QSpell qSpell)
+        public QJungle(QSpell spell)
         {
-            this.qSpell = qSpell;
+            this.spell = spell;
         }
+
+        private Obj_AI_Base Mobs =>
+          MinionManager.GetMinions(ObjectManager.Player.Position,
+              spell.Spell.Range,
+              MinionTypes.All,
+              MinionTeam.Neutral).FirstOrDefault();
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
@@ -41,24 +47,21 @@ namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Jungle
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("QOverkill", "Overkill Check").SetValue(true));
+            Menu.AddItem(new MenuItem("Caitlyn.Jungle.Q.Overkill", "Overkill Check").SetValue(true));
         }
 
         private void OnUpdate(EventArgs args)
         {
-            var mobs = MinionManager.GetMinions(qSpell.Spell.Range, MinionTypes.All, MinionTeam.Neutral,MinionOrderTypes.MaxHealth).FirstOrDefault();
+            if (Mobs == null || !Mobs.IsValid || !CheckGuardians()) return;
 
-            if (mobs == null || !mobs.IsValid || !CheckGuardians()) return;
+            var qPrediction = spell.Spell.GetPrediction(Mobs);
 
-            var qPrediction = qSpell.Spell.GetPrediction(mobs);
-
-            if (Menu.Item("QOverkill").GetValue<bool>() && mobs.Health < ObjectManager.Player.GetAutoAttackDamage(mobs) * 4)
+            if (Menu.Item("Caitlyn.Jungle.Q.Overkill").GetValue<bool>() && Mobs.Health < ObjectManager.Player.GetAutoAttackDamage(Mobs) * 4)
             {
                 return;
             }
 
-            LeagueSharp.Common.Utility.DelayAction.Add(5, ()=> qSpell.Spell.Cast(qPrediction.CastPosition));
-
+            LeagueSharp.Common.Utility.DelayAction.Add(5, ()=> spell.Spell.Cast(qPrediction.CastPosition));
         }
     }
 }

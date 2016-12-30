@@ -30,8 +30,8 @@ namespace ReformedAIO.Champions.Lucian.Killsteal
                 || Target.Health > rSpell.GetDamage(Target)
                 || !CheckGuardians()
                 || Target.Distance(ObjectManager.Player) > rSpell.Spell.Range
-                || (Menu.Item("Safety").GetValue<bool>() && ObjectManager.Player.CountEnemiesInRange(rSpell.Spell.Range) > 1))
-            {               // Soz for lazy 'safety' check xd cba
+                || (Menu.Item("Killsteal.R.Safety").GetValue<bool>() && ObjectManager.Player.CountEnemiesInRange(rSpell.Spell.Range) > 1))
+            {            
                 return;
             }
 
@@ -48,6 +48,7 @@ namespace ReformedAIO.Champions.Lucian.Killsteal
             base.OnDisable(sender, eventArgs);
 
             Game.OnUpdate -= OnUpdate;
+            
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs eventArgs)
@@ -55,13 +56,14 @@ namespace ReformedAIO.Champions.Lucian.Killsteal
             base.OnEnable(sender, eventArgs);
 
             Game.OnUpdate += OnUpdate;
+           
         }
 
         protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("Safety", "Safety Check").SetValue(true));
+            Menu.AddItem(new MenuItem("Killsteal.R.Safety", "Safety Check").SetValue(true));
         }
     }
 }

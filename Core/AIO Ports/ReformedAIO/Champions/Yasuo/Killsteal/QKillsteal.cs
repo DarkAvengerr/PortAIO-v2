@@ -15,39 +15,39 @@ namespace ReformedAIO.Champions.Yasuo.Killsteal
     {
         public override string Name { get; set; } = "Q";
 
-        private readonly Q1Spell qSpell;
+        private readonly QSpell spell;
 
-        private readonly Q3Spell q3Spell;
-
-        public QKillsteal(Q1Spell qSpell, Q3Spell q3Spell)
+        public QKillsteal(QSpell spell)
         {
-            this.qSpell = qSpell;
-            this.q3Spell = q3Spell;
+            this.spell = spell;
         }
 
-        private float Range => ObjectManager.Player.HasBuff("YasuoQ3W") ? q3Spell.Spell.Range : qSpell.Spell.Range;
+        private float Range => spell.Spell.Range;
 
         private AIHeroClient Target => TargetSelector.GetTarget(Range, TargetSelector.DamageType.Physical);
 
         private void OnUpdate(EventArgs args)
         {
-            if (Target == null || Target.Health > qSpell.GetDamage(Target) || !CheckGuardians())
+            if (Target == null || Target.Health > spell.GetDamage(Target) || !CheckGuardians())
             {
                 return;
             }
 
-            if (q3Spell.Active)
+            switch (spell.Spellstate)
             {
-                var q3Pred = q3Spell.Spell.GetPrediction(Target);
+                    case QSpell.SpellState.Whirlwind:
 
-                if (q3Pred.Hitchance >= HitChance.High)
-                {
-                    q3Spell.Spell.Cast(q3Pred.CastPosition);
-                }
-            }
-            else
-            {
-                qSpell.Spell.Cast(Target);
+                    var prediction = spell.Spell.GetPrediction(Target);
+
+                    if (prediction.Hitchance >= HitChance.High)
+                    {
+                        spell.Spell.Cast(prediction.CastPosition);
+                    }
+
+                    break;
+                    case QSpell.SpellState.Standard:
+
+                    break;
             }
         }
 

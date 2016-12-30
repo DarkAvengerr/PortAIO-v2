@@ -3,15 +3,9 @@ using LeagueSharp.Common;
 namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Combo
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
 
     using LeagueSharp;
     using LeagueSharp.Common;
-
-    using ReformedAIO.Library.Dash_Handler;
-    using ReformedAIO.Library.Get_Information.HeroInfo;
-    using ReformedAIO.Library.Spell_Information;
 
     using Yasuo.Core.Spells;
 
@@ -20,61 +14,71 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Combo
     internal sealed class QCombo : OrbwalkingChild
     {
         public override string Name { get; set; } = "Q";
+            
+        private readonly QSpell spell;
 
-        private readonly Q1Spell qSpell;
-
-        private readonly Q3Spell q3Spell;
-
-        private DashPosition dashPos;
-
-        public QCombo(Q1Spell qSpell, Q3Spell q3Spell)
+        public QCombo(QSpell spell)
         {
-            this.qSpell = qSpell;
-            this.q3Spell = q3Spell;
+            this.spell = spell;
         }
-
-        private float Range => ObjectManager.Player.HasBuff("YasuoQ3W") ? q3Spell.Spell.Range : qSpell.Spell.Range;
-
-        private AIHeroClient Target => TargetSelector.GetTarget(Range, TargetSelector.DamageType.Physical);
-
-       // private Obj_AI_Base Minion => MinionManager.GetMinions(ObjectManager.Player.Position, Range).FirstOrDefault();
+      
+        private AIHeroClient Target => TargetSelector.GetTarget(spell.Spell.Range, TargetSelector.DamageType.Physical);
 
         private void OnUpdate(EventArgs args)
         {
-            if (Target == null || !CheckGuardians() || (ObjectManager.Player.IsDashing() && !qSpell.EqRange(Target.Position)))
+            if (Target == null || !CheckGuardians())
             {
                 return;
             }
 
-            if (q3Spell.Active)
+            switch (spell.Spellstate)
             {
-                var pred = q3Spell.Spell.GetPrediction(Target);
+                case QSpell.SpellState.Whirlwind:
+                    Whirlwind();
+                    break;
 
-                switch (Menu.Item("Hitchance").GetValue<StringList>().SelectedIndex)
-                {
-                    case 0:
-                        if (pred.Hitchance >= HitChance.Medium)
-                        {
-                            q3Spell.Spell.Cast(pred.CastPosition);
-                        }
-                        break;
-                    case 1:
-                        if (pred.Hitchance >= HitChance.High)
-                        {
-                            q3Spell.Spell.Cast(pred.CastPosition);
-                        }
-                        break;
-                    case 2:
-                        if (pred.Hitchance >= HitChance.VeryHigh)
-                        {
-                            q3Spell.Spell.Cast(pred.CastPosition);
-                        }
-                        break;
-                }
+                case QSpell.SpellState.DashQ:
+                    EQCombo();
+                    break;
+
+                case QSpell.SpellState.Standard:
+                    Whirlwind();
+                    break;
             }
-            else
+        }
+
+        private void EQCombo()
+        {
+            if (spell.CanEQ(Target))
             {
-                LeagueSharp.Common.Utility.DelayAction.Add(2, ()=> qSpell.Spell.CastOnUnit(Target));
+                spell.Spell.Cast(Target);
+            }
+        }
+
+        private void Whirlwind()
+        {
+            var pred = spell.Spell.GetPrediction(Target);
+
+            switch (Menu.Item("Combo.Q.Hitchance2").GetValue<StringList>().SelectedIndex)
+            {
+                case 0:
+                    if (pred.Hitchance >= HitChance.Medium)
+                    {
+                        spell.Spell.Cast(pred.CastPosition);
+                    }
+                    break;
+                case 1:
+                    if (pred.Hitchance >= HitChance.High)
+                    {
+                        spell.Spell.Cast(pred.CastPosition);
+                    }
+                    break;
+                case 2:
+                    if (pred.Hitchance >= HitChance.VeryHigh)
+                    {
+                        spell.Spell.Cast(pred.CastPosition);
+                    }
+                    break;
             }
         }
 
@@ -95,10 +99,10 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Combo
         protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
             base.OnLoad(sender, eventArgs);
+           
+            Menu.AddItem(new MenuItem("Combo.Q.Hitchance2", "Whirlwind Hitchance").SetValue(new StringList(new[] { "Medium", "High", "Very High" }, 1)));
 
-            dashPos = new DashPosition();
-
-            Menu.AddItem(new MenuItem("Hitchance", "Hitchance").SetValue(new StringList(new[] { "Medium", "High", "Very High" }, 1)));
+         //   Menu.AddItem(new MenuItem("Combo.Q.Hitchance", "Q1 Hitchance").SetValue(new StringList(new[] { "Medium", "High", "Very High" }, 1)));
         }
     }
 }

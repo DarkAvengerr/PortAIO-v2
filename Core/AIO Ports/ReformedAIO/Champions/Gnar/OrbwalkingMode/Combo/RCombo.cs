@@ -11,7 +11,6 @@ namespace ReformedAIO.Champions.Gnar.OrbwalkingMode.Combo
     using ReformedAIO.Champions.Gnar.Logic;
     using ReformedAIO.Library.Get_Information.HeroInfo;
 
-    using RethoughtLib.FeatureSystem.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Implementations;
 
     using SharpDX;

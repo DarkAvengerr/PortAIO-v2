@@ -3,7 +3,6 @@ using LeagueSharp.Common;
 namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Lane
 {
     using System;
-    using System.Linq;
 
     using LeagueSharp;
     using LeagueSharp.Common;
@@ -41,17 +40,17 @@ namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Lane
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("LaneQEnemy", "Only If No Enemies Visible").SetValue(true));
+            Menu.AddItem(new MenuItem("Caitlyn.Lane.Q.Enemy", "Only If No Enemies Visible").SetValue(true));
 
-            Menu.AddItem(new MenuItem("LaneQMana", "Mana %").SetValue(new Slider(65, 0, 100)));
+            Menu.AddItem(new MenuItem("Caitlyn.Lane.Q.Mana", "Mana %").SetValue(new Slider(65, 0, 100)));
 
-            Menu.AddItem(new MenuItem("MinQHit", "Minimum Hit By Q").SetValue(new Slider(4, 0, 6)));
+            Menu.AddItem(new MenuItem("Caitlyn.Lane.Q.Hit", "Minimum Hit By Q").SetValue(new Slider(4, 0, 6)));
         }
 
       
         private void OnUpdate(EventArgs args)
         {
-            if (Menu.Item("LaneQMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
+            if (Menu.Item("Caitlyn.Lane.Q.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
             {
                 return;
             }
@@ -60,14 +59,14 @@ namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Lane
 
             if (minions == null) return;
 
-            if (Menu.Item("LaneQEnemy").GetValue<bool>() && ObjectManager.Player.CountEnemiesInRange(2000) >= 1)
+            if (Menu.Item("Caitlyn.Lane.Q.Enemy").GetValue<bool>() && ObjectManager.Player.CountEnemiesInRange(2000) >= 1)
             {
                 return;
             }
 
             var pos = qSpell.Spell.GetLineFarmLocation(minions);
 
-            if(pos.MinionsHit >= Menu.Item("MinQHit").GetValue<Slider>().Value)
+            if (pos.MinionsHit >= Menu.Item("Caitlyn.Lane.Q.Hit").GetValue<Slider>().Value)
 
             qSpell.Spell.Cast(pos.Position);
         }

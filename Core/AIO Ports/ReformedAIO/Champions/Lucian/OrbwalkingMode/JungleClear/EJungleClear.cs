@@ -24,7 +24,7 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.JungleClear
 
         private void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!CheckGuardians() || !sender.IsMe || Menu.Item("EMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
+            if (!CheckGuardians() || !sender.IsMe || Menu.Item("Jungle.E.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
             {
                 return;
             }
@@ -49,8 +49,8 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.JungleClear
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("Range", "Range").SetValue(new Slider(65, 0, 425)));
-            Menu.AddItem(new MenuItem("EMana", "Min Mana %").SetValue(new Slider(5, 0, 100)));
+            Menu.AddItem(new MenuItem("Jungle.E.Range", "Range").SetValue(new Slider(65, 0, 425)));
+            Menu.AddItem(new MenuItem("Jungle.E.Mana", "Min Mana %").SetValue(new Slider(5, 0, 100)));
         }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)

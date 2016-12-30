@@ -35,15 +35,17 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Harass
 
             var target = TargetSelector.GetTarget(q2Spell.Spell.Range, TargetSelector.DamageType.Physical);
 
-            if (target == null
-                || ObjectManager.Player.IsDashing()
-                || !Menu.Item("ExtendedQ").GetValue<bool>()
-                || target.Distance(ObjectManager.Player) < qSpell.Spell.Range)
+            if (target == null)
             {
                 return;
             }
 
-            var minions = MinionManager.GetMinions(qSpell.Spell.Range);
+            if (!Menu.Item("Harass.Q.Extended").GetValue<bool>() || target.Distance(ObjectManager.Player) <= q2Spell.Spell.Range)
+            {
+                return;
+            }
+
+            var minions = MinionManager.GetMinions(q2Spell.Spell.Range);
 
             foreach (var m in minions)
             {
@@ -54,9 +56,10 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Harass
             }
         }
 
-        private void AfterAttack(AttackableUnit unit, AttackableUnit attackableunit)
+        private void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (Menu.Item("QMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent
+            if (!sender.IsMe
+                || Menu.Item("Harass.Q.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent
                 || !CheckGuardians())
             {
                 return;
@@ -74,8 +77,8 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Harass
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("ExtendedQ", "Extended Q").SetValue(true));
-            Menu.AddItem(new MenuItem("QMana", "Min Mana %").SetValue(new Slider(5, 0, 100)));
+            Menu.AddItem(new MenuItem("Harass.Q.Extended", "Extended Q").SetValue(true));
+            Menu.AddItem(new MenuItem("Harass.Q.Mana", "Min Mana %").SetValue(new Slider(5, 0, 100)));
         }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
@@ -83,7 +86,7 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Harass
             base.OnDisable(sender, eventArgs);
 
             Game.OnUpdate -= OnUpdate;
-            Orbwalking.AfterAttack -= AfterAttack;
+            Obj_AI_Base.OnSpellCast -= OnSpellCast;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs eventArgs)
@@ -91,7 +94,7 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Harass
             base.OnEnable(sender, eventArgs);
 
             Game.OnUpdate += OnUpdate;
-            Orbwalking.AfterAttack += AfterAttack;
+            Obj_AI_Base.OnSpellCast += OnSpellCast;
         }
     }
 }

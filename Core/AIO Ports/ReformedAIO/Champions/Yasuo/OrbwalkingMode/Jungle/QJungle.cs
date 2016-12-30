@@ -9,7 +9,6 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Jungle
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Yasuo.Core.Spells;
-    using ReformedAIO.Library.Dash_Handler;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
@@ -17,19 +16,14 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Jungle
     {
         public override string Name { get; set; } = "Q";
 
-        private readonly Q1Spell qSpell;
+        private readonly QSpell spell;
 
-        private readonly Q3Spell q3Spell;
-
-        private DashPosition dashPos;
-
-        public QJungle(Q1Spell qSpell, Q3Spell q3Spell)
+        public QJungle(QSpell spell)
         {
-            this.qSpell = qSpell;
-            this.q3Spell = q3Spell;
+            this.spell = spell;
         }
 
-        private float Range => ObjectManager.Player.HasBuff("YasuoQ3W") ? q3Spell.Spell.Range : qSpell.Spell.Range;
+        private float Range => spell.Spell.Range;
 
         private IOrderedEnumerable<Obj_AI_Base> Mob =>
              MinionManager.GetMinions(ObjectManager.Player.Position,
@@ -46,41 +40,47 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Jungle
 
             foreach (var m in Mob)
             {
-                if (ObjectManager.Player.IsDashing() && !qSpell.EqRange(m.Position))
+                if (ObjectManager.Player.IsDashing() && !spell.CanEQ(m))
                 {
                     return;
                 }
 
-                if (q3Spell.Active)
+                switch (spell.Spellstate)
                 {
-                    var pred = q3Spell.Spell.GetPrediction(m, true);
+                        case QSpell.SpellState.Whirlwind:
+                        Whirldwind(m);
+                        break;
+                        case QSpell.SpellState.Standard:
+                        spell.Spell.Cast(m);
+                        break;
+                }
+            }
+        }
 
-                    switch (Menu.Item("JHitchance").GetValue<StringList>().SelectedIndex)
+        private void Whirldwind(Obj_AI_Base m)
+        {
+            var pred = spell.Spell.GetPrediction(m, true);
+
+            switch (Menu.Item("Jungle.Q.Hitchance").GetValue<StringList>().SelectedIndex)
+            {
+                case 0:
+                    if (pred.Hitchance >= HitChance.Medium)
                     {
-                        case 0:
-                            if (pred.Hitchance >= HitChance.Medium)
-                            {
-                                q3Spell.Spell.Cast(pred.CastPosition);
-                            }
-                            break;
-                        case 1:
-                            if (pred.Hitchance >= HitChance.High)
-                            {
-                                q3Spell.Spell.Cast(pred.CastPosition);
-                            }
-                            break;
-                        case 2:
-                            if (pred.Hitchance >= HitChance.VeryHigh)
-                            {
-                                q3Spell.Spell.Cast(pred.CastPosition);
-                            }
-                            break;
+                        spell.Spell.Cast(pred.CastPosition);
                     }
-                }
-                else
-                {
-                    qSpell.Spell.Cast(m);
-                }
+                    break;
+                case 1:
+                    if (pred.Hitchance >= HitChance.High)
+                    {
+                        spell.Spell.Cast(pred.CastPosition);
+                    }
+                    break;
+                case 2:
+                    if (pred.Hitchance >= HitChance.VeryHigh)
+                    {
+                        spell.Spell.Cast(pred.CastPosition);
+                    }
+                    break;
             }
         }
 
@@ -102,9 +102,7 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Jungle
         {
             base.OnLoad(sender, eventArgs);
 
-            dashPos = new DashPosition();
-
-            Menu.AddItem(new MenuItem("JHitchance", "Hitchance").SetValue(new StringList(new[] { "Medium", "High", "Very High" }, 1)));
+            Menu.AddItem(new MenuItem("Jungle.Q.Hitchance", "Hitchance").SetValue(new StringList(new[] { "Medium", "High", "Very High" }, 1)));
         }
     }
 }

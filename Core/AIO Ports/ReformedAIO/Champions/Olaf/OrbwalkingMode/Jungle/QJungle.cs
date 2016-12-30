@@ -3,7 +3,6 @@ using LeagueSharp.Common;
 namespace ReformedAIO.Champions.Olaf.OrbwalkingMode.Jungle
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
 
     using LeagueSharp;

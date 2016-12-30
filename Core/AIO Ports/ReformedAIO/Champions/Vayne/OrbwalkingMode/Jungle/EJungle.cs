@@ -14,8 +14,6 @@ namespace ReformedAIO.Champions.Vayne.OrbwalkingMode.Jungle
 
     using RethoughtLib.FeatureSystem.Implementations;
 
-    using SharpDX;
-
     internal sealed class EJungle : OrbwalkingChild
     {
         public override string Name { get; set; } = "E";

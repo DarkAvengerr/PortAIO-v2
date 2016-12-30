@@ -40,7 +40,7 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Combo
                 return;
             }
 
-            if (!Menu.Item("ExtendedQ").GetValue<bool>() || target.Distance(ObjectManager.Player) <= q2Spell.Spell.Range)
+            if (!Menu.Item("Combo.Q.Extended").GetValue<bool>() || target.Distance(ObjectManager.Player) <= q2Spell.Spell.Range)
             {
                 return;
             }
@@ -59,7 +59,7 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Combo
         private void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!sender.IsMe
-                ||Menu.Item("QMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent
+                ||Menu.Item("Combo.Q.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent
                 || !CheckGuardians())
             {
                 return;
@@ -77,8 +77,8 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Combo
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("ExtendedQ", "Extended Q").SetValue(true));
-            Menu.AddItem(new MenuItem("QMana", "Min Mana %").SetValue(new Slider(5, 0, 100)));
+            Menu.AddItem(new MenuItem("Combo.Q.Extended", "Extended Q").SetValue(true));
+            Menu.AddItem(new MenuItem("Combo.Q.Mana", "Min Mana %").SetValue(new Slider(5, 0, 100)));
         }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)

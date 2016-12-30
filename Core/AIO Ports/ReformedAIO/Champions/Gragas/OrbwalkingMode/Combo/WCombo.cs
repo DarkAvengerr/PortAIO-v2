@@ -9,7 +9,6 @@ namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Combo
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using RethoughtLib.FeatureSystem.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Implementations;
 
     #endregion

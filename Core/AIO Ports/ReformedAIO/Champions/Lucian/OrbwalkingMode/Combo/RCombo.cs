@@ -33,13 +33,13 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Combo
                 return;
             }
 
-            var target = TargetSelector.GetTarget(Menu.Item("Range").GetValue<Slider>().Value, TargetSelector.DamageType.Physical);
+            var target = TargetSelector.GetTarget(Menu.Item("Combo.R.Range").GetValue<Slider>().Value, TargetSelector.DamageType.Physical);
 
             if (target == null
                 || !target.IsValidTarget(rSpell.Spell.Range)
                 || target.Distance(ObjectManager.Player) < ObjectManager.Player.AttackRange
-                || (Menu.Item("RKillable").GetValue<bool>() && damage.GetComboDamage(target) < target.Health)
-                || (Menu.Item("SafetyCheck").GetValue<bool>() && ObjectManager.Player.CountEnemiesInRange(1400) > ObjectManager.Player.CountAlliesInRange(1400)))
+                || (Menu.Item("Combo.R.Killable").GetValue<bool>() && damage.GetComboDamage(target) < target.Health)
+                || (Menu.Item("Combo.R.SafetyCheck").GetValue<bool>() && ObjectManager.Player.CountEnemiesInRange(1400) > ObjectManager.Player.CountAlliesInRange(1400)))
             {
                 return;
             }
@@ -56,17 +56,16 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Combo
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("RKillable", "Only If Killable").SetValue(true));
-            Menu.AddItem(new MenuItem("SafetyCheck", "Safety Check").SetValue(true));
-            Menu.AddItem(new MenuItem("Range", "R Range").SetValue(new Slider(1400, 150, 1400)));
-            Menu.AddItem(new MenuItem("RMana", "Min Mana %").SetValue(new Slider(25, 0, 100)));
-
+            Menu.AddItem(new MenuItem("Combo.R.Killable", "Only If Killable").SetValue(true));
+            Menu.AddItem(new MenuItem("Combo.R.SafetyCheck", "Safety Check").SetValue(true));
+            Menu.AddItem(new MenuItem("Combo.R.Range", "R Range").SetValue(new Slider(1400, 150, 1400)));
+            Menu.AddItem(new MenuItem("Combo.R.Mana", "Min Mana %").SetValue(new Slider(25, 0, 100)));
         }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
             base.OnDisable(sender, eventArgs);
-
+            
             Game.OnUpdate -= OnUpdate;
         }
 

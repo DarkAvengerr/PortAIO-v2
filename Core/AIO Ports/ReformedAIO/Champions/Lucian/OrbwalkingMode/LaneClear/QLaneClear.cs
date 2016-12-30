@@ -28,9 +28,9 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.LaneClear
 
         private void OnUpdate(EventArgs args)
         {
-              if ((Menu.Item("EnemiesCheck").GetValue<bool>()
+            if ((Menu.Item("Lane.Q.EnemiesCheck").GetValue<bool>()
                 && ObjectManager.Player.CountEnemiesInRange(1750) >= 1)
-                || (ObjectManager.Player.ManaPercent <= Menu.Item("QMana").GetValue<Slider>().Value)
+                || (ObjectManager.Player.ManaPercent <= Menu.Item("Lane.Q.Mana").GetValue<Slider>().Value)
                 || !CheckGuardians())
             {
                 return;
@@ -47,7 +47,7 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.LaneClear
 
             var collision = qSpell.Spell.GetCollision(ObjectManager.Player.Position.To2D(), new List<Vector2> { prediction.UnitPosition.To2D() });
 
-            if (collision.Count >= Menu.Item("MinHit").GetValue<Slider>().Value)
+            if (collision.Count >= Menu.Item("Lane.Q.MinHit").GetValue<Slider>().Value)
             {
                 qSpell.Spell.Cast(collision[0]);
             }
@@ -57,9 +57,9 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.LaneClear
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("EnemiesCheck", "Check Enemies First").SetValue(true).SetTooltip("Wont Q If Nearby Enemies"));
-            Menu.AddItem(new MenuItem("MinHit", "Min Hit By Q").SetValue(new Slider(3, 0, 6)));
-            Menu.AddItem(new MenuItem("QMana", "Min Mana %").SetValue(new Slider(70, 0, 100)));
+            Menu.AddItem(new MenuItem("Lane.Q.EnemiesCheck", "Check Enemies First").SetValue(true).SetTooltip("Wont Q If Nearby Enemies"));
+            Menu.AddItem(new MenuItem("Lane.Q.MinHit", "Min Hit By Q").SetValue(new Slider(3, 0, 6)));
+            Menu.AddItem(new MenuItem("Lane.Q.Mana", "Min Mana %").SetValue(new Slider(70, 0, 100)));
         }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)

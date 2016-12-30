@@ -16,12 +16,18 @@ namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Jungle
     {
         public override string Name { get; set; } = "E";
 
-        private readonly ESpell eSpell;
+        private readonly ESpell spell;
 
-        public EJungle(ESpell eSpell)
+        public EJungle(ESpell spell)
         {
-            this.eSpell = eSpell;
+            this.spell = spell;
         }
+
+        private Obj_AI_Base Mobs =>
+            MinionManager.GetMinions(ObjectManager.Player.Position,
+                spell.Spell.Range,
+                MinionTypes.All,
+                MinionTeam.Neutral).FirstOrDefault();
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
@@ -44,13 +50,11 @@ namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Jungle
 
         private void OnUpdate(EventArgs args)
         {
-            var mobs = MinionManager.GetMinions(eSpell.Spell.Range, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
+            if (Mobs == null || !CheckGuardians() || Mobs.Health < ObjectManager.Player.GetAutoAttackDamage(Mobs) * 3 || Mobs.BaseSkinName == "Baron") return;
 
-            if (mobs == null || !CheckGuardians() || mobs.Health < ObjectManager.Player.GetAutoAttackDamage(mobs) * 3 || mobs.BaseSkinName == "Baron") return;
+            var qPrediction = spell.Spell.GetPrediction(Mobs);
 
-            var qPrediction = eSpell.Spell.GetPrediction(mobs);
-
-            eSpell.Spell.Cast(qPrediction.CastPosition);
+            spell.Spell.Cast(qPrediction.CastPosition);
         }
     }
 }

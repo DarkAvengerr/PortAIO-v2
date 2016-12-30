@@ -29,7 +29,6 @@ namespace ReformedAIO.Champions.Lucian.Killsteal
 
         private void OnUpdate(EventArgs args)
         {
-
             if (Target == null || Target.Health > qSpell.GetDamage(Target) || !CheckGuardians())
             {
                 return;
@@ -39,7 +38,7 @@ namespace ReformedAIO.Champions.Lucian.Killsteal
             {
                 qSpell.Spell.CastOnUnit(Target);
             }
-           else if (Target.Distance(ObjectManager.Player) > ObjectManager.Player.AttackRange && Menu.Item("Extend").GetValue<bool>())
+            else if (Target.Distance(ObjectManager.Player) > ObjectManager.Player.AttackRange && Menu.Item("Killsteal.Q.Extend").GetValue<bool>())
             {
                 var minions = MinionManager.GetMinions(qSpell.Spell.Range);
 
@@ -71,7 +70,7 @@ namespace ReformedAIO.Champions.Lucian.Killsteal
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("Extend", "Allow Extended Q").SetValue(true));
+            Menu.AddItem(new MenuItem("Killsteal.Q.Extend", "Allow Extended Q").SetValue(true));
         }
     }
 }

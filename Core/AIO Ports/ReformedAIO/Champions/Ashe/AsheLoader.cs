@@ -23,7 +23,6 @@ namespace ReformedAIO.Champions.Ashe
     using RethoughtLib.FeatureSystem.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Implementations;
     using RethoughtLib.Orbwalker.Implementations;
-    using RethoughtLib.Utility;
 
     using Color = SharpDX.Color;
 

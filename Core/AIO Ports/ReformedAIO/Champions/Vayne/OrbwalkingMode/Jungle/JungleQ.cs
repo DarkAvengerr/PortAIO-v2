@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
-namespace ReformedAIO.Champions.Vayne.OrbwalkingMode.Jungleclear
+namespace ReformedAIO.Champions.Vayne.OrbwalkingMode.Jungle
 {
     using System;
     using System.Linq;

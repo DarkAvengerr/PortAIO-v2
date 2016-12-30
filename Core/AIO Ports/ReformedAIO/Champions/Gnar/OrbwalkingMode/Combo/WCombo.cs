@@ -10,7 +10,6 @@ namespace ReformedAIO.Champions.Gnar.OrbwalkingMode.Combo
 
     using ReformedAIO.Champions.Gnar.Core;
 
-    using RethoughtLib.FeatureSystem.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Implementations;
 
     internal sealed class WCombo : OrbwalkingChild

@@ -2,7 +2,6 @@ using EloBuddy;
 using LeagueSharp.Common; 
 namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.LaneClear
 {
-    using System;
     using System.Linq;
 
     using LeagueSharp;
@@ -31,9 +30,9 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.LaneClear
         {
             if (!sender.IsMe
                 || !Orbwalking.IsAutoAttack(args.SData.Name)
-                || (Menu.Item("EnemiesCheck").GetValue<bool>()
+                || (Menu.Item("Lane.E.EnemiesCheck").GetValue<bool>()
                 && ObjectManager.Player.CountEnemiesInRange(1500) >= 1)
-                || (ObjectManager.Player.ManaPercent <= Menu.Item("EMana").GetValue<Slider>().Value)
+                || (ObjectManager.Player.ManaPercent <= Menu.Item("Lane.E.Mana").GetValue<Slider>().Value)
                 || !CheckGuardians())
             {
                 return;
@@ -46,16 +45,16 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.LaneClear
                 return;
             }
 
-            eSpell.Spell.Cast(dashSmart.Kite(minion.Position.To2D(), Menu.Item("Range").GetValue<Slider>().Value));
+            eSpell.Spell.Cast(dashSmart.Kite(minion.Position.To2D(), Menu.Item("Lane.E.Range").GetValue<Slider>().Value));
         }
 
         protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("EnemiesCheck", "Check Enemies First").SetValue(true).SetTooltip("Wont E If Nearby Enemies"));
-            Menu.AddItem(new MenuItem("Range", "E Range").SetValue(new Slider(65, 1, 425)));
-            Menu.AddItem(new MenuItem("EMana", "Min Mana %").SetValue(new Slider(60, 0, 100)));
+            Menu.AddItem(new MenuItem("Lane.E.EnemiesCheck", "Check Enemies First").SetValue(true).SetTooltip("Wont E If Nearby Enemies"));
+            Menu.AddItem(new MenuItem("Lane.E.Range", "E Range").SetValue(new Slider(65, 1, 425)));
+            Menu.AddItem(new MenuItem("Lane.E.Mana", "Min Mana %").SetValue(new Slider(60, 0, 100)));
         }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)

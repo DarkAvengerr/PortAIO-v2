@@ -10,7 +10,6 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Lane
 
     using ReformedAIO.Champions.Yasuo.Core.Spells;
     using ReformedAIO.Library.Dash_Handler;
-    using ReformedAIO.Library.Get_Information.HeroInfo;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
@@ -18,19 +17,16 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Lane
     {
         public override string Name { get; set; } = "Q";
 
-        private readonly Q1Spell qSpell;
-
-        private readonly Q3Spell q3Spell;
+        private readonly QSpell spell;
 
         private DashPosition dashPos;
 
-        public QLane(Q1Spell qSpell, Q3Spell q3Spell)
+        public QLane(QSpell spell)
         {
-            this.qSpell = qSpell;
-            this.q3Spell = q3Spell;
+            this.spell = spell;
         }
 
-        private float Range => ObjectManager.Player.HasBuff("YasuoQ3W") ? q3Spell.Spell.Range : qSpell.Spell.Range;
+        private float Range => spell.Spell.Range;
 
         private List<Obj_AI_Base> Minion => MinionManager.GetMinions(ObjectManager.Player.Position, Range);
 
@@ -43,24 +39,36 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Lane
 
             foreach (var m in Minion)
             {
-                if (q3Spell.Active)
+                switch (spell.Spellstate)
                 {
-                    var pred = q3Spell.Spell.GetLineFarmLocation(Minion);
+                    case QSpell.SpellState.Whirlwind:
+                        Whirlwind();
+                        break;
 
-                    if (ObjectManager.Player.IsDashing() && (m.Health < qSpell.GetDamage(m) || !qSpell.EqRange(dashPos.DashEndPosition(m, 475))))
-                    {
-                        return;
-                    }
+                    case QSpell.SpellState.Standard:
+                        spell.Spell.Cast(m);
+                        break;
 
-                    if (pred.MinionsHit >= Menu.Item("LQ3").GetValue<Slider>().Value)
-                    {
-                        q3Spell.Spell.Cast(pred.Position);
-                    }
+                    case QSpell.SpellState.DashQ:
+
+                        var pred = spell.Spell.GetCircularFarmLocation(Minion);
+
+                        if (spell.CanEQ(m) && pred.MinionsHit >= Menu.Item("Lane.Q.Hit").GetValue<Slider>().Value && m.Distance(ObjectManager.Player) < 220)
+                        {
+                            spell.Spell.Cast(m);
+                        }
+                        break;
                 }
-                else
-                {
-                    qSpell.Spell.Cast(m);
-                }
+            }
+        }
+
+        private void Whirlwind()
+        {
+            var pred = spell.Spell.GetLineFarmLocation(Minion);
+
+            if (pred.MinionsHit >= Menu.Item("Lane.Q.Hit").GetValue<Slider>().Value)
+            {
+                spell.Spell.Cast(pred.Position);
             }
         }
 
@@ -84,9 +92,7 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Lane
 
             dashPos = new DashPosition();
 
-            Menu.AddItem(new MenuItem("LQ3", "Use Q3 If X Hit Count").SetValue(new Slider(4, 0, 7)));
-
-           // Menu.AddItem(new MenuItem("LHitchance", "Hitchance").SetValue(new StringList(new[] { "Medium", "High", "Very High" }, 1)));
+            Menu.AddItem(new MenuItem("Lane.Q.Hit", "Use Q3 If X Hit Count").SetValue(new Slider(4, 0, 7)));
         }
     }
 }

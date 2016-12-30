@@ -10,7 +10,6 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Lane
 
     using ReformedAIO.Champions.Yasuo.Core.Spells;
     using ReformedAIO.Library.Dash_Handler;
-    using ReformedAIO.Library.WallExtension;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
@@ -27,15 +26,15 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Lane
 
         private DashPosition dashPos;
 
-        private Obj_AI_Base Minion => MinionManager.GetMinions(ObjectManager.Player.Position, spell.Spell.Range).FirstOrDefault(m => m.Distance(Game.CursorPos) <= 475);
+        private Obj_AI_Base Minion => MinionManager.GetMinions(ObjectManager.Player.Position, spell.Spell.Range).FirstOrDefault();
 
         private void OnUpdate(EventArgs args)
         {
             if (Minion == null
                 || !CheckGuardians()
-                || (Menu.Item("ETurret").GetValue<bool>() && (dashPos.DashEndPosition(Minion, spell.Spell.Range).UnderTurret(true) || Minion.UnderTurret(true)))
-                || (Menu.Item("EEnemies").GetValue<Slider>().Value < dashPos.DashEndPosition(Minion, spell.Spell.Range).CountEnemiesInRange(500))
-                || (Menu.Item("EKillable").GetValue<bool>() && Minion.Health > spell.Spell.GetDamage(Minion)))
+                || (Menu.Item("Lane.E.Turret").GetValue<bool>() && (dashPos.DashEndPosition(Minion, spell.Spell.Range).UnderTurret(true) || Minion.UnderTurret(true)))
+                || (Menu.Item("Lane.E.Enemies").GetValue<Slider>().Value < dashPos.DashEndPosition(Minion, spell.Spell.Range).CountEnemiesInRange(500))
+                || (Menu.Item("Lane.E.Killable").GetValue<bool>() && Minion.Health > spell.Spell.GetDamage(Minion)))
             {
                 return;
             }
@@ -63,11 +62,11 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Lane
 
             dashPos = new DashPosition();
 
-            Menu.AddItem(new MenuItem("EKillable", "Only Killable Minions").SetValue(true));
+            Menu.AddItem(new MenuItem("Lane.E.Killable", "Only Killable Minions").SetValue(true));
 
-            Menu.AddItem(new MenuItem("EEnemies", "Don't E Into X Enemies").SetValue(new Slider(1, 0, 5)));
+            Menu.AddItem(new MenuItem("Lane.E.Enemies", "Don't E Into X Enemies").SetValue(new Slider(1, 0, 5)));
 
-            Menu.AddItem(new MenuItem("ETurret", "Turret Check").SetValue(true));
+            Menu.AddItem(new MenuItem("Lane.E.Turret", "Turret Check").SetValue(true));
         }
     }
 }

@@ -10,7 +10,6 @@ namespace ReformedAIO.Champions.Annie.OrbwalkingMode.Combo
     using Core.Spells;
 
     using ReformedAIO.Champions.Annie.Core.Damage;
-    using ReformedAIO.Library.Spell_Information;
 
     using RethoughtLib.FeatureSystem.Implementations;
 

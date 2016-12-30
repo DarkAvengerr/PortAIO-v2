@@ -7,8 +7,7 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Harass
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using ReformedAIO.Champions.Yasuo.Core.Spells;
-    using ReformedAIO.Library.Dash_Handler;
+    using Yasuo.Core.Spells;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
@@ -16,21 +15,14 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Harass
     {
         public override string Name { get; set; } = "Q";
 
-        private readonly Q1Spell qSpell;
+        private readonly QSpell spell;
 
-        private readonly Q3Spell q3Spell;
-
-        private DashPosition dashPos;
-
-        public QHarass(Q1Spell qSpell, Q3Spell q3Spell)
+        public QHarass(QSpell spell)
         {
-            this.qSpell = qSpell;
-            this.q3Spell = q3Spell;
+            this.spell = spell;
         }
 
-        private float Range => ObjectManager.Player.HasBuff("YasuoQ3W") ? q3Spell.Spell.Range : qSpell.Spell.Range;
-
-        private AIHeroClient Target => TargetSelector.GetTarget(Range, TargetSelector.DamageType.Physical);
+        private AIHeroClient Target => TargetSelector.GetTarget(spell.Spell.Range, TargetSelector.DamageType.Physical);
 
         private void OnUpdate(EventArgs args)
         {
@@ -39,40 +31,54 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Harass
                 return;
             }
 
-            if (ObjectManager.Player.IsDashing() && ObjectManager.Player.Distance(dashPos.DashEndPosition(Target, 475)) > qSpell.Spell.Range)
+            switch (spell.Spellstate)
             {
-                return;
-            }
+                case QSpell.SpellState.Whirlwind:
+                    Whirlwind();
+                    break;
 
-            if (q3Spell.Active)
-            {
-                var pred = q3Spell.Spell.GetPrediction(Target, true);
+                case QSpell.SpellState.DashQ:
+                    EQHarass();
+                    break;
 
-                switch (Menu.Item("Hitchance").GetValue<StringList>().SelectedIndex)
-                {
-                    case 0:
-                        if (pred.Hitchance >= HitChance.Medium)
-                        {
-                            q3Spell.Spell.Cast(pred.CastPosition);
-                        }
-                        break;
-                    case 1:
-                        if (pred.Hitchance >= HitChance.High)
-                        {
-                            q3Spell.Spell.Cast(pred.CastPosition);
-                        }
-                        break;
-                    case 2:
-                        if (pred.Hitchance >= HitChance.VeryHigh)
-                        {
-                            q3Spell.Spell.Cast(pred.CastPosition);
-                        }
-                        break;
-                }
+                case QSpell.SpellState.Standard:
+                    Whirlwind();
+                    break;
             }
-            else
+        }
+
+        private void EQHarass()
+        {
+            if (spell.CanEQ(Target))
             {
-                qSpell.Spell.Cast(Target);
+                spell.Spell.Cast(Target);
+            }
+        }
+
+        private void Whirlwind()
+        {
+            var pred = spell.Spell.GetPrediction(Target);
+
+            switch (Menu.Item("Harass.Q.Hitchance2").GetValue<StringList>().SelectedIndex)
+            {
+                case 0:
+                    if (pred.Hitchance >= HitChance.Medium)
+                    {
+                        spell.Spell.Cast(pred.CastPosition);
+                    }
+                    break;
+                case 1:
+                    if (pred.Hitchance >= HitChance.High)
+                    {
+                        spell.Spell.Cast(pred.CastPosition);
+                    }
+                    break;
+                case 2:
+                    if (pred.Hitchance >= HitChance.VeryHigh)
+                    {
+                        spell.Spell.Cast(pred.CastPosition);
+                    }
+                    break;
             }
         }
 
@@ -94,9 +100,9 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Harass
         {
             base.OnLoad(sender, eventArgs);
 
-            dashPos = new DashPosition();
+            Menu.AddItem(new MenuItem("Harass.Q.Hitchance2", "Whirlwind Hitchance").SetValue(new StringList(new[] { "Medium", "High", "Very High" }, 1)));
 
-            Menu.AddItem(new MenuItem("Hitchance", "Hitchance").SetValue(new StringList(new[] { "Medium", "High", "Very High" }, 1)));
+            //   Menu.AddItem(new MenuItem("Harass.Q.Hitchance", "Q1 Hitchance").SetValue(new StringList(new[] { "Medium", "High", "Very High" }, 1)));
         }
     }
 }

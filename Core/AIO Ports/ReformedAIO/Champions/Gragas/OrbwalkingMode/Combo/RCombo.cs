@@ -12,7 +12,6 @@ namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Combo
 
     using ReformedAIO.Champions.Gragas.Logic;
 
-    using RethoughtLib.FeatureSystem.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Implementations;
 
     using SharpDX;

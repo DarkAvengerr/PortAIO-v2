@@ -8,7 +8,6 @@ namespace ReformedAIO.Champions.Caitlyn.Drawings
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using ReformedAIO.Champions.Caitlyn.Logic;
     using ReformedAIO.Champions.Caitlyn.Spells;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;

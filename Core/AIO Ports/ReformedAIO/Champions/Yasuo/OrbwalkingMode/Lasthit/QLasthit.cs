@@ -17,19 +17,16 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Lasthit
     {
         public override string Name { get; set; } = "Q";
 
-        private readonly Q1Spell qSpell;
-
-        private readonly Q3Spell q3Spell;
+        private readonly QSpell spell;
 
         private DashPosition dashPos;
 
-        public QLasthit(Q1Spell qSpell, Q3Spell q3Spell)
+        public QLasthit(QSpell spell)
         {
-            this.qSpell = qSpell;
-            this.q3Spell = q3Spell;
+            this.spell = spell;
         }
 
-        private float Range => ObjectManager.Player.HasBuff("YasuoQ3W") ? q3Spell.Spell.Range : qSpell.Spell.Range;
+        private float Range => spell.Spell.Range;
 
         private List<Obj_AI_Base> Minion => MinionManager.GetMinions(ObjectManager.Player.Position, Range);
 
@@ -42,28 +39,21 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Lasthit
 
             foreach (var m in Minion)
             {
-                if (ObjectManager.Player.IsDashing() && !qSpell.EqRange(dashPos.DashEndPosition(m, 475)) || m.Health > qSpell.GetDamage(m))
+                switch (spell.Spellstate)
                 {
-                    return;
-                }
+                    case QSpell.SpellState.Whirlwind:
 
-                if (q3Spell.Active)
-                {
-                    var pred = q3Spell.Spell.GetLineFarmLocation(Minion);
+                        var pred = spell.Spell.GetLineFarmLocation(Minion);
 
-                    if (ObjectManager.Player.IsDashing() && (m.Health < qSpell.GetDamage(m) || !qSpell.EqRange(dashPos.DashEndPosition(m, 475))))
-                    {
-                        return;
-                    }
+                        if (pred.MinionsHit >= Menu.Item("Lasthit.Q.Hit").GetValue<Slider>().Value)
+                        {
+                            spell.Spell.Cast(pred.Position);
+                        }
+                        break;
 
-                    if (pred.MinionsHit >= Menu.Item("LhQ3").GetValue<Slider>().Value)
-                    {
-                        q3Spell.Spell.Cast(pred.Position);
-                    }
-                }
-                else
-                {
-                    qSpell.Spell.Cast(m);
+                    case QSpell.SpellState.Standard:
+                        spell.Spell.Cast(m);
+                        break;
                 }
             }
         }
@@ -88,7 +78,7 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Lasthit
 
             dashPos = new DashPosition();
 
-            Menu.AddItem(new MenuItem("LhQ3", "Use Q3 If X Hit Count").SetValue(new Slider(4, 0, 7)));
+            Menu.AddItem(new MenuItem("Lasthit.Q.Hit", "Use Q3 If X Hit Count").SetValue(new Slider(4, 0, 7)));
         }
     }
 }

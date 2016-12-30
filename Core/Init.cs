@@ -3921,6 +3921,9 @@ namespace PortAIO
                         case 2: // OKTW
                             OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
                             break;
+                        case 3: // ReformedAIO
+                            ReformedAIO.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Zilean:

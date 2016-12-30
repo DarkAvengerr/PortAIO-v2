@@ -16,14 +16,11 @@ namespace ReformedAIO.Champions.Yasuo.Drawings.SpellDrawings
     {
         public override string Name { get; set; } = "Q";
 
-        private readonly Q1Spell spell;
+        private readonly QSpell spell;
 
-        private readonly Q3Spell q3Spell;
-
-        public QDrawing(Q1Spell spell, Q3Spell q3Spell)
+        public QDrawing(QSpell spell)
         {
             this.spell = spell;
-            this.q3Spell = q3Spell;
         }
 
         public void OnDraw(EventArgs args)
@@ -33,24 +30,15 @@ namespace ReformedAIO.Champions.Yasuo.Drawings.SpellDrawings
                 return;
             }
 
-            if (Menu.Item("Q3").GetValue<bool>() && q3Spell.Active)
-            {
-                Render.Circle.DrawCircle(ObjectManager.Player.Position,
-                q3Spell.Spell.Range
-               , q3Spell.Spell.IsReady()
-               ? Color.Cyan
-               : Color.DarkSlateGray);
-            }
-            else
-            {
-                Render.Circle.DrawCircle(ObjectManager.Player.Position,
-                   spell.Spell.Range
-                  , spell.Spell.IsReady()
-                  ? Color.Cyan
-                  : Color.DarkSlateGray);
-            }
+            Render.Circle.DrawCircle(
+                ObjectManager.Player.Position,
+                spell.Spell.Range,
+                spell.Spell.IsReady() 
+                ? Color.Cyan 
+                : Color.DarkSlateGray);
         }
-     
+
+
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
             base.OnDisable(sender, eventArgs);
@@ -68,8 +56,6 @@ namespace ReformedAIO.Champions.Yasuo.Drawings.SpellDrawings
         protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
             base.OnLoad(sender, eventArgs);
-
-            Menu.AddItem(new MenuItem("Q3", "Draw Whirlwind Range").SetValue(true));
         }
     }
 }

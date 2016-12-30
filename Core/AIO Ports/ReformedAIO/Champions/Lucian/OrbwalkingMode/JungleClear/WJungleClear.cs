@@ -2,8 +2,6 @@ using EloBuddy;
 using LeagueSharp.Common; 
 namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.JungleClear
 {
-    using System.Linq;
-
     using LeagueSharp;
     using LeagueSharp.Common;
 
@@ -25,7 +23,7 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.JungleClear
         private void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!sender.IsMe
-                || Menu.Item("WMana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent
+                || Menu.Item("Jungle.W.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent
                 || !CheckGuardians())
             {
                 return;
@@ -54,7 +52,7 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.JungleClear
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("WMana", "Min Mana %").SetValue(new Slider(5, 0, 100)));
+            Menu.AddItem(new MenuItem("Jungle.W.Mana", "Min Mana %").SetValue(new Slider(5, 0, 100)));
         }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)

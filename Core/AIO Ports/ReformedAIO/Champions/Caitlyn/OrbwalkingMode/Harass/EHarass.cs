@@ -15,14 +15,14 @@ namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Harass
     {
         public override string Name { get; set; } = "E";
 
-        private readonly ESpell eSpell;
+        private readonly ESpell spell;
 
-        public EHarass(ESpell eSpell)
+        public EHarass(ESpell spell)
         {
-            this.eSpell = eSpell;
+            this.spell = spell;
         }
 
-        private AIHeroClient Target => TargetSelector.GetTarget(eSpell.Spell.Range, TargetSelector.DamageType.Physical);
+        private AIHeroClient Target => TargetSelector.GetTarget(spell.Spell.Range, TargetSelector.DamageType.Physical);
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
@@ -44,16 +44,16 @@ namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Harass
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("Mana", "Mana %").SetValue(new Slider(0, 0, 100)));
+            Menu.AddItem(new MenuItem("Caitlyn.Harass.E.Mana", "Mana %").SetValue(new Slider(0, 0, 100)));
 
-            Menu.AddItem(new MenuItem("AntiGapcloser", "Anti Gapcloser").SetValue(true));
+            Menu.AddItem(new MenuItem("Caitlyn.Harass.E.AntiGapcloser", "Anti Gapcloser").SetValue(true));
 
-            Menu.AddItem(new MenuItem("AntiMelee", "E Anti-Melee").SetValue(true));
+            Menu.AddItem(new MenuItem("Caitlyn.Harass.E.AntiMelee", "E Anti-Melee").SetValue(true));
         }
 
         private void Gapcloser(ActiveGapcloser gapcloser)
         {
-            if (!Menu.Item("AntiGapcloser").GetValue<bool>()) return;
+            if (!Menu.Item("Caitlyn.Harass.E.AntiGapcloser").GetValue<bool>()) return;
 
             var target = gapcloser.Sender;
 
@@ -62,29 +62,31 @@ namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Harass
                 return;
             }
 
-            eSpell.Spell.Cast(gapcloser.End);
+            spell.Spell.Cast(gapcloser.End);
         }
 
         private void OnUpdate(EventArgs args)
         {
-            if (Target == null || Menu.Item("Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent || !CheckGuardians())
+            if (Target == null
+                || Menu.Item("Caitlyn.Harass.E.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent
+                || !CheckGuardians())
             {
                 return;
             }
 
-            if (ObjectManager.Player.Distance(Target) < ObjectManager.Player.AttackRange / 2 && Menu.Item("AntiMelee").GetValue<bool>())
+            var ePrediction = spell.Spell.GetPrediction(Target);
+
+            if (ObjectManager.Player.Distance(Target) < ObjectManager.Player.AttackRange / 2 && Menu.Item("Caitlyn.Harass.E.AntiMelee").GetValue<bool>() && ePrediction.Hitchance >= HitChance.High)
             {
-                eSpell.Spell.Cast(Target.Position);
+                spell.Spell.Cast(Target.Position);
             }
 
-            var ePrediction = eSpell.Spell.GetPrediction(Target);
-
-            if (ePrediction.Hitchance < HitChance.High)
+            if (ePrediction.Hitchance < HitChance.VeryHigh)
             {
                 return;
             }
 
-            eSpell.Spell.Cast(ePrediction.CastPosition);
+            spell.Spell.Cast(ePrediction.CastPosition);
         }
     }
 }

@@ -12,17 +12,15 @@ namespace ReformedAIO.Champions.Yasuo.Stack
 
     using Core.Spells;
 
-    using ReformedAIO.Champions.Yasuo.Core;
-
     using RethoughtLib.FeatureSystem.Implementations;
 
     internal sealed class YasuoQStack: OrbwalkingChild
     {
         public override string Name { get; set; } = "Stack";
 
-        private readonly Q1Spell spell;
+        private readonly QSpell spell;
 
-        public YasuoQStack(Q1Spell spell)
+        public YasuoQStack(QSpell spell)
         {
             this.spell = spell;
         }
@@ -43,7 +41,7 @@ namespace ReformedAIO.Champions.Yasuo.Stack
                 || ObjectManager.Player.HasBuff("YasuoQ3W") 
                 || ObjectManager.Player.CountEnemiesInRange(600) >= 1 
                 || !Menu.Item("StackKeybind").GetValue<KeyBind>().Active
-                || ObjectManager.Player.IsDashing())
+                || spell.Spellstate != QSpell.SpellState.Standard)
             {
                 return;
             }

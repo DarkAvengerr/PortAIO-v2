@@ -10,8 +10,6 @@ namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Combo
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using ReformedAIO.Champions.Ashe.Logic;
-
     using RethoughtLib.FeatureSystem.Abstract_Classes;
 
     #endregion

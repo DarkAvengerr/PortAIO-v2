@@ -11,7 +11,6 @@ namespace ReformedAIO.Champions.Diana.OrbwalkingMode.Misaya
 
     using ReformedAIO.Champions.Diana.Logic;
 
-    using RethoughtLib.FeatureSystem.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Implementations;
 
     #endregion

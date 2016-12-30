@@ -8,7 +8,6 @@ namespace ReformedAIO.Champions.Caitlyn.Killsteal
     using LeagueSharp.Common;
     using LeagueSharp.SDK.Utils;
 
-    using ReformedAIO.Champions.Caitlyn.Logic;
     using ReformedAIO.Champions.Caitlyn.Spells;
 
     using RethoughtLib.FeatureSystem.Implementations;

@@ -17,7 +17,6 @@ namespace ReformedAIO.Champions.Caitlyn
 
     using ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Harass;
     using ReformedAIO.Champions.Caitlyn.Spells;
-    using ReformedAIO.Champions.Caitlyn.Utility;
     using ReformedAIO.Library.SpellParent;
 
     using RethoughtLib.FeatureSystem.Guardians;
@@ -67,10 +66,6 @@ namespace ReformedAIO.Champions.Caitlyn
             var killstealParent = new Parent("Killsteal");
             var drawParent = new Parent("Drawings");
 
-            var utilityParent = new Parent("Reformed Utility");
-
-            utilityParent.Add(new CaitlynSkinchanger());
-
             var logic = new ComboLogic(eSpell, wSpell, qSpell, rSpell);
 
             comboParent.Add(new List<Base>()
@@ -108,11 +103,11 @@ namespace ReformedAIO.Champions.Caitlyn
             {
                 new DmgDraw(logic),
                 new QDraw(qSpell),
+                new WDraw(wSpell),
                 new RDraw(rSpell)
             });
 
             superParent.Add(new List<Base> {
-                utilityParent,
                 orbwalkerModule,
                 comboParent,
                 harassParent,
@@ -124,8 +119,8 @@ namespace ReformedAIO.Champions.Caitlyn
 
             superParent.Load();
 
-            utilityParent.Menu.Style = FontStyle.Bold;
-            utilityParent.Menu.Color = Color.Cyan;
+            orbwalkerModule.Menu.Style = FontStyle.Bold;
+            orbwalkerModule.Menu.Color = Color.Cyan;
 
             superParent.Menu.Style = FontStyle.Bold;
             superParent.Menu.Color = Color.Cyan;

@@ -20,7 +20,6 @@ namespace ReformedAIO.Champions.Yasuo
     using ReformedAIO.Champions.Yasuo.OrbwalkingMode.Jungle;
     using ReformedAIO.Champions.Yasuo.OrbwalkingMode.Lasthit;
     using ReformedAIO.Champions.Yasuo.Stack;
-    using ReformedAIO.Champions.Yasuo.Utility;
 
     using ReformedAIO.Library.SpellParent;
 
@@ -45,8 +44,7 @@ namespace ReformedAIO.Champions.Yasuo
             var superParent = new SuperParent(DisplayName);
             superParent.Initialize();
 
-            var qSpell = new Q1Spell();
-            var q3Spell = new Q3Spell();
+            var qSpell = new QSpell();
             var wSpell = new WSpell();
             var eSpell = new ESpell();
             var rSpell = new RSpell();
@@ -55,7 +53,6 @@ namespace ReformedAIO.Champions.Yasuo
             spellParent.Add(new List<Base>
                                   {
                                      qSpell,
-                                     q3Spell,
                                      wSpell,
                                      eSpell,
                                      rSpell
@@ -73,9 +70,6 @@ namespace ReformedAIO.Champions.Yasuo
 
             var killstealParnet = new Parent("Killsteal");
             var drawingParent = new Parent("Drawings");
-            var utilityParent = new Parent("Reformed Utility");
-
-            utilityParent.Add(new YasuoSkinchanger());
 
             var yasuoDmg = new YasuoDamage(qSpell, eSpell, rSpell);
 
@@ -87,49 +81,48 @@ namespace ReformedAIO.Champions.Yasuo
 
             comboParent.Add(new List<Base>()
                                 {
-                                    new QCombo(qSpell, q3Spell).Guardian(mustNotBeWindingUpGuardian).Guardian(qReadyGuardian),
+                                    new QCombo(qSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(qReadyGuardian),
                                     new ECombo(eSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(eReadyGuardian),
-                                    new RCombo(rSpell, yasuoDmg).Guardian(mustNotBeWindingUpGuardian).Guardian(rReadyGuardian)
+                                    new RCombo(rSpell, yasuoDmg).Guardian(rReadyGuardian)
                                 });
             harassParent.Add(new List<Base>()
                                  {
-                                     new QHarass(qSpell, q3Spell).Guardian(qReadyGuardian),
+                                     new QHarass(qSpell).Guardian(qReadyGuardian),
                                      new EHarass(eSpell).Guardian(eReadyGuardian),
                                  });
             laneParent.Add(new List<Base>()
                                {
-                                   new QLane(qSpell, q3Spell).Guardian(mustNotBeWindingUpGuardian).Guardian(qReadyGuardian),
+                                   new QLane(qSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(qReadyGuardian),
                                    new ELane(eSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(wReadyGuardian),
                                });
 
             jungleParent.Add(new List<Base>()
                                  {
-                                     new QJungle(qSpell, q3Spell).Guardian(mustNotBeWindingUpGuardian).Guardian(qReadyGuardian),
+                                     new QJungle(qSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(qReadyGuardian),
                                      new EJungle(eSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(eReadyGuardian),
                                  });
 
             lasthitParent.Add(new List<Base>()
                                   {
-                                      new QLasthit(qSpell, q3Spell).Guardian(mustNotBeWindingUpGuardian).Guardian(qReadyGuardian),
+                                      new QLasthit(qSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(qReadyGuardian),
                                       new ELasthit(eSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(eReadyGuardian),
                                   });
 
             killstealParnet.Add(new List<Base>
                                     {
-                                        new QKillsteal(qSpell, q3Spell).Guardian(mustNotBeWindingUpGuardian).Guardian(qReadyGuardian),
+                                        new QKillsteal(qSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(qReadyGuardian),
                                         new EKillsteal(eSpell).Guardian(rReadyGuardian)
                                     });
 
             drawingParent.Add(new List<Base>
                                   {
                                     new YasuoDamageDrawing(yasuoDmg),
-                                    new QDrawing(qSpell, q3Spell),
+                                    new QDrawing(qSpell),
                                     new EDrawing(eSpell)
                                   });
 
             superParent.Add(new List<Base>
                                   {
-                                     utilityParent,
                                      orbwalkerModule,
                                      comboParent,
                                      harassParent,
@@ -143,9 +136,6 @@ namespace ReformedAIO.Champions.Yasuo
                                   });
 
             superParent.Load();
-
-            utilityParent.Menu.Style = FontStyle.Bold;
-            utilityParent.Menu.Color = Color.Cyan;
 
             superParent.Menu.Style = FontStyle.Bold;
             superParent.Menu.Color = Color.Cyan;

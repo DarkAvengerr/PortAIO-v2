@@ -13,8 +13,6 @@ namespace ReformedAIO.Champions.Vayne.OrbwalkingMode.Harass
 
     using RethoughtLib.FeatureSystem.Implementations;
 
-    using SharpDX;
-
     internal sealed class EHarass : OrbwalkingChild
     {
         public override string Name { get; set; } = "E";

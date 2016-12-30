@@ -198,6 +198,8 @@
                 Drawing.OnDraw += OnDraw;
                 Interrupter2.OnInterruptableTarget += OnInterruptableTarget;
                 Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+                Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
+                Obj_AI_Base.OnBasicAttack += OnProcessSpellCast;
                 Orbwalking.BeforeAttack += BeforeAttack;
             }
             catch (Exception exception)

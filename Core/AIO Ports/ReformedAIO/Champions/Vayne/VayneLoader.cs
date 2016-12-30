@@ -20,7 +20,6 @@ namespace ReformedAIO.Champions.Vayne
     using Interrupter;
     using OrbwalkingMode.Harass;
     using OrbwalkingMode.Jungle;
-    using OrbwalkingMode.Jungleclear;
     using OrbwalkingMode.Laneclear;
 
     using Vayne.Killsteal;

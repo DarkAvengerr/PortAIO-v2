@@ -10,7 +10,6 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Harass
 
     using ReformedAIO.Champions.Yasuo.Core.Spells;
     using ReformedAIO.Library.Dash_Handler;
-    using ReformedAIO.Library.WallExtension;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
@@ -25,34 +24,26 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Harass
             this.spell = spell;
         }
 
-        private WallExtension wall;
-
         private DashPosition dashPos;
 
         private static AIHeroClient Target => TargetSelector.GetTarget(1500, TargetSelector.DamageType.Physical);
 
-        private Obj_AI_Base Minion => MinionManager.GetMinions(ObjectManager.Player.Position,
-                 spell.Spell.Range).LastOrDefault(m =>
-                 m.Distance(ObjectManager.Player.Position.Extend(Target.Position, 475))
-                 <= ObjectManager.Player.AttackRange && !m.HasBuff("YasuoDashWrapper"));
+        private Obj_AI_Base Minion => MinionManager.GetMinions(ObjectManager.Player.Position, 1000).LastOrDefault(
+            m => dashPos.DashEndPosition(m, spell.Spell.Range).Distance(Target.Position) <= ObjectManager.Player.Distance(Target)
+                 && dashPos.DashEndPosition(m, spell.Spell.Range).Distance(Target.Position) > ObjectManager.Player.AttackRange);
 
         private void OnUpdate(EventArgs args)
         {
-            if (Target == null || !CheckGuardians()
-                || (Menu.Item("Turret").GetValue<bool>() && dashPos.DashEndPosition(Target, spell.Spell.Range).UnderTurret(true))
-                || (Menu.Item("Enemies").GetValue<Slider>().Value < ObjectManager.Player.CountEnemiesInRange(1000)))
+            if (Target == null
+                || !CheckGuardians()
+                || (Menu.Item("Yasuo.Harass.E.Mouse").GetValue<bool>() && Minion.Distance(Game.CursorPos) > Menu.Item("Yasuo.Harass.E.Radius").GetValue<Slider>().Value)
+                || (Menu.Item("Yasuo.Harass.E.Turret").GetValue<bool>() && dashPos.DashEndPosition(Target, spell.Spell.Range).UnderTurret(true))
+                || (Menu.Item("Yasuo.Harass.E.Enemies").GetValue<Slider>().Value < ObjectManager.Player.CountEnemiesInRange(1000)))
             {
                 return;
             }
 
-            if (Minion != null && (ObjectManager.Player.Position.Distance(Target.Position) > ObjectManager.Player.AttackRange || Target.HasBuff("YasuoDashWrapper")))
-            {
-                spell.Spell.CastOnUnit(Minion);
-            }
-            else
-            {
-                spell.Spell.CastOnUnit(Target);
-            }
+            spell.Spell.CastOnUnit(Minion ?? Target);
         }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
@@ -74,11 +65,14 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Harass
             base.OnLoad(sender, eventArgs);
 
             dashPos = new DashPosition();
-            wall = new WallExtension();
 
-            Menu.AddItem(new MenuItem("Enemies", "Don't E Into X Enemies").SetValue(new Slider(3, 1, 5)));
+            Menu.AddItem(new MenuItem("Yasuo.Harass.E.Mouse", "Mouse Based").SetValue(true));
 
-            Menu.AddItem(new MenuItem("Turret", "Turret Check").SetValue(true));
+            Menu.AddItem(new MenuItem("Yasuo.Harass.E.Radius", "Mouse Radius").SetValue(new Slider(450, 100, 900)));
+
+            Menu.AddItem(new MenuItem("Yasuo.Harass.E.Enemies", "Don't E Into X Enemies").SetValue(new Slider(3, 0, 5)));
+
+            Menu.AddItem(new MenuItem("Yasuo.Harass.E.Turret", "Turret Check").SetValue(true));
         }
     }
 }

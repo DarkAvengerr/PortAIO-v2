@@ -425,7 +425,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "Korean Zed", "SharpyAIO", "[SDK] Valvrave#", "iDZed", "Ze-D is Back", "xSalice" };
                     break;
                 case EloBuddy.Champion.Ziggs:
-                    champ = new string[] { "Ziggs#", "Royal Ziggy", "OKTW" };
+                    champ = new string[] { "Ziggs#", "Royal Ziggy", "OKTW", "ReformedAIO" };
                     break;
                 case EloBuddy.Champion.Zilean:
                     champ = new string[] { "ElZilean", "Support is Easy", "BlackZilean" };

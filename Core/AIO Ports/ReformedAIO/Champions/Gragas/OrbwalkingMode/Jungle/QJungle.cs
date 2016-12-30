@@ -12,7 +12,6 @@ namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Jungle
 
     using ReformedAIO.Champions.Gragas.Logic;
 
-    using RethoughtLib.FeatureSystem.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Implementations;
 
     #endregion

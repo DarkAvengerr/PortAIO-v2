@@ -10,7 +10,6 @@ namespace ReformedAIO.Champions.Gnar.OrbwalkingMode.Lane
 
     using ReformedAIO.Champions.Gnar.Core;
 
-    using RethoughtLib.FeatureSystem.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Implementations;
     using RethoughtLib.Menu;
     using RethoughtLib.Menu.Presets;

@@ -44,14 +44,14 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Flee
 
         private void OnUpdate(EventArgs args)
         {
-            if (!Menu.Item("Keybind").GetValue<KeyBind>().Active)
+            if (!Menu.Item("Flee.Keybind").GetValue<KeyBind>().Active)
             {
                 return;
             }
 
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
 
-            if (Menu.Item("Turret").GetValue<bool>() && Minion != null && dashPos.DashEndPosition(Minion, 475).UnderTurret(true))
+            if (Menu.Item("Flee.Turret").GetValue<bool>() && Minion != null && dashPos.DashEndPosition(Minion, 475).UnderTurret(true))
             {
                 return;
             }
@@ -99,11 +99,11 @@ namespace ReformedAIO.Champions.Yasuo.OrbwalkingMode.Flee
 
             wall = new WallExtension();
 
-            Menu.AddItem(new MenuItem("Keybind", "Keybind: ").SetValue(new KeyBind('A', KeyBindType.Press)));
+            Menu.AddItem(new MenuItem("Flee.Keybind", "Keybind: ").SetValue(new KeyBind('A', KeyBindType.Press)));
 
-            Menu.AddItem(new MenuItem("Enemies", "Don't Flee Into X Enemies").SetValue(new Slider(2, 0, 5)));
+            //Menu.AddItem(new MenuItem("Flee.Enemies", "Don't Flee Into X Enemies").SetValue(new Slider(2, 0, 5)));
 
-            Menu.AddItem(new MenuItem("Turret", "Turret Check").SetValue(true));
+            Menu.AddItem(new MenuItem("Flee.Turret", "Turret Check").SetValue(true));
         }
     }
 }
