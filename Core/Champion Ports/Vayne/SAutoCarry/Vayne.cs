@@ -4,7 +4,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SCommon;
 using SCommon.PluginBase;
-using SCommon.Prediction;
+using SPrediction;
 using SCommon.Database;
 using SharpDX;
 //typedefs
@@ -18,7 +18,7 @@ namespace SAutoCarry.Champions
         public Vayne()
             : base("Vayne", "SAutoCarry - Vayne")
         {
-            SCommon.Prediction.Prediction.predMenu.Item("SPREDDRAWINGS").SetValue(false);
+            //SCommon.Prediction.predMenu.Item("SPREDDRAWINGS").SetValue(false);
             OnDraw += BeforeDraw;
             OnCombo += Combo;
             OnHarass += Harass;

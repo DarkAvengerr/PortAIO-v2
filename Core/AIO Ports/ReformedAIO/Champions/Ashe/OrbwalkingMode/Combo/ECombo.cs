@@ -81,7 +81,7 @@ namespace ReformedAIO.Champions.Ashe.OrbwalkingMode.Combo
 
             foreach (var position in HeroManager.Enemies.Where(x => !x.IsDead && x.Distance(Variable.Player) < Menu.Item("EDistance").GetValue<Slider>().Value))
             {
-                var path = position.GetWaypoints().FirstOrDefault().To3D();
+                var path = position.Path.ToList().FirstOrDefault();
 
                 if (!NavMesh.IsWallOfGrass(path, 50)) return;
 

@@ -70,11 +70,11 @@ using EloBuddy;
                     break;
                 case 2:
                     {
-                        SDKPrediction.SkillshotType CoreType2 = SDKPrediction.SkillshotType.SkillshotLine;
+                        SebbyLib.Movement.SkillshotType CoreType2 = SebbyLib.Movement.SkillshotType.SkillshotLine;
 
-                        var predInput2 = new SDKPrediction.PredictionInput
+                        var predInput2 = new SebbyLib.Movement.PredictionInput
                         {
-                            AoE = AOE,
+                            Aoe = AOE,
                             Collision = Spells.Collision,
                             Speed = Spells.Speed,
                             Delay = Spells.Delay,
@@ -85,18 +85,18 @@ using EloBuddy;
                             Type = CoreType2
                         };
 
-                        var poutput2 = SDKPrediction.GetPrediction(predInput2);
+                        var poutput2 = SebbyLib.Movement.Prediction.GetPrediction(predInput2);
 
                         if (Spells.Speed != float.MaxValue && YasuoWindWall.CollisionYasuo(ObjectManager.Player.ServerPosition, poutput2.CastPosition))
                         {
                             return;
                         }
 
-                        if (poutput2.Hitchance >= SDKPrediction.HitChance.VeryHigh)
+                        if (poutput2.Hitchance >= SebbyLib.Movement.HitChance.VeryHigh)
                         {
                             Spells.Cast(poutput2.CastPosition, true);
                         }
-                        else if (predInput2.AoE && poutput2.AoeTargetsHitCount > 1 && poutput2.Hitchance >= SDKPrediction.HitChance.High)
+                        else if (predInput2.Aoe && poutput2.AoeTargetsHitCount > 1 && poutput2.Hitchance >= SebbyLib.Movement.HitChance.High)
                         {
                             Spells.Cast(poutput2.CastPosition, true);
                         }

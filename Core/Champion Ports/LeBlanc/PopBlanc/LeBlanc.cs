@@ -500,7 +500,7 @@ using EloBuddy;
                 }
             }
 
-            if (!Menu.Item("FleeMove").IsActive() || Player.GetWaypoints().Last().Distance(Game.CursorPos) < 100)
+            if (!Menu.Item("FleeMove").IsActive() || Player.Path.ToList().Last().Distance(Game.CursorPos) < 100)
             {
                 return true;
             }

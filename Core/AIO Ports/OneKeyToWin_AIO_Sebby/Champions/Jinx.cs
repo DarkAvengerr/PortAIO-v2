@@ -321,7 +321,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             }
             else if (inx == 3)
             {
-                List<Vector2> waypoints = target.GetWaypoints();
+                List<Vector2> waypoints = target.Path.ToList().To2D();
                 if ((Player.Distance(waypoints.Last<Vector2>().To3D()) - Player.Distance(target.Position)) > 400)
                 {
                     Program.CastSpell(R, target);

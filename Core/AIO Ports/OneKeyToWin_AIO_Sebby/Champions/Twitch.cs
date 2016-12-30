@@ -147,7 +147,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             var count = 0;
             foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(3000)))
             {
-                List<Vector2> waypoints = enemy.GetWaypoints();
+                List<Vector2> waypoints = enemy.Path.ToList().To2D();
 
                 if (Player.Distance(waypoints.Last().To3D()) < 600)
                     count++;

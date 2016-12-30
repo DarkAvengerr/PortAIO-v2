@@ -331,9 +331,9 @@ using EloBuddy;
                 // Follow
                 case "Follow":
                     var delay = this.Menu.Item("FollowDelay").GetValue<Slider>().Value;
-                    var moveTo = this.Player.GetWaypoints().Count < 1
+                    var moveTo = this.Player.Path.ToList().Count < 1
                                      ? this.Player.ServerPosition
-                                     : this.Player.GetWaypoints().FirstOrDefault().To3D();
+                                     : this.Player.Path.ToList().FirstOrDefault();
 
                     LeagueSharp.Common.Utility.DelayAction.Add(
                         delay,

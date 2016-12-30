@@ -7,7 +7,7 @@ using SCommon;
 using SCommon.Database;
 using SCommon.PluginBase;
 using SCommon.Maths;
-using SCommon.Prediction;
+using SPrediction;
 using SCommon.Orbwalking;
 using SUtility.Drawings;
 using SharpDX;
@@ -128,7 +128,7 @@ namespace SAutoCarry.Champions
                 {
                     if (minion.IsValidTarget(Spells[Q].Range) && minion.Distance(t.ServerPosition) <= Spells[Q].Range)
                     {
-                        var hitbox = ClipperWrapper.DefineCircle(minion.ServerPosition.To2D(), Spells[Q].Range);
+                        var hitbox = SCommon.Maths.ClipperWrapper.DefineCircle(minion.ServerPosition.To2D(), Spells[Q].Range);
                         var possibleBounces = minions.Where(p => !hitbox.IsOutside(p.ServerPosition.To2D())).OrderBy(q => q.Distance(minion.ServerPosition));
                         if (possibleBounces.Count() < 3 || possibleBounces.FirstOrDefault().Distance(minion.ServerPosition) > t.Distance(minion.ServerPosition)) // <= 3 ?
                         {

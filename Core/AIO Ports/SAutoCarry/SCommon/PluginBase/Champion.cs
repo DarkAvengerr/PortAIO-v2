@@ -4,11 +4,11 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SCommon.Orbwalking;
 using SCommon.Evade;
-using SCommon.Prediction;
+using SPrediction;
 using SharpDX;
 using SharpDX.Direct3D9;
 //typedefs
-using Prediction = SCommon.Prediction.Prediction;
+using Prediction = SPrediction.Prediction;
 using Geometry = SCommon.Maths.Geometry;
 using Color = System.Drawing.Color;
 using TargetSelector = SCommon.TS.TargetSelector;
@@ -178,7 +178,7 @@ namespace SCommon.PluginBase
             TargetedSpellDetector.OnDetected += this.TargetedSpellDetector_OnDetected;
             #endregion
 
-            Prediction.Prediction.Initialize(ConfigMenu);
+            Prediction.Initialize(ConfigMenu);
             ConfigMenu.AddSubMenu(credits);
         }
 

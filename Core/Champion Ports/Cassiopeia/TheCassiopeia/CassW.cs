@@ -8,7 +8,6 @@ using LeagueSharp.Common;
 using SharpDX;
 using TheCassiopeia.Commons;
 using TheCassiopeia.Commons.ComboSystem;
-using Prediction = TheCassiopeia.Commons.Prediction.Prediction;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
@@ -126,7 +125,7 @@ namespace TheCassiopeia
 
         public static Vector3 GetMovementPrediction(Obj_AI_Base target, float time = 1f)
         {
-            var input = new TheCassiopeia.Commons.Prediction.PredictionInput() { Unit = target, Delay = time };
+            var input = new PredictionInput() { Unit = target, Delay = time };
             if (input.Unit.IsDashing())
             {
                 return Prediction.GetDashingPrediction(input).UnitPosition;

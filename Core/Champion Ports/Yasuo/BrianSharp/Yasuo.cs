@@ -1228,7 +1228,7 @@
                     return;
                 }
                 var safePoint = IsSafePoint(Player.ServerPosition.To2D());
-                var safePath = IsSafePath(Player.GetWaypoints(), 100);
+                var safePath = IsSafePath(Player.Path.ToList().To2D(), 100);
                 if (!safePath.IsSafe && !safePoint.IsSafe)
                 {
                     TryToEvade(safePoint.SkillshotList, Game.CursorPos.To2D());

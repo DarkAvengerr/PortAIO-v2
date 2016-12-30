@@ -476,7 +476,7 @@ using LeagueSharp.Common;
 
             NoSolutionFound = false;
 
-            var currentPath = ObjectManager.Player.GetWaypoints();
+            var currentPath = ObjectManager.Player.Path.ToList().To2D();
             var safeResult = IsSafe(ObjectManager.Player.ServerPosition.To2D());
             var safePath = IsSafePath(currentPath, 100);
 

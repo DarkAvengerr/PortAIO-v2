@@ -220,12 +220,12 @@ namespace OneKeyToWin_AIO_Sebby.Core
                 
                 if (enemy.IsValidTarget() && ShowClicks)
                 {
-                    var lastWaypoint = enemy.GetWaypoints().Last().To3D();
+                    var lastWaypoint = enemy.Path.ToList().Last();
                     if (lastWaypoint.IsValid())
                     {
                         drawLine(enemy.Position, lastWaypoint, 1, System.Drawing.Color.Red);
                             
-                        if (enemy.GetWaypoints().Count() > 1)
+                        if (enemy.Path.ToList().Count() > 1)
                             DrawFontTextMap(Tahoma13, enemy.ChampionName, lastWaypoint, SharpDX.Color.WhiteSmoke);
                     }
                 }

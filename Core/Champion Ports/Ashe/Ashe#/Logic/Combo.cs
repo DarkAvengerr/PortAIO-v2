@@ -75,7 +75,7 @@ using EloBuddy;
 
                     if (UseR)
                     {
-                        var waypoints = target.GetWaypoints();
+                        var waypoints = target.Path.ToList().To2D();
                         if ((Player.Distance(waypoints.Last().To3D()) - Player.Distance(target.Position)) > 400
                             && !CheckOverkill(target))
                         {

@@ -4,7 +4,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SCommon;
 using SCommon.PluginBase;
-using SCommon.Prediction;
+using SPrediction;
 using SCommon.Orbwalking;
 using SCommon.Evade;
 using SUtility.Drawings;

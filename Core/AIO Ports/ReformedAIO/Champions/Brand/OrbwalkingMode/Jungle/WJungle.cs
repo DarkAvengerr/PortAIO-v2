@@ -39,7 +39,7 @@ namespace ReformedAIO.Champions.Brand.OrbwalkingMode.Jungle
                 return;
             }
 
-            var pos = spell.Spell.GetCircularFarmLocation(Mob.GetWaypoints());
+            var pos = spell.Spell.GetCircularFarmLocation(Mob.Path.ToList().To2D());
 
             spell.Spell.Cast(pos.Position.To3D());
         }

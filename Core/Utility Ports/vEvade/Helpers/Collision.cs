@@ -164,7 +164,7 @@ using LeagueSharp.Common;
         private static Prediction FastPrediction(Vector2 from, Obj_AI_Base unit, int delay, int speed)
         {
             var d = (delay / 1000f + (speed == 0 ? 0 : from.Distance(unit) / speed)) * unit.MoveSpeed;
-            var path = unit.GetWaypoints();
+            var path = unit.Path.ToList().To2D();
 
             return path.PathLength() > d
                        ? new Prediction { IsMoving = true, Position = path.CutPath((int)d)[0] }

@@ -543,7 +543,7 @@ using EloBuddy;
                 return;
             }
 
-            var currentPath = GameObjects.Player.GetWaypoints();
+            var currentPath = GameObjects.Player.Path.ToList().To2D();
             var safeResult = IsSafe(PlayerPosition);
             var safePath = IsSafePath(currentPath, 100);
 

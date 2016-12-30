@@ -5,12 +5,12 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SCommon.Maths;
-using SCommon.Prediction;
+using SPrediction;
 using SCommon.PluginBase;
 using SharpDX;
 //typedefs
-using Prediction = SCommon.Prediction.Prediction;
-using Collision = SCommon.Prediction.Collision;
+using Prediction = SPrediction.Prediction;
+using Collision = SPrediction.Collision;
 using EloBuddy;
 
 namespace SAutoCarry.Champions.Helpers

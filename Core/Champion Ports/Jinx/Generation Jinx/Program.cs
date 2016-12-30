@@ -438,7 +438,7 @@ using EloBuddy;
         {
             if (Config.Item("hitchanceR").GetValue<bool>())
             {
-                List<Vector2> waypoints = target.GetWaypoints();
+                List<Vector2> waypoints = target.Path.ToList().To2D();
                 if ((ObjectManager.Player.Distance(waypoints.Last<Vector2>().To3D()) - ObjectManager.Player.Distance(target.Position)) > 400)
                 {
                     R.Cast(target, true);
@@ -625,7 +625,7 @@ using EloBuddy;
             }
             else if (HitChanceNum == 3)
             {
-                List<Vector2> waypoints = target.GetWaypoints();
+                List<Vector2> waypoints = target.Path.ToList().To2D();
                 float SiteToSite = ((target.MoveSpeed * QWER.Delay) + (Player.Distance(target.ServerPosition) / QWER.Speed)) * 6 - QWER.Width;
                 float BackToFront = ((target.MoveSpeed * QWER.Delay) + (Player.Distance(target.ServerPosition) / QWER.Speed));
                 if (ObjectManager.Player.Distance(waypoints.Last<Vector2>().To3D()) < SiteToSite || ObjectManager.Player.Distance(target.Position) < SiteToSite)
@@ -650,7 +650,7 @@ using EloBuddy;
             }
             else if (HitChanceNum == 4 && (int)poutput.Hitchance > 4)
             {
-                List<Vector2> waypoints = target.GetWaypoints();
+                List<Vector2> waypoints = target.Path.ToList().To2D();
                 float SiteToSite = ((target.MoveSpeed * QWER.Delay) + (Player.Distance(target.ServerPosition) / QWER.Speed)) * 6 - QWER.Width;
                 float BackToFront = ((target.MoveSpeed * QWER.Delay) + (Player.Distance(target.ServerPosition) / QWER.Speed));
                 if (ObjectManager.Player.Distance(waypoints.Last<Vector2>().To3D()) < SiteToSite || ObjectManager.Player.Distance(target.Position) < SiteToSite)

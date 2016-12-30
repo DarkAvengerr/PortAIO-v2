@@ -136,7 +136,7 @@ using EloBuddy; namespace HumanizerSharp
 
                 if (Menu.Item("MovementHumanizeDistance").IsActive())
                 {
-                    var wp = ObjectManager.Player.GetWaypoints();
+                    var wp = ObjectManager.Player.Path.ToList().To2D();
                    /* if (wp.Count > 1 && wp.Last().Distance(args.TargetPosition) < 20)
                     {
                         //Console.WriteLine("HUMANIZE WAYPOINTS");

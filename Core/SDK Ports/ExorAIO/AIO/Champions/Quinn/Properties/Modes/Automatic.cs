@@ -41,9 +41,9 @@ namespace ExorAIO.Champions.Quinn
             if (Vars.W.IsReady()
                 && GameObjects.EnemyHeroes.Any(
                     t =>
-                    t.Distance(t.GetWaypoints().LastOrDefault()) < 1500
-                    && NavMesh.IsWallOfGrass((Vector3)t.GetWaypoints().LastOrDefault(), 1)
-                    && GameObjects.Player.Distance(t.GetWaypoints().LastOrDefault()) < Vars.W.Range)
+                    t.Distance(t.Path.ToList().LastOrDefault()) < 1500
+                    && NavMesh.IsWallOfGrass((Vector3)t.Path.ToList().LastOrDefault(), 1)
+                    && GameObjects.Player.Distance(t.Path.ToList().LastOrDefault()) < Vars.W.Range)
                 && Vars.Menu["spells"]["w"]["vision"].GetValue<MenuBool>().Value)
             {
                 Vars.W.Cast();

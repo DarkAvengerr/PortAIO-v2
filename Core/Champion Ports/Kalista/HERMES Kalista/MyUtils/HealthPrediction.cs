@@ -43,7 +43,7 @@ using EloBuddy;
 
         static HealthPrediction()
         {
-            Obj_AI_Base.OnSpellCast += ObjAiBaseOnOnProcessSpellCast;
+            Obj_AI_Base.OnBasicAttack += ObjAiBaseOnOnProcessSpellCast;
             Game.OnUpdate += Game_OnGameUpdate;
             Spellbook.OnStopCast += SpellbookOnStopCast;
             MissileClient.OnDelete += MissileClient_OnDelete;

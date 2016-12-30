@@ -117,20 +117,20 @@ using EloBuddy;
 
         public static void CastSdk(this Spell spell, Obj_AI_Base unit, HitChance hit, bool aoe)
         {
-            SDKPrediction.SkillshotType CoreType2 = SDKPrediction.SkillshotType.SkillshotLine;
+            SebbyLib.Movement.SkillshotType CoreType2 = SebbyLib.Movement.SkillshotType.SkillshotLine;
 
             if (spell.Type == SkillshotType.SkillshotCircle)
             {
-                CoreType2 = SDKPrediction.SkillshotType.SkillshotCircle;
+                CoreType2 = SebbyLib.Movement.SkillshotType.SkillshotCircle;
                 aoe = true;
             }
 
             if (spell.Width > 80 && !spell.Collision)
                 aoe = true;
 
-            var predInput2 = new SDKPrediction.PredictionInput
+            var predInput2 = new SebbyLib.Movement.PredictionInput
             {
-                AoE = aoe,
+                Aoe = aoe,
                 Collision = spell.Collision,
                 Speed = spell.Speed,
                 Delay = spell.Delay,
@@ -141,7 +141,7 @@ using EloBuddy;
                 Type = CoreType2
             };
 
-            var poutput2 = SDKPrediction.GetPrediction(predInput2);
+            var poutput2 = SebbyLib.Movement.Prediction.GetPrediction(predInput2);
 
             if (spell.Speed != Single.MaxValue &&
                 OktwCommon.CollisionYasuo(ObjectManager.Player.ServerPosition, poutput2.CastPosition))
@@ -152,29 +152,29 @@ using EloBuddy;
             switch (hit)
             {
                 case HitChance.Low:
-                    if (poutput2.Hitchance >= SDKPrediction.HitChance.Low)
+                    if (poutput2.Hitchance >= SebbyLib.Movement.HitChance.Low)
                         spell.Cast(poutput2.CastPosition);
                     break;
                 case HitChance.Medium:
-                    if (poutput2.Hitchance >= SDKPrediction.HitChance.Medium)
+                    if (poutput2.Hitchance >= SebbyLib.Movement.HitChance.Medium)
                         spell.Cast(poutput2.CastPosition);
                     break;
                 case HitChance.High:
-                    if (poutput2.Hitchance >= SDKPrediction.HitChance.High)
+                    if (poutput2.Hitchance >= SebbyLib.Movement.HitChance.High)
                         spell.Cast(poutput2.CastPosition);
                     break;
                 case HitChance.VeryHigh:
-                    if (poutput2.Hitchance >= SDKPrediction.HitChance.VeryHigh)
+                    if (poutput2.Hitchance >= SebbyLib.Movement.HitChance.VeryHigh)
                         spell.Cast(poutput2.CastPosition);
                     break;
                 case HitChance.Immobile:
-                    if (poutput2.Hitchance >= SDKPrediction.HitChance.Immobile)
+                    if (poutput2.Hitchance >= SebbyLib.Movement.HitChance.Immobile)
                         spell.Cast(poutput2.CastPosition);
                     break;
             }
 
-            if (predInput2.AoE && poutput2.AoeTargetsHitCount > 1 &&
-                poutput2.Hitchance >= SDKPrediction.HitChance.High)
+            if (predInput2.Aoe && poutput2.AoeTargetsHitCount > 1 &&
+                poutput2.Hitchance >= SebbyLib.Movement.HitChance.High)
             {
                 spell.Cast(poutput2.CastPosition, true);
             }

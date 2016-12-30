@@ -85,12 +85,12 @@ namespace TheCassiopeia.Commons
                        .Any(sp => sp.Team == hero.Team && hero.Distance(sp.Position, true) < distance * distance);
         }
 
-        public static bool IsBehindWindWall(this AIHeroClient target, float delay = 0f, float radiusOrWidth = 0f, float speed = float.MaxValue, Prediction.SkillshotType testType = Prediction.SkillshotType.SkillshotLine)
+        public static bool IsBehindWindWall(this AIHeroClient target, float delay = 0f, float radiusOrWidth = 0f, float speed = float.MaxValue, SkillshotType testType = SkillshotType.SkillshotLine)
         {
-            return Prediction.Prediction.GetPrediction(new Prediction.PredictionInput
+            return Prediction.GetPrediction(new PredictionInput
             {
                 Collision = true,
-                CollisionObjects = new[] { Prediction.CollisionableObjects.YasuoWall },
+                CollisionObjects = new[] { CollisionableObjects.YasuoWall },
                 Aoe = false,
                 Delay = delay,
                 From = ObjectManager.Player.ServerPosition,
@@ -98,7 +98,7 @@ namespace TheCassiopeia.Commons
                 Speed = speed,
                 Type = testType,
                 Unit = target
-            }, true, true).Hitchance == Prediction.HitChance.Collision;
+            }, true, true).Hitchance == HitChance.Collision;
         }
 
     }

@@ -16,7 +16,7 @@ using EloBuddy;
     {
         public static Vector3 WayPointEnemy(AIHeroClient enemy)
         {
-            return enemy.GetWaypoints()[enemy.GetWaypoints().Count - 1].To3D();
+            return enemy.Path.ToList()[enemy.Path.ToList().Count - 1];
         }
         public static float Calculate(AIHeroClient enemy)
         {

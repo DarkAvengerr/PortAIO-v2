@@ -6,7 +6,7 @@ using LeagueSharp.Common;
 using SCommon;
 using SCommon.Database;
 using SCommon.PluginBase;
-using SCommon.Prediction;
+using SPrediction;
 using SCommon.Orbwalking;
 using SUtility.Drawings;
 using SharpDX;
@@ -189,7 +189,7 @@ namespace SAutoCarry.Champions
         {
             if (sender.IsEnemy && sender.IsChampion() && Data.IsImmobilizeBuff(args.Buff.Type) && AutoGrabMinHealth <= ObjectManager.Player.HealthPercent)
             {
-                if (Spells[Q].IsReady() && sender.IsValidTarget(Spells[Q].Range) && AutoGrabImmobile && !IsBlacklistedAutoGrab(sender as AIHeroClient) && !Spells[Q].GetCollisionFlags(ObjectManager.Player.ServerPosition.To2D(), sender.ServerPosition.To2D()).HasFlag(SCommon.Prediction.Collision.Flags.Minions))
+                if (Spells[Q].IsReady() && sender.IsValidTarget(Spells[Q].Range) && AutoGrabImmobile && !IsBlacklistedAutoGrab(sender as AIHeroClient) && !Spells[Q].GetCollisionFlags(ObjectManager.Player.ServerPosition.To2D(), sender.ServerPosition.To2D()).HasFlag(SPrediction.Collision.Flags.Minions))
                     Spells[Q].Cast(sender.ServerPosition);
             }
         }

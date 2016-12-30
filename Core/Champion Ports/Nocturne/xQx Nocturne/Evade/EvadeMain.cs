@@ -561,7 +561,7 @@ namespace Nocturne.Evade
                 PathFollower.Stop();
             }
 
-            var currentPath = ObjectManager.Player.GetWaypoints();
+            var currentPath = ObjectManager.Player.Path.ToList().To2D();
             var safeResult = IsSafe(PlayerPosition);
             var safePath = IsSafePath(currentPath, 100);
 

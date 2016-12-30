@@ -23,7 +23,7 @@ using EloBuddy;
 
         public override void Cast(AIHeroClient target, bool force = false, HitChance minChance = HitChance.Low)
         {
-            if (HasBeenSafeCast() || target == null || target.GetWaypoints().Last().Distance(target) > 50) return;
+            if (HasBeenSafeCast() || target == null || target.Path.ToList().To2D().Last().Distance(target) > 50) return;
             var prediction = Spell.GetPrediction(target, true);
             if (prediction.Hitchance < minChance) return;
             SafeCast(() => Spell.Cast(prediction.CastPosition));

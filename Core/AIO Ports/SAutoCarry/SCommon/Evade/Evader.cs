@@ -5,7 +5,7 @@ using System.Threading;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using SCommon.Prediction;
+using SPrediction;
 using SCommon.Maths;
 using SCommon.Database;
 //typedefs
@@ -220,17 +220,17 @@ namespace SCommon.Evade
                         if (sender_pos.Distance(end_pos) > dcspell.Spell.Range)
                             end_pos = sender_pos + direction * dcspell.Spell.Range;
 
-                        Geometry.Polygon my_hitbox = ClipperWrapper.DefineRectangle(my_pos - 60, my_pos + 60, 60);
+                        Geometry.Polygon my_hitbox = SCommon.Maths.ClipperWrapper.DefineRectangle(my_pos - 60, my_pos + 60, 60);
                         Geometry.Polygon spell_hitbox = null;
 
                         if (dcspell.Spell.IsSkillshot)
                         {
                             if (dcspell.Spell.Type == SkillshotType.SkillshotLine)
-                                spell_hitbox = ClipperWrapper.DefineRectangle(sender_pos, end_pos, dcspell.Spell.Radius);
+                                spell_hitbox = SCommon.Maths.ClipperWrapper.DefineRectangle(sender_pos, end_pos, dcspell.Spell.Radius);
                             else if (dcspell.Spell.Type == SkillshotType.SkillshotCircle)
-                                spell_hitbox = ClipperWrapper.DefineCircle(end_pos, dcspell.Spell.Radius);
+                                spell_hitbox = SCommon.Maths.ClipperWrapper.DefineCircle(end_pos, dcspell.Spell.Radius);
                             else if (dcspell.Spell.Type == SkillshotType.SkillshotCone)
-                                spell_hitbox = ClipperWrapper.DefineSector(sender_pos, end_pos - sender_pos, dcspell.Spell.Radius * (float)Math.PI / 180, dcspell.Spell.Range);
+                                spell_hitbox = SCommon.Maths.ClipperWrapper.DefineSector(sender_pos, end_pos - sender_pos, dcspell.Spell.Radius * (float)Math.PI / 180, dcspell.Spell.Range);
                         }
 
                         //spells with arc
@@ -239,14 +239,14 @@ namespace SCommon.Evade
                             float mul = (end_pos.Distance(sender_pos) / (dcspell.Spell.Range - 20.0f));
                             
                             spell_hitbox = new Geometry.Polygon(
-                                ClipperWrapper.DefineArc(sender_pos - dcspell.Spell.ArcData.Pos, end_pos, dcspell.Spell.ArcData.Angle * mul, dcspell.Spell.ArcData.Width, dcspell.Spell.ArcData.Height * mul),
-                                ClipperWrapper.DefineArc(sender_pos - dcspell.Spell.ArcData.Pos, end_pos, dcspell.Spell.ArcData.Angle * mul, dcspell.Spell.ArcData.Width, (dcspell.Spell.ArcData.Height + dcspell.Spell.ArcData.Radius) * mul),
+                                SCommon.Maths.ClipperWrapper.DefineArc(sender_pos - dcspell.Spell.ArcData.Pos, end_pos, dcspell.Spell.ArcData.Angle * mul, dcspell.Spell.ArcData.Width, dcspell.Spell.ArcData.Height * mul),
+                                SCommon.Maths.ClipperWrapper.DefineArc(sender_pos - dcspell.Spell.ArcData.Pos, end_pos, dcspell.Spell.ArcData.Angle * mul, dcspell.Spell.ArcData.Width, (dcspell.Spell.ArcData.Height + dcspell.Spell.ArcData.Radius) * mul),
                                 spell_hitbox);
                         }
 
                         if (spell_hitbox != null)
                         {
-                            if (ClipperWrapper.IsIntersects(ClipperWrapper.MakePaths(my_hitbox), ClipperWrapper.MakePaths(spell_hitbox)))
+                            if (SCommon.Maths.ClipperWrapper.IsIntersects(SCommon.Maths.ClipperWrapper.MakePaths(my_hitbox), SCommon.Maths.ClipperWrapper.MakePaths(spell_hitbox)))
                                 OnSpellHitDetected(direction, ObjectManager.Player);
                             else
                             {
@@ -259,8 +259,8 @@ namespace SCommon.Evade
                                         foreach (Obj_AI_Base ally in allies)
                                         {
                                             Vector2 ally_pos = ally.ServerPosition.To2D();
-                                            Geometry.Polygon ally_hitbox = ClipperWrapper.DefineRectangle(ally_pos, ally_pos + 60, 60);
-                                            if (ClipperWrapper.IsIntersects(ClipperWrapper.MakePaths(ally_hitbox), ClipperWrapper.MakePaths(spell_hitbox)))
+                                            Geometry.Polygon ally_hitbox = SCommon.Maths.ClipperWrapper.DefineRectangle(ally_pos, ally_pos + 60, 60);
+                                            if (SCommon.Maths.ClipperWrapper.IsIntersects(SCommon.Maths.ClipperWrapper.MakePaths(ally_hitbox), SCommon.Maths.ClipperWrapper.MakePaths(spell_hitbox)))
                                             {
                                                 OnSpellHitDetected(direction, ally);
                                                 break;

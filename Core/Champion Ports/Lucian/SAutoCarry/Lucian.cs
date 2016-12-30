@@ -4,7 +4,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SCommon;
 using SCommon.PluginBase;
-using SCommon.Prediction;
+using SPrediction;
 using SCommon.Maths;
 using SharpDX;
 //typedefs
@@ -26,7 +26,7 @@ namespace SAutoCarry.Champions
             OnLaneClear += LaneClear;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
             Spellbook.OnStopCast += Spellbook_OnStopCast;
-            SCommon.Prediction.Prediction.predMenu.Item("SPREDDRAWINGS").SetValue(false);
+            //SPrediction.Prediction.menpredMenu.Item("SPREDDRAWINGS").SetValue(false);
         }
 
         public override void CreateConfigMenu()
@@ -134,12 +134,12 @@ namespace SAutoCarry.Champions
             var t = TargetSelector.GetTarget(1200f, LeagueSharp.Common.TargetSelector.DamageType.Physical);
             if (t != null)
             {
-                var enemyHitBox = ClipperWrapper.DefineCircle(SCommon.Prediction.Prediction.GetFastUnitPosition(t, 0.35f), t.BoundingRadius);
+                var enemyHitBox = SCommon.Maths.ClipperWrapper.DefineCircle(SPrediction.Prediction.GetFastUnitPosition(t, 0.35f), t.BoundingRadius);
                 var minions = MinionManager.GetMinions(Spells[Q].Range, MinionTypes.All, MinionTeam.NotAlly);
                 foreach (var minion in minions)
                 {
-                    var spellHitBox = ClipperWrapper.DefineRectangle(ObjectManager.Player.ServerPosition.To2D(), ObjectManager.Player.ServerPosition.To2D() + (minion.ServerPosition.To2D() - ObjectManager.Player.ServerPosition.To2D()).Normalized() * 1200f, 60f);
-                    if (ClipperWrapper.IsIntersects(ClipperWrapper.MakePaths(enemyHitBox), ClipperWrapper.MakePaths(spellHitBox)))
+                    var spellHitBox = SCommon.Maths.ClipperWrapper.DefineRectangle(ObjectManager.Player.ServerPosition.To2D(), ObjectManager.Player.ServerPosition.To2D() + (minion.ServerPosition.To2D() - ObjectManager.Player.ServerPosition.To2D()).Normalized() * 1200f, 60f);
+                    if (SCommon.Maths.ClipperWrapper.IsIntersects(SCommon.Maths.ClipperWrapper.MakePaths(enemyHitBox), SCommon.Maths.ClipperWrapper.MakePaths(spellHitBox)))
                     {
                         Spells[Q].CastOnUnit(minion);
                         return;

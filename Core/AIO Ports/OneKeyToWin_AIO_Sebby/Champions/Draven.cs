@@ -291,7 +291,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
         {
             if (Config.Item("hitchanceR", true).GetValue<bool>())
             {
-                List<Vector2> waypoints = target.GetWaypoints();
+                List<Vector2> waypoints = target.Path.ToList().To2D();
                 if (target.Path.Count() < 2 && (Player.Distance(waypoints.Last<Vector2>().To3D()) - Player.Distance(target.Position)) > 300)
                 {
                     Program.CastSpell(R, target);

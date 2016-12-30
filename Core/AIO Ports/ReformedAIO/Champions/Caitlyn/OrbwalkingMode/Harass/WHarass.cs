@@ -116,7 +116,7 @@ namespace ReformedAIO.Champions.Caitlyn.OrbwalkingMode.Harass
             // Beta
             if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Ammo < 2) return;
 
-            var path = ObjectManager.Player.GetWaypoints().LastOrDefault().To3D();
+            var path = ObjectManager.Player.Path.ToList().LastOrDefault();
 
             if (!NavMesh.IsWallOfGrass(path, 0)) return;
 

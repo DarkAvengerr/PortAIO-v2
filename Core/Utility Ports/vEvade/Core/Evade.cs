@@ -282,7 +282,7 @@ using LeagueSharp.Common;
 
             if (Configs.Debug)
             {
-                var curPaths = ObjectManager.Player.GetWaypoints();
+                var curPaths = ObjectManager.Player.Path.ToList().To2D();
 
                 for (var i = 0; i < curPaths.Count - 1; i++)
                 {
@@ -487,7 +487,7 @@ using LeagueSharp.Common;
                 }
             }
 
-            var curPaths = ObjectManager.Player.GetWaypoints();
+            var curPaths = ObjectManager.Player.Path.ToList().To2D();
             var checkPos = IsSafePoint(PlayerPosition);
             var checkPath = IsSafePath(curPaths, 100);
             haveSolution = false;

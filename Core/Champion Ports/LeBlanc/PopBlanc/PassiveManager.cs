@@ -4,9 +4,11 @@ using LeagueSharp.Common;
 using SharpDX;
 using TreeLib.Extensions;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace PopBlanc
+using EloBuddy;
+using LeagueSharp.Common;
+using System.Linq;
+
+namespace PopBlanc
 {
     internal class PassiveManager
     {
@@ -98,8 +100,8 @@ using EloBuddy;
                 switch (mode)
                 {
                     case 0: // toward player
-                        var pos = Player.GetWaypoints().Count > 1
-                            ? Player.GetWaypoints()[1].To3D()
+                        var pos = Player.Path.ToList().Count > 1
+                            ? Player.Path.ToList()[1]
                             : Player.ServerPosition;
                         LeagueSharp.Common.Utility.DelayAction.Add(
                             200, () => { EloBuddy.Player.IssueOrder(GameObjectOrder.MovePet, pos, false); });

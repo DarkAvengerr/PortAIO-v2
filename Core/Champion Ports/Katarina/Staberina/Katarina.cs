@@ -540,7 +540,7 @@ namespace Staberina
                 }
             }
 
-            if (!Player.IsDashing() && Player.GetWaypoints().Last().Distance(Game.CursorPos) > 100)
+            if (!Player.IsDashing() && Player.Path.ToList().Last().Distance(Game.CursorPos) > 100)
             {
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Player.ServerPosition.Extend(Game.CursorPos, 250), false);
             }

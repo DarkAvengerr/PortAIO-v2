@@ -77,7 +77,7 @@ using LeagueSharp.Common;
         {
             var tickDelay = delay / 1000f + (fromVector2.Distance(unitAiBase) / speed);
             var moveSpeedF = tickDelay * unitAiBase.MoveSpeed;
-            var path = unitAiBase.GetWaypoints();
+            var path = unitAiBase.Path.ToList().To2D();
 
             if (path.PathLength() > moveSpeedF)
             {

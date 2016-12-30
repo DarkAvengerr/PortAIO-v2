@@ -1,6 +1,7 @@
 using EloBuddy; 
- using LeagueSharp.SDK; 
- namespace Valvrave_Sharp.ValvEvade
+ using LeagueSharp.SDK;
+using EloBuddy.SDK;
+namespace Valvrave_Sharp.ValvEvade
 {
     #region
 
@@ -15,6 +16,7 @@ using EloBuddy;
     using LeagueSharp.SDK.Utils;
 
     using SharpDX;
+    
 
     #endregion
 
@@ -184,7 +186,7 @@ using EloBuddy;
         {
             var tDelay = delay / 1000f + (Math.Abs(speed - int.MaxValue) > 0 ? unit.Distance(from) / speed : 0);
             var d = tDelay * unit.MoveSpeed;
-            var path = unit.GetWaypoints();
+            var path = unit.Path.ToList().To2D();
             if (path.PathLength() > d)
             {
                 return new FastPredResult { IsMoving = true, PredictedPos = path.CutPath((int)d)[0] };

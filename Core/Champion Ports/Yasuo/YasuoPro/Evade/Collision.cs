@@ -75,7 +75,7 @@ using EloBuddy; namespace EvadeYas
         {
             var tDelay = delay / 1000f + (from.Distance(unit) / speed);
             var d = tDelay * unit.MoveSpeed;
-            var path = unit.GetWaypoints();
+            var path = unit.Path.ToList().To2D();
 
             if (path.PathLength() > d)
             {

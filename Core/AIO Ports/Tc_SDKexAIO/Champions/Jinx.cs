@@ -397,7 +397,7 @@ using EloBuddy;
                             + 300 + target.BoundingRadius && target.CountAllyHeroesInRange(600) == 0
                             && Player.CountEnemyHeroesInRange(400) == 0)
                         {
-                            List<Vector2> waypoints = target.GetWaypoints();
+                            List<Vector2> waypoints = target.Path.ToList().To2D();
 
                             if ((Player.Distance(waypoints.Last().ToVector3()) - Player.Distance(target.Position)) > 400)
                             R.Cast(target);

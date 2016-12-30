@@ -7,7 +7,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using VeigShineCommon;
-using VeigSPrediction;
+using SPrediction;
 
 using EloBuddy; 
  using LeagueSharp.Common; 

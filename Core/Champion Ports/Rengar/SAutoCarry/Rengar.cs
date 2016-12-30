@@ -6,7 +6,7 @@ using LeagueSharp.Common;
 using SCommon;
 using SCommon.Database;
 using SCommon.PluginBase;
-using SCommon.Prediction;
+using SPrediction;
 using SharpDX;
 //typedefs
 using TargetSelector = SCommon.TS.TargetSelector;

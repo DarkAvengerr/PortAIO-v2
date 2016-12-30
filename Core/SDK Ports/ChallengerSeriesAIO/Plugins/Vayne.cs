@@ -324,7 +324,7 @@ using EloBuddy;
                         h.GetBuffCount("vaynesilvereddebuff") == 2);
                 if (Orbwalker.ActiveMode != OrbwalkingMode.Combo)
                 {
-                    if (possible2WTarget.IsValidTarget() && UseEAs3rdWProcBool && possible2WTarget.GetWaypoints().LastOrDefault().Distance(ObjectManager.Player.ServerPosition) < 1000)
+                    if (possible2WTarget.IsValidTarget() && UseEAs3rdWProcBool && possible2WTarget.Path.ToList().LastOrDefault().Distance(ObjectManager.Player.ServerPosition) < 1000)
                     {
                         if (EDelaySlider.Value > 0)
                         {
@@ -467,7 +467,7 @@ using EloBuddy;
                             }
                         }
                         if (
-                            possibleNearbyMeleeChampion.GetWaypoints()
+                            possibleNearbyMeleeChampion.Path.ToList()
                                 .LastOrDefault()
                                 .Distance(ObjectManager.Player.ServerPosition) < possibleNearbyMeleeChampion.AttackRange)
                         {

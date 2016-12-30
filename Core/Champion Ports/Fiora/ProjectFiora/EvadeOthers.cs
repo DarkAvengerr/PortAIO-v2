@@ -441,7 +441,7 @@ namespace FioraProject
                 var buff = ramus.GetBuff("PowerBall");
                 if (buff != null)
                 {
-                    var waypoints = ramus.GetWaypoints();
+                    var waypoints = ramus.Path.ToList().To2D();
                     if (waypoints.Count == 1)
                     {
                         if (Player.Position.To2D().Distance(ramus.Position.To2D())

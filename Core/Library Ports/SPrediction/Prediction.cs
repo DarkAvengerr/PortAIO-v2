@@ -381,7 +381,7 @@ namespace SPrediction
             finally
             {
                 //check if movement changed while prediction calculations
-                if (!target.GetWaypoints().SequenceEqual(path))
+                if (!target.Path.ToList().To2D().SequenceEqual(path))
                     result.HitChance = HitChance.Medium;
             }
         }

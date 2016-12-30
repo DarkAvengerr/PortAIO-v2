@@ -117,7 +117,7 @@ using EloBuddy; namespace YasuoPro
 
         internal static bool IsCloserWP(this Vector2 point, Obj_AI_Base target)
         {
-            var wp = target.GetWaypoints();
+            var wp = target.Path.ToList().To2D();
             var lastwp = wp.LastOrDefault();
             var wpc = wp.Count();
             var midwpnum = wpc / 2;

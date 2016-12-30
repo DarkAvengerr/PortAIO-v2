@@ -459,7 +459,7 @@ using EloBuddy;
         public static Vector2 PositionAfter(Obj_AI_Base unit, float t, float speed = float.MaxValue)
         {
             var distance = t * speed;
-            var path = unit.GetWaypoints();
+            var path = unit.Path.ToList().To2D();
 
             for (var i = 0; i < path.Count - 1; i++)
             {
@@ -493,7 +493,7 @@ using EloBuddy;
                 value = (Range - varRange - Hero.BoundingRadius);
             }
             var distance = Delay * Hero.MoveSpeed + value;
-            var path = Hero.GetWaypoints();
+            var path = Hero.Path.ToList().To2D();
 
             for (var i = 0; i < path.Count - 1; i++)
             {

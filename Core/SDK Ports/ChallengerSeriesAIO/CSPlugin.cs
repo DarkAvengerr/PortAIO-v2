@@ -24,9 +24,10 @@ using LeagueSharp.SDK.UI;
 using LeagueSharp.SDK.Utils;
 using Menu = LeagueSharp.SDK.UI.Menu;
 
-using EloBuddy; 
- using LeagueSharp.SDK; 
- namespace Challenger_Series
+using EloBuddy;
+using LeagueSharp.SDK;
+
+namespace Challenger_Series
 {
     public abstract class CSPlugin
     {
@@ -68,11 +69,11 @@ using EloBuddy;
                     {
                         var ip = Drawing.WorldToScreen(e.Position); //start pos
 
-                        var wp = e.GetWaypoints();
+                        var wp = e.Path.ToList();
                         var c = wp.Count - 1;
                         if (wp.Count() <= 1) break;
 
-                        var w = Drawing.WorldToScreen(wp[c].ToVector3()); //endpos
+                        var w = Drawing.WorldToScreen(wp[c]); //endpos
 
                         Drawing.DrawLine(ip.X, ip.Y, w.X, w.Y, 2, Color.Red);
                         Drawing.DrawText(w.X, w.Y, Color.Red, e.CharData.BaseSkinName);

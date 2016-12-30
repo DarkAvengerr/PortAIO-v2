@@ -94,21 +94,5 @@ using EloBuddy;
                        .Any(sp => sp.Team == hero.Team && hero.Distance(sp.Position, true) < distance * distance);
         }
 
-        public static bool IsBehindWindWall(this AIHeroClient target, float delay = 0f, float radiusOrWidth = 0f, float speed = float.MaxValue, Prediction.SkillshotType testType = Prediction.SkillshotType.SkillshotLine)
-        {
-            return Prediction.Prediction.GetPrediction(new Prediction.PredictionInput
-            {
-                Collision = true,
-                CollisionObjects = new[] { Prediction.CollisionableObjects.YasuoWall },
-                Aoe = false,
-                Delay = delay,
-                From = ObjectManager.Player.ServerPosition,
-                Radius = radiusOrWidth,
-                Speed = speed,
-                Type = testType,
-                Unit = target
-            }, true, true).Hitchance == Prediction.HitChance.Collision;
-        }
-
     }
 }

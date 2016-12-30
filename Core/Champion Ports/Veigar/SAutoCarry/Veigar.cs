@@ -6,7 +6,7 @@ using SCommon;
 using SCommon.Maths;
 using SCommon.Database;
 using SCommon.PluginBase;
-using SCommon.Prediction;
+using SPrediction;
 using SUtility.Drawings;
 using SharpDX;
 //typedefs

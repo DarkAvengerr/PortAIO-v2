@@ -618,7 +618,7 @@ namespace SFXTargetSelector
                     position, randomizeMinDistance ? (Random.NextFloat(0.6f, 1) + 0.2f) * _minDistance : _minDistance);
             }
             var angle = 0f;
-            var currentPath = Player.GetWaypoints();
+            var currentPath = Player.Path.ToList().To2D();
             if (currentPath.Count > 1 && currentPath.PathLength() > 100)
             {
                 var movePath = Player.GetPath(point);

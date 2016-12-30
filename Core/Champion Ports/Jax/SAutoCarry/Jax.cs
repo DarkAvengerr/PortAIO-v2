@@ -6,7 +6,7 @@ using LeagueSharp.Common;
 using SCommon;
 using SCommon.Database;
 using SCommon.PluginBase;
-using SCommon.Prediction;
+using SPrediction;
 using SCommon.Orbwalking;
 using SCommon.Maths;
 using SUtility.Drawings;
@@ -173,7 +173,7 @@ namespace SAutoCarry.Champions
 
             if (Spells[Q].IsReady())
             {
-                var poly = ClipperWrapper.DefineCircle(ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, Spells[Q].Range - 300).To2D(), 300);
+                var poly = SCommon.Maths.ClipperWrapper.DefineCircle(ObjectManager.Player.ServerPosition.Extend(Game.CursorPos, Spells[Q].Range - 300).To2D(), 300);
                 var unit = ObjectManager.Get<Obj_AI_Base>()
                     .Where(p => p.IsAlly && !p.IsMe && p.IsTargetable && !p.Name.Contains("turret")
                         && p.ServerPosition.Distance(ObjectManager.Player.ServerPosition) < Spells[Q].Range 

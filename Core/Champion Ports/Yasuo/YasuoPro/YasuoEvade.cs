@@ -54,7 +54,7 @@ using EloBuddy; namespace YasuoPro
 
 
                 if (((Program.NoSolutionFound ||
-                      !Program.IsSafePath(Helper.Yasuo.GetWaypoints(), 1000).IsSafe &&
+                      !Program.IsSafePath(Helper.Yasuo.Path.ToList().To2D(), 1000).IsSafe &&
                       !Program.IsSafe(Helper.Yasuo.ServerPosition.To2D()).IsSafe)))
                 {
                     Helper.DontDash = true;

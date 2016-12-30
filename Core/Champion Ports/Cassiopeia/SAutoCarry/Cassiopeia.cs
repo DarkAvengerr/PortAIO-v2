@@ -6,7 +6,7 @@ using LeagueSharp.Common;
 using SCommon;
 using SCommon.Database;
 using SCommon.PluginBase;
-using SCommon.Prediction;
+using SPrediction;
 using SCommon.Orbwalking;
 using SUtility.Drawings;
 using SharpDX;

@@ -380,7 +380,7 @@ using EloBuddy;
             bool hasTarget = false;
             foreach (var enemy in HeroManager.Enemies)
             {
-                var prediction = MidlaneSharp.Prediction.GetPrediction(enemy, width, time, 0, range, false, SkillshotType.SkillshotCircle, enemy.GetWaypoints(), enemy.AvgMovChangeTime(), enemy.LastMovChangeTime(), enemy.AvgPathLenght(), Ball.Position.To2D(), Ball.Position.To2D());
+                var prediction = SPrediction.Prediction.GetPrediction(enemy, width, time, 0, range, false, SkillshotType.SkillshotCircle, enemy.Path.ToList().To2D(), enemy.AvgMovChangeTime(), enemy.LastMovChangeTime(), enemy.AvgPathLenght(), enemy.LastAngleDiff(), Ball.Position.To2D(), Ball.Position.To2D());
                 if (prediction.HitChance > HitChance.Low)
                 {
                     if (prediction.UnitPosition.Distance(Ball.Position.To2D()) < range)

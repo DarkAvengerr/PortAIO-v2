@@ -79,7 +79,7 @@ using EloBuddy; namespace ADCPackage.Plugins
                 {
                     if (Q.CanCast(target))
                     {
-                        if (target.IsMoving && target.GetWaypoints().Count >= 2)
+                        if (target.IsMoving && target.Path.ToList().Count >= 2)
                         {
                             //var qpred = Q.GetPrediction(target);
                             var x = target.Position.Extend(Prediction.GetPrediction(target, Q.Delay).UnitPosition, 300);

@@ -339,7 +339,7 @@ using EloBuddy;
 
             Orbwalker.ActiveMode = Orbwalking.OrbwalkingMode.None;
 
-            if (!Player.IsDashing() && Player.GetWaypoints().Last().Distance(Game.CursorPos) > 100)
+            if (!Player.IsDashing() && Player.Path.ToList().Last().Distance(Game.CursorPos) > 100)
             {
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
             }
@@ -1028,7 +1028,7 @@ using EloBuddy;
                 }
 
                 CastQ(target, vital);
-                /*  var path = target.GetWaypoints();
+                /*  var path = target.Path.ToList().To2D();
                 if (path.Count == 1 || Player.Distance(target) < 700)
                 {
                     CastQ(target);

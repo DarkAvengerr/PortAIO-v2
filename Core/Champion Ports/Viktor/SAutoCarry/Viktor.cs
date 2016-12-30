@@ -7,7 +7,7 @@ using SCommon;
 using SCommon.Database;
 using SCommon.PluginBase;
 using SCommon.Orbwalking;
-using SCommon.Prediction;
+using SPrediction;
 using SUtility.Drawings;
 using SharpDX;
 //typedefs

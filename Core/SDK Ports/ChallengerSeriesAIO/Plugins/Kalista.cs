@@ -407,7 +407,7 @@ using EloBuddy;
             {
                 foreach (var enemy in ValidTargets.Where(en => en.IsValidTarget(1000) && en.IsFacing(ObjectManager.Player)))
                 {
-                    var waypoints = enemy.GetWaypoints();
+                    var waypoints = enemy.Path.ToList();
                     if (waypoints.LastOrDefault().Distance(ObjectManager.Player.ServerPosition) < 400)
                     {
                         R.Cast();

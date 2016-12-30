@@ -94,7 +94,7 @@ using EloBuddy; namespace SFXChallenger.Helpers
         public static Vector2 PositionAfter(Obj_AI_Base unit, float t, float speed = float.MaxValue)
         {
             var distance = t * speed;
-            var path = unit.GetWaypoints();
+            var path = unit.Path.ToList().To2D();
 
             for (var i = 0; i < path.Count - 1; i++)
             {

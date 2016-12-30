@@ -473,7 +473,7 @@ namespace Jhin_As_The_Virtuoso
 
                 #region 探草E
                 if (enemy.IsDead) continue;
-                var path = enemy.GetWaypoints().LastOrDefault().To3D();
+                var path = enemy.Path.ToList().LastOrDefault();
                 if (!NavMesh.IsWallOfGrass(path, 1)) continue;
                 if (enemy.Distance(path) > 200) continue;
                 if (NavMesh.IsWallOfGrass(HeroManager.Player.Position, 1) && HeroManager.Player.Distance(path) < 200) continue;

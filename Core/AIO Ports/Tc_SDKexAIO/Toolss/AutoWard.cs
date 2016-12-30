@@ -214,7 +214,7 @@ using EloBuddy;
                     Vector3 prepos = enemy.Position;
 
                     if (enemy.IsMoving)
-                        prepos = prepos.Extend(enemy.GetWaypoints().Last().ToVector3(), 125);
+                        prepos = prepos.Extend(enemy.Path.ToList().Last(), 125);
 
                     if (ChampionInfoOne == null)
                     {

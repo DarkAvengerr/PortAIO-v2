@@ -499,7 +499,7 @@ using EloBuddy;
             }
 
             if (Menu.Item("FleeMove").IsActive() && !Player.IsDashing() &&
-                Player.GetWaypoints().Last().Distance(Game.CursorPos) > 100)
+                Player.Path.ToList().Last().Distance(Game.CursorPos) > 100)
             {
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
                 return true;

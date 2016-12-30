@@ -583,7 +583,7 @@ using EloBuddy;
                 PathFollower.Stop();
             }
 
-            var currentPath = ObjectManager.Player.GetWaypoints();
+            var currentPath = ObjectManager.Player.Path.ToList().To2D();
             var safeResult = IsSafe(PlayerPosition);
             var safePath = IsSafePath(currentPath, 100);
 
@@ -1416,7 +1416,7 @@ using EloBuddy;
 
             if (Config.TestOnAllies)
             {
-                var myPath = ObjectManager.Player.GetWaypoints();
+                var myPath = ObjectManager.Player.Path.ToList().To2D();
 
                 for (var i = 0; i < myPath.Count - 1; i++)
                 {

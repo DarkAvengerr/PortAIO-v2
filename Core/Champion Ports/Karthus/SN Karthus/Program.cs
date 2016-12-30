@@ -260,7 +260,7 @@ using EloBuddy;
                 value = -(100f - Hero.BoundingRadius);
             }
             var distance = Delay * Hero.MoveSpeed + value;
-            var path = Hero.GetWaypoints();
+            var path = Hero.Path.ToList().To2D();
 
             for (var i = 0; i < path.Count - 1; i++)
             {

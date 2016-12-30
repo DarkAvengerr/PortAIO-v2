@@ -84,7 +84,7 @@ using EloBuddy; namespace SFXUtility.Features.Drawings
                             Menu.Item(Name + "DrawAlly").GetValue<bool>() && hero.IsAlly ||
                             Menu.Item(Name + "DrawEnemy").GetValue<bool>() && hero.IsEnemy))
                 {
-                    _waypoints[hero.NetworkId] = hero.GetWaypoints();
+                    _waypoints[hero.NetworkId] = hero.Path.ToList().To2D();
                 }
             }
             catch (Exception ex)

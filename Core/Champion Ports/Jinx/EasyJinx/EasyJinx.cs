@@ -102,7 +102,7 @@ namespace EasyJinx
 
             AIHeroClient target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Physical);
             if (target == null) return;
-            if (target.GetWaypoints().Count == 1) return;
+            if (target.Path.ToList().Count == 1) return;
 
             Spells.CastSkillshot("E", target);
         }
@@ -141,7 +141,7 @@ namespace EasyJinx
                 {
                     if (Menu.Item("Auto_estun").GetValue<bool>() && enemy.HasBuffOfType(BuffType.Stun))
                         Spells.CastSkillshot("E", enemy, HitChance.VeryHigh, true, false);
-                    if (Menu.Item("Auto_eslow").GetValue<bool>() && enemy.HasBuffOfType(BuffType.Slow) && enemy.GetWaypoints().Count > 1)
+                    if (Menu.Item("Auto_eslow").GetValue<bool>() && enemy.HasBuffOfType(BuffType.Slow) && enemy.Path.ToList().Count > 1)
                         Spells.CastSkillshot("E", enemy, HitChance.VeryHigh, true, false);
                 }
             }

@@ -99,7 +99,7 @@ namespace Flowers_Yasuo.Evade
                 return;
             }
 
-            if (!IsSafePath(ObjectManager.Player.GetWaypoints(), 100).IsSafe &&
+            if (!IsSafePath(ObjectManager.Player.Path.ToList().To2D(), 100).IsSafe &&
                 !IsSafe(ObjectManager.Player.ServerPosition.To2D()).IsSafe)
             {
                 TryToEvade(IsSafe(ObjectManager.Player.ServerPosition.To2D()).SkillshotList, Game.CursorPos.To2D());

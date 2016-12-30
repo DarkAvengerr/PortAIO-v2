@@ -112,7 +112,7 @@ using EloBuddy;
 
                 if (menu.Item("cUseR").GetValue<bool>() && R.IsReady())
                 {
-                    var waypoints = target.GetWaypoints();
+                    var waypoints = target.Path.ToList().To2D();
                     if ((myPlayer.Distance(waypoints.Last().To3D()) - myPlayer.Distance(target.Position)) > 400)
                     {
                         R.Cast(target);

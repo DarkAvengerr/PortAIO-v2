@@ -200,7 +200,7 @@
         private static FastPredResult FastPrediction(Vector2 from, Obj_AI_Base unit, int delay, int speed)
         {
             var d = (delay / 1000f + (from.Distance(unit) / speed)) * unit.MoveSpeed;
-            var path = unit.GetWaypoints();
+            var path = unit.Path.ToList().To2D();
             return path.PathLength() > d
                        ? new FastPredResult
                              {

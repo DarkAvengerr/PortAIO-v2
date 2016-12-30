@@ -272,7 +272,6 @@
     <Compile Include="Core\AIO Ports\Hikicarry ADC AIO\Core\Plugins\SpellDatabase.cs" />
     <Compile Include="Core\AIO Ports\Hikicarry ADC AIO\Core\Predictions\PredCommon.cs" />
     <Compile Include="Core\AIO Ports\Hikicarry ADC AIO\Core\Predictions\PredictionUpdater.cs" />
-    <Compile Include="Core\AIO Ports\Hikicarry ADC AIO\Core\Predictions\SDKPrediction.cs" />
     <Compile Include="Core\AIO Ports\Hikicarry ADC AIO\Core\Utilities\KalistaLogics.cs" />
     <Compile Include="Core\AIO Ports\Hikicarry ADC AIO\Core\Utilities\Utilities.cs" />
     <Compile Include="Core\AIO Ports\Hikicarry ADC AIO\Initializer.cs" />
@@ -445,19 +444,6 @@
     <Compile Include="Core\AIO Ports\MidlaneSharp\Champions\Orianna\BallMgr.cs" />
     <Compile Include="Core\AIO Ports\MidlaneSharp\Champions\Orianna\Orianna.cs" />
     <Compile Include="Core\AIO Ports\MidlaneSharp\Program.cs" />
-    <Compile Include="Core\AIO Ports\MidlaneSharp\SPrediction\ArcPrediction.cs" />
-    <Compile Include="Core\AIO Ports\MidlaneSharp\SPrediction\CirclePrediction.cs" />
-    <Compile Include="Core\AIO Ports\MidlaneSharp\SPrediction\ClipperWrapper.cs" />
-    <Compile Include="Core\AIO Ports\MidlaneSharp\SPrediction\Collision.cs" />
-    <Compile Include="Core\AIO Ports\MidlaneSharp\SPrediction\ConePrediction.cs" />
-    <Compile Include="Core\AIO Ports\MidlaneSharp\SPrediction\Geometry.cs" />
-    <Compile Include="Core\AIO Ports\MidlaneSharp\SPrediction\LinePrediction.cs" />
-    <Compile Include="Core\AIO Ports\MidlaneSharp\SPrediction\Obj_AI_HeroExtensions.cs" />
-    <Compile Include="Core\AIO Ports\MidlaneSharp\SPrediction\PathTracker.cs" />
-    <Compile Include="Core\AIO Ports\MidlaneSharp\SPrediction\Prediction.cs" />
-    <Compile Include="Core\AIO Ports\MidlaneSharp\SPrediction\RingPrediction.cs" />
-    <Compile Include="Core\AIO Ports\MidlaneSharp\SPrediction\SpellExtensions.cs" />
-    <Compile Include="Core\AIO Ports\MidlaneSharp\SPrediction\VectorPrediction.cs" />
     <Compile Include="Core\AIO Ports\MidlaneSharp\Target.cs" />
     <Compile Include="Core\AIO Ports\MidlaneSharp\Utility.cs" />
     <Compile Include="Core\AIO Ports\mySeries\myAnnie\Logic.cs" />
@@ -1247,7 +1233,6 @@
     <Compile Include="Core\AIO Ports\Tc_SDKexAIO\Common\Manager.cs" />
     <Compile Include="Core\AIO Ports\Tc_SDKexAIO\Common\MEC.cs" />
     <Compile Include="Core\AIO Ports\Tc_SDKexAIO\Config\ExterienceManager.cs" />
-    <Compile Include="Core\AIO Ports\Tc_SDKexAIO\Core\Prediction.cs" />
     <Compile Include="Core\AIO Ports\Tc_SDKexAIO\Core\TCommon.cs" />
     <Compile Include="Core\AIO Ports\Tc_SDKexAIO\PlaySharp.cs" />
     <Compile Include="Core\AIO Ports\Tc_SDKexAIO\Toolss\AutoWard.cs" />
@@ -1398,7 +1383,6 @@
     <Compile Include="Core\Champion Ports\Brand\Flowers%27 Brand\Common\Common.cs" />
     <Compile Include="Core\Champion Ports\Brand\Flowers%27 Brand\Common\HpBarDraw.cs" />
     <Compile Include="Core\Champion Ports\Brand\Flowers%27 Brand\Common\YasuoWindWall.cs" />
-    <Compile Include="Core\Champion Ports\Brand\Flowers%27 Brand\Prediction\SDKPrediction.cs" />
     <Compile Include="Core\Champion Ports\Brand\Flowers%27 Brand\Prediction\xcsoftPrediction.cs" />
     <Compile Include="Core\Champion Ports\Brand\Flowers%27 Brand\Program.cs" />
     <Compile Include="Core\Champion Ports\Brand\SergixBrand\BramdModes.cs" />
@@ -1452,7 +1436,6 @@
     <Compile Include="Core\Champion Ports\Cassiopeia\TheCassiopeia\Commons\Items\YoumusBlade.cs" />
     <Compile Include="Core\Champion Ports\Cassiopeia\TheCassiopeia\Commons\ManaManager.cs" />
     <Compile Include="Core\Champion Ports\Cassiopeia\TheCassiopeia\Commons\MenuExtensions.cs" />
-    <Compile Include="Core\Champion Ports\Cassiopeia\TheCassiopeia\Commons\Prediction\Prediction.cs" />
     <Compile Include="Core\Champion Ports\Cassiopeia\TheCassiopeia\Commons\SummonerManager.cs" />
     <Compile Include="Core\Champion Ports\Cassiopeia\TheCassiopeia\Commons\Summoners\Cleanse.cs" />
     <Compile Include="Core\Champion Ports\Cassiopeia\TheCassiopeia\Commons\Summoners\Heal.cs" />
@@ -1579,7 +1562,6 @@
     <Compile Include="Core\Champion Ports\Jhin\Flowers%27 Jhin\Common\Common.cs" />
     <Compile Include="Core\Champion Ports\Jhin\Flowers%27 Jhin\Common\HpBarDraw.cs" />
     <Compile Include="Core\Champion Ports\Jhin\Flowers%27 Jhin\Common\YasuoWindWall.cs" />
-    <Compile Include="Core\Champion Ports\Jhin\Flowers%27 Jhin\Prediction\SDKPrediction.cs" />
     <Compile Include="Core\Champion Ports\Jhin\Flowers%27 Jhin\Prediction\xcsoftPrediction.cs" />
     <Compile Include="Core\Champion Ports\Jhin\Flowers%27 Jhin\Program.cs" />
     <Compile Include="Core\Champion Ports\Katarina\e.Motion Katarina\BlockIssueOrder.cs" />
@@ -1720,7 +1702,6 @@
     <Compile Include="Core\Champion Ports\Nidalee\Flowers%27 Nidalee\Common\Common.cs" />
     <Compile Include="Core\Champion Ports\Nidalee\Flowers%27 Nidalee\Common\HpBarDraw.cs" />
     <Compile Include="Core\Champion Ports\Nidalee\Flowers%27 Nidalee\Common\YasuoWindWall.cs" />
-    <Compile Include="Core\Champion Ports\Nidalee\Flowers%27 Nidalee\Prediction\SDKPrediction.cs" />
     <Compile Include="Core\Champion Ports\Nidalee\Flowers%27 Nidalee\Prediction\xcsoftPrediction.cs" />
     <Compile Include="Core\Champion Ports\Nidalee\Flowers%27 Nidalee\Program.cs" />
     <Compile Include="Core\Champion Ports\Nidalee\MightyNidalee\Damages.cs" />
@@ -2015,14 +1996,12 @@
     <Compile Include="Core\Champion Ports\Diana\Flowers%27 Diana\Common\Common.cs" />
     <Compile Include="Core\Champion Ports\Diana\Flowers%27 Diana\Common\HpBarDraw.cs" />
     <Compile Include="Core\Champion Ports\Diana\Flowers%27 Diana\Common\YasuoWindWall.cs" />
-    <Compile Include="Core\Champion Ports\Diana\Flowers%27 Diana\Prediction\SDKPrediction.cs" />
     <Compile Include="Core\Champion Ports\Diana\Flowers%27 Diana\Prediction\xcsoftPrediction.cs" />
     <Compile Include="Core\Champion Ports\Diana\Flowers%27 Diana\Program.cs" />
     <Compile Include="Core\Champion Ports\Karthus\Flowers%27 Karthus\Common\Common.cs" />
     <Compile Include="Core\Champion Ports\Karthus\Flowers%27 Karthus\Common\EnemyTracker.cs" />
     <Compile Include="Core\Champion Ports\Karthus\Flowers%27 Karthus\Common\HpBarDraw.cs" />
     <Compile Include="Core\Champion Ports\Karthus\Flowers%27 Karthus\Common\YasuoWindWall.cs" />
-    <Compile Include="Core\Champion Ports\Karthus\Flowers%27 Karthus\Prediction\SDKPrediction.cs" />
     <Compile Include="Core\Champion Ports\Karthus\Flowers%27 Karthus\Prediction\xcsoftPrediction.cs" />
     <Compile Include="Core\Champion Ports\Karthus\Flowers%27 Karthus\Program.cs" />
     <Compile Include="Core\Champion Ports\Riven\RivenToTheChallenger\Activator.cs" />
@@ -2390,7 +2369,6 @@
     <Compile Include="Core\Champion Ports\Garen\TheGaren\Commons\Items\SeraphsEmbrace.cs" />
     <Compile Include="Core\Champion Ports\Garen\TheGaren\Commons\Items\YoumusBlade.cs" />
     <Compile Include="Core\Champion Ports\Garen\TheGaren\Commons\MenuExtensions.cs" />
-    <Compile Include="Core\Champion Ports\Garen\TheGaren\Commons\Prediction\Prediction.cs" />
     <Compile Include="Core\Champion Ports\Garen\TheGaren\Commons\SummonerManager.cs" />
     <Compile Include="Core\Champion Ports\Garen\TheGaren\Commons\SummonerSpells\Cleanse.cs" />
     <Compile Include="Core\Champion Ports\Garen\TheGaren\Commons\SummonerSpells\Heal.cs" />
@@ -4188,18 +4166,6 @@
     <Compile Include="Core\AIO Ports\SAutoCarry\SCommon\Packet\PacketHandler.cs" />
     <Compile Include="Core\AIO Ports\SAutoCarry\SCommon\PluginBase\Champion.cs" />
     <Compile Include="Core\AIO Ports\SAutoCarry\SCommon\PluginBase\IChampion.cs" />
-    <Compile Include="Core\AIO Ports\SAutoCarry\SCommon\Prediction\ArcPrediction.cs" />
-    <Compile Include="Core\AIO Ports\SAutoCarry\SCommon\Prediction\CirclePrediction.cs" />
-    <Compile Include="Core\AIO Ports\SAutoCarry\SCommon\Prediction\Collision.cs" />
-    <Compile Include="Core\AIO Ports\SAutoCarry\SCommon\Prediction\ConePrediction.cs" />
-    <Compile Include="Core\AIO Ports\SAutoCarry\SCommon\Prediction\LinePrediction.cs" />
-    <Compile Include="Core\AIO Ports\SAutoCarry\SCommon\Prediction\Obj_AI_HeroExtensions.cs" />
-    <Compile Include="Core\AIO Ports\SAutoCarry\SCommon\Prediction\PathTracker.cs" />
-    <Compile Include="Core\AIO Ports\SAutoCarry\SCommon\Prediction\Prediction.cs" />
-    <Compile Include="Core\AIO Ports\SAutoCarry\SCommon\Prediction\RingPrediction.cs" />
-    <Compile Include="Core\AIO Ports\SAutoCarry\SCommon\Prediction\SpellExtensions.cs" />
-    <Compile Include="Core\AIO Ports\SAutoCarry\SCommon\Prediction\Utility.cs" />
-    <Compile Include="Core\AIO Ports\SAutoCarry\SCommon\Prediction\VectorPrediction.cs" />
     <Compile Include="Core\AIO Ports\SAutoCarry\SCommon\TS\ConfigMenu.cs" />
     <Compile Include="Core\AIO Ports\SAutoCarry\SCommon\TS\TargetSelector.cs" />
     <Compile Include="Core\AIO Ports\SAutoCarry\SUtility\Drawings\DamageIndicator.cs" />
@@ -4925,16 +4891,6 @@
     <Compile Include="Core\Champion Ports\Rengar\Hoola Rengar\common\Damage.cs" />
     <Compile Include="Core\Champion Ports\Rengar\Hoola Rengar\HpBarIndicator.cs" />
     <Compile Include="Core\Champion Ports\Rengar\Hoola Rengar\Program.cs" />
-    <Compile Include="Core\Champion Ports\Rengar\Hoola Rengar\SPrediction\ClipperWrapper.cs" />
-    <Compile Include="Core\Champion Ports\Rengar\Hoola Rengar\SPrediction\Collision.cs" />
-    <Compile Include="Core\Champion Ports\Rengar\Hoola Rengar\SPrediction\Geometry.cs" />
-    <Compile Include="Core\Champion Ports\Rengar\Hoola Rengar\SPrediction\LinePrediction.cs" />
-    <Compile Include="Core\Champion Ports\Rengar\Hoola Rengar\SPrediction\Obj_AI_HeroExtensions.cs" />
-    <Compile Include="Core\Champion Ports\Rengar\Hoola Rengar\SPrediction\PathTracker.cs" />
-    <Compile Include="Core\Champion Ports\Rengar\Hoola Rengar\SPrediction\Prediction.cs" />
-    <Compile Include="Core\Champion Ports\Rengar\Hoola Rengar\SPrediction\SpellExtensions.cs" />
-    <Compile Include="Core\Champion Ports\Rengar\Hoola Rengar\SPrediction\Utility.cs" />
-    <Compile Include="Core\Champion Ports\Rengar\Hoola Rengar\SPrediction\VectorPrediction.cs" />
     <Compile Include="Core\Champion Ports\Rengar\Nechrito Rengar\Core.cs" />
     <Compile Include="Core\Champion Ports\Rengar\Nechrito Rengar\Drawing\DRAWING.cs" />
     <Compile Include="Core\Champion Ports\Rengar\Nechrito Rengar\Drawing\HpBarIndicator.cs" />
@@ -5196,7 +5152,6 @@
     <Compile Include="Core\Champion Ports\Twitch\TheTwitch\Commons\Items\YoumusBlade.cs" />
     <Compile Include="Core\Champion Ports\Twitch\TheTwitch\Commons\ManaManager.cs" />
     <Compile Include="Core\Champion Ports\Twitch\TheTwitch\Commons\MenuExtensions.cs" />
-    <Compile Include="Core\Champion Ports\Twitch\TheTwitch\Commons\Prediction\Prediction.cs" />
     <Compile Include="Core\Champion Ports\Twitch\TheTwitch\Commons\SummonerManager.cs" />
     <Compile Include="Core\Champion Ports\Twitch\TheTwitch\Commons\Summoners\Cleanse.cs" />
     <Compile Include="Core\Champion Ports\Twitch\TheTwitch\Commons\Summoners\Heal.cs" />
@@ -5331,20 +5286,6 @@
     <Compile Include="Core\Champion Ports\Veigar\PlaceboVeigar\ShineCommon\Pool\ObjectPool.cs" />
     <Compile Include="Core\Champion Ports\Veigar\PlaceboVeigar\ShineCommon\SpellDatabase.cs" />
     <Compile Include="Core\Champion Ports\Veigar\PlaceboVeigar\ShineCommon\Utility.cs" />
-    <Compile Include="Core\Champion Ports\Veigar\PlaceboVeigar\SPrediction\ArcPrediction.cs" />
-    <Compile Include="Core\Champion Ports\Veigar\PlaceboVeigar\SPrediction\CirclePrediction.cs" />
-    <Compile Include="Core\Champion Ports\Veigar\PlaceboVeigar\SPrediction\ClipperWrapper.cs" />
-    <Compile Include="Core\Champion Ports\Veigar\PlaceboVeigar\SPrediction\Collision.cs" />
-    <Compile Include="Core\Champion Ports\Veigar\PlaceboVeigar\SPrediction\ConePrediction.cs" />
-    <Compile Include="Core\Champion Ports\Veigar\PlaceboVeigar\SPrediction\Geometry.cs" />
-    <Compile Include="Core\Champion Ports\Veigar\PlaceboVeigar\SPrediction\LinePrediction.cs" />
-    <Compile Include="Core\Champion Ports\Veigar\PlaceboVeigar\SPrediction\Obj_AI_HeroExtensions.cs" />
-    <Compile Include="Core\Champion Ports\Veigar\PlaceboVeigar\SPrediction\PathTracker.cs" />
-    <Compile Include="Core\Champion Ports\Veigar\PlaceboVeigar\SPrediction\Prediction.cs" />
-    <Compile Include="Core\Champion Ports\Veigar\PlaceboVeigar\SPrediction\RingPrediction.cs" />
-    <Compile Include="Core\Champion Ports\Veigar\PlaceboVeigar\SPrediction\SpellExtensions.cs" />
-    <Compile Include="Core\Champion Ports\Veigar\PlaceboVeigar\SPrediction\Utility.cs" />
-    <Compile Include="Core\Champion Ports\Veigar\PlaceboVeigar\SPrediction\VectorPrediction.cs" />
     <Compile Include="Core\Champion Ports\Veigar\PlaceboVeigar\Target.cs" />
     <Compile Include="Core\Champion Ports\Veigar\PlaceboVeigar\Veigar.cs" />
     <Compile Include="Core\Champion Ports\Veigar\Slutty Veigar\Helper.cs" />
@@ -5406,7 +5347,6 @@
     <Compile Include="Core\Champion Ports\Yasuo\hYasuo\Extensions\DamageIndicator.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\hYasuo\Extensions\Menus.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\hYasuo\Extensions\Predictions\PredictionUpdater.cs" />
-    <Compile Include="Core\Champion Ports\Yasuo\hYasuo\Extensions\Predictions\SDKPrediction.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\hYasuo\Extensions\SpellDatabase.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\hYasuo\Extensions\Spells.cs" />
     <Compile Include="Core\Champion Ports\Yasuo\hYasuo\Extensions\Utilities.cs" />
@@ -6864,9 +6804,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Core\AIO Ports\SharpyAIO\Core\" />
+    <Folder Include="Core\Champion Ports\Cassiopeia\TheCassiopeia\Commons\Prediction\" />
     <Folder Include="Core\Champion Ports\Diana\ReformedAIO\" />
+    <Folder Include="Core\Champion Ports\Garen\TheGaren\Commons\Prediction\" />
     <Folder Include="Core\Champion Ports\Gnar\ReformedAIO\" />
     <Folder Include="Core\Champion Ports\Kalista\Hikicarry Kalista\HikiOrbwalker\" />
+    <Folder Include="Core\Champion Ports\Twitch\TheTwitch\Commons\Prediction\" />
     <Folder Include="Core\Champion Ports\Veigar\PlaceboVeigar\ShineCommon\Orbwalking\" />
   </ItemGroup>
   <ItemGroup>

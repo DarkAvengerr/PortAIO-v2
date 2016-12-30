@@ -7,7 +7,7 @@ using System.Drawing;
 using LeagueSharp;
 using LeagueSharp.Common;
 using VeigShineCommon;
-using VeigSPrediction;
+using SPrediction;
 //typedefs
 
 using EloBuddy; 

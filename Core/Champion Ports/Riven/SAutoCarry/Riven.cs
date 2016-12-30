@@ -5,7 +5,7 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SCommon;
 using SCommon.PluginBase;
-using SCommon.Prediction;
+using SPrediction;
 using SCommon.Maths;
 using SCommon.Database;
 using SCommon.Evade;
@@ -42,7 +42,7 @@ namespace SAutoCarry.Champions
             AIHeroClient.OnPlayAnimation += Animation.OnPlay;
             Animation.OnAnimationCastable += Animation_OnAnimationCastable;
             Game.OnWndProc += Game_OnWndProc;
-            //SCommon.Prediction.Prediction.predMenu.Item("SPREDDRAWINGS").SetValue(false);
+            //SCommon.Prediction.predMenu.Item("SPREDDRAWINGS").SetValue(false);
 
             IsDoingFastQ = false;
             //Orbwalker.Configuration.DontMoveInRange = true;

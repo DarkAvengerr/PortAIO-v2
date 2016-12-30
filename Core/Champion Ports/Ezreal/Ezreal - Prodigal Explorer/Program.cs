@@ -126,7 +126,7 @@ namespace Ezreal___The_prodigal_explorer
             }
 
             var enemy = TargetSelector.GetTarget(1500, TargetSelector.DamageType.Magical);
-            List<Vector2> waypoints = enemy.GetWaypoints();
+            List<Vector2> waypoints = enemy.Path.ToList().To2D();
             for (int i = 0; i < waypoints.Count - 1; i++)
             {
                 oWp = Drawing.WorldToScreen(waypoints[i].To3D());

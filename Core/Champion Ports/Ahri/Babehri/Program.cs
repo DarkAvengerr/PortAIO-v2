@@ -329,7 +329,7 @@ using EloBuddy;
 
             Orbwalker.ActiveMode = Orbwalking.OrbwalkingMode.None;
 
-            if (!Player.IsDashing() && Player.GetWaypoints().Last().Distance(Game.CursorPos) > 100)
+            if (!Player.IsDashing() && Player.Path.ToList().Last().Distance(Game.CursorPos) > 100)
             {
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
             }

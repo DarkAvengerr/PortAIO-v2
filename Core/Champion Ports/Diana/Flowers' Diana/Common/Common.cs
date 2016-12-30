@@ -67,31 +67,31 @@ using EloBuddy;
             }
         }
 
-        public static SDKPrediction.HitChance MinSDKHitChance
+        public static SebbyLib.Movement.HitChance MinSDKHitChance
         {
             get
             {
                 if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 0)
                 {
-                    return SDKPrediction.HitChance.VeryHigh;
+                    return SebbyLib.Movement.HitChance.VeryHigh;
                 }
 
                 if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 1)
                 {
-                    return SDKPrediction.HitChance.High;
+                    return SebbyLib.Movement.HitChance.High;
                 }
 
                 if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 2)
                 {
-                    return SDKPrediction.HitChance.Medium;
+                    return SebbyLib.Movement.HitChance.Medium;
                 }
 
                 if (Program.Menu.Item("SetHitchance", true).GetValue<StringList>().SelectedIndex == 3)
                 {
-                    return SDKPrediction.HitChance.Low;
+                    return SebbyLib.Movement.HitChance.Low;
                 }
 
-                return SDKPrediction.HitChance.VeryHigh;
+                return SebbyLib.Movement.HitChance.VeryHigh;
             }
         }
 
@@ -150,11 +150,11 @@ using EloBuddy;
                     break;
                 case 2:
                     {
-                        SDKPrediction.SkillshotType CoreType2 = SDKPrediction.SkillshotType.SkillshotLine;
+                        SebbyLib.Movement.SkillshotType CoreType2 = SebbyLib.Movement.SkillshotType.SkillshotLine;
 
-                        var predInput2 = new SDKPrediction.PredictionInput
+                        var predInput2 = new SebbyLib.Movement.PredictionInput
                         {
-                            AoE = AOE,
+                            Aoe = AOE,
                             Collision = Spells.Collision,
                             Speed = Spells.Speed,
                             Delay = Spells.Delay,
@@ -165,7 +165,7 @@ using EloBuddy;
                             Type = CoreType2
                         };
 
-                        var poutput2 = SDKPrediction.GetPrediction(predInput2);
+                        var poutput2 = SebbyLib.Movement.Prediction.GetPrediction(predInput2);
 
                         if (Spells.Speed != float.MaxValue && YasuoWindWall.CollisionYasuo(ObjectManager.Player.ServerPosition, poutput2.CastPosition))
                         {
@@ -176,7 +176,7 @@ using EloBuddy;
                         {
                             Spells.Cast(poutput2.CastPosition, true);
                         }
-                        else if (predInput2.AoE && poutput2.AoeTargetsHitCount > 1 && poutput2.Hitchance >= MinSDKHitChance - 1)
+                        else if (predInput2.Aoe && poutput2.AoeTargetsHitCount > 1 && poutput2.Hitchance >= MinSDKHitChance - 1)
                         {
                             Spells.Cast(poutput2.CastPosition, true);
                         }

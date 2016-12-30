@@ -7,7 +7,7 @@ using LeagueSharp.Common;
 using SCommon;
 using SCommon.Database;
 using SCommon.PluginBase;
-using SCommon.Prediction;
+using SPrediction;
 using SCommon.Orbwalking;
 using SCommon.Evade;
 using SUtility.Drawings;
@@ -439,7 +439,7 @@ namespace SAutoCarry.Champions
             int cnt = 0;
             foreach (var enemy in HeroManager.Enemies)
             {
-                var prediction = SCommon.Prediction.Prediction.GetPrediction(enemy, width, time, 0, range, false, SkillshotType.SkillshotCircle, enemy.GetWaypoints(), enemy.AvgMovChangeTime(), enemy.LastMovChangeTime(), enemy.AvgPathLenght(), 360, Helpers.BallMgr.Position.To2D(), Helpers.BallMgr.Position.To2D());
+                var prediction = SPrediction.Prediction.GetPrediction(enemy, width, time, 0, range, false, SkillshotType.SkillshotCircle, enemy.Path.ToList().To2D(), enemy.AvgMovChangeTime(), enemy.LastMovChangeTime(), enemy.AvgPathLenght(), 360, Helpers.BallMgr.Position.To2D(), Helpers.BallMgr.Position.To2D());
                 if (prediction.HitChance > HitChance.Low)
                 {
                     if (prediction.UnitPosition.Distance(Helpers.BallMgr.Position.To2D()) < range)

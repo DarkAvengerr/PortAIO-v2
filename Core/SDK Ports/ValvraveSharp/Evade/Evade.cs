@@ -681,7 +681,7 @@ using EloBuddy;
                 return;
             }
             var safePoint = IsSafePoint(PlayerPosition);
-            var safePath = IsSafePath(Program.Player.GetWaypoints(), 100);
+            var safePath = IsSafePath(EloBuddy.SDK.Extensions.To2D(Program.Player.Path.ToList()), 100);
             if (!safePath.IsSafe && !safePoint.IsSafe)
             {
                 Evading(safePoint.SkillshotList);

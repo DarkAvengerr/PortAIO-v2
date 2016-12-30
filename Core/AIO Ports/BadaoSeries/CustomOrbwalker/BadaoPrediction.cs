@@ -256,7 +256,7 @@ using EloBuddy;
             //Normal prediction
             if (result == null)
             {
-                result = spell.GetBadaoStandarPrediction(target,target.GetWaypoints());
+                result = spell.GetBadaoStandarPrediction(target,target.Path.ToList().To2D());
             }
             //Check for collision
             if (spell.Collision)
@@ -573,7 +573,7 @@ using EloBuddy;
                                                 spell.RangeCheckFrom)))
                             {
                                 var target = minion;
-                                var minionPrediction = spell.GetBadaoStandarPrediction(target,target.GetWaypoints());
+                                var minionPrediction = spell.GetBadaoStandarPrediction(target,target.Path.ToList().To2D());
                                 if (
                                     minionPrediction.UnitPosition.To2D()
                                         .Distance(spell.From.To2D(), position.To2D(), true, true) <=
@@ -592,7 +592,7 @@ using EloBuddy;
                                 )
                             {
                                 var target = hero;
-                                var prediction = spell.GetBadaoStandarPrediction(target, target.GetWaypoints());
+                                var prediction = spell.GetBadaoStandarPrediction(target, target.Path.ToList().To2D());
                                 if (
                                     prediction.UnitPosition.To2D()
                                         .Distance(spell.From.To2D(), position.To2D(), true, true) <=
@@ -611,7 +611,7 @@ using EloBuddy;
                                 )
                             {
                                 var target = hero;
-                                var prediction = spell.GetBadaoStandarPrediction(target, target.GetWaypoints());
+                                var prediction = spell.GetBadaoStandarPrediction(target, target.Path.ToList().To2D());
                                 if (
                                     prediction.UnitPosition.To2D()
                                         .Distance(spell.From.To2D(), position.To2D(), true, true) <=

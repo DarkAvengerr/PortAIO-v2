@@ -4,7 +4,7 @@ using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SCommon.PluginBase;
-using SCommon.Prediction;
+using SPrediction;
 using SharpDX;
 using EloBuddy;
 
@@ -54,7 +54,7 @@ namespace SAutoCarry.Champions.Helpers
                 {
                     if (enemy.IsValidTarget(2000))
                     {
-                        var targetPosition = Geometry.PositionAfter(enemy.GetWaypoints(), 300, (int)enemy.MoveSpeed);
+                        var targetPosition = SPrediction.Geometry.PositionAfter(enemy.Path.ToList().To2D(), 300, (int)enemy.MoveSpeed);
                         var pushDirection = (targetPosition - ObjectManager.Player.ServerPosition.To2D()).Normalized();
                         for (int i = 0; i < PushDistance - 20; i += 20)
                         {
@@ -96,7 +96,7 @@ namespace SAutoCarry.Champions.Helpers
             if (!IsWhitelisted(target))
                 return false;
 
-            var targetPosition = Geometry.PositionAfter(target.GetWaypoints(), 300, (int)target.MoveSpeed);
+            var targetPosition = SPrediction.Geometry.PositionAfter(target.Path.ToList().To2D(), 300, (int)target.MoveSpeed);
 
             if (target.Distance(ObjectManager.Player.ServerPosition) < 650f && IsCondemnable(ObjectManager.Player.ServerPosition.To2D(), targetPosition, target.BoundingRadius))
             {
@@ -131,7 +131,7 @@ namespace SAutoCarry.Champions.Helpers
                         var angle = i * 2 * Math.PI / TumbleCondemnCount;
                         float x = ObjectManager.Player.Position.X + outRadius * (float)Math.Cos(angle);
                         float y = ObjectManager.Player.Position.Y + outRadius * (float)Math.Sin(angle);
-                        targetPosition = Geometry.PositionAfter(target.GetWaypoints(), 300, (int)target.MoveSpeed);
+                        targetPosition = SPrediction.Geometry.PositionAfter(target.Path.ToList().To2D(), 300, (int)target.MoveSpeed);
                         var vec = new Vector2(x, y);
                         if (targetPosition.Distance(vec) < 550f && IsCondemnable(vec, targetPosition, target.BoundingRadius, 300f))
                         {
@@ -205,9 +205,9 @@ namespace SAutoCarry.Champions.Helpers
 
                     for (var i = -90; i <= 90; i += currentStep)
                     {
-                        var angleRad = Geometry.DegreeToRadian(i);
+                        var angleRad = LeagueSharp.Common.Geometry.DegreeToRadian(i);
                         var rotatedPosition = ObjectManager.Player.Position.To2D() + (425f * direction.Rotated(angleRad));
-                        if(IsCondemnable(rotatedPosition, Geometry.PositionAfter(TargetSelector.SelectedTarget.GetWaypoints(), (int)300, (int)TargetSelector.SelectedTarget.MoveSpeed), TargetSelector.SelectedTarget.BoundingRadius))
+                        if(IsCondemnable(rotatedPosition, SPrediction.Geometry.PositionAfter(TargetSelector.SelectedTarget.Path.ToList().To2D(), (int)300, (int)TargetSelector.SelectedTarget.MoveSpeed), TargetSelector.SelectedTarget.BoundingRadius))
                         {
                             s_Champion.Spells[SCommon.PluginBase.Champion.E].CastOnUnit(TargetSelector.SelectedTarget);
                             LeagueSharp.Common.Utility.DelayAction.Add((int)(250 + Game.Ping / 2f + 25), () =>
