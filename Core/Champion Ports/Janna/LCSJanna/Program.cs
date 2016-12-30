@@ -24,7 +24,7 @@ namespace LCS_Janna
 
         public static string[] HitchanceNameArray = { "Low", "Medium", "High", "Very High", "Only Immobile" };
         public static HitChance[] HitchanceArray = { HitChance.Low, HitChance.Medium, HitChance.High, HitChance.VeryHigh, HitChance.Immobile };
-        
+
         public static string[] HighChamps =
             {
                 "Ahri", "Anivia", "Annie", "Ashe", "Azir", "Brand", "Caitlyn", "Cassiopeia", "Corki", "Draven",
@@ -78,7 +78,7 @@ namespace LCS_Janna
                         Config.Item("q.hit.x.chance.info.1").Show(ar.GetNewValue<StringList>().SelectedIndex == 1);
                         Config.Item("q.hit.x.chance.info.2").Show(ar.GetNewValue<StringList>().SelectedIndex == 1);
                     };
-                    
+
                     qsettings.AddItem(new MenuItem("q.normal.hit.chance", "(Q) Hit Chance").SetValue(new StringList(HitchanceNameArray, 2))).Show(qsettings.Item("q.settings").GetValue<StringList>().SelectedIndex == 0);
                     qsettings.AddItem(new MenuItem("q.hit.x.chance", "(Q) Hit Chance").SetValue(new StringList(HitchanceNameArray, 1))).Show(qsettings.Item("q.settings").GetValue<StringList>().SelectedIndex == 1);
                     qsettings.AddItem(new MenuItem("q.hit.count", "(Q) Hit Count").SetValue(new Slider(2, 1, 5))).Show(qsettings.Item("q.settings").GetValue<StringList>().SelectedIndex == 1);
@@ -89,7 +89,7 @@ namespace LCS_Janna
                     qsettings.AddItem(new MenuItem("q.antigapcloser", "(Q) Anti-Gapcloser").SetValue(true));
                     Config.AddSubMenu(qsettings);
                 }
-                var esettings = new Menu(":: E Settings", ":: E Settings").SetFontStyle(FontStyle.Bold,SharpDX.Color.HotPink);
+                var esettings = new Menu(":: E Settings", ":: E Settings").SetFontStyle(FontStyle.Bold, SharpDX.Color.HotPink);
                 {
                     var evademenu = new Menu(":: Protectable Skillshots", ":: Protectable Skillshots");
                     {
@@ -168,20 +168,23 @@ namespace LCS_Janna
                     }
 
                     rsettings.AddItem(
-                        new MenuItem("protector.settings", "Protector Mode: ").SetValue(new StringList(new string[] {"Smart (Other logics soon™)"})));
+                        new MenuItem("protector.settings", "Protector Mode: ").SetValue(new StringList(new string[] { "Smart (Other logics soon™)" })));
                     rsettings.AddItem(new MenuItem("spell.damage.percent", "Min. Spell Damage Percentage").SetValue(new Slider(10, 1, 99)));
                     /*rsettings.AddItem(new MenuItem("total.carry.health.percent", "Total Carries HP Percentage").SetValue(new Slider(10, 1, 99)));*/
                     rsettings.AddItem(new MenuItem("evade.protector", "If enemy spell damage bigger than carry health cast (R) for protect").SetValue(true));
                     Config.AddSubMenu(rsettings);
                 }
 
-                
+
                 Config.AddToMainMenu();
             }
 
             SPrediction.Prediction.Initialize(Config);
 
             Obj_AI_Base.OnSpellCast += OnProcess;
+            Obj_AI_Base.OnProcessSpellCast += OnProcess;
+            Obj_AI_Base.OnBasicAttack += Obj_AI_Base_OnBasicAttack;
+
             AntiGapcloser.OnEnemyGapcloser += OnGapcloser;
             Game.OnUpdate += OnUpdate;
         }
@@ -202,9 +205,30 @@ namespace LCS_Janna
                         HighChamps.Contains(x.ChampionName) &&
                         x.Distance(ObjectManager.Player.Position) < R.Range && !x.IsDead && x.IsVisible && !x.IsZombie);
         }
+
+        private static void Obj_AI_Base_OnBasicAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (E.IsReady())
+            {
+                if (sender is AIHeroClient && sender.IsEnemy && args.Target.IsAlly && args.Target.Type == GameObjectType.AIHeroClient
+                    && ObjectManager.Player.ManaPercent >= Config.Item("min.mana.for.e").GetValue<Slider>().Value
+                    && Config.Item("e." + ((AIHeroClient)args.Target).ChampionName).GetValue<bool>() && ((AIHeroClient)args.Target).Distance(ObjectManager.Player.Position) < E.Range)
+                {
+                    E.Cast((AIHeroClient)args.Target);
+                }
+            }
+
+            if (sender is AIHeroClient && sender.IsEnemy && args.Target.IsAlly && args.Target.Type == GameObjectType.obj_AI_Turret
+                && ObjectManager.Player.ManaPercent >= Config.Item("min.mana.for.e").GetValue<Slider>().Value
+                && ((AIHeroClient)args.Target).Distance(ObjectManager.Player.Position) < E.Range
+                && ((AIHeroClient)args.Target).HealthPercent < Config.Item("turret.hp.percent").GetValue<Slider>().Value)
+            {
+                E.Cast((AIHeroClient)args.Target);
+            }
+        }
+
         private static void OnProcess(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-
             if (E.IsReady())
             {
                 if (sender.IsAlly && sender is AIHeroClient && Config.Item("e.engage." + args.SData.Name).GetValue<bool>()
@@ -212,13 +236,6 @@ namespace LCS_Janna
                     && !sender.IsDead && !sender.IsZombie && sender.IsValid)
                 {
                     E.CastOnUnit(sender);
-                }
-
-                if (sender is AIHeroClient && sender.IsEnemy && args.Target.IsAlly && args.Target.Type == GameObjectType.AIHeroClient
-                && args.SData.IsAutoAttack() && ObjectManager.Player.ManaPercent >= Config.Item("min.mana.for.e").GetValue<Slider>().Value
-                && Config.Item("e." + ((AIHeroClient)args.Target).ChampionName).GetValue<bool>() && ((AIHeroClient)args.Target).Distance(ObjectManager.Player.Position) < E.Range)
-                {
-                    E.Cast((AIHeroClient)args.Target);
                 }
 
                 if (sender is Obj_AI_Turret && args.Target.IsAlly && ObjectManager.Player.ManaPercent >= Config.Item("min.mana.for.e").GetValue<Slider>().Value
@@ -234,22 +251,12 @@ namespace LCS_Janna
                 {
                     E.Cast((AIHeroClient)args.Target);
                 }
-
-                if (sender is AIHeroClient && sender.IsEnemy && args.Target.IsAlly && args.Target.Type == GameObjectType.obj_AI_Turret
-                    && args.SData.IsAutoAttack() && ObjectManager.Player.ManaPercent >= Config.Item("min.mana.for.e").GetValue<Slider>().Value
-                    && ((AIHeroClient)args.Target).Distance(ObjectManager.Player.Position) < E.Range
-                    && ((AIHeroClient)args.Target).HealthPercent < Config.Item("turret.hp.percent").GetValue<Slider>().Value)
-                {
-                    E.Cast((AIHeroClient)args.Target);
-                }
-
-                
             }
 
             if (R.IsReady())
             {
                 if (sender is AIHeroClient && args.Target.IsAlly && args.Target.Type == GameObjectType.AIHeroClient
-                && !args.SData.IsAutoAttack() && (Config.Item("r.protect." + args.SData.Name).GetValue<bool>() || Config.Item("r.protect.targetted." + args.SData.Name).GetValue<bool>())
+                && (Config.Item("r.protect." + args.SData.Name).GetValue<bool>() || Config.Item("r.protect.targetted." + args.SData.Name).GetValue<bool>())
                 && sender.IsEnemy && sender.GetSpellDamage(((AIHeroClient)args.Target), args.SData.Name) > ((AIHeroClient)args.Target).Health
                 && sender.GetSpellDamage(((AIHeroClient)args.Target), args.SData.Name) * 100 / ((AIHeroClient)args.Target).Health < Config.Item("spell.damage.percent").GetValue<Slider>().Value)
                 {
@@ -265,7 +272,7 @@ namespace LCS_Janna
                 case Orbwalking.OrbwalkingMode.Combo:
                     OnCombo();
                     break;
-            } 
+            }
         }
         private static void OnCombo()
         {
@@ -274,7 +281,7 @@ namespace LCS_Janna
                 switch (Config.Item("q.settings").GetValue<StringList>().SelectedIndex)
                 {
                     case 0:
-                        foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(Q.Range)))
+                        foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(Q.Range)))
                         {
                             Q.SPredictionCast(enemy, HikiChance("q.normal.hit.chance"));
                         }
@@ -292,12 +299,12 @@ namespace LCS_Janna
             }
             if (Config.Item("w.combo").GetValue<bool>() && Q.IsReady())
             {
-                foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(W.Range)))
+                foreach (var enemy in HeroManager.Enemies.Where(x => x.IsValidTarget(W.Range)))
                 {
                     W.CastOnUnit(enemy);
                 }
             }
-            
+
         }
 
     }
