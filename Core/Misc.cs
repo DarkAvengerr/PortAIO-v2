@@ -179,7 +179,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "Kortatu's Karma", "KarmaXD", "Support is Easy", "vSeries", "[SDK] Karma Never Falter", "[SDK] ExorAIO", "[SDK] Flowers' Series", "[SDK] SpiritKarma", "Karma - the Enlightened One" };
                     break;
                 case EloBuddy.Champion.Karthus:
-                    champ = new string[] { "OKTW", "SharpShooter", "xSalice", "[SDK] RAREKarthus", "Karthus#", "KimbaengKarthus", "SNKarthus", "XDSharpAIO", "[SDK] ExorAIO" };
+                    champ = new string[] { "OKTW", "SharpShooter", "xSalice", "[SDK] RAREKarthus", "Karthus#", "KimbaengKarthus", "SNKarthus", "XDSharpAIO", "[SDK] ExorAIO", "Flowers' Karthus" };
                     break;
                 case EloBuddy.Champion.Kassadin:
                     champ = new string[] { "PainInMyKass", "SharpyAIO", "Slutty Kassadin", "[SDK] PreservedKassadin", "Kassadin the Harbinger", "KicKassadin" };

@@ -166,7 +166,7 @@ using EloBuddy;
             this.Q = new Spell(SpellSlot.Q, Orbwalking.GetRealAutoAttackRange(this.Player));
             this.W = new Spell(SpellSlot.W);
             this.E = new Spell(SpellSlot.E, 1050);
-            this.R = new Spell(SpellSlot.R);
+            this.R = new Spell(SpellSlot.R, 3000f);
 
             this.E.SetSkillshot(0.25f, 130, 1400, false, SkillshotType.SkillshotLine);
             this.R.SetSkillshot(0.4f, 160, 2000, true, SkillshotType.SkillshotLine);
@@ -335,7 +335,7 @@ using EloBuddy;
             }
 
             // Patented Advanced Algorithms D321987
-            var killableTarget = HeroManager.Enemies.Where(x => x.IsValidTarget(2000)).FirstOrDefault(x => this.Player.GetSpellDamage(x, SpellSlot.R) * 2 > x.Health);
+            var killableTarget = HeroManager.Enemies.Where(x => x.IsValidTarget(2000)).FirstOrDefault(x => R.GetDamage(x) > x.Health);
 
             if (killableTarget != null)
             {

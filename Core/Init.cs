@@ -1764,7 +1764,9 @@ namespace PortAIO
                         case 8: // ExorAIO
                             ExorAIO.Program.Main();
                             break;
-
+                        case 9: // Flowers' Karthus
+                            Flowers_Karthus.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Kassadin:

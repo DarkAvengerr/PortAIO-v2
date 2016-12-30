@@ -1,3 +1,15 @@
+[12/30/16]
+- LCS Janna E Protector Changes (should work better)
+- More Incoming Damage Listener on OKTWCommon
+- ElZilean Ult Incoming Damage Fix
+- ReformedAIO updated to latest & Added the new champions to the init
+- ReAdded OKTW's AutoWard
+- Fixed OKTW Pred not casting circular spells
+- Removed Custom NON-LIBRARY Predictions so that we only focus on Common, OKTW, SPred, SDK, and xcsoft preds.
+- Fixed GetWaypoints to Path
+- Added Flowers' Karthus to Init/Misc
+- Fix MoonDraven Ulti
+
 [12/26/16]
 - Temporarily switched the damage calculation from PortAIO.Common's to EB's calculator, should work perfect until we fix PortAIO.Common's Damage Calc.
 
