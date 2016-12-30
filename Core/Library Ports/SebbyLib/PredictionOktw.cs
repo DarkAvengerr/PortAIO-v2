@@ -304,7 +304,7 @@ namespace SebbyLib.Prediction
                 if (input.RangeCheckFrom.Distance(result.UnitPosition, true) >
                     Math.Pow(input.Range + (input.Type == SkillshotType.SkillshotCircle ? input.RealRadius : 0), 2))
                 {
-                    result.Hitchance = HitChance.OutOfRange;
+                    //result.Hitchance = HitChance.OutOfRange;
                 }
 
                 /* This does not need to be handled for the updated predictions, but left as a reference.*/
