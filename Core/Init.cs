@@ -2832,6 +2832,9 @@ namespace PortAIO
                         case 3: // BadaoShen
                             BadaoShen.Program.Main();
                             break;
+                        case 4: // xQx Shen
+                            Shen.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Shyvana:
