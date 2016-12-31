@@ -17,7 +17,7 @@
                                                                        {
                                                                            { Spells.Q, new Spell(SpellSlot.Q, 625) },
                                                                            { Spells.W, new Spell(SpellSlot.W, Orbwalking.GetRealAutoAttackRange(ObjectManager.Player) + 100) },
-                                                                           { Spells.E, new Spell(SpellSlot.E, 375) },
+                                                                           { Spells.E, new Spell(SpellSlot.E, 340) },
                                                                            { Spells.R, new Spell(SpellSlot.R, 1000) }
                                                                        };
 
