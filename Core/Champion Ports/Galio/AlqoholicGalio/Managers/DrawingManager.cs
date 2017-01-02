@@ -35,7 +35,7 @@ namespace AlqoholicGalio.Managers
 
     #endregion
 
-    internal class UtilityManager
+    internal class DrawingManager
     {
         #region Public Methods and Operators
 

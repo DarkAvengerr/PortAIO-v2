@@ -32,6 +32,7 @@ namespace AlqoholicGalio.Managers
 
     using LeagueSharp;
     using LeagueSharp.Common;
+    using SebbyLib;
 
     using Color = SharpDX.Color;
 
@@ -57,7 +58,7 @@ namespace AlqoholicGalio.Managers
 
         public static Menu MiscMenu;
 
-        public static Orbwalking.Orbwalker Orbwalker;
+        public static LeagueSharp.Common.Orbwalking.Orbwalker Orbwalker;
 
         public static Menu WMenu;
 
@@ -89,7 +90,9 @@ namespace AlqoholicGalio.Managers
 
         public static int HarassMana => HarassMenu.Item("harassMana").GetValue<Slider>().Value;
 
-        public static int Prediction => ComboMenu.Item("comboPrediction").GetValue<StringList>().SelectedIndex;
+        public static int HitChance => ComboMenu.Item("comboHitChance").GetValue<StringList>().SelectedIndex;
+
+        public static int PredictionMode => Menu.Item("predictionMode").GetValue<StringList>().SelectedIndex;
 
         public static int RAmount => ComboMenu.Item("rAmount").GetValue<Slider>().Value;
 
@@ -112,46 +115,52 @@ namespace AlqoholicGalio.Managers
 
         private static void CreateMenu()
         {
-            var orbwalkerMenu = new Menu("Orbwalker", "orbwalker");
+            var orbwalkerMenu = new Menu("Alqoholic Galio - Orbwalker", "orbwalkerMenu");
 
-            Menu = new Menu("DrunkGalio", "DrunkGalio", true).SetFontStyle(FontStyle.Underline, Color.Gold);
-            Orbwalker = new Orbwalking.Orbwalker(orbwalkerMenu.SetFontStyle(FontStyle.Bold, Color.MediumTurquoise));
+            Menu = new Menu("Alqoholic Galio", "AlqoholicGalio", true).SetFontStyle(FontStyle.Underline, Color.Gold);
+            Orbwalker = new LeagueSharp.Common.Orbwalking.Orbwalker(orbwalkerMenu.SetFontStyle(FontStyle.Bold, Color.Gold));
             Menu.AddSubMenu(orbwalkerMenu);
-            SPrediction.Prediction.Initialize(Menu);
+
+            Menu.AddItem(
+                new MenuItem("predictionMode", "Prediction - Mode (F5 TO CHANGE)").SetValue(
+                    new StringList(new[] { "OKTW", "SPrediction", "Common" })));
 
             // Combo Menu
-            ComboMenu = new Menu("Drunk Galio - Combo", "comboMenu").SetFontStyle(FontStyle.Bold, Color.MediumTurquoise);
+            ComboMenu = new Menu("Alqoholic Galio - Combo", "comboMenu").SetFontStyle(FontStyle.Bold, Color.Gold);
             ComboMenu.AddItem(
-                new MenuItem("comboPrediction", "Combo - Prediction Mode").SetValue(
+                new MenuItem("comboHitChance", "Combo - Hit Chance").SetValue(
                     new StringList(
                         new[]
                             {
-                                HitChance.Low.ToString(), HitChance.Medium.ToString(), HitChance.High.ToString(),
-                                HitChance.VeryHigh.ToString()
+                                LeagueSharp.Common.HitChance.Low.ToString(),
+                                LeagueSharp.Common.HitChance.Medium.ToString(),
+                                LeagueSharp.Common.HitChance.High.ToString(),
+                                LeagueSharp.Common.HitChance.VeryHigh.ToString()
                             },
                         2)));
             ComboMenu.AddItem(new MenuItem("comboQ", "Combo - Use Q").SetValue(true));
-            ComboMenu.AddItem(new MenuItem("comboW", "Combo - Use W").SetValue(true));
             ComboMenu.AddItem(new MenuItem("comboE", "Combo - Use E").SetValue(true));
             ComboMenu.AddItem(new MenuItem("comboR", "Combo - Use R").SetValue(true));
             ComboMenu.AddItem(new MenuItem("rAmount", "Only R when x >= enemies").SetValue(new Slider(3, 0, 5)));
 
             // Harass Menu
-            HarassMenu = new Menu("Drunk Galio - Harass", "harassMenu").SetFontStyle(FontStyle.Bold, Color.MediumTurquoise);
+            HarassMenu = new Menu("Alqoholic Galio - Harass", "harassMenu").SetFontStyle(FontStyle.Bold, Color.Gold);
             HarassMenu.AddItem(
                 new MenuItem("autoHarass", "Auto Harass").SetValue(new KeyBind('T', KeyBindType.Toggle, true)))
-                .Permashow(true, "Drunk Galio - Auto Harass", new Color(0, 255, 255));
+                .Permashow(true, "Alqoholic Galio - Auto Harass", new Color(0, 255, 255));
 
             HarassMenu.AddItem(new MenuItem("harassQ", "Harass - Use Q").SetValue(true));
             HarassMenu.AddItem(new MenuItem("harassE", "Harass - Use Q").SetValue(true));
             HarassMenu.AddItem(new MenuItem("harassMana", "Harass - Mana").SetValue(new Slider(60)));
 
             // Lane Clear Menu
-            LaneClearMenu = new Menu("Drunk Galio - Lane Clear", "laneClearMenu").SetFontStyle(FontStyle.Bold, Color.MediumTurquoise);
+            LaneClearMenu = new Menu("Alqoholic Galio - Lane Clear", "laneClearMenu").SetFontStyle(
+                FontStyle.Bold,
+                Color.Gold);
             LaneClearMenu.AddItem(
                 new MenuItem("laneClearSpells", "Lane Clear - Use Spells").SetValue(
                     new KeyBind('M', KeyBindType.Toggle)))
-                .Permashow(true, "Drunk Galio - Lane Clear Spells", new Color(0, 255, 255));
+                .Permashow(true, "Alqoholic Galio - Lane Clear Spells", new Color(0, 255, 255));
 
             LaneClearMenu.AddItem(new MenuItem("laneClearQ", "Lane Clear - Use Q").SetValue(true));
             LaneClearMenu.AddItem(new MenuItem("laneClearE", "Lane Clear - Use E").SetValue(true));
@@ -161,7 +170,7 @@ namespace AlqoholicGalio.Managers
             LaneClearMenu.AddItem(new MenuItem("laneClearMana", "Lane Clear - Mana").SetValue(new Slider(60)));
 
             // Escape Menu
-            EscapeMenu = new Menu("Drunk Galio - Escape", "escapeMenu").SetFontStyle(FontStyle.Bold, Color.MediumTurquoise);
+            EscapeMenu = new Menu("Alqoholic Galio - Escape", "escapeMenu").SetFontStyle(FontStyle.Bold, Color.Gold);
             EscapeMenu.AddItem(
                 new MenuItem("escapeKey", "Escape - Escape").SetValue(new KeyBind('A', KeyBindType.Press)));
 
@@ -169,7 +178,7 @@ namespace AlqoholicGalio.Managers
             EscapeMenu.AddItem(new MenuItem("escapeE", "Escape - Use E").SetValue(true));
 
             // Draw Menu
-            DrawMenu = new Menu("Drunk Galio - Draw", "drawMenu").SetFontStyle(FontStyle.Bold, Color.MediumTurquoise);
+            DrawMenu = new Menu("Alqoholic Galio - Draw", "drawMenu").SetFontStyle(FontStyle.Bold, Color.Gold);
             DrawMenu.AddItem(new MenuItem("drawEnabled", "Draw - Enabled").SetValue(true));
             DrawMenu.AddItem(new MenuItem("drawDamage", "Draw - Draw Damage").SetValue(true));
             DrawMenu.AddItem(new MenuItem("drawQ", "Draw - Q Range").SetValue(true));
@@ -178,17 +187,17 @@ namespace AlqoholicGalio.Managers
             DrawMenu.AddItem(new MenuItem("drawR", "Draw - R Range").SetValue(true));
 
             // Misc Menu
-            MiscMenu = new Menu("Drunk Galio - Misc", "miscMenu").SetFontStyle(FontStyle.Bold, Color.MediumTurquoise);
+            MiscMenu = new Menu("Alqoholic Galio - Misc", "miscMenu").SetFontStyle(FontStyle.Bold, Color.Gold);
             WMenu = new Menu("W", "wMenu");
             AlliesMenu = new Menu("W - Allies", "alliesMenu");
             MiscMenu.AddSubMenu(WMenu);
             MiscMenu.AddItem(new MenuItem("miscRFlash", "Misc - R Flash").SetValue(new KeyBind('G', KeyBindType.Press)));
             //MiscMenu.AddItem(new MenuItem("test", "test").SetValue(new KeyBind('H', KeyBindType.Press)))
-            //    .Permashow(true, "Drunk Galio - TEST", new Color(0, 255, 255));
+            //    .Permashow(true, "Alqoholic Galio - TEST", new Color(0, 255, 255));
 
             // W Menu
             WMenu.AddItem(new MenuItem("wAuto", "W - Auto W").SetValue(true))
-                .Permashow(true, "Drunk Galio - Auto W", new Color(0, 255, 255));
+                .Permashow(true, "Alqoholic Galio - Auto W", new Color(0, 255, 255));
 
             WMenu.AddSubMenu(AlliesMenu);
             WMenu.AddItem(new MenuItem("wIncDamage", "W - Incoming Damage %").SetValue(new Slider(10)));

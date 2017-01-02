@@ -1557,9 +1557,9 @@
     <Compile Include="Core\Champion Ports\Fiora\Flower%27s Fiora\Program.cs" />
     <Compile Include="Core\Champion Ports\Fizz\Lord%27s Fizz\Program.cs" />
     <Compile Include="Core\Champion Ports\Galio\AlqoholicGalio\Galio.cs" />
+    <Compile Include="Core\Champion Ports\Galio\AlqoholicGalio\Managers\DrawingManager.cs" />
     <Compile Include="Core\Champion Ports\Galio\AlqoholicGalio\Managers\MenuManager.cs" />
     <Compile Include="Core\Champion Ports\Galio\AlqoholicGalio\Managers\SpellManager.cs" />
-    <Compile Include="Core\Champion Ports\Galio\AlqoholicGalio\Managers\UtilityManager.cs" />
     <Compile Include="Core\Champion Ports\Galio\AlqoholicGalio\Program.cs" />
     <Compile Include="Core\Champion Ports\Hecarim\Darwinn Hecarim\Champions\Hecarim.cs" />
     <Compile Include="Core\Champion Ports\Hecarim\Darwinn Hecarim\Extensions\Menus.cs" />

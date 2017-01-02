@@ -30,6 +30,7 @@ namespace AlqoholicGalio
 
     using LeagueSharp;
     using LeagueSharp.Common;
+    using Managers;
 
     #endregion
 
