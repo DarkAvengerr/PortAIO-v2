@@ -11,6 +11,9 @@ namespace Lord_s_Vayne.Events
 {
     class AfterAttack
     {
+        private static AIHeroClient enemy;
+
+        // AIHeroClient enemy;
 
         public static void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
@@ -92,6 +95,7 @@ namespace Lord_s_Vayne.Events
             {
                 var value = Program.qmenu.Item("QMode", true).GetValue<StringList>().SelectedIndex;
                 var FastQ = Program.qmenu.Item("FastQ").GetValue<bool>();
+                var htarget = TargetSelector.GetTarget(Program.E.Range, TargetSelector.DamageType.Physical);
 
                 if (value == 0)
                 {
@@ -114,7 +118,7 @@ namespace Lord_s_Vayne.Events
 
                 if (value == 2)
                 {
-                    if(FastQ)
+                    if (FastQ)
                     {
                         Program.Q.Cast(Game.CursorPos);
                         EloBuddy.Player.DoEmote(Emote.Dance);
@@ -174,13 +178,34 @@ namespace Lord_s_Vayne.Events
 
                 if (value == 6)
                 {
-                    QLogic.Bursts.Burst();
-                }              
-            }
-        }
-        
-    }
-}
+                    if (!FastQ)
+                    {
+                        QLogic.Bursts.Burst();
+                    }
+                    if (FastQ)
+                    {
+                        QLogic.Bursts.Burst();
+                        EloBuddy.Player.DoEmote(Emote.Dance);
+                    }
+                }
+                if (value == 7)
+                {
+                   
+                    if (!FastQ)
+                    {
+                        QLogic.Hiki.SafePositionQ(htarget);
+                    }
+                    if (FastQ)
+                    {
+                        QLogic.Hiki.SafePositionQ(htarget);
+                        EloBuddy.Player.DoEmote(Emote.Dance);
+                    }
+                }
+             }
+          }
+      }
+  }
+
 
        
  

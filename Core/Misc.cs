@@ -224,7 +224,7 @@ namespace PortAIO.Dual_Port
                     champ = new string[] { "Lululicious", "HeavenStrikeLulu", "SharpShooter", "Support is Easy", "Lulu & Pix", "Lulu#", "SethLulu" };
                     break;
                 case EloBuddy.Champion.Lux:
-                    champ = new string[] { "OKTW", "vSeries", "M1D 0R F33D", "M00N Lux", "[SDK] ExorAIO", "CheerleaderLux", "ElLux", "Hikigaya Lux", "SephLux" };
+                    champ = new string[] { "OKTW", "vSeries", "M1D 0R F33D", "M00N Lux", "[SDK] ExorAIO", "CheerleaderLux", "ElLux", "Hikigaya Lux", "SephLux", "ReformedAIO" };
                     break;
                 case EloBuddy.Champion.Malphite:
                     champ = new string[] { "ElEasy", "JustMalphite", "SephMalphite" };
@@ -474,8 +474,11 @@ namespace PortAIO.Dual_Port
             utility.AddItem(new MenuItem("RandomUlt", "Enable RandomUlt?").SetValue(false));
             utility.AddItem(new MenuItem("BaseUlt3", "Enable BaseUlt3?").SetValue(false));
             utility.AddItem(new MenuItem("UniversalRecallTracker", "Enable UniversalRecallTracker?").SetValue(false));
+            utility.AddItem(new MenuItem("UniversalGankAlerter", "Enable UniversalGankAlerter?").SetValue(false));
             utility.AddItem(new MenuItem("UniversalMinimapHack", "Enable UniversalMinimapHack?").SetValue(false));
             utility.AddItem(new MenuItem("StandaloneOrbwalker", "Enable StandaloneOrbwalker?").SetValue(false));
+            utility.AddItem(new MenuItem("BasicChatBlock", "Enable BasicChatBlock?").SetValue(false));
+            utility.AddItem(new MenuItem("CSCounter", "Enable CSCounter?").SetValue(false));
             menu.AddSubMenu(utility);
 
             var autoPlay = new Menu("Auto Play", "PortAIOAUTOPLAY");

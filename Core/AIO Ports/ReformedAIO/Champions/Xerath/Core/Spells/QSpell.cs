@@ -48,11 +48,7 @@ namespace ReformedAIO.Champions.Xerath.Core.Spells
 
             var output = SebbyLib.Prediction.Prediction.GetPrediction(input);
 
-            if (!OktwCommon.CollisionYasuo(ObjectManager.Player.Position, output.CastPosition) && output.Hitchance >= HitChance.High && Spell.IsCharging)
-            {
-                return output;
-            }
-            return null;
+            return output;
         }
 
         /// <summary>
@@ -80,11 +76,7 @@ namespace ReformedAIO.Champions.Xerath.Core.Spells
 
             var output = SebbyLib.Movement.Prediction.GetPrediction(input);
 
-            if (!OktwCommon.CollisionYasuo(ObjectManager.Player.Position, output.CastPosition) && output.Hitchance >= SebbyLib.Movement.HitChance.High && Spell.IsCharging)
-            {
-                return output;
-            }
-            return null;
+            return output;
         }
 
         /// <summary>

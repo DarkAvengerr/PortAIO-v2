@@ -28,9 +28,9 @@ namespace ReformedAIO.Champions._Example.Killsteal
         {
             if (!CheckGuardians()
                 || Target == null 
-                || Target.Health > spell.Spell.GetDamage(Target)
+                || Target.Health > spell.GetDamage(Target)
                 || spell.Prediction(Target).Hitchance < HitChance.High
-                || Menu.Item("Ziggs.Killsteal.Q.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
+                || Menu.Item("Example.Killsteal.Q.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
             {
                 return;
             }

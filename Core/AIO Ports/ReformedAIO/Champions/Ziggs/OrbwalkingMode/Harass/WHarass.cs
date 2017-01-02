@@ -13,6 +13,8 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Harass
 
     using SharpDX;
 
+    using Color = System.Drawing.Color;
+
     internal sealed class WHarass : OrbwalkingChild
     {
         public override string Name { get; set; } = "W";
@@ -65,9 +67,14 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Harass
         {
             foreach (var obj in eSpell.GameobjectLists)
             {
-                if (obj.Position.Distance(Target.Position) > 345) continue;
+                if (obj.Position.Distance(Target.Position) > 350 || ObjectManager.Player.Distance(Target) > 350) return;
 
-                var position = ObjectManager.Player.ServerPosition + (ObjectManager.Player.ServerPosition - obj.Position).Normalized() * 250;
+                var position = obj.Position.Extend(Target.Position, Target.Distance(obj.Position) + 50);
+
+                if (position.Distance(ObjectManager.Player.Position) < spell.Spell.Width)
+                {
+                    return;
+                }
 
                 spell.Spell.Cast(position);
             }
@@ -77,29 +84,7 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Harass
         {
             var prediction = ObjectManager.Player.ServerPosition.Extend(spell.Spell.GetPrediction(Target).CastPosition, spell.Spell.Range);
 
-            switch (Menu.Item("Ziggs.Harass.W.Hitchance").GetValue<StringList>().SelectedIndex)
-            {
-                case 0:
-                    if (spell.Prediction(Target).Hitchance >= HitChance.Medium)
-                    {
-                        spell.Spell.Cast(prediction);
-                    }
-                    break;
-
-                case 1:
-                    if (spell.Prediction(Target).Hitchance >= HitChance.High)
-                    {
-                        spell.Spell.Cast(prediction);
-                    }
-                    break;
-
-                case 2:
-                    if (spell.Prediction(Target).Hitchance >= HitChance.VeryHigh)
-                    {
-                        spell.Spell.Cast(prediction);
-                    }
-                    break;
-            }
+            spell.Spell.Cast(prediction);
         }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
@@ -126,7 +111,7 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Harass
 
             Menu.AddItem(new MenuItem("Ziggs.Harass.W.Insec", "W Into Minefield").SetValue(true));
 
-            Menu.AddItem(new MenuItem("Ziggs.Harass.W.Hitchance", "Hitchance: ").SetValue(new StringList(new[] { "Medium", "High", "Very High" })));
+            //   Menu.AddItem(new MenuItem("Ziggs.Harass.W.Hitchance", "Hitchance: ").SetValue(new StringList(new[] { "Medium", "High", "Very High" })));
 
             Menu.AddItem(new MenuItem("Ziggs.Harass.W.Mana", "Min Mana %").SetValue(new Slider(0, 0, 100)));
         }

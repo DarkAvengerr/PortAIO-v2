@@ -2,27 +2,45 @@ using EloBuddy;
 using LeagueSharp.Common; 
 namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Jungle
 {
-    #region Using Directives
-
     using System;
     using System.Linq;
 
     using LeagueSharp;
     using LeagueSharp.Common;
+    using LeagueSharp.SDK.Utils;
+
+    using ReformedAIO.Champions.Gragas.Core.Spells;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
-    #endregion
-
-    internal class WJungle : OrbwalkingChild
+    internal sealed class WJungle : OrbwalkingChild
     {
-        #region Public Properties
+        public override string Name { get; set; } = "W";
 
-        public override string Name { get; set; } = "[W] Drunken Rage";
+        private readonly WSpell spell;
 
-        #endregion
-       
-        #region Methods
+        public WJungle(WSpell spell)
+        {
+            this.spell = spell;
+        }
+
+        private static Obj_AI_Base Mob =>
+              MinionManager.GetMinions(ObjectManager.Player.Position,
+                  ObjectManager.Player.AttackRange + 115,
+                  MinionTypes.All,
+                  MinionTeam.Neutral).FirstOrDefault();
+
+        private void OnUpdate(EventArgs args)
+        {
+            if (!CheckGuardians()
+                || Mob == null
+                || Menu.Item("Gragas.Jungle.W.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
+            {
+                return;
+            }
+
+            spell.Spell.Cast();
+        }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
@@ -38,29 +56,12 @@ namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Jungle
             Game.OnUpdate += OnUpdate;
         }
 
-        protected sealed override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("WMana", "Mana %").SetValue(new Slider(10, 0, 100)));
+
+            Menu.AddItem(new MenuItem("Gragas.Jungle.W.Mana", "Min Mana %").SetValue(new Slider(0, 0, 100)));
         }
-
-        private static void DrunkenRage()
-        {
-            var mobs = MinionManager.GetMinions(350, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth).FirstOrDefault();
-
-            if (mobs == null || !mobs.IsValid || ObjectManager.Player.Spellbook.IsAutoAttacking || mobs.HealthPercent < 15) return;
-
-            Variable.Spells[SpellSlot.W].Cast();
-        }
-
-        private void OnUpdate(EventArgs args)
-        {
-            if (!CheckGuardians() || Menu.Item("WMana").GetValue<Slider>().Value > Variable.Player.ManaPercent) return;
-
-            DrunkenRage();
-        }
-
-        #endregion
     }
 }

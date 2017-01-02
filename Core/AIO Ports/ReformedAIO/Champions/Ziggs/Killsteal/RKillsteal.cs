@@ -11,6 +11,8 @@ namespace ReformedAIO.Champions.Ziggs.Killsteal
 
     using RethoughtLib.FeatureSystem.Implementations;
 
+    using HitChance = SebbyLib.Prediction.HitChance;
+
     internal sealed class RKillsteal : OrbwalkingChild
     {
         public override string Name { get; set; } = "R";
@@ -29,17 +31,17 @@ namespace ReformedAIO.Champions.Ziggs.Killsteal
             if (!CheckGuardians()
                 || Target == null 
                 || Target.Health > spell.Spell.GetDamage(Target)
-                || (Menu.Item("Ziggs.Killsteal.R.Safety").GetValue<bool>() && Target.CountAlliesInRange(900) >= 1)
+                || (Menu.Item("Ziggs.Killsteal.R.Safety").GetValue<bool>() && Target.CountEnemiesInRange(900) >= 1)
                 || Menu.Item("Ziggs.Killsteal.R.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
             {
                 return;
             }
 
-            spell.Delay(Target); // Updates the delay, temporary. 
+           // spell.Delay(Target);
 
-            if (spell.SPredictionOutput(Target).HitChance >= HitChance.VeryHigh)
+            if (spell.OKTW(Target).Hitchance >= HitChance.VeryHigh)
             {
-                spell.Spell.Cast(Target.ServerPosition);
+                spell.Spell.Cast(spell.OKTW(Target).CastPosition);
             }
         }
 

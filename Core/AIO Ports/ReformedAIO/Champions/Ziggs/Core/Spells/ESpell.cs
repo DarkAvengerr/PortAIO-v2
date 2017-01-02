@@ -23,8 +23,6 @@ namespace ReformedAIO.Champions.Ziggs.Core.Spells
 
         public override Spell Spell { get; set; }
 
-       // public GameObject GameObject;
-
         public List<ObjList> GameobjectLists = new List<ObjList>();
 
         public float GetDamage(Obj_AI_Base target)
@@ -47,7 +45,7 @@ namespace ReformedAIO.Champions.Ziggs.Core.Spells
             base.OnLoad(sender, eventArgs);
 
             Spell = new Spell(SpellSlot.E, 800);
-            Spell.SetSkillshot(.35f, 300f, 1600, false, SkillshotType.SkillshotCircle);
+            Spell.SetSkillshot(.5f, 100f, 1750, false, SkillshotType.SkillshotCircle);
 
             GameObject.OnCreate += OnCreate;
             GameObject.OnDelete += OnDelete;
@@ -64,7 +62,6 @@ namespace ReformedAIO.Champions.Ziggs.Core.Spells
 
             if (particle != null && sender.Name.Contains("Ziggs_Base_E_placedMine.troy"))
             {
-                Console.WriteLine("add");
                 GameobjectLists.Add(new ObjList(particle, particle.Position));
             }
         }

@@ -13,7 +13,7 @@ namespace NechritoRiven.Event.OrbwalkingModes
 
     internal class Combos : Core
     {
-        private static AIHeroClient Target => TargetSelector.GetTarget(375, TargetSelector.DamageType.Physical);
+        private static AIHeroClient Target => TargetSelector.GetTarget(400, TargetSelector.DamageType.Physical);
 
         private static AIHeroClient SelectedTarget => TargetSelector.GetSelectedTarget();
 
@@ -23,17 +23,14 @@ namespace NechritoRiven.Event.OrbwalkingModes
             {
                 BurstCastR2(Target);
             }
-           else if (Spells.Flash.IsReady() && MenuConfig.AlwaysF)
-            {
-                if (SelectedTarget == null
-                    || !SelectedTarget.IsValidTarget(Player.AttackRange + 625)
-                    || Player.Distance(SelectedTarget.Position) < Player.AttackRange
-                    || (MenuConfig.Flash && SelectedTarget.Health > Dmg.GetComboDamage(SelectedTarget) && !Spells.R.IsReady() && Spells.R.Instance.Name != IsSecondR)
-                    || (!MenuConfig.Flash && !Spells.W.IsReady()))
-                {
-                    return;
-                }
 
+            if (Spells.Flash.IsReady() 
+                && MenuConfig.AlwaysF 
+                && SelectedTarget != null 
+                && SelectedTarget.IsValidTarget(Player.AttackRange + 625)
+                && Player.Distance(SelectedTarget.Position) > 335
+                && (SelectedTarget.Health < Dmg.GetComboDamage(SelectedTarget) || MenuConfig.Flash))
+            {
                 Usables.CastYoumoo();
                 Spells.E.Cast(SelectedTarget.Position);
                 Spells.R.Cast();
@@ -57,7 +54,7 @@ namespace NechritoRiven.Event.OrbwalkingModes
                 ComboCastR2(Target);
             }
 
-           if (Spells.E.IsReady() && MenuConfig.Q3Wall && Qstack >= 3)
+            if (Spells.E.IsReady() && MenuConfig.Q3Wall && Qstack >= 3)
             {
                 Q3Wall(Target);
             }
@@ -67,7 +64,10 @@ namespace NechritoRiven.Event.OrbwalkingModes
                 Spells.E.Cast(Target.Position);
             }
 
-            if (Spells.R.IsReady() && Spells.R.Instance.Name == IsFirstR && MenuConfig.UseR1 && (Target.HealthPercent > 15 || !Spells.Q.IsReady()))
+           if (Spells.R.IsReady() 
+                && Spells.R.Instance.Name == IsFirstR
+                && MenuConfig.UseR1
+                && Target.Health > Dmg.GetComboDamage(Target) - Spells.R.GetDamage(Target))
             {
                 Spells.R.Cast();
             }
@@ -80,7 +80,7 @@ namespace NechritoRiven.Event.OrbwalkingModes
             DoublecastWQ(Target);
         }
 
-        private static void ComboCastR2(AIHeroClient target)
+        private static void ComboCastR2(Obj_AI_Base target)
         {
             var pred = Spells.R.GetPrediction(target, true, collisionable: new[] { CollisionableObjects.YasuoWall });
 
@@ -99,7 +99,7 @@ namespace NechritoRiven.Event.OrbwalkingModes
             }
         }
 
-        private static void BurstCastR2(AIHeroClient target)
+        private static void BurstCastR2(Obj_AI_Base target)
         {
             var pred = Spells.R.GetPrediction(target, true, collisionable: new[] { CollisionableObjects.YasuoWall });
 
@@ -114,7 +114,7 @@ namespace NechritoRiven.Event.OrbwalkingModes
             Spells.R.Cast(pred.CastPosition);
         }
 
-        private static void DoublecastWQ(AIHeroClient target)
+        private static void DoublecastWQ(Obj_AI_Base target)
         {
             if (MenuConfig.Doublecast && Spells.Q.IsReady() && Qstack != 2)
             {
@@ -127,7 +127,7 @@ namespace NechritoRiven.Event.OrbwalkingModes
             }
         }
 
-        private static void Q3Wall(AIHeroClient target)
+        private static void Q3Wall(Obj_AI_Base target)
         {
             if (target.Distance(Player) < Player.AttackRange || target.Distance(Player) > 650)
             {

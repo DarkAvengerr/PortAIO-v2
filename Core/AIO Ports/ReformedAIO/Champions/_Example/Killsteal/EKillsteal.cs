@@ -13,7 +13,7 @@ namespace ReformedAIO.Champions._Example.Killsteal
 
     internal sealed class EKillsteal : OrbwalkingChild
     {
-        public override string Name { get; set; } = "Q";
+        public override string Name { get; set; } = "E";
 
         private readonly ESpell spell;
 
@@ -28,7 +28,7 @@ namespace ReformedAIO.Champions._Example.Killsteal
         {
             if (!CheckGuardians()
                 || Target == null
-                || Target.Health > spell.Spell.GetDamage(Target)
+                || Target.Health > spell.GetDamage(Target)
                 || spell.Prediction(Target).Hitchance < HitChance.High
                 || Menu.Item("Example.Killsteal.E.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
             {

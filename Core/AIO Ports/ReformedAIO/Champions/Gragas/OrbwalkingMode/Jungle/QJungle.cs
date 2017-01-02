@@ -2,35 +2,53 @@ using EloBuddy;
 using LeagueSharp.Common; 
 namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Jungle
 {
-    #region Using Directives
-
     using System;
     using System.Linq;
 
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using ReformedAIO.Champions.Gragas.Logic;
+    using ReformedAIO.Champions.Gragas.Core.Spells;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
-    #endregion
-
-    internal class QJungle : OrbwalkingChild
+    internal sealed class QJungle : OrbwalkingChild
     {
-        #region Fields
+        public override string Name { get; set; } = "Q";
 
-        private QLogic qLogic;
+        private readonly QSpell spell;
 
-        #endregion
+        public QJungle(QSpell spell)
+        {
+            this.spell = spell;
+        }
 
-        #region Public Properties
+        private Obj_AI_Base Mob =>
+              MinionManager.GetMinions(ObjectManager.Player.Position,
+                  spell.Spell.Range,
+                  MinionTypes.All,
+                  MinionTeam.Neutral).FirstOrDefault();
 
-        public override string Name { get; set; } = "[Q] Barrel Roll";
+        private void OnUpdate(EventArgs args)
+        {
+            if (!CheckGuardians()
+                || Mob == null
+                || Menu.Item("Gragas.Jungle.Q.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
+            {
+                return;
+            }
 
-        #endregion
-       
-        #region Methods
+            if (spell.CanThrow())
+            {
+                spell.Handle(Mob.Position);
+                spell.Spell.Cast(Mob.Position);
+            }
+
+            if (Mob.Health < spell.GetDamage(Mob))
+            {
+                spell.ExplodeHandler(Mob);
+            }
+        }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
@@ -46,38 +64,12 @@ namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Jungle
             Game.OnUpdate += OnUpdate;
         }
 
-        protected sealed override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("QRange", "Q Range ").SetValue(new Slider(835, 0, 850)));
 
-            Menu.AddItem(new MenuItem("QMana", "Mana %").SetValue(new Slider(0, 0, 100)));
-
-            qLogic = new QLogic();
+            Menu.AddItem(new MenuItem("Gragas.Jungle.Q.Mana", "Min Mana %").SetValue(new Slider(0, 0, 100)));
         }
-
-        private void BarrelRoll()
-        {
-            var mobs =
-                MinionManager.GetMinions(
-                    Menu.Item("QRange").GetValue<Slider>().Value,
-                    MinionTypes.All,
-                    MinionTeam.Neutral,
-                    MinionOrderTypes.MaxHealth).FirstOrDefault();
-
-            if (mobs == null || !mobs.IsValid) return;
-
-            Variable.Spells[SpellSlot.Q].Cast(mobs.ServerPosition);
-        }
-
-        private void OnUpdate(EventArgs args)
-        {
-            if (!CheckGuardians() || Menu.Item("QMana").GetValue<Slider>().Value > Variable.Player.ManaPercent) return;
-            
-            BarrelRoll();
-        }
-
-        #endregion
     }
 }

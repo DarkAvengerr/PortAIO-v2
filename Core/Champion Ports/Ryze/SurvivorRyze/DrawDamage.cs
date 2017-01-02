@@ -30,7 +30,7 @@ namespace SurvivorRyze
         public static bool Enabled = true;
         private static DamageToUnitDelegate _damageToUnit;
 
-        private static readonly Render.Text Text = new Render.Text(0, 0, "", 14, SharpDX.Color.Red, "monospace");
+        private static readonly Render.Text Text = new Render.Text(0, 0, "", 14, SharpDX.Color.Crimson, "monospace");
 
         public static DamageToUnitDelegate DamageToUnit
         {
@@ -70,10 +70,10 @@ namespace SurvivorRyze
 
                 if (Fill)
                 {
-                    var differenceInHP = xPosCurrentHp - xPosDamage;
+                    var differenceInHp = xPosCurrentHp - xPosDamage;
                     var pos1 = barPos.X + 9 + 107*percentHealthAfterDamage;
 
-                    for (var i = 0; i < differenceInHP; i++)
+                    for (var i = 0; i < differenceInHp; i++)
                         Drawing.DrawLine(pos1 + i, yPos, pos1 + i, yPos + Height, 1, FillColor);
                 }
             }

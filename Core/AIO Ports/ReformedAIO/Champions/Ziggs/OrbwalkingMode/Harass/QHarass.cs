@@ -11,6 +11,8 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Harass
 
     using RethoughtLib.FeatureSystem.Implementations;
 
+    using SPrediction;
+
     using Prediction = SPrediction.Prediction;
 
     internal sealed class QHarass : OrbwalkingChild
@@ -35,13 +37,16 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Harass
                 return;
             }
 
-            switch (Menu.Item("Ziggs.Harass.Q.Hitchance").GetValue<StringList>().SelectedIndex)
+            switch (Menu.Item("Ziggs.Harass.Q.Prediction").GetValue<StringList>().SelectedIndex)
             {
                 case 0:
                     Common();
                     break;
                 case 1:
                     SPrediction();
+                    break;
+                case 2:
+                    OKTW();
                     break;
             }
         }
@@ -51,24 +56,15 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Harass
             switch (Menu.Item("Ziggs.Harass.Q.Hitchance").GetValue<StringList>().SelectedIndex)
             {
                 case 0:
-                    if (spell.SPredictionOutput(Target).HitChance >= HitChance.Medium)
-                    {
-                        spell.Spell.Cast(spell.SPredictionOutput(Target).CastPosition);
-                    }
+                    spell.Spell.SPredictionCast(Target, HitChance.Medium);
                     break;
 
                 case 1:
-                    if (spell.SPredictionOutput(Target).HitChance >= HitChance.High)
-                    {
-                        spell.Spell.Cast(spell.SPredictionOutput(Target).CastPosition);
-                    }
+                    spell.Spell.SPredictionCast(Target, HitChance.High);
                     break;
 
                 case 2:
-                    if (spell.SPredictionOutput(Target).HitChance >= HitChance.VeryHigh)
-                    {
-                        spell.Spell.Cast(spell.SPredictionOutput(Target).CastPosition);
-                    }
+                    spell.Spell.SPredictionCast(Target, HitChance.VeryHigh);
                     break;
             }
         }
@@ -78,25 +74,24 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Harass
             switch (Menu.Item("Ziggs.Harass.Q.Hitchance").GetValue<StringList>().SelectedIndex)
             {
                 case 0:
-                    if (spell.Prediction(Target).Hitchance >= HitChance.Medium)
-                    {
-                        spell.Spell.Cast(spell.Prediction(Target).CastPosition);
-                    }
+                    spell.Spell.CastIfHitchanceEquals(Target, HitChance.Medium);
                     break;
 
                 case 1:
-                    if (spell.Prediction(Target).Hitchance >= HitChance.High)
-                    {
-                        spell.Spell.Cast(spell.Prediction(Target).CastPosition);
-                    }
+                    spell.Spell.CastIfHitchanceEquals(Target, HitChance.High);
                     break;
 
                 case 2:
-                    if (spell.Prediction(Target).Hitchance >= HitChance.VeryHigh)
-                    {
-                        spell.Spell.Cast(spell.Prediction(Target).CastPosition);
-                    }
+                    spell.Spell.CastIfHitchanceEquals(Target, HitChance.VeryHigh);
                     break;
+            }
+        }
+
+        private void OKTW()
+        {
+            if (spell.OKTW(Target) != null && spell.OKTW(Target).Hitchance >= SebbyLib.Prediction.HitChance.VeryHigh)
+            {
+                spell.Spell.Cast(spell.OKTW(Target).CastPosition);
             }
         }
 
@@ -118,7 +113,7 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Harass
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("Ziggs.Harass.Q.Prediction", "Prediction: ").SetValue(new StringList(new[] { "Common", "SPrediction" })));
+            Menu.AddItem(new MenuItem("Ziggs.Harass.Q.Prediction", "Prediction: ").SetValue(new StringList(new[] { "Common", "SPrediction", "OKTW" }, 1)));
 
             Menu.AddItem(new MenuItem("Ziggs.Harass.Q.Hitchance", "Hitchance: ").SetValue(new StringList(new[] { "Medium", "High", "Very High" })));
 

@@ -94,11 +94,15 @@ namespace SSRumble
             ComboMenu.AddItem(new MenuItem("ComboUseW", "Use W").SetValue(true));
             ComboMenu.AddItem(new MenuItem("ComboUseE", "Use E").SetValue(true));
             ComboMenu.AddItem(new MenuItem("ComboUseRSolo", "Use R on 1vs1").SetValue(true));
+            ComboMenu.AddItem(new MenuItem("ComboUseRComboMode", "Use R in Combo Mode").SetValue(true));
             ComboMenu.AddItem(new MenuItem("ComboUseItems", "Use Items?").SetValue(true));
             //ComboMenu.AddItem(
             //    new MenuItem("UseSmartCastingADC", "Use R Only if it'll land first on ADC?").SetValue(false));
             ComboMenu.AddItem(new MenuItem("ComboCastUltimate", "[Insta] Cast Ultimate Key"))
                 .SetValue(new KeyBind('T', KeyBindType.Press)).Permashow(true, "[Insta Ult Active?]");
+            ComboMenu.AddItem(
+                new MenuItem("BubbaKushCastFromTo", "Logic to Cast R: ").SetValue(
+                    new StringList(new[] {"From Target to Second Target", "From Second Target to Target"}, 0)));
             ComboMenu.AddItem(
                 new MenuItem("SemiManualR", "Semi-Manual R Casting?").SetValue(true)
                     .SetTooltip("True - Script will Auto R | False - You will R when you decide - preferably",
@@ -107,12 +111,12 @@ namespace SSRumble
             //    new MenuItem("ComboMinimumRTargets", "Minimum Enemies to hit before casting Ultimate?").SetValue(
             //        new Slider(2, 1, HeroManager.Enemies.Count)));
 
-            var LaneClearMenu = Config.AddSubMenu(new Menu(":: LaneClear", "LaneClear"));
-            LaneClearMenu.AddItem(new MenuItem("LaneClearQ", "Use Q").SetValue(true));
-            LaneClearMenu.AddItem(new MenuItem("LaneClearE", "Use E").SetValue(false));
-            LaneClearMenu.AddItem(
+            var laneClearMenu = Config.AddSubMenu(new Menu(":: LaneClear", "LaneClear"));
+            laneClearMenu.AddItem(new MenuItem("LaneClearQ", "Use Q").SetValue(true));
+            laneClearMenu.AddItem(new MenuItem("LaneClearE", "Use E").SetValue(false));
+            laneClearMenu.AddItem(
                 new MenuItem("LaneClearManaManager", "LaneClear Mana Manager").SetValue(new Slider(0, 0, 100)));
-            LaneClearMenu.AddItem(
+            laneClearMenu.AddItem(
                 new MenuItem("MinimumQMinions", "Minimum Minions Near You To Use Q?").SetValue(new Slider(2, 1, 10)));
 
             var JungleClearMenu = Config.AddSubMenu(new Menu(":: JungleClear", "JungleClear"));
@@ -452,22 +456,17 @@ namespace SSRumble
                             .ThenByDescending(x => x.HeroToKick.MaxHealth).FirstOrDefault();
 
                     if (BubbaFat != null)
-                    {
-                        /*if (Config.Item("UseSmartCastingADC").GetValue<bool>())
+                        switch (Config.Item("BubbaKushCastFromTo").GetValue<StringList>().SelectedIndex)
                         {
-                            var importantTarget =
-                                HeroManager.Enemies.FirstOrDefault(
-                                    x =>
-                                        HighChamps.Contains(BubbaFat.TargetHero.ChampionName) &&
-                                        x.IsValidTarget(R.Range));
-                            if (importantTarget != null)
-                                if (R.Instance.IsReady() &&
-                                    Config.Item("SemiManualR").GetValue<bool>())
-                                    R.Cast(importantTarget.Position, BubbaFat.HeroToKick.Position);
-                        }*/
-                        if (R.Instance.IsReady() && Config.Item("SemiManualR").GetValue<bool>())
-                            R.Cast(BubbaFat.TargetHero.Position, BubbaFat.HeroToKick.Position);
-                    }
+                            case 0:
+                                if (R.Instance.IsReady() && Config.Item("SemiManualR").GetValue<bool>())
+                                    R.Cast(BubbaFat.HeroToKick.ServerPosition, BubbaFat.TargetHero.ServerPosition);
+                                break;
+                            case 1:
+                                if (R.Instance.IsReady() && Config.Item("SemiManualR").GetValue<bool>())
+                                    R.Cast(BubbaFat.TargetHero.ServerPosition, BubbaFat.HeroToKick.ServerPosition);
+                                break;
+                        }
                 }
             }
         }
@@ -559,18 +558,22 @@ namespace SSRumble
             var UseQ = Config.Item("ComboUseQ").GetValue<bool>();
             var UseW = Config.Item("ComboUseW").GetValue<bool>();
             var UseE = Config.Item("ComboUseE").GetValue<bool>();
+            var UseR = Config.Item("ComboUseRComboMode").GetValue<bool>();
             var UseItems = Config.Item("ComboUseItems").GetValue<bool>();
 
             var target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
             if ((target == null) || !target.IsValidTarget())
                 return;
-            if (UseQ && target.IsValidTarget(Q.Range) && Player.IsFacing(target) && (Player.Mana < 80))
+            if (UseR && target.IsValidTarget(R.Range) && R.Instance.IsReady())
+                BubbKushGo(target);
+            if (UseQ && Q.Instance.IsReady() && target.IsValidTarget(Q.Range) && Player.IsFacing(target) &&
+                (Player.Mana < 80))
                 Q.Cast();
-            if (UseE && target.IsValidTarget(E.Range) && (Player.Mana < 80))
+            if (UseE && E.Instance.IsReady() && target.IsValidTarget(E.Range) && (Player.Mana < 80))
                 SebbySpell(E, target);
-            if (UseW && (Player.CountEnemiesInRange(E.Range) > 0) && (Player.HealthPercent < 80))
+            if (UseW && W.Instance.IsReady() && (Player.CountEnemiesInRange(E.Range) > 0) && (Player.HealthPercent < 80))
                 W.Cast();
-            if ((target.CountEnemiesInRange(1000) <= 0) && target.IsValidTarget(700) &&
+            if ((target.CountEnemiesInRange(1000) <= 0) && R.Instance.IsReady() && target.IsValidTarget(700) &&
                 Config.Item("ComboUseRSolo").GetValue<bool>())
                 switch (target.IsFacing(Player))
                 {

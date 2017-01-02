@@ -33,14 +33,14 @@ namespace ReformedAIO.Champions.Xerath.OrbwalkingMode.Jungle
         {
             if (!CheckGuardians()
                 || Mob == null 
-                || Menu.Item("Xerath.Jungle.Q.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
+                || (Menu.Item("Xerath.Jungle.Q.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent && !spell.Charging))
             {
                 return;
             }
 
             if (!spell.Charging)
             {
-                spell.Spell.StartCharging();
+                LeagueSharp.Common.Utility.DelayAction.Add(10, ()=> spell.Spell.StartCharging());
                 return;
             }
 
@@ -64,8 +64,6 @@ namespace ReformedAIO.Champions.Xerath.OrbwalkingMode.Jungle
         protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
             base.OnLoad(sender, eventArgs);
-
-            Menu.AddItem(new MenuItem("Xerath.Jungle.Q.BUG", "Q JUNGLE IS BUGGY, DO IT MANUALLY(?)"));
 
             Menu.AddItem(new MenuItem("Xerath.Jungle.Q.Mana", "Min Mana %").SetValue(new Slider(0, 0, 100)));
         }

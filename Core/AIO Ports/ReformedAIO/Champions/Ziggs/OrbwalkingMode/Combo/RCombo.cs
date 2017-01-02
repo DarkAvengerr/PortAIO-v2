@@ -35,11 +35,12 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Combo
             if (!CheckGuardians()
                 || Target == null
                 || Menu.Item("Ziggs.Combo.R.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent
-                || (Menu.Item("Ziggs.Combo.R.Killable").GetValue<bool>() && damage.GetComboDamage(Target) * 1.33 < Target.Health))
+                || (Menu.Item("Ziggs.Combo.R.Killable").GetValue<bool>() && damage.GetComboDamage(Target) < Target.Health))
             {
                 return;
             }
 
+            spell.Spell.SPredictionCastAoe(Menu.Item("Ziggs.Combo.R.Hit").GetValue<Slider>().Value);
 
             spell.Spell.CastIfWillHit(Target, Menu.Item("Ziggs.Combo.R.Hit").GetValue<Slider>().Value);
 
@@ -51,16 +52,41 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Combo
                 case 1:
                     SPrediction();
                     break;
+                case 2:
+                    OKTW();
+                    break;
+            }
+        }
+
+        private void OKTW()
+        {
+            switch (Menu.Item("Ziggs.Combo.R.Hitchance").GetValue<StringList>().SelectedIndex)
+            {
+                case 0:
+                    spell.Spell.Cast(Target.ServerPosition);
+                    break;
+                case 1:
+                    if (spell.OKTW(Target).Hitchance >= SebbyLib.Prediction.HitChance.High)
+                    {
+                        spell.Spell.Cast(spell.OKTW(Target).CastPosition);
+                    }
+                    break;
+                case 2:
+                    if (spell.OKTW(Target).Hitchance >= SebbyLib.Prediction.HitChance.VeryHigh)
+                    {
+                        spell.Spell.Cast(spell.OKTW(Target).CastPosition);
+                    }
+                    break;
+                    
             }
         }
 
         private void SPrediction()
         {
-            spell.Spell.CastIfWillHit(Target, 1);
-
-            spell.Spell.SPredictionCastAoe(2);
-
-            spell.Spell.SPredictionCast(Target, HitChance.VeryHigh);
+            if (spell.SPredictionOutput(Target).HitCount >= 1)
+            {
+                spell.Spell.Cast(spell.SPredictionOutput(Target).CastPosition);
+            }
         }
 
         private void Common()
@@ -68,7 +94,7 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Combo
             switch (Menu.Item("Ziggs.Combo.R.Hitchance").GetValue<StringList>().SelectedIndex)
             {
                 case 0:
-                    spell.Spell.CastIfWillHit(Target, 1);
+                    spell.Spell.Cast(Target.ServerPosition);
                     break;  
                 case 1:
                     spell.Spell.CastIfHitchanceEquals(Target, HitChance.High);
@@ -98,11 +124,11 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Combo
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("Ziggs.Combo.R.Hit", "Use if X hit: ").SetValue(new Slider(3, 1, 5)));
+            Menu.AddItem(new MenuItem("Ziggs.Combo.R.Hit", "Use if X hit: ").SetValue(new Slider(3, 2, 5)));
 
             Menu.AddItem(new MenuItem("Ziggs.Combo.R.Killable", "Use when target killable").SetValue(true));
 
-            Menu.AddItem(new MenuItem("Ziggs.Combo.R.Prediction", "Prediction: ").SetValue(new StringList(new[] { "Common", "SPrediction" }, 1)));
+            Menu.AddItem(new MenuItem("Ziggs.Combo.R.Prediction", "Prediction: ").SetValue(new StringList(new[] { "Common", "SPrediction", "OKTW" }, 2)));
 
             Menu.AddItem(new MenuItem("Ziggs.Combo.R.Hitchance", "Hitchance: ").SetValue(new StringList(new[] {"Target Position", "High", "Very High" })));
 

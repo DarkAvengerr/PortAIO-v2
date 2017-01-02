@@ -19,6 +19,7 @@ namespace ReformedAIO.Champions.Ezreal
     using Ezreal.OrbwalkingMode.JungleClear;
     using Ezreal.OrbwalkingMode.LaneClear;
 
+    using ReformedAIO.Champions.Ezreal.Misc;
     using ReformedAIO.Champions.Ezreal.OrbwalkingMode.Stack;
     using ReformedAIO.Champions.Ezreal.Utility;
     using ReformedAIO.Library.Dash_Handler;
@@ -131,6 +132,7 @@ namespace ReformedAIO.Champions.Ezreal
                                      jungleParent,
                                      new StackTear(qSpell, wSpell).Guardian(new PlayerMustNotBeWindingUp()),
                                      killstealParnet,
+                                     new EzrealAntiGapcloser(eSpell),
                                      drawingParent,
                                   });
 

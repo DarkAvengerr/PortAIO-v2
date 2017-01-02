@@ -33,15 +33,15 @@ namespace ReformedAIO.Champions.Xerath.Drawings.Spells
             Render.Circle.DrawCircle(ObjectManager.Player.Position,
                                      spell.RealRange,
                                      spell.Spell.IsReady()
-                                     ? Color.Cyan
+                                     ? Color.OrangeRed
                                      : Color.DarkSlateGray,
                                      Menu.Item("Xerath.Draw.R.Width").GetValue<Slider>().Value,
                                      Menu.Item("Xerath.Draw.R.Z").GetValue<bool>());
 
-            //if (Menu.Item("Xerath.Draw.R.Minimap").GetValue<bool>() && spell.Spell.IsReady())
-            //{
-            //    Render.Circle.DrawCircle(ObjectManager.Player.Position, spell.RealRange(), Color.AliceBlue, 23, true);
-            //}
+            if (Menu.Item("Xerath.Draw.R.Minimap").GetValue<bool>() && spell.Spell.IsReady())
+            {
+                LeagueSharp.Common.Utility.DrawCircle(ObjectManager.Player.Position, spell.RealRange, Color.OrangeRed, 1, 26, true);
+            }
         }
 
 
@@ -64,7 +64,7 @@ namespace ReformedAIO.Champions.Xerath.Drawings.Spells
         {
             base.OnLoad(sender, eventArgs);
 
-           // Menu.AddItem(new MenuItem("Xerath.Draw.R.Minimap", "Minimap").SetValue(true));
+            Menu.AddItem(new MenuItem("Xerath.Draw.R.Minimap", "Minimap").SetValue(true));
 
             Menu.AddItem(new MenuItem("Xerath.Draw.R.Z", "Draw Z").SetValue(false));
 

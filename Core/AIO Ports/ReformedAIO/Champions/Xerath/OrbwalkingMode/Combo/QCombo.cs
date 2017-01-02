@@ -11,6 +11,8 @@ namespace ReformedAIO.Champions.Xerath.OrbwalkingMode.Combo
 
     using RethoughtLib.FeatureSystem.Implementations;
 
+    using HitChance = SebbyLib.Movement.HitChance;
+
     internal sealed class QCombo : OrbwalkingChild
     {
         public override string Name { get; set; } = "Q";
@@ -28,7 +30,7 @@ namespace ReformedAIO.Champions.Xerath.OrbwalkingMode.Combo
         {
             if (!CheckGuardians()
                 || Target == null
-                || Menu.Item("Xerath.Combo.Q.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
+                || (Menu.Item("Xerath.Combo.Q.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent && !spell.Charging))
             {
                 return;
             }
@@ -42,14 +44,14 @@ namespace ReformedAIO.Champions.Xerath.OrbwalkingMode.Combo
             switch (Menu.Item("Xerath.Combo.Q.Prediction").GetValue<StringList>().SelectedIndex)
             {
                 case 0:
-                    if (spell.SDK(Target) != null)
+                    if (spell.SDK(Target).Hitchance >= HitChance.High)
                     {
                         spell.Spell.Cast(spell.SDK(Target).CastPosition);
                     }
                     break;
                 case 1:
 
-                    if (spell.OKTW(Target) != null)
+                    if (spell.OKTW(Target).Hitchance >= SebbyLib.Prediction.HitChance.High)
                     {
                         spell.Spell.Cast(spell.OKTW(Target).CastPosition);
                     }

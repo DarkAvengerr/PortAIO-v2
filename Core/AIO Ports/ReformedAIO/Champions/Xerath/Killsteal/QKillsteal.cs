@@ -13,6 +13,8 @@ namespace ReformedAIO.Champions.Xerath.Killsteal
 
     using SebbyLib;
 
+    using HitChance = SebbyLib.Movement.HitChance;
+
     internal sealed class QKillsteal : OrbwalkingChild
     {
         public override string Name { get; set; } = "Q";
@@ -31,7 +33,7 @@ namespace ReformedAIO.Champions.Xerath.Killsteal
             if (!CheckGuardians()
                 || Target == null 
                 || Target.Health > OktwCommon.GetKsDamage(Target, spell.Spell)
-                || Menu.Item("Xerath.Killsteal.Q.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
+                || (Menu.Item("Xerath.Killsteal.Q.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent && !spell.Charging))
             {
                 return;
             }
@@ -39,16 +41,13 @@ namespace ReformedAIO.Champions.Xerath.Killsteal
             if (!spell.Charging)
             {
                 spell.Spell.StartCharging();
-                
                 return;
             }
 
-            if (spell.SDK(Target) == null)
+            if (spell.SDK(Target).Hitchance >= HitChance.High)
             {
-                return;
+                spell.Spell.Cast(spell.SDK(Target).CastPosition);
             }
-
-            spell.Spell.Cast(spell.SDK(Target).CastPosition);
         }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)

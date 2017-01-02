@@ -86,7 +86,7 @@ namespace ReformedAIO.Champions.Ziggs
             comboParent.Add(new List<Base>()
                                 {
                                     new QCombo(qSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(qReadyGuardian),
-                                    new WCombo(wSpell, eSpell, qSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(wReadyGuardian),
+                                    new WCombo(wSpell, eSpell, qSpell, ziggsDmg).Guardian(mustNotBeWindingUpGuardian).Guardian(wReadyGuardian),
                                     new ECombo(eSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(eReadyGuardian),
                                     new RCombo(rSpell, ziggsDmg).Guardian(rReadyGuardian)
                                 });

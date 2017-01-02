@@ -24,7 +24,9 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.JungleClear
 
         private void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!CheckGuardians() || !sender.IsMe || Menu.Item("Jungle.E.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
+            if (!CheckGuardians()
+                || !sender.IsMe
+                || Menu.Item("Jungle.E.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
             {
                 return;
             }
@@ -34,12 +36,7 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.JungleClear
                     ObjectManager.Player.Position,
                     ObjectManager.Player.AttackRange,
                     MinionTypes.All,
-                    MinionTeam.Neutral).FirstOrDefault();
-
-            if (mob == null)
-            {
-                return;
-            }
+                    MinionTeam.Neutral).Any();
 
             eSpell.Spell.Cast(ObjectManager.Player.Position.Extend(Game.CursorPos, 70));
         }

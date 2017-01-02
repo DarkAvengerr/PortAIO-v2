@@ -7,13 +7,10 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Combo
     using LeagueSharp;
     using LeagueSharp.Common;
 
+    using ReformedAIO.Champions.Ziggs.Core.Damage;
     using ReformedAIO.Champions.Ziggs.Core.Spells;
 
     using RethoughtLib.FeatureSystem.Implementations;
-
-    using SharpDX;
-
-    using Color = System.Drawing.Color;
 
     internal sealed class WCombo : OrbwalkingChild
     {
@@ -25,11 +22,14 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Combo
 
         private readonly QSpell qSpell;
 
-        public WCombo(WSpell spell, ESpell eSpell, QSpell qSpell)
+        private readonly ZiggsDamage damage;
+
+        public WCombo(WSpell spell, ESpell eSpell, QSpell qSpell, ZiggsDamage damage)
         {
             this.spell = spell;
             this.eSpell = eSpell;
             this.qSpell = qSpell;
+            this.damage = damage;
         }
 
         private AIHeroClient Target => TargetSelector.GetTarget(qSpell.Spell.Range, TargetSelector.DamageType.Physical);
@@ -50,12 +50,13 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Combo
             else if (Menu.Item("Ziggs.Combo.W.Jump").GetValue<bool>() 
                      && qSpell.Spell.IsReady()
                      && Target.Distance(ObjectManager.Player) > 850 
-                     && Target.HealthPercent <= 10
-                     && ObjectManager.Player.HealthPercent >= 30
-                     && ObjectManager.Player.ManaPercent >= 15)
+                     && Target.Health <= damage.GetComboDamage(Target)
+                     && ObjectManager.Player.HealthPercent >= Target.HealthPercent
+                     && ObjectManager.Player.ManaPercent >= 20)
             {
-                var position = ObjectManager.Player.ServerPosition + (ObjectManager.Player.ServerPosition - Target.Position).Normalized() * 200;
-                spell.Spell.Cast(position);
+                var pred = spell.Prediction(Target).CastPosition;
+
+                spell.Spell.Cast(ObjectManager.Player.Position.Extend(pred, -140));
             }
             else
             {
@@ -67,24 +68,29 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Combo
         {
             foreach (var obj in eSpell.GameobjectLists)
             {
-                if(obj.Position.Distance(Target.Position) > 350 || ObjectManager.Player.Distance(Target) > 350) return;
-
-                var position = obj.Position.Extend(Target.Position, Target.Distance(obj.Position) + 50);
-
-                if (position.Distance(ObjectManager.Player.Position) < spell.Spell.Width)
+                if (obj.Position.Distance(Target.Position) < 350 && ObjectManager.Player.Distance(Target) < 350)
                 {
-                    return;
-                }
+                    var position = obj.Position.Extend(Target.Position, Target.Distance(obj.Position) + 50);
 
-                spell.Spell.Cast(position);
+                    if (position.Distance(ObjectManager.Player.Position) < spell.Spell.Width)
+                    {
+                        return;
+                    }
+
+                    spell.Spell.Cast(position);
+                }
+                else
+                {
+                   Combo();
+                }
             }
         }
 
         private void Combo()
         {
-            var prediction = ObjectManager.Player.ServerPosition.Extend(spell.Spell.GetPrediction(Target).CastPosition, spell.Spell.Range);
+            var pred = spell.Prediction(Target).CastPosition;
 
-            spell.Spell.Cast(prediction);
+            spell.Spell.Cast(Target.Position.Extend(pred, 140));
         }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)

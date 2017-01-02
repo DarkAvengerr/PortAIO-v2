@@ -32,7 +32,7 @@ namespace ReformedAIO.Champions.Xerath.Drawings.Damage
         {
             if (ObjectManager.Player.IsDead) return;
 
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(1750)))
+            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(3500)))
             {
                 heroHealthBarIndicator.Unit = enemy;
 

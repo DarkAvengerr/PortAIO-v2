@@ -29,7 +29,7 @@ namespace ReformedAIO.Champions.Xerath.OrbwalkingMode.Lane
         {
             if (!CheckGuardians()
                || Minion == null
-               || Menu.Item("Xerath.Lane.Q.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent
+               || (Menu.Item("Xerath.Lane.Q.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent && !spell.Charging)
                || (Menu.Item("Xerath.Lane.Q.Enemies").GetValue<bool>() && ObjectManager.Player.CountEnemiesInRange(1400) >= 1))
             {
                 return;

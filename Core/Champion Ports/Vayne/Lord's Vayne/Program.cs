@@ -27,7 +27,7 @@ namespace Lord_s_Vayne
 
         public static Orbwalking.Orbwalker orbwalker;
 
-        private static string News = "Added New Q Logic's: Gosu, Side, Cursor, SmartQ, SafeQ, AggroQ, Burst ";
+        private static string News = "Added New Q Logic's: Gosu, Side, Cursor, SmartQ, SafeQ, AggroQ, Burst, Hiki";
 
         public static Menu menu;
 
@@ -107,7 +107,7 @@ namespace Lord_s_Vayne
             Program.qmenu = Program.menu.AddSubMenu(new Menu("Tumble", "Tumble"));
             Program.qmenu.AddItem(new MenuItem("FastQ", "Fast Q").SetValue(true).SetValue(true).SetTooltip("Q Animation Cancelation"));
             Program.qmenu.AddItem(new MenuItem("UseQC", "Use Q Combo").SetValue(true));
-            Program.qmenu.AddItem(new MenuItem("QMode", "Use Q Mode:", true).SetValue(new StringList(new[] { "Gosu", "Side", "Cursor", "SmartQ", "SafeQ", "AggroQ", "Burst" })));
+            Program.qmenu.AddItem(new MenuItem("QMode", "Use Q Mode:", true).SetValue(new StringList(new[] { "Gosu", "Side", "Cursor", "SmartQ", "SafeQ", "AggroQ", "Burst", "Hiki" })));
             Program.qmenu.AddItem(new MenuItem("hq", "Use Q Harass").SetValue(true));
             Program.qmenu.AddItem(new MenuItem("restrictq", "Restrict Q usage?").SetValue(true));
             Program.qmenu.AddItem(new MenuItem("UseQJ", "Use Q Farm").SetValue(true));

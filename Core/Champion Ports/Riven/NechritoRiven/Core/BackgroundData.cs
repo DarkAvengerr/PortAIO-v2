@@ -102,7 +102,7 @@ namespace NechritoRiven.Core
 
             if (canQ)
             {
-                if (CanUseItem && Qstack == 3)
+                if (CanUseItem)
                 {
                     Items.UseItem(Item);
                     LeagueSharp.Common.Utility.DelayAction.Add(1, () => Spells.Q.Cast(Unit.Position));

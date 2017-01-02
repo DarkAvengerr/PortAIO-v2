@@ -3,13 +3,11 @@ using LeagueSharp.Common;
 namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Flee
 {
     using System;
-    using System.Linq;
 
     using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Ziggs.Core.Spells;
-    using ReformedAIO.Library.Dash_Handler;
     using ReformedAIO.Library.WallExtension;
 
     using RethoughtLib.FeatureSystem.Implementations;
@@ -24,6 +22,8 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Flee
         {
             this.spell = spell;
         }
+
+        private AIHeroClient Target => TargetSelector.GetTarget(spell.Spell.Range, TargetSelector.DamageType.Physical);
 
         private WallExtension wall;
 
@@ -45,7 +45,7 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Flee
                 ObjectManager.Player.GetPath(point);
 
                 var position = ObjectManager.Player.ServerPosition
-                               + (ObjectManager.Player.ServerPosition - point).Normalized() * 200;
+                               + (ObjectManager.Player.ServerPosition - point).Normalized() * 140;
 
                 if (point.Distance(ObjectManager.Player.Position) < 300f)
                 {
@@ -54,7 +54,7 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Flee
             }
             else
             {
-                spell.Spell.Cast(ObjectManager.Player.Position);
+                spell.Spell.Cast(ObjectManager.Player.ServerPosition + (ObjectManager.Player.ServerPosition - Game.CursorPos).Normalized() * 140);
             }
         }
 

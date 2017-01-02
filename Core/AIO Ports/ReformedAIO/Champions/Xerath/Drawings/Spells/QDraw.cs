@@ -12,6 +12,8 @@ namespace ReformedAIO.Champions.Xerath.Drawings.Spells
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
 
+    using HitChance = SebbyLib.Movement.HitChance;
+
     internal sealed class QDrawing : ChildBase
     {
         public override string Name { get; set; } = "Q";
@@ -23,7 +25,24 @@ namespace ReformedAIO.Champions.Xerath.Drawings.Spells
             this.spell = spell;
         }
 
-        public void OnEndScene(EventArgs args)
+        private AIHeroClient Target => TargetSelector.GetTarget(spell.Spell.Range, TargetSelector.DamageType.Magical);
+
+        private Color GetColor()
+        {
+            if (spell.SDK(Target).Hitchance >= HitChance.VeryHigh)
+            {
+                return Color.Green;
+            }
+
+            if (spell.SDK(Target).Hitchance >= HitChance.High)
+            {
+                return Color.Yellow;
+            }
+
+            return spell.SDK(Target).Hitchance <= HitChance.Medium ? Color.Red : new Color();
+        }
+
+        private void OnEndScene(EventArgs args)
         {
             if (ObjectManager.Player.IsDead)
             {
@@ -37,6 +56,24 @@ namespace ReformedAIO.Champions.Xerath.Drawings.Spells
                                      : Color.DarkSlateGray,
                                      Menu.Item("Xerath.Draw.Q.Width").GetValue<Slider>().Value,
                                      Menu.Item("Xerath.Draw.Q.Z").GetValue<bool>());
+
+            if (Target == null || Menu.Item("Xerath.Draw.Q.Prediction").GetValue<StringList>().SelectedIndex == 3 || !spell.Charging)
+            {
+                return;
+            }
+
+            switch (Menu.Item("Xerath.Draw.Q.Prediction").GetValue<StringList>().SelectedIndex)
+            {
+                case 0:
+                    Drawing.DrawLine(Drawing.WorldToScreen(ObjectManager.Player.Position), Drawing.WorldToScreen(spell.SDK(Target).CastPosition), 5, GetColor());
+                    break;
+                case 1:
+                    Drawing.DrawLine(Drawing.WorldToScreen(ObjectManager.Player.Position), Drawing.WorldToScreen(spell.OKTW(Target).CastPosition), 5, GetColor());
+                    break;
+                case 2:
+                    Drawing.DrawLine(Drawing.WorldToScreen(ObjectManager.Player.Position), Drawing.WorldToScreen(Target.Position), 2, Color.AliceBlue);
+                    break;
+            }
         }
 
 
@@ -58,6 +95,8 @@ namespace ReformedAIO.Champions.Xerath.Drawings.Spells
         protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
             base.OnLoad(sender, eventArgs);
+
+            Menu.AddItem(new MenuItem("Xerath.Draw.Q.Prediction", "Draw Prediction").SetValue(new StringList(new [] { "SDK", "OKTW", "Target Position", "Don't Draw" }, 3)));
 
             Menu.AddItem(new MenuItem("Xerath.Draw.Q.Z", "Draw Z").SetValue(false));
 

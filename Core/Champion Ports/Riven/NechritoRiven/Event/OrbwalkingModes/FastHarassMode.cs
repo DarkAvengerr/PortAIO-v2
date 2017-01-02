@@ -19,7 +19,7 @@ namespace NechritoRiven.Event.OrbwalkingModes
         {
             var target = TargetSelector.GetTarget(400, TargetSelector.DamageType.Physical);
 
-            if (target == null || !Spells.Q.IsReady() || !Spells.E.IsReady())
+            if (target == null)
             {
                 return;
             }
@@ -29,14 +29,22 @@ namespace NechritoRiven.Event.OrbwalkingModes
                 BackgroundData.CastQ(target);
             }
 
-            if (Qstack == 3 && !Orbwalking.CanAttack() && Orbwalking.CanMove(5))
+            if (Qstack != 3)
+            {
+                return;
+            }
+
+            if (Spells.E.IsReady())
             {
                 Spells.E.Cast(Game.CursorPos);
-
-                LeagueSharp.Common.Utility.DelayAction.Add(170, () => Spells.W.Cast());
-
-                LeagueSharp.Common.Utility.DelayAction.Add(190, () => Spells.Q.Cast(Game.CursorPos));
             }
+
+            if (Spells.W.IsReady())
+            {
+                LeagueSharp.Common.Utility.DelayAction.Add(170, () => Spells.W.Cast());
+            }
+
+            LeagueSharp.Common.Utility.DelayAction.Add(190, () => Spells.Q.Cast(Game.CursorPos));
         }
 
         #endregion

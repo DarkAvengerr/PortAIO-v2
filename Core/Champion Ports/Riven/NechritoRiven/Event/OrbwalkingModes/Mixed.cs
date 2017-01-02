@@ -40,7 +40,7 @@ namespace NechritoRiven.Event.OrbwalkingModes
                 || !Spells.E.IsReady()
                 || Qstack != 3
                 || Orbwalking.CanAttack()
-                || !Orbwalking.CanMove(5))
+                || !Orbwalking.CanMove(0))
             {
                 return;
             }

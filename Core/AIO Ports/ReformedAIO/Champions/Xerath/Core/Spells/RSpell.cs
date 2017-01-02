@@ -20,7 +20,9 @@ namespace ReformedAIO.Champions.Xerath.Core.Spells
 
         public bool IsCasting => ObjectManager.Player.HasBuff("XerathLocusOfPower2");
 
-        public int RealRange => Spell.Level * 1300 + 2000;
+        public int RealRange => Spell.Level * 1200 + 2000;
+
+        public bool TappedKey = false;
 
         public float GetDamage(Obj_AI_Base target)
         {
@@ -37,7 +39,7 @@ namespace ReformedAIO.Champions.Xerath.Core.Spells
                 Delay = .7f,
                 Range = RealRange,
                 From = ObjectManager.Player.ServerPosition,
-                Radius = 200f,
+                Radius = 150f,
                 Unit = target,
                 Type = SkillshotType.SkillshotCircle
             };
@@ -61,7 +63,7 @@ namespace ReformedAIO.Champions.Xerath.Core.Spells
                 Delay = .7f,
                 Range = RealRange,
                 From = ObjectManager.Player.ServerPosition,
-                Radius = 200f,
+                Radius = 150f,
                 Unit = target,
                 Type = SebbyLib.Movement.SkillshotType.SkillshotCircle
             };
@@ -85,7 +87,7 @@ namespace ReformedAIO.Champions.Xerath.Core.Spells
             base.OnLoad(sender, eventArgs);
 
             Spell = new Spell(SpellSlot.R, 3520);
-            Spell.SetSkillshot(.6f, 200f, float.MaxValue, false, (LeagueSharp.Common.SkillshotType)SkillshotType.SkillshotCircle);
+            Spell.SetSkillshot(.7f, 150, float.MaxValue, false, (LeagueSharp.Common.SkillshotType)SkillshotType.SkillshotCircle);
         }
 
         protected override void SetSwitch()

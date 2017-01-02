@@ -2,22 +2,23 @@ using EloBuddy;
 using LeagueSharp.Common; 
 namespace ReformedAIO.Champions.Gragas
 {
-    #region Using Directives
-
     using System.Collections.Generic;
     using System.Drawing;
 
     using LeagueSharp;
     using LeagueSharp.Common;
 
-   using Draw;
-   using Logic;
-   using OrbwalkingMode.Combo;
-   using OrbwalkingMode.Jungle;
-   using OrbwalkingMode.Lane;
-   using OrbwalkingMode.Mixed;
-
-    using ReformedAIO.Champions.Gragas.Utility;
+    using ReformedAIO.Champions.Gragas.Core.Damage;
+    using ReformedAIO.Champions.Gragas.Core.Spells;
+    using ReformedAIO.Champions.Gragas.Drawings.Damage;
+    using ReformedAIO.Champions.Gragas.Drawings.Spells;
+    using ReformedAIO.Champions.Gragas.Killsteal;
+    using ReformedAIO.Champions.Gragas.Misc;
+    using ReformedAIO.Champions.Gragas.OrbwalkingMode.Combo;
+    using ReformedAIO.Champions.Gragas.OrbwalkingMode.Harass;
+    using ReformedAIO.Champions.Gragas.OrbwalkingMode.Jungle;
+    using ReformedAIO.Champions.Gragas.OrbwalkingMode.Lane;
+    using ReformedAIO.Library.SpellParent;
 
     using RethoughtLib.Bootstraps.Abstract_Classes;
     using RethoughtLib.FeatureSystem.Abstract_Classes;
@@ -26,109 +27,124 @@ namespace ReformedAIO.Champions.Gragas
     using RethoughtLib.Orbwalker.Implementations;
 
     using Color = SharpDX.Color;
-    using Prediction = SPrediction.Prediction;
 
-    #endregion
-
-    internal class GragasLoader : LoadableBase
+    internal sealed class GragasLoader : LoadableBase
     {
-        #region Public Properties
-
         public override string DisplayName { get; set; } = "Reformed Gragas";
 
         public override string InternalName { get; set; } = "Gragas";
 
-        public override IEnumerable<string> Tags { get; set; } = new List<string> { "Gragas" };
-
-        #endregion
-
-        #region Public Methods and Operators
+        public override IEnumerable<string> Tags { get; set; } = new[] { "Gragas" };
 
         public override void Load()
         {
             var superParent = new SuperParent(DisplayName);
             superParent.Initialize();
 
-            var orbwalker = new OrbwalkerModule();
-            orbwalker.Load();
+            var qSpell = new QSpell();
+            var wSpell = new WSpell();
+            var eSpell = new ESpell();
+            var rSpell = new RSpell();
 
-            var comboParent = new OrbwalkingParent("Combo", orbwalker.OrbwalkerInstance, Orbwalking.OrbwalkingMode.Combo);
-            var laneParent = new OrbwalkingParent("Lane", orbwalker.OrbwalkerInstance, Orbwalking.OrbwalkingMode.LaneClear);
-            var jungleParent = new OrbwalkingParent("Jungle", orbwalker.OrbwalkerInstance, Orbwalking.OrbwalkingMode.LaneClear);
-            var mixedParent = new OrbwalkingParent("Mixed", orbwalker.OrbwalkerInstance, Orbwalking.OrbwalkingMode.Mixed);
-            var draw = new Parent("Drawings");
+            var spellParent = new SpellParent();
+            spellParent.Add(new List<Base> { qSpell, wSpell, eSpell, rSpell });
+            spellParent.Load();
 
-            var reformedUtilityParent = new Parent("Reformed Utility");
+            var orbwalkerModule = new OrbwalkerModule();
+            orbwalkerModule.Load();
 
-            reformedUtilityParent.Add(new GragasSkinchanger());
+            var comboParent = new OrbwalkingParent(
+                "Combo",
+                orbwalkerModule.OrbwalkerInstance,
+                Orbwalking.OrbwalkingMode.Combo);
+            var harassParent = new OrbwalkingParent(
+                "Harass",
+                orbwalkerModule.OrbwalkerInstance,
+                Orbwalking.OrbwalkingMode.Mixed);
+            var laneParent = new OrbwalkingParent(
+                "Lane",
+                orbwalkerModule.OrbwalkerInstance,
+                Orbwalking.OrbwalkingMode.LaneClear);
+            var jungleParent = new OrbwalkingParent(
+                "Jungle",
+                orbwalkerModule.OrbwalkerInstance,
+                Orbwalking.OrbwalkingMode.LaneClear);
 
-            var qLogic = new QLogic();
-            qLogic.Load();
+            var killstealParnet = new Parent("Killsteal");
+            var drawingParent = new Parent("Drawings");
 
-            var qReady = new SpellMustBeReady(SpellSlot.Q);
-            var wReady = new SpellMustBeReady(SpellSlot.W);
-            var eReady = new SpellMustBeReady(SpellSlot.E);
-            var rReady = new SpellMustBeReady(SpellSlot.R);
+            var mustNotBeWindingUpGuardian = new PlayerMustNotBeWindingUp();
+            var qReadyGuardian = new SpellMustBeReady(SpellSlot.Q);
+            var wReadyGuardian = new SpellMustBeReady(SpellSlot.W);
+            var eReadyGuardian = new SpellMustBeReady(SpellSlot.E);
+            var rReadyGuardian = new SpellMustBeReady(SpellSlot.R);
 
-            comboParent.Add(new ChildBase[]
-            {
-                new QCombo().Guardian(qReady).Guardian(new SpellMustBeReady(SpellSlot.R) { Negated = true }), 
-                new WCombo().Guardian(wReady), 
-                new ECombo().Guardian(eReady), 
-                new RCombo().Guardian(rReady)
-            });
-           
-            laneParent.Add(new ChildBase[]
-            {
-                new LaneQ().Guardian(qReady), 
-                new LaneW().Guardian(wReady), 
-                new LaneE().Guardian(eReady) 
-            });
-          
-            mixedParent.Add(new ChildBase[]
-            {
-                new QMixed().Guardian(qReady)
-            });
-           
-            jungleParent.Add(new ChildBase[]
-            {
-                new QJungle().Guardian(qReady), 
-                new WJungle().Guardian(wReady), 
-                new EJungle().Guardian(eReady)
-            });
-            
-            draw.Add(new ChildBase[]
-            {
-                new DrawIndicator(), 
-                new DrawQ(), 
-                new DrawE(), 
-                new DrawR()
-            });
-          
-            superParent.Add(new Base[]
-            {
-                reformedUtilityParent,
-                orbwalker,
-                comboParent,
-                mixedParent,
-                laneParent,
-                jungleParent,
-                draw
-            });
+            var GragasDmg = new GragasDamage(qSpell, wSpell, eSpell, rSpell);
 
-            Prediction.Initialize(superParent.Menu);
+            comboParent.Add(new List<Base>()
+                                {
+                                    new WCombo(wSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(wReadyGuardian),
+                                    new ECombo(eSpell, GragasDmg).Guardian(mustNotBeWindingUpGuardian).Guardian(eReadyGuardian),
+                                    new RQCombo(qSpell, rSpell)
+                                });
+
+            harassParent.Add(new List<Base>()
+                                 {
+                                     new QHarass(qSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(qReadyGuardian),
+                                     new WHarass(wSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(wReadyGuardian),
+                                     new EHarass(eSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(eReadyGuardian)
+                                 });
+            laneParent.Add(new List<Base>()
+                               {
+                                   new QLane(qSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(qReadyGuardian),
+                                   new WLane(wSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(wReadyGuardian),
+                                   new ELane(eSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(eReadyGuardian)
+                               });
+
+            jungleParent.Add(new List<Base>()
+                                 {
+                                     new QJungle(qSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(qReadyGuardian),
+                                     new WJungle(wSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(wReadyGuardian),
+                                     new EJungle(eSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(eReadyGuardian)
+                                 });
+
+            killstealParnet.Add(new List<Base>()
+                                    {
+                                        new QKillsteal(qSpell).Guardian(qReadyGuardian),
+                                        new EKillsteal(eSpell).Guardian(eReadyGuardian),
+                                    });
+
+            drawingParent.Add(new List<Base>
+                                  {
+                                    new DamageDrawing(GragasDmg),
+                                    new QDrawing(qSpell),
+                                    new WDrawing(wSpell),
+                                    new EDrawing(eSpell),
+                                    new RDrawing(rSpell)
+                                  });
+
+            superParent.Add(new List<Base>
+                                  {
+                                     orbwalkerModule,
+                                     comboParent,
+                                     harassParent,
+                                     laneParent,
+                                     jungleParent,
+                                     killstealParnet,
+                                     drawingParent,
+                                     new GragasAntiGapcloser(eSpell),
+                                     new GragasInterrupter(rSpell)
+                                  });
 
             superParent.Load();
 
-            reformedUtilityParent.Menu.Style = FontStyle.Bold;
-            reformedUtilityParent.Menu.Color = Color.Cyan;
+            orbwalkerModule.Menu.Style = FontStyle.Bold;
+            orbwalkerModule.Menu.Color = Color.Cyan;
 
             superParent.Menu.Style = FontStyle.Bold;
             superParent.Menu.Color = Color.Cyan;
 
             Chat.Print("<b><font color=\"#FFFFFF\">[</font></b><b><font color=\"#00e5e5\">Reformed AIO</font></b><b><font color=\"#FFFFFF\">]</font></b><b><font color=\"#FFFFFF\"> - Gragas!</font></b>");
         }
-
-        #endregion
     }
 }

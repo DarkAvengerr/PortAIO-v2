@@ -11,6 +11,8 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Harass
 
     using RethoughtLib.FeatureSystem.Implementations;
 
+    using SPrediction;
+
     internal sealed class EHarass : OrbwalkingChild
     {
         public override string Name { get; set; } = "E";
@@ -44,53 +46,29 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Harass
             }
         }
 
+        private void SPrediction()
+        {
+            spell.Spell.CastIfWillHit(Target, 1);
+
+            spell.Spell.SPredictionCastAoe(2);
+
+            spell.Spell.SPredictionCast(Target, HitChance.VeryHigh);
+        }
+
         private void Common()
         {
             switch (Menu.Item("Ziggs.Harass.E.Hitchance").GetValue<StringList>().SelectedIndex)
             {
                 case 0:
-                    spell.Spell.Cast(Target.ServerPosition);
+                    spell.Spell.CastIfHitchanceEquals(Target, HitChance.Medium);
                     break;
 
                 case 1:
-                    if (spell.Prediction(Target).Hitchance >= HitChance.High)
-                    {
-                        spell.Spell.Cast(spell.Prediction(Target).CastPosition);
-                    }
+                    spell.Spell.CastIfHitchanceEquals(Target, HitChance.High);
                     break;
 
                 case 2:
-                    if (spell.Prediction(Target).Hitchance >= HitChance.VeryHigh)
-                    {
-                        spell.Spell.Cast(spell.Prediction(Target).CastPosition);
-                    }
-                    break;
-            }
-        }
-
-        private void SPrediction()
-        {
-            switch (Menu.Item("Ziggs.Harass.E.Hitchance").GetValue<StringList>().SelectedIndex)
-            {
-                case 0:
-                    if (spell.SPredictionOutput(Target).HitChance >= HitChance.Medium)
-                    {
-                        spell.Spell.Cast(spell.SPredictionOutput(Target).CastPosition);
-                    }
-                    break;
-
-                case 1:
-                    if (spell.SPredictionOutput(Target).HitChance >= HitChance.High)
-                    {
-                        spell.Spell.Cast(spell.SPredictionOutput(Target).CastPosition);
-                    }
-                    break;
-
-                case 2:
-                    if (spell.SPredictionOutput(Target).HitChance >= HitChance.VeryHigh)
-                    {
-                        spell.Spell.Cast(spell.SPredictionOutput(Target).CastPosition);
-                    }
+                    spell.Spell.CastIfHitchanceEquals(Target, HitChance.VeryHigh);
                     break;
             }
         }
@@ -113,7 +91,7 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Harass
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("Ziggs.Harass.E.Prediction", "Prediction: ").SetValue(new StringList(new[] { "Common", "SPrediction" })));
+            Menu.AddItem(new MenuItem("Ziggs.Harass.E.Prediction", "Prediction: ").SetValue(new StringList(new[] { "Common", "SPrediction" }, 1)));
 
             Menu.AddItem(new MenuItem("Ziggs.Harass.E.Hitchance", "Hitchance: ").SetValue(new StringList(new[] { "Target", "High", "Very High" })));
 

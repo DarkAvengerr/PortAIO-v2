@@ -29,7 +29,7 @@ namespace ReformedAIO.Champions.Ziggs.Core.Spells
             base.OnLoad(sender, eventArgs);
 
             Spell = new Spell(SpellSlot.W, 1000);
-            Spell.SetSkillshot(.3f, 300f, 1750, false, SkillshotType.SkillshotCircle);
+            Spell.SetSkillshot(.25f, 275f, 1750, false, SkillshotType.SkillshotCircle);
         }
 
         protected override void SetSwitch()

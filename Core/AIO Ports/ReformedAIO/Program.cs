@@ -6,23 +6,22 @@ namespace ReformedAIO
 
     using System.Collections.Generic;
 
-    using ReformedAIO.Champions.Annie;
-
-    //  using ReformedAIO.Champions;
-    using ReformedAIO.Champions.Ashe;
-    using ReformedAIO.Champions.Brand;
-    using ReformedAIO.Champions.Caitlyn;
-    using ReformedAIO.Champions.Diana;
-    using ReformedAIO.Champions.Ezreal;
-    using ReformedAIO.Champions.Gnar;
-    using ReformedAIO.Champions.Gragas;
-    using ReformedAIO.Champions.Lucian;
-    using ReformedAIO.Champions.Olaf;
-    using ReformedAIO.Champions.Thresh;
-    using ReformedAIO.Champions.Vayne;
-    using ReformedAIO.Champions.Xerath;
-    using ReformedAIO.Champions.Yasuo;
-    using ReformedAIO.Champions.Ziggs;
+    using Champions.Annie;
+    using Champions.Ashe;
+    using Champions.Brand;
+    using Champions.Caitlyn;
+    using Champions.Diana;
+    using Champions.Ezreal;
+    using Champions.Gnar;
+    using Champions.Gragas;
+    using Champions.Lucian;
+    using Champions.Lux;
+    using Champions.Olaf;
+    using Champions.Thresh;
+    using Champions.Vayne;
+    using Champions.Xerath;
+    using Champions.Yasuo;
+    using Champions.Ziggs;
 
     using RethoughtLib.Bootstraps.Abstract_Classes;
 
@@ -41,10 +40,11 @@ namespace ReformedAIO
                 new BrandLoader(),
                 new CaitlynLoader(),
                 new DianaLoader(),
-                new GragasLoader(),
                 new GnarLoader(),
+                new GragasLoader(),
                 new EzrealLoader(),
                 new LucianLoader(),
+                new LuxLoader(),
                 new OlafLoader(),
                 new ThreshLoader(),
                 new VayneLoader(),

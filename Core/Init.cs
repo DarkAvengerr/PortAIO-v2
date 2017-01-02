@@ -64,6 +64,7 @@ namespace PortAIO
 
         public static void LoadUtility()
         {
+            //Mastery_Badge_Spammer.Program.Main();
             if (Misc.menu.Item("enableEvade").GetValue<bool>())
             {
                 switch (Misc.menu.Item("Evade").GetValue<StringList>().SelectedIndex)
@@ -202,6 +203,21 @@ namespace PortAIO
             if (Misc.menu.Item("StandaloneOrbwalker").GetValue<bool>())
             {
                 Standalone_Orbwalker.Program.Main();
+            }
+
+            if (Misc.menu.Item("UniversalGankAlerter").GetValue<bool>())
+            {
+                UniversalGankAlerter.Program.Main();
+            }
+
+            if (Misc.menu.Item("BasicChatBlock").GetValue<bool>())
+            {
+                BasicChatBlock.Program.Main();
+            }
+
+            if (Misc.menu.Item("CSCounter").GetValue<bool>())
+            {
+                CS_Counter.CsCounter.Main();
             }
         }
 
@@ -2201,6 +2217,9 @@ namespace PortAIO
                             break;
                         case 8: // SephLux
                             SephLux.Program.Main();
+                            break;
+                        case 9: // ReformedAIO
+                            ReformedAIO.Program.Main();
                             break;
                     }
                     break;

@@ -2,36 +2,71 @@ using EloBuddy;
 using LeagueSharp.Common; 
 namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Combo
 {
-    #region Using Directives
-
     using System;
 
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using ReformedAIO.Champions.Gragas.Logic;
+    using ReformedAIO.Champions.Gragas.Core.Damage;
+    using ReformedAIO.Champions.Gragas.Core.Spells;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
-    using SPrediction;
+    using HitChance = SebbyLib.Prediction.HitChance;
 
-    #endregion
-
-    internal class ECombo : OrbwalkingChild
+    internal sealed class ECombo : OrbwalkingChild
     {
-        #region Fields
+        public override string Name { get; set; } = "E";
 
-        private LogicAll logic;
+        private readonly ESpell spell;
 
-        #endregion
+        private readonly GragasDamage damage;
 
-        #region Public Properties
+        public ECombo(ESpell spell, GragasDamage damage)
+        {
+            this.spell = spell;
+            this.damage = damage;
+        }
 
-        public override string Name { get; set; } = "[E] Body Slam";
+        private AIHeroClient Target => TargetSelector.GetTarget(spell.Spell.Range + 480, TargetSelector.DamageType.Physical);
 
-        #endregion
+        private void OnUpdate(EventArgs args)
+        {
+            if (!CheckGuardians()
+                || Target == null
+                || Menu.Item("Gragas.Combo.E.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
+            {
+                return;
+            }
 
-        #region Methods
+            if (Menu.Item("Gragas.Combo.E.Flash").GetValue<bool>()
+                && damage.GetComboDamage(Target) * 1.15 > Target.Health 
+                && spell.Flash.IsReady()
+                && Target.Distance(ObjectManager.Player) < 800)
+            {
+                ObjectManager.Player.Spellbook.CastSpell(spell.Flash, Target.Position);
+                spell.Spell.Cast(Target.Position);
+            }
+           
+            else
+            {
+                switch (Menu.Item("Gragas.Combo.E.Hitchance").GetValue<StringList>().SelectedIndex)
+                {
+                    case 0:
+                        if (spell.OKTW(Target).Hitchance >= HitChance.High)
+                        {
+                            spell.Spell.Cast(spell.OKTW(Target).CastPosition);
+                        }
+                        break;
+                    case 1:
+                        if (spell.OKTW(Target).Hitchance >= HitChance.VeryHigh)
+                        {
+                            spell.Spell.Cast(spell.OKTW(Target).CastPosition);
+                        }
+                        break;
+                }
+            }
+        }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
@@ -47,45 +82,15 @@ namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Combo
             Game.OnUpdate += OnUpdate;
         }
 
-        protected sealed override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
-            Menu.AddItem(new MenuItem("EKillable", "Only If Killable").SetValue(false));
+            base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("ERange", "E Range ").SetValue(new Slider(835, 0, 850)));
+            Menu.AddItem(new MenuItem("Gragas.Combo.E.Flash", "Flash Combo Killable (BETA)").SetValue(true));
 
-            Menu.AddItem(new MenuItem("EMana", "Mana %").SetValue(new Slider(45, 0, 100)));
+            Menu.AddItem(new MenuItem("Gragas.Combo.E.Hitchance", "Hitchance:").SetValue(new StringList(new[] {"High", "Very High"})));
 
-            logic = new LogicAll();
+            Menu.AddItem(new MenuItem("Gragas.Combo.E.Mana", "Min Mana %").SetValue(new Slider(0, 0, 100)));
         }
-
-        private void BodySlam()
-        {
-            var target = TargetSelector.GetTarget(
-                Menu.Item("ERange").GetValue<Slider>().Value,
-                TargetSelector.DamageType.Magical);
-
-            if (target == null 
-                || !target.IsValid
-                || (Menu.Item("EKillable").GetValue<bool>() 
-                && logic.ComboDmg(target) < target.Health))
-            {
-                return;
-            }
-
-            var ePred = Variable.Spells[SpellSlot.E].GetSPrediction(target);
-
-            if (target.HasBuffOfType(BuffType.Knockback) || ePred.HitChance < HitChance.High) return;
-
-            Variable.Spells[SpellSlot.E].Cast(ePred.CastPosition);
-        }
-
-        private void OnUpdate(EventArgs args)
-        {
-            if (!CheckGuardians() || Menu.Item("EMana").GetValue<Slider>().Value > Variable.Player.ManaPercent) return;
-
-            BodySlam();
-        }
-
-        #endregion
     }
 }

@@ -2,27 +2,44 @@ using EloBuddy;
 using LeagueSharp.Common; 
 namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Jungle
 {
-    #region Using Directives
-
     using System;
     using System.Linq;
 
     using LeagueSharp;
     using LeagueSharp.Common;
 
+    using ReformedAIO.Champions.Gragas.Core.Spells;
+
     using RethoughtLib.FeatureSystem.Implementations;
 
-    #endregion
-
-    internal class EJungle : OrbwalkingChild
+    internal sealed class EJungle : OrbwalkingChild
     {
-        #region Public Properties
+        public override string Name { get; set; } = "E";
 
-        public override string Name { get; set; } = "[E] Body Slam";
+        private readonly ESpell spell;
 
-        #endregion
-        
-        #region Methods
+        public EJungle(ESpell spell)
+        {
+            this.spell = spell;
+        }
+
+        private Obj_AI_Base Mob =>
+              MinionManager.GetMinions(ObjectManager.Player.Position,
+                  spell.Spell.Range,
+                  MinionTypes.All,
+                  MinionTeam.Neutral).FirstOrDefault();
+
+        private void OnUpdate(EventArgs args)
+        {
+            if (!CheckGuardians()
+                || Mob == null
+                || Menu.Item("Gragas.Jungle.E.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
+            {
+                return;
+            }
+
+            spell.Spell.Cast(Mob);
+        }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
         {
@@ -38,31 +55,12 @@ namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Jungle
             Game.OnUpdate += OnUpdate;
         }
 
-        protected sealed override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
+        protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("EMana", "Mana %").SetValue(new Slider(10, 0, 100)));
+
+            Menu.AddItem(new MenuItem("Gragas.Jungle.E.Mana", "Min Mana %").SetValue(new Slider(0, 0, 100)));
         }
-
-        private static void BodySlam()
-        {
-            var mobs =
-                MinionManager.GetMinions(375, MinionTypes.All, MinionTeam.Neutral, MinionOrderTypes.MaxHealth)
-                    .FirstOrDefault();
-
-            if (mobs == null || !mobs.IsValid) return;
-
-            Variable.Spells[SpellSlot.E].Cast(mobs.Position);
-        }
-
-        private void OnUpdate(EventArgs args)
-        {
-            if (!CheckGuardians() || Menu.Item("EMana").GetValue<Slider>().Value > Variable.Player.ManaPercent) return;
-
-            BodySlam();
-        }
-
-        #endregion
     }
 }

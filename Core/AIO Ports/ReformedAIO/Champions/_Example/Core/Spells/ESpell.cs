@@ -28,7 +28,7 @@ namespace ReformedAIO.Champions._Example.Core.Spells
         {
             base.OnLoad(sender, eventArgs);
 
-            Spell = new Spell(SpellSlot.Q, 0);
+            Spell = new Spell(SpellSlot.E, 0);
             Spell.SetSkillshot(.0f, 0f, 0, false, SkillshotType.SkillshotLine);
         }
 

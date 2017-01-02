@@ -37,7 +37,7 @@ using LeagueSharp.Common;
         /// </summary>
         public PlayerMustNotBeWindingUp()
         {
-            this.Func = () => ObjectManager.Player.Spellbook.IsAutoAttacking;
+            this.Func = () => !ObjectManager.Player.Spellbook.IsAutoAttacking;
         }
 
         #endregion
