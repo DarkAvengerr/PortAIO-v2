@@ -5,8 +5,8 @@ using LeagueSharp.Common;
 using SharpDX;
 using SebbyLib;
 
-using EloBuddy;
-using LeagueSharp.Common;
+using EloBuddy; 
+using LeagueSharp.Common; 
 namespace OneKeyToWin_AIO_Sebby.Champions
 {
     class Sivir : Base
@@ -74,9 +74,9 @@ namespace OneKeyToWin_AIO_Sebby.Champions
         {
             var missile = sender as MissileClient;
 
-            if (missile != null && Config.Item("autoEmissile", true).GetValue<bool>())
+            if(missile != null && Config.Item("autoEmissile", true).GetValue<bool>())
             {
-                if (!missile.SData.IsAutoAttack() && missile.Target == Player && missile.SpellCaster.IsEnemy && missile.SpellCaster.IsChampion())
+                if(!missile.SData.IsAutoAttack() && missile.Target == Player && missile.SpellCaster.IsEnemy && missile.SpellCaster.IsChampion())
                 {
                     E.Cast();
                 }
@@ -90,7 +90,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 var t = target as AIHeroClient;
                 if (t != null)
                 {
-                    if (Player.GetAutoAttackDamage(t) * 3 > t.Health - OktwCommon.GetIncomingDamage(t))
+                    if(Player.GetAutoAttackDamage(t) * 3 > t.Health - OktwCommon.GetIncomingDamage(t))
                         W.Cast();
                     if (Program.Combo && Player.Mana > RMANA + WMANA)
                         W.Cast();
@@ -121,21 +121,39 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
         private void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!E.IsReady() || args.SData.IsAutoAttack() || Player.HealthPercent > Config.Item("Edmg", true).GetValue<Slider>().Value || !Config.Item("autoE", true).GetValue<bool>()
-                || !sender.IsEnemy || sender.IsMinion || !sender.IsValid<AIHeroClient>() || args.SData.Name.ToLower() == "tormentedsoil")
+
+            if (!E.IsReady() || !(sender is AIHeroClient) || !sender.IsEnemy || Player.HealthPercent > Config.Item("Edmg", true).GetValue<Slider>().Value || !Config.Item("autoE", true).GetValue<bool>()
+                 || args.SData.Name.ToLower() == "tormentedsoil")
                 return;
+
+            if (args.SData.IsAutoAttack())
+            {
+                switch (args.SData.Name)
+                {
+                    case "UdyrBearAttack":
+                    case "GoldCardPreAttack":
+                    case "RedCardPreAttack":
+                    case "BlueCardPreAttack":
+                    case "NautilusRavageStrikeAttack":
+                        {
+                            E.Cast();
+                        }
+                        break;
+                }
+                return;
+            }
 
             if (Config.Item("spell" + args.SData.Name) != null && !Config.Item("spell" + args.SData.Name).GetValue<bool>())
                 return;
 
-            if (OktwCommon.CanHitSkillShot(Player, args.Start, args.End, args.SData))
-            {
-                E.Cast();
-            }
-            else if (args.Target != null)
+            if (args.Target != null)
             {
                 if (args.Target.IsMe)
                     E.Cast();
+            }
+            else if (OktwCommon.CanHitSkillShot(Player, args.Start, args.End, args.SData))
+            {
+                E.Cast();
             }
         }
 
@@ -153,7 +171,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             {
                 SetMana();
             }
-
+           
             if (Program.LagFree(1) && Q.IsReady() && !ObjectManager.Player.Spellbook.IsAutoAttacking)
             {
                 LogicQ();
@@ -176,7 +194,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             if (t.IsValidTarget())
             {
                 missileManager.Target = t;
-                var qDmg = OktwCommon.GetKsDamage(t, Q) * 1.9;
+                var qDmg = OktwCommon.GetKsDamage(t,Q) * 1.9;
                 if (Orbwalking.InAutoAttackRange(t))
                     qDmg = qDmg + Player.GetAutoAttackDamage(t) * 3;
                 if (qDmg > t.Health)
@@ -185,16 +203,16 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                     Program.CastSpell(Q, t);
                 else if (Program.Harass && Config.Item("Harass" + t.ChampionName).GetValue<bool>() && !Player.UnderTurret(true))
                 {
-                    if (Player.Mana > Player.MaxMana * 0.9)
+                     if (Player.Mana > Player.MaxMana * 0.9)
                         Program.CastSpell(Q, t);
-                    else if (ObjectManager.Player.Mana > RMANA + WMANA + QMANA + QMANA)
+                     else if (ObjectManager.Player.Mana > RMANA + WMANA + QMANA + QMANA)
                         Program.CastSpell(Q1, t);
-                    else if (Player.Mana > RMANA + WMANA + QMANA + QMANA)
-                    {
-                        Q.CastIfWillHit(t, 2, true);
-                        if (Program.LaneClear)
-                            Program.CastSpell(Q, t);
-                    }
+                     else if (Player.Mana > RMANA + WMANA + QMANA + QMANA)
+                     {
+                         Q.CastIfWillHit(t, 2, true);
+                         if(Program.LaneClear)
+                             Program.CastSpell(Q, t);
+                     }
                 }
                 if (Player.Mana > RMANA + WMANA)
                 {
@@ -202,7 +220,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                         Q.Cast(enemy);
                 }
             }
-            else if (FarmSpells && Config.Item("farmQ", true).GetValue<bool>())
+            else if (FarmSpells && Config.Item("farmQ", true).GetValue<bool>() )
             {
                 var minionList = Cache.GetMinions(Player.ServerPosition, Q.Range);
                 var farmPosition = Q.GetLineFarmLocation(minionList, Q.Width);
@@ -221,7 +239,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
         private void Jungle()
         {
-            if (Player.Mana > RMANA + WMANA + RMANA)
+            if ( Player.Mana > RMANA  + WMANA + RMANA )
             {
                 var mobs = Cache.GetMinions(ObjectManager.Player.ServerPosition, 600, MinionTeam.Neutral);
                 if (mobs.Count > 0)
@@ -276,7 +294,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 {
                     var color = System.Drawing.Color.Yellow;
                     var buffTime = OktwCommon.GetPassiveTime(Player, "sivirwmarker");
-                    if (buffTime < 1)
+                    if (buffTime<1)
                         color = System.Drawing.Color.Red;
                     drawText2("W:  " + String.Format("{0:0.0}", buffTime), Player.Position, 175, color);
                 }
