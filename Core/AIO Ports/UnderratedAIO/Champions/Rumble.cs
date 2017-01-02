@@ -15,7 +15,7 @@ using Prediction = LeagueSharp.Common.Prediction;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace UnderratedAIO.Champions
+namespace UnderratedAIO.Champions
 {
     internal class Rumble
     {
@@ -71,7 +71,7 @@ using LeagueSharp.Common;
 
         private void Game_OnGameUpdate(EventArgs args)
         {
-            if(false)
+            if (false)
             {
                 return;
             }

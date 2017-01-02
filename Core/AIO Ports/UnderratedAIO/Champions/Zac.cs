@@ -14,7 +14,7 @@ using Environment = UnderratedAIO.Helpers.Environment;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace UnderratedAIO.Champions
+namespace UnderratedAIO.Champions
 {
     internal class Zac
     {
@@ -89,7 +89,7 @@ using LeagueSharp.Common;
                 Orbwalking.Move = true;
                 Orbwalking.Attack = true;
             }
-            if(false)
+            if (false)
             {
                 return;
             }

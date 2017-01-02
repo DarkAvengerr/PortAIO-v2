@@ -10,7 +10,7 @@ using Environment = UnderratedAIO.Helpers.Environment;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace UnderratedAIO.Champions
+namespace UnderratedAIO.Champions
 {
     internal class Mordekaiser
     {
@@ -19,7 +19,7 @@ using LeagueSharp.Common;
         public static readonly AIHeroClient player = ObjectManager.Player;
         public static Spell Q, W, E, R;
         public static bool justW;
-        public static int wWidth = 300;
+        public static int wWidth = 225;
         
         public AIHeroClient IgniteTarget;
 
@@ -52,7 +52,7 @@ using LeagueSharp.Common;
 
         private void Game_OnGameUpdate(EventArgs args)
         {
-            if(false)
+            if (false)
             {
                 return;
             }
@@ -60,12 +60,15 @@ using LeagueSharp.Common;
             {
                 case Orbwalking.OrbwalkingMode.Combo:
                     Combo();
+                    TurnOffW();
                     break;
                 case Orbwalking.OrbwalkingMode.Mixed:
                     Harass();
+                    TurnOffW();
                     break;
                 case Orbwalking.OrbwalkingMode.LaneClear:
                     Clear();
+                    TurnOffW();
                     break;
                 case Orbwalking.OrbwalkingMode.LastHit:
                     break;
@@ -130,9 +133,10 @@ using LeagueSharp.Common;
                              (!config.Item("ultDef", true).GetValue<bool>() ||
                               (config.Item("ultDef", true).GetValue<bool>() && !CombatHelper.HasDef(target)));
                 if (canUlt &&
-                    (player.Distance(target.Position) <= 400f ||
-                     (R.CanCast(target) && target.Health < 250f && target.Position.CountAlliesInRange(600f) >= 1)) &&
-                    R.GetDamage(target) * 0.8f > target.Health)
+                    (((player.Distance(target.Position) <= 400f ||
+                       (R.CanCast(target) && target.Health < 250f && target.Position.CountAlliesInRange(600f) >= 1)) &&
+                      R.GetDamage(target) * 0.8f > target.Health) ||
+                     (player.HealthPercent < 40 && target.HealthPercent < 40 && target.Distance(player) < 300f)))
                 {
                     R.CastOnUnit(target);
                 }
@@ -173,25 +177,6 @@ using LeagueSharp.Common;
             {
                 foreach (var allyW in allyWs)
                 {
-                    var targethero =
-                        HeroManager.Enemies.Where(e => e.Distance(allyW.Position) < wWidth && e.IsValidTarget())
-                            .OrderByDescending(e => e.Distance(allyW.Position))
-                            .FirstOrDefault();
-                    if (targethero != null)
-                    {
-                        var pred =
-                            Prediction.GetPrediction(targethero, 0.1f)
-                                .UnitPosition.Distance(Prediction.GetPrediction(allyW, 0.1f).UnitPosition);
-                        if ((pred > wWidth &&
-                             (allyW.CountEnemiesInRange(wWidth) == 1 || target.NetworkId == targethero.NetworkId)) &&
-                            !allyWs.Any(
-                                a =>
-                                    Prediction.GetPrediction(targethero, 0.1f)
-                                        .UnitPosition.Distance(Prediction.GetPrediction(a, 0.1f).UnitPosition) < wWidth))
-                        {
-                            W.Cast();
-                        }
-                    }
                     if (allyW is AIHeroClient)
                     {
                         var data = Program.IncDamages.GetAllyData(allyW.NetworkId);
@@ -228,16 +213,162 @@ using LeagueSharp.Common;
             get { return player.Spellbook.GetSpell(SpellSlot.R).Name.ToLower() == "mordekaisercotgguide"; }
         }
 
+        private static bool wActive
+        {
+            get
+            {
+                return player.Spellbook.GetSpell(SpellSlot.W).Name.ToLower() == "mordekaisercreepingdeath2" || justW;
+            }
+        }
+
         private void Harass()
         {
-            AIHeroClient target = DrawHelper.GetBetterTarget(E.Range, TargetSelector.DamageType.Magical);
-            if (target == null)
+            AIHeroClient target = DrawHelper.GetBetterTarget(W.Range, TargetSelector.DamageType.Magical);
+
+            if (target != null)
+            {
+                if (config.Item("useeH", true).GetValue<bool>() && E.CanCast(target))
+                {
+                    E.Cast(target);
+                }
+                if (config.Item("usewH", true).GetValue<bool>() && W.IsReady() && !wActive)
+                {
+                    if (config.Item("usewHHero", true).GetValue<bool>())
+                    {
+                        var bestHeroes =
+                            HeroManager.Allies.Where(h => h.CountEnemiesInRange(wWidth) > 0)
+                                .OrderByDescending(h => h.CountEnemiesInRange(wWidth));
+                        foreach (var hero in bestHeroes)
+                        {
+                            W.Cast(hero);
+                            return;
+                        }
+                    }
+                    if (config.Item("usewHMini", true).GetValue<bool>())
+                    {
+                        var minions =
+                            MinionManager.GetMinions(W.Range, MinionTypes.All, MinionTeam.Ally)
+                                .Where(m => m.CountEnemiesInRange(wWidth) > 0)
+                                .OrderByDescending(h => h.CountEnemiesInRange(wWidth));
+                        foreach (var minion in minions)
+                        {
+                            W.Cast(minion);
+                            return;
+                        }
+                    }
+                }
+            }
+            if (config.Item("usewHLH", true).GetValue<bool>())
+            {
+                LasthitW(config.Item("usewHHeroPrior", true).GetValue<bool>());
+            }
+        }
+
+        private void LasthitW(bool prior)
+        {
+            if (!W.IsReady())
             {
                 return;
             }
-            if (config.Item("useeH", true).GetValue<bool>() && E.CanCast(target))
+            if (!wActive)
             {
-                E.Cast(target);
+                if (!player.Spellbook.IsAutoAttacking && Orbwalking.CanMove(100))
+                {
+                    var minions =
+                        MinionManager.GetMinions(W.Range)
+                            .Where(
+                                m => HealthPrediction.GetHealthPrediction(m, 500) - GetWDamage(m) - W.GetDamage(m) < 0)
+                            .OrderByDescending(m => m.Distance(player));
+                    foreach (var minion in minions)
+                    {
+                        var allyTarget =
+                            MinionManager.GetMinions(minion.Position, wWidth, MinionTypes.All, MinionTeam.Ally)
+                                .OrderByDescending(m => m.CountEnemiesInRange(wWidth))
+                                .FirstOrDefault();
+                        if (allyTarget == null)
+                        {
+                            allyTarget =
+                                HeroManager.Allies.Where(m => m.Distance(minion) < wWidth)
+                                    .OrderByDescending(m => m.CountEnemiesInRange(wWidth))
+                                    .FirstOrDefault();
+                        }
+                        if (allyTarget != null)
+                        {
+                            if (minion.IsInAttackRange() && player.CanAttack &&
+                                MinionManager.GetMinions(allyTarget.Position, wWidth).Count == 1)
+                            {
+                                break;
+                            }
+                            if (minion.Health - GetWDamage(minion) - W.GetDamage(minion) < 0)
+                            {
+                                W.Cast(allyTarget);
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                var allyWs =
+                    ObjectManager.Get<Obj_AI_Base>()
+                        .Where(o => o.Distance(player) < 1500 && o.HasBuff("mordekaisercreepingdeath"));
+                foreach (var allyW in allyWs)
+                {
+                    var minions =
+                        MinionManager.GetMinions(allyW.Position, wWidth, MinionTypes.All, MinionTeam.Enemy)
+                            .OrderByDescending(m => m.Distance(player))
+                            .Where(m => m.Health - W.GetDamage(m) < 0);
+                    if (minions.Any() &&
+                        (!prior || allyW.CountEnemiesInRange(allyW.MaxHealth > 749 ? 300 : wWidth) == 0))
+                    {
+                        W.Cast();
+                    }
+                }
+            }
+        }
+
+        private void TurnOffW()
+        {
+            if (!W.IsReady())
+            {
+                return;
+            }
+            if (wActive)
+            {
+                var targethero = DrawHelper.GetBetterTarget(W.Range, TargetSelector.DamageType.Magical);
+                var hit = false;
+                if (targethero == null)
+                {
+                    return;
+                }
+                var allyWs =
+                    ObjectManager.Get<Obj_AI_Base>()
+                        .Where(o => o.Distance(player) < 1500 && o.HasBuff("mordekaisercreepingdeath"));
+                foreach (var allyW in allyWs)
+                {
+                    var range = allyW.MaxHealth > 749 ? 300 : wWidth;
+                    if (allyW != null &&
+                        Prediction.GetPrediction(targethero, 0.1f)
+                            .UnitPosition.Distance(
+                                allyW is AIHeroClient
+                                    ? Prediction.GetPrediction(allyW, 0.1f).UnitPosition
+                                    : allyW.Position) > range && allyW.Distance(targethero) < range)
+                    {
+                        if (hit)
+                        {
+                            hit = false;
+                        }
+                        else
+                        {
+                            hit = true;
+                        }
+                    }
+                }
+                if (hit)
+                {
+                    W.Cast();
+                }
             }
         }
 
@@ -251,6 +382,10 @@ using LeagueSharp.Common;
             {
                 E.Cast(bestPosition.Position);
             }
+            if (config.Item("usewLCHLH", true).GetValue<bool>() && !wActive)
+            {
+                LasthitW(false);
+            }
         }
 
         private void Game_OnDraw(EventArgs args)
@@ -260,6 +395,12 @@ using LeagueSharp.Common;
             DrawHelper.DrawCircle(config.Item("drawee", true).GetValue<Circle>(), E.Range);
             DrawHelper.DrawCircle(config.Item("drawrr", true).GetValue<Circle>(), R.Range);
             
+        }
+
+        private static double GetWDamage(Obj_AI_Base mini)
+        {
+            var dmg = new double[] { 50, 85, 120, 155, 190 }[W.Level - 1] + 0.3f * player.FlatMagicDamageMod;
+            return Damage.CalcDamage(player, mini, Damage.DamageType.Magical, dmg);
         }
 
         private float ComboDamage(AIHeroClient hero)
@@ -298,7 +439,7 @@ using LeagueSharp.Common;
             Q = new Spell(SpellSlot.Q, player.AttackRange);
             W = new Spell(SpellSlot.W, 750);
             E = new Spell(SpellSlot.E, 650);
-            E.SetSkillshot(0.5f, 45, 1500, false, SkillshotType.SkillshotCone);
+            E.SetSkillshot(0.5f, 45, 2000, false, SkillshotType.SkillshotCone);
             R = new Spell(SpellSlot.R, 850);
         }
 
@@ -341,11 +482,17 @@ using LeagueSharp.Common;
             // Harass Settings
             Menu menuH = new Menu("Harass ", "Hsettings");
             menuH.AddItem(new MenuItem("useeH", "Use E", true)).SetValue(true);
+            menuH.AddItem(new MenuItem("usewH", "Use W", true)).SetValue(true);
+            menuH.AddItem(new MenuItem("usewHHero", "   On Hero", true)).SetValue(true);
+            menuH.AddItem(new MenuItem("usewHMini", "   On Minion", true)).SetValue(true);
+            menuH.AddItem(new MenuItem("usewHLH", "Use W lasthit", true)).SetValue(true);
+            menuH.AddItem(new MenuItem("usewHHeroPrior", "   Priorize harass", true)).SetValue(true);
             config.AddSubMenu(menuH);
             // LaneClear Settings
             Menu menuLC = new Menu("LaneClear ", "Lcsettings");
             menuLC.AddItem(new MenuItem("useqLC", "Use Q", true)).SetValue(true);
             menuLC.AddItem(new MenuItem("qhitLC", "   Min hit", true).SetValue(new Slider(2, 1, 3)));
+            menuLC.AddItem(new MenuItem("usewLCHLH", "Use W lasthit", true)).SetValue(true);
             menuLC.AddItem(new MenuItem("useeLC", "Use E", true)).SetValue(true);
             menuLC.AddItem(new MenuItem("ehitLC", "   Min hit", true).SetValue(new Slider(2, 1, 5)));
             config.AddSubMenu(menuLC);

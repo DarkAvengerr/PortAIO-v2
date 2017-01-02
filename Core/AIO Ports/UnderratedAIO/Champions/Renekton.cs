@@ -13,7 +13,7 @@ using Environment = UnderratedAIO.Helpers.Environment;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace UnderratedAIO.Champions
+namespace UnderratedAIO.Champions
 {
     internal class Renekton
     {
@@ -46,7 +46,7 @@ using LeagueSharp.Common;
             {
                 lastE = 0;
             }
-            if(false)
+            if (false)
             {
                 return;
             }

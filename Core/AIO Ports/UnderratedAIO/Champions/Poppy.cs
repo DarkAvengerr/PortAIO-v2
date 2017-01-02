@@ -10,7 +10,7 @@ using Environment = UnderratedAIO.Helpers.Environment;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace UnderratedAIO.Champions
+namespace UnderratedAIO.Champions
 {
     internal class Poppy
     {
@@ -46,7 +46,7 @@ using LeagueSharp.Common;
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if(false)
+            if (false)
             {
                 return;
             }
@@ -149,7 +149,8 @@ using LeagueSharp.Common;
                 ItemHandler.UseItems(target, config, ComboDamage(target));
             }
             bool hasFlash = player.Spellbook.CanUseSpell(player.GetSpellSlot("SummonerFlash")) == SpellState.Ready;
-            if (config.Item("usee", true).GetValue<bool>() && E.IsReady())
+            if (config.Item("usee", true).GetValue<bool>() && E.IsReady() &&
+                (config.Item("useetower", true).GetValue<bool>() || !target.UnderTurret(true)))
             {
                 if (config.Item("useewall", true).GetValue<bool>())
                 {
@@ -413,6 +414,7 @@ using LeagueSharp.Common;
             menuC.AddItem(new MenuItem("usew", "Use W", true)).SetValue(true);
             menuC.AddItem(new MenuItem("usee", "Use E", true)).SetValue(true);
             menuC.AddItem(new MenuItem("useewall", "Use E only near walls", true)).SetValue(true);
+            menuC.AddItem(new MenuItem("useetower", "Use E under turret", true)).SetValue(true);
             menuC.AddItem(new MenuItem("useeflash", "Use flash to positioning", true)).SetValue(false);
             menuC.AddItem(new MenuItem("useeflashforced", "Forced flash+E if possible", true))
                 .SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press))

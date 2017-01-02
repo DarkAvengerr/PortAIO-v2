@@ -11,7 +11,7 @@ using Environment = UnderratedAIO.Helpers.Environment;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace UnderratedAIO.Champions
+namespace UnderratedAIO.Champions
 {
     internal class Skarner
     {
@@ -56,7 +56,7 @@ using LeagueSharp.Common;
                 orbwalker.SetAttack(true);
                 orbwalker.SetMovement(true);
             }
-            if(false)
+            if (false)
             {
                 return;
             }

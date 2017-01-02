@@ -12,7 +12,7 @@ using Environment = UnderratedAIO.Helpers.Environment;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace UnderratedAIO.Champions
+namespace UnderratedAIO.Champions
 {
     internal class Sejuani
     {
@@ -76,7 +76,7 @@ using LeagueSharp.Common;
 
         private static void Game_OnGameUpdate(EventArgs args)
         {
-            if(false)
+            if (false)
             {
                 return;
             }

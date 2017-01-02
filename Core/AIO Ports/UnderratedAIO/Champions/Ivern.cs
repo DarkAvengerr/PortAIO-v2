@@ -12,8 +12,8 @@ using SPrediction;
 
 using Prediction = LeagueSharp.Common.Prediction;
 
-using EloBuddy;
-using LeagueSharp.Common;
+using EloBuddy; 
+using LeagueSharp.Common; 
 namespace UnderratedAIO.Champions
 {
     internal class Ivern
@@ -24,7 +24,7 @@ namespace UnderratedAIO.Champions
         public static Spell Q, W, E, R;
         public static bool justW;
         public static int wWidth = 300;
-
+        
         public AIHeroClient IgniteTarget;
         public List<Bush> Bushes = new List<Bush>();
 
@@ -36,14 +36,14 @@ namespace UnderratedAIO.Champions
             Game.OnUpdate += Game_OnGameUpdate;
             Drawing.OnDraw += Game_OnDraw;
             Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
-
+            
             Jungle.setSmiteSlot();
         }
 
 
         private void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base hero, GameObjectProcessSpellCastEventArgs args)
         {
-            if (hero.CharData.BaseSkinName == "Ivern" && args.Slot == SpellSlot.W)
+            if (hero.BaseSkinName == "Ivern" && args.Slot == SpellSlot.W)
             {
                 Bushes.Add(new Bush(System.Environment.TickCount, args.End));
             }
@@ -88,10 +88,8 @@ namespace UnderratedAIO.Champions
                     ItemHandler.UseItems(target, config, ComboDamage(target));
                 }
                 bool hasIgnite = player.Spellbook.CanUseSpell(player.GetSpellSlot("SummonerDot")) == SpellState.Ready;
-
-                var ignitedmg = (float)player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
-
-                if (config.Item("useq", true).GetValue<bool>() && Q.IsReady())
+                var ignitedmg = (float) player.GetSummonerSpellDamage(target, Damage.SummonerSpell.Ignite);
+                if (config.Item("useq", true).GetValue<bool>() && Q.IsReady() && Q.CanCast(target))
                 {
                     if (Program.IsSPrediction)
                     {
@@ -129,7 +127,7 @@ namespace UnderratedAIO.Champions
                         }
                         if (player.Pet != null && player.Pet.Position.Distance(target.Position) < 450)
                         {
-                            E.CastOnUnit((Obj_AI_Base)player.Pet);
+                            E.CastOnUnit((Obj_AI_Base) player.Pet);
                         }
                     }
                 }
@@ -261,6 +259,7 @@ namespace UnderratedAIO.Champions
             DrawHelper.DrawCircle(config.Item("drawww", true).GetValue<Circle>(), W.Range);
             DrawHelper.DrawCircle(config.Item("drawee", true).GetValue<Circle>(), E.Range);
             DrawHelper.DrawCircle(config.Item("drawrr", true).GetValue<Circle>(), R.Range);
+            
         }
 
         private float ComboDamage(AIHeroClient hero)
@@ -283,12 +282,12 @@ namespace UnderratedAIO.Champions
             {
                 damage += ignitedmg;
             }
-            return (float)damage;
+            return (float) damage;
         }
 
         private void InitIvern()
         {
-            Q = new Spell(SpellSlot.Q, 1100f);
+            Q = new Spell(SpellSlot.Q, 1075);
             Q.SetSkillshot(0.5f, 65f, 1300f, true, SkillshotType.SkillshotLine);
             W = new Spell(SpellSlot.W, 1650);
             W.SetSkillshot(W.Delay, W.Width, W.Speed, false, SkillshotType.SkillshotCircle);

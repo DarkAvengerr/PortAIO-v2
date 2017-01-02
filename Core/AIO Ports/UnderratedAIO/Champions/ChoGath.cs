@@ -11,7 +11,7 @@ using Environment = UnderratedAIO.Helpers.Environment;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace UnderratedAIO.Champions
+namespace UnderratedAIO.Champions
 {
     internal class Chogath
     {
@@ -68,7 +68,7 @@ using LeagueSharp.Common;
             {
                 Jungle();
             }
-            if(false)
+            if (false)
             {
                 return;
             }

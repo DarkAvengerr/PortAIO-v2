@@ -11,7 +11,7 @@ using Environment = UnderratedAIO.Helpers.Environment;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace UnderratedAIO.Champions
+namespace UnderratedAIO.Champions
 {
     internal class Volibear
     {
@@ -48,7 +48,7 @@ using LeagueSharp.Common;
                 passivecd = false;
                 passivetime = 0f;
             }
-            if(false)
+            if (false)
             {
                 return;
             }

@@ -14,7 +14,7 @@ using Prediction = LeagueSharp.Common.Prediction;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace UnderratedAIO.Champions
+namespace UnderratedAIO.Champions
 {
     internal class Gragas
     {
@@ -145,7 +145,7 @@ using LeagueSharp.Common;
 
         private void Game_OnGameUpdate(EventArgs args)
         {
-            if(false)
+            if (false)
             {
                 return;
             }
@@ -283,12 +283,10 @@ using LeagueSharp.Common;
                 HeroManager.Enemies.Where(e => e.Distance(savedQ.position) < QExplosionRange && e.IsValidTarget())
                     .OrderByDescending(e => e.Distance(savedQ.position))
                     .FirstOrDefault();
-
             if (targethero == null)
             {
                 return;
             }
-
             if (savedQ.deltaT() < 2000 &&
                 Prediction.GetPrediction(targethero, 0.1f).UnitPosition.Distance(savedQ.position) < QExplosionRange &&
                 HeroManager.Enemies.Count(

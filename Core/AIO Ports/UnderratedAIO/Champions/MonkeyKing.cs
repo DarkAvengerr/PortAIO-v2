@@ -15,7 +15,7 @@ using Environment = UnderratedAIO.Helpers.Environment;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace UnderratedAIO.Champions
+namespace UnderratedAIO.Champions
 {
     internal class MonkeyKing
     {
@@ -110,7 +110,7 @@ using LeagueSharp.Common;
             {
                 orbwalker.SetAttack(true);
             }
-            if(false)
+            if (false)
             {
                 return;
             }

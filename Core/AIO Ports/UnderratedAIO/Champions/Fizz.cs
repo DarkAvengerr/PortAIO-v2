@@ -15,7 +15,7 @@ using Geometry = LeagueSharp.Common.Geometry;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace UnderratedAIO.Champions
+namespace UnderratedAIO.Champions
 {
     internal class Fizz
     {
@@ -73,10 +73,11 @@ using LeagueSharp.Common;
 
         private void Game_OnGameUpdate(EventArgs args)
         {
-            if(false)
+            if (false)
             {
                 return;
             }
+
             switch (orbwalker.ActiveMode)
             {
                 case Orbwalking.OrbwalkingMode.Combo:
@@ -167,7 +168,7 @@ using LeagueSharp.Common;
 
         private bool OnTrident
         {
-            get { return player.Spellbook.GetSpell(SpellSlot.E).Name == "FizzETwo"; }
+            get { return player.Spellbook.GetSpell(SpellSlot.E).Name == "fizzjumptwo"; }
         }
 
 
@@ -240,7 +241,7 @@ using LeagueSharp.Common;
                 if (!OnTrident)
                 {
                     if (config.Item("useedmg", true).GetValue<bool>() &&
-                        data.ProjectileDamageTaken > target.GetAutoAttackDamage(player, true) + 10)
+                        data.DamageTaken > target.GetAutoAttackDamage(player, true) + 10)
                     {
                         E.Cast(enemyPred.CastPosition);
                     }

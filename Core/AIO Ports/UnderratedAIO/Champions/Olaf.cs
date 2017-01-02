@@ -17,7 +17,7 @@ using Prediction = LeagueSharp.Common.Prediction;
 
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace UnderratedAIO.Champions
+namespace UnderratedAIO.Champions
 {
     internal class Olaf
     {
@@ -89,7 +89,7 @@ using LeagueSharp.Common;
 
         private void Game_OnUpdate(EventArgs args)
         {
-            if(false)
+            if (false)
             {
                 return;
             }
