@@ -179,7 +179,7 @@ namespace e.Motion_Katarina
         private static void RLogic()
         {
             AIHeroClient target = TargetSelector.GetTarget(E.Range, TargetSelector.DamageType.Magical);
-            if (target != null && R.IsReady() && target.Distance(Player) < (E.IsReady() && Config.GetBoolValue("combo.e") ? E.Range : R.Range - 200))
+            if (target != null && R.IsReady() && (target.HealthPercent < Config.GetSliderValue("combo.rhealth") || target.Health < R.GetDamage(target,1) * .7) && target.Distance(Player) < (E.IsReady() && Config.GetBoolValue("combo.e") ? E.Range : R.Range - 200))
             {
                 if (E.IsReady() && Config.GetBoolValue("combo.e"))
                 {

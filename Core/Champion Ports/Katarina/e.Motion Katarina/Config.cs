@@ -31,6 +31,7 @@ namespace e.Motion_Katarina
             comboMenu.AddItem(new MenuItem("combo.e", "Use E").SetValue(true));
             comboMenu.AddItem(new MenuItem("combo.ealways", "Always use E").SetValue(false));
             comboMenu.AddItem(new MenuItem("combo.r", "Use R").SetValue(true));
+            comboMenu.AddItem(new MenuItem("combo.rhealth", "Enemy Health %").SetValue(new Slider(30)));
 
             //Harass-Menu
             Menu harassMenu = new Menu("Harass", "harass");
@@ -134,7 +135,7 @@ namespace e.Motion_Katarina
             }
             catch
             {
-                Console.WriteLine("Menu-Item " + itemName + " does not have a Boolean Value");
+                Console.WriteLine("Menu-Item " + itemName + " does not have a Slider Value");
                 return -1;
             }
         }
