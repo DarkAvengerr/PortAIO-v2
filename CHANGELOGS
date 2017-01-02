@@ -1,3 +1,26 @@
+[1/2/17]
+- Updated :
+     - ReformedAIO
+     - NechritoRiven
+     - SSRumble
+     - SurvivorRyze
+     - Lord's Vayne
+     - UnderratedAIO
+     - AlqoholicGalio
+     - xSalice
+     - Flowers' Yasuo
+     - Flowers' Fiora
+     - Activator#
+     - SephSoraka
+     - YasuoPro
+     - e.Motion Katarina
+     - OKTW
+- Removed all HP Bar Indicators (caused HP drops and weren't even accurate)
+
+[12/31/16]
+- Fixed ElEasy Malphite's E Range
+- Added xQx Shen
+
 [12/30/16]
 - LCS Janna E Protector Changes (should work better)
 - More Incoming Damage Listener on OKTWCommon
