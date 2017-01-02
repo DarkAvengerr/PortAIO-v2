@@ -177,7 +177,8 @@ namespace Flowers_Yasuo.Manager.Events.Games.Mode
                     Q3.Cast(Me.Position, true);
                 }
 
-                if (Menu.Item("ComboQStack", true).GetValue<StringList>().SelectedIndex != 3 && Q.IsReady() && !SpellManager.HaveQ3)
+                if (Menu.Item("ComboQStack", true).GetValue<StringList>().SelectedIndex != 3 && Q.IsReady() &&
+                    !SpellManager.HaveQ3)
                 {
                     switch (Menu.Item("ComboQStack", true).GetValue<StringList>().SelectedIndex)
                     {

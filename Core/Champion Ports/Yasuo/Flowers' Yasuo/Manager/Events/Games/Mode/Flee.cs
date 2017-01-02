@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 using EloBuddy; 
 using LeagueSharp.Common; 
 namespace Flowers_Yasuo.Manager.Events.Games.Mode
@@ -60,14 +62,20 @@ namespace Flowers_Yasuo.Manager.Events.Games.Mode
                 {
                     if (Menu.Item("FleeE", true).GetValue<bool>() && E.IsReady())
                     {
-                        var eMinion =
-                            MinionManager.GetMinions(Me.Position, E.Range, MinionTypes.All, MinionTeam.NotAlly)
-                                .OrderBy(x => x.Position.Distance(Game.CursorPos))
-                                .FirstOrDefault();
+                        var dashList = new List<Obj_AI_Base>();
+                        dashList.AddRange(HeroManager.Enemies.Where(i => i.IsValidTarget(E.Range)));
+                        dashList.AddRange(MinionManager.GetMinions(Me.Position, E.Range, MinionTypes.All, MinionTeam.NotAlly));
 
-                        if (eMinion != null && SpellManager.CanCastE(eMinion) && E.IsReady() && Me.IsFacing(eMinion))
+                        var dash = dashList.Where(
+                                i => SpellManager.CanCastE(i) &&
+                                     PosAfterE(i).Distance(Game.CursorPos) < Game.CursorPos.DistanceToPlayer()
+                                     && Evade.EvadeManager.IsSafe(PosAfterE(i).To2D()).IsSafe)
+                            .MinOrDefault(i => Game.CursorPos.Distance(PosAfterE(i)));
+
+                        if (dash.IsValidTarget(E.Range) && SpellManager.CanCastE(dash))
                         {
-                            E.CastOnUnit(eMinion, true);
+                            E.CastOnUnit(dash, true);
+                            return;
                         }
                     }
 
