@@ -113,7 +113,7 @@ namespace SFXUtility
                             new Teleport(detectors),
                             new Clock(drawings),
                             new Clone(drawings),
-                            new DamageIndicator(drawings),
+                            //new DamageIndicator(drawings),
                             new Health(drawings),
                             new LaneMomentum(drawings),
                             new LasthitMarker(drawings),

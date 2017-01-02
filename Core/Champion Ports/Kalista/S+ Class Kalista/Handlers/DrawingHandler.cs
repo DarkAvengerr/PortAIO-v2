@@ -22,9 +22,6 @@ namespace S_Plus_Class_Kalista.Handlers
             _Menu.AddSubMenu(DrawingOnMinions.DrawingOnMinionsMenu());
             SMenu.AddSubMenu(_Menu);
 
-            DrawingOnMonsters.DamageToMonster = Damage.DamageCalc.CalculateRendDamage;
-            DrawingOnChamps.DamageToEnemy = Damage.DamageCalc.CalculateRendDamage;
-
             EloBuddy.Drawing.OnDraw += DrawingOnMonsters.OnDrawMonster;
             EloBuddy.Drawing.OnDraw += DrawingOnChamps.OnDrawEnemy;
             EloBuddy.Drawing.OnDraw += DrawingOnChamps.OnDrawSelf;
