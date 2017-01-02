@@ -2,7 +2,9 @@ using System.Reflection;
 using System.Linq;
 using LeagueSharp.Common;
 
-using EloBuddy; namespace YasuoPro
+using EloBuddy; 
+using LeagueSharp.Common; 
+namespace YasuoPro
 {
     internal static class YasuoMenu
     {
@@ -75,6 +77,8 @@ using EloBuddy; namespace YasuoPro
                 menu.AddBool("Combo.ETower", "Use E under Tower", false);
                 menu.AddBool("Combo.EAdvanced", "Predict E position with Waypoints");
                 menu.AddBool("Combo.EToSafety", "E towards base if unhealthy", false);
+                menu.AddBool("Combo.UseBeyBlade", "Use BeyBlade", false);
+                menu.AddSlider("Combo.BeyBladeDelay", "BeyBlade Delay", 330, 150, 800);
 
                 var ultmenu = menu.AddSubMenu("Ult Settings");
                 var blacklist = new Menu("Ult Targets", "BlackList");
@@ -170,7 +174,7 @@ using EloBuddy; namespace YasuoPro
             {
                 var targettedmenu = new Menu("Targetted Spells", "Targetted");
 
-                foreach (var spell in TargettedDanger.spellList.Where(x => HeroManager.Enemies.Any(e => e.CharData.BaseSkinName == x.championName)))
+                foreach (var spell in TargettedDanger.spellList.Where(x => HeroManager.Enemies.Any(e => e.BaseSkinName == x.championName)))
                 {
                     Menu champmenu = targettedmenu.SubMenu(spell.championName);
                     champmenu.AddBool("enabled." + spell.spellName, spell.spellName, true);

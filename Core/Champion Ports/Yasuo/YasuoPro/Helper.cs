@@ -6,7 +6,9 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 
-using EloBuddy; namespace YasuoPro
+using EloBuddy; 
+using LeagueSharp.Common; 
+namespace YasuoPro
 {
     class Helper
     {
@@ -19,7 +21,7 @@ using EloBuddy; namespace YasuoPro
 
         internal static bool DontDash = false;
 
-        internal static int Q = 1, Q2 = 2, W = 3, E = 4, R = 5, Ignite = 6;
+        internal static int Q = 1, Q2 = 2, W = 3, E = 4, R = 5, Ignite = 6, Flash = 7;
 
         internal const float LaneClearWaitTimeMod = 2f;
 
@@ -30,6 +32,8 @@ using EloBuddy; namespace YasuoPro
         internal float LastTornadoClearTick;
 
         internal float LastDashTick;
+
+        internal float FlashRange = 425f;
 
         public static int TickCount
         {
@@ -58,7 +62,8 @@ using EloBuddy; namespace YasuoPro
             { 3, new Spell(SpellSlot.W, 450f) },
             { 4, new Spell(SpellSlot.E, 475f) },
             { 5, new Spell(SpellSlot.R, 1250f) },
-            { 6, new Spell(ObjectManager.Player.GetSpellSlot("summonerdot"), 600) }
+            { 6, new Spell(ObjectManager.Player.GetSpellSlot("summonerdot"), 600) },
+            { 7, new Spell(ObjectManager.Player.GetSpellSlot("summonerflash"), 425) }
             };
 
             Spells[Q].SetSkillshot(GetQ1Delay, 20f, float.MaxValue, false, SkillshotType.SkillshotLine);
