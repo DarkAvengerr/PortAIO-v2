@@ -45,10 +45,9 @@ namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Lane
             
             foreach (var m in Minion)
             {
-                if (spell.CanThrow())
+                if (!spell.HasThrown)
                 {
                     spell.Handle(pred.Position.To3D());
-                    spell.Spell.Cast(pred.Position.To3D());
                 }
 
                 if (Menu.Item("Gragas.Lane.Q.Killable").GetValue<bool>() && m.Health < spell.GetDamage(m))

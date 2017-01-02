@@ -49,7 +49,7 @@ namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Combo
 
             qSpell.ExplodeHandler(Target);
 
-            if (qSpell.CanThrow() && qSpell.Spell.IsReady())
+            if (!qSpell.HasThrown && qSpell.Spell.IsReady())
             {
                 Combo();
             }
@@ -68,14 +68,12 @@ namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Combo
                     if (qSpell.OKTW(Target).Hitchance >= HitChance.High)
                     {
                         qSpell.Handle(qSpell.OKTW(Target).CastPosition);
-                        qSpell.Spell.Cast(qSpell.OKTW(Target).CastPosition);
                     }
                     break;
                 case 1:
                     if (qSpell.OKTW(Target).Hitchance >= HitChance.VeryHigh)
                     {
                         qSpell.Handle(qSpell.OKTW(Target).CastPosition);
-                        qSpell.Spell.Cast(qSpell.OKTW(Target).CastPosition);
                     }
                     break;
             }
@@ -93,24 +91,22 @@ namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Combo
             {
                 var pred = rSpell.OKTW(Target).CastPosition;
 
-                if (qSpell.CanThrow() && qSpell.Spell.IsReady())
+                if (!qSpell.HasThrown && qSpell.Spell.IsReady())
                 {
-                    qSpell.Handle(Target.Position.Extend(pred, 140).Extend(ObjectManager.Player.Position, 600));
-
-                    qSpell.Spell.Cast(Target.Position.Extend(pred, 140).Extend(ObjectManager.Player.Position, 600));
+                    qSpell.Handle(Target.Position.Extend(pred, Range).Extend(ObjectManager.Player.Position, 600));
                 }
 
-                rSpell.Spell.Cast(Target.Position.Extend(pred, 140));
+                rSpell.Spell.Cast(Target.Position.Extend(pred, Range));
             }
             else if (Menu.Item("Gragas.Combo.RQ.Ally").GetValue<bool>() && Ally != null)
             {
-                rSpell.Spell.Cast(rSpell.OKTW(Target).CastPosition.Extend(Ally.Position, Range));
+                rSpell.Spell.Cast(rSpell.OKTW(Target).CastPosition.Extend(Ally. Position, Range));
             }
             else if (Menu.Item("Gragas.Combo.RQ.Gragas").GetValue<bool>())
             {
                 var pred = rSpell.OKTW(Target).CastPosition;
 
-                rSpell.Spell.Cast(Target.Position.Extend(pred, 140));
+                rSpell.Spell.Cast(Target.Position.Extend(pred, Range));
             }
         }
 
@@ -134,7 +130,7 @@ namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Combo
 
             Menu.AddItem(new MenuItem("Gragas.Combo.RQ.Hitchance", "Hitchance:").SetValue(new StringList(new[] { "High", "Very High" })));
 
-            Menu.AddItem(new MenuItem("Gragas.Combo.RQ.Range", "Range Behind Target").SetValue(new Slider(300, 140, 350)));
+            Menu.AddItem(new MenuItem("Gragas.Combo.RQ.Range", "Range Behind Target").SetValue(new Slider(140, 140, 280)));
 
             Menu.AddItem(new MenuItem("Gragas.Combo.RQ.Q", "Insec To: Q Barrel").SetValue(true));
 

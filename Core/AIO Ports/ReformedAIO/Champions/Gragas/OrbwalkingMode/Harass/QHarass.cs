@@ -43,14 +43,12 @@ namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Harass
                 case 0:
                     if (spell.OKTW(Target).Hitchance >= HitChance.High)
                     {
-                        spell.Spell.Cast(spell.OKTW(Target).CastPosition);
                         spell.Handle(spell.OKTW(Target).CastPosition);
                     }
                     break;
                 case 1:
                     if (spell.OKTW(Target).Hitchance >= HitChance.VeryHigh)
                     {
-                        spell.Spell.Cast(spell.OKTW(Target).CastPosition);
                         spell.Handle(spell.OKTW(Target).CastPosition);
                     }
                     break;

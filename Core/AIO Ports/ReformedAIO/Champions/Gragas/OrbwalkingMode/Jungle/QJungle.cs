@@ -38,15 +38,14 @@ namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Jungle
                 return;
             }
 
-            if (spell.CanThrow())
-            {
-                spell.Handle(Mob.Position);
-                spell.Spell.Cast(Mob.Position);
-            }
-
             if (Mob.Health < spell.GetDamage(Mob))
             {
                 spell.ExplodeHandler(Mob);
+            }
+
+            if (!spell.HasThrown)
+            {
+                spell.Handle(Mob.Position);
             }
         }
 

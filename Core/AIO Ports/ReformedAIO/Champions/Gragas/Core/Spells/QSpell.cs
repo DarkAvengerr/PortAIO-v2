@@ -20,30 +20,26 @@ namespace ReformedAIO.Champions.Gragas.Core.Spells
 
         public override Spell Spell { get; set; }
 
-        public Vector3 LastCastPosition = Vector3.Zero;
+        public Vector3 LastCastPosition;
 
         public bool HasThrown;
 
-        public void Handle(Vector3 Position)
+        public void Handle(Vector3 LastPos)
         {
-            LastCastPosition = Position;
+            Spell.Cast(LastPos);
+            LastCastPosition = LastPos;
             HasThrown = true;
-        }
 
-        public bool CanThrow()
-        {
-            return !HasThrown;
+            LeagueSharp.Common.Utility.DelayAction.Add(5600, () => HasThrown = false);
         }
 
         public void ExplodeHandler(Obj_AI_Base target)
         {
-            if (target.Distance(LastCastPosition) > 110f || !HasThrown)
+            if (target.Distance(LastCastPosition) < 110f && HasThrown)
             {
-                return;
+                Spell.Cast();
+                HasThrown = false;
             }
-
-            Spell.Cast();
-            HasThrown = false;
         }
 
         public float GetDamage(Obj_AI_Base target)
