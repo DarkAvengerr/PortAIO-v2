@@ -8,7 +8,7 @@ using SCommon.Database;
 using SCommon.PluginBase;
 using SPrediction;
 using SCommon.Orbwalking;
-using SUtility.Drawings;
+
 using SharpDX;
 //typedefs
 using TargetSelector = SCommon.TS.TargetSelector;
@@ -44,7 +44,7 @@ namespace SAutoCarry.Champions
             misc.AddItem(new MenuItem("SAutoCarry.Pantheon.Misc.LaneClearQ", "Use Q On LaneClear").SetValue(true));
             misc.AddItem(new MenuItem("SAutoCarry.Pantheon.Misc.LaneClear.MinMana", "Min Mana Percent").SetValue(new Slider(50, 100, 0)));
             misc.AddItem(new MenuItem("SAutoCarry.Pantheon.Misc.InterruptW", "Interrupt Spells With W").SetValue(true));
-            DamageIndicator.Initialize((t) => (float)CalculateComboDamage(t), misc);
+            //DamageIndicator.Initialize((t) => (float)CalculateComboDamage(t), misc);
 
             ConfigMenu.AddSubMenu(combo);
             ConfigMenu.AddSubMenu(harass);

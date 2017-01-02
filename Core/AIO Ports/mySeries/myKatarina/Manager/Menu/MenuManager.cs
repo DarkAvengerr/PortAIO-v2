@@ -130,7 +130,7 @@ namespace myKatarina.Manager.Menu
                 drawMenu.AddItem(new MenuItem("DrawE", "Draw E Range", true).SetValue(false));
                 drawMenu.AddItem(new MenuItem("DrawR", "Draw R Range", true).SetValue(false));
                 ManaManager.AddDrawFarm(drawMenu);
-                DamageIndicator.AddToMenu(drawMenu, DamageCalculate.GetComboDamage);
+                //DamageIndicator.AddToMenu(drawMenu, DamageCalculate.GetComboDamage);
             }
 
             Menu.AddItem(new MenuItem("asd ad asd ", " ", true));

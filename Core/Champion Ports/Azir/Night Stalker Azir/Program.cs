@@ -567,8 +567,8 @@ using EloBuddy;
 
             CreateMenu();
 
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = DamageToUnit;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = DamageToUnit;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = true;
 
             Chat.Print("<font color=\"#7CFC00\"><b>Night Stalker Azir:</b></font> by ChewyMoon & Shiver loaded");
 

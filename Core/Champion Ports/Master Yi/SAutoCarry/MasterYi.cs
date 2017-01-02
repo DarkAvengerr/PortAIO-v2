@@ -7,7 +7,7 @@ using SCommon.PluginBase;
 using SPrediction;
 using SCommon.Orbwalking;
 using SCommon.Evade;
-using SUtility.Drawings;
+
 using SharpDX;
 //typedefs
 using TargetSelector = SCommon.TS.TargetSelector;
@@ -40,7 +40,7 @@ namespace SAutoCarry.Champions
 
             Menu misc = new Menu("Misc", "SAutoCarry.MasterYi.Misc");
             m_targetedEvader = new TargetedSpellEvader(TargetedSpell_Evade, misc);
-            DamageIndicator.Initialize((t) => (float)CalculateComboDamage(t, 4), misc);
+            //DamageIndicator.Initialize((t) => (float)CalculateComboDamage(t, 4), misc);
 
             ConfigMenu.AddSubMenu(combo);
             ConfigMenu.AddSubMenu(jungleclear);

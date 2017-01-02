@@ -537,10 +537,10 @@ using EloBuddy;
         /// </summary>
         private void InitEvents()
         {
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = this.GetRealDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = this.GetRealDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = true;
 
-            CustomDamageIndicator.Initialize(this.GetRealDamage);
+            //Custom//DamageIndicator.Initialize(this.GetRealDamage);
 
             Game.OnUpdate += this.OnUpdate;
 
@@ -592,7 +592,7 @@ using EloBuddy;
                             link.Value.Value.Color);
                     }
 
-                    CustomDamageIndicator.DrawingColor = this.circleLinks["drawEDamage"].Value.Color;
+                    //Custom//DamageIndicator.DrawingColor = this.circleLinks["drawEDamage"].Value.Color;
 
                     if (BoolLinks["drawPercentage"].Value)
                     {

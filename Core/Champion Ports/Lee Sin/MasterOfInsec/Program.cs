@@ -454,15 +454,7 @@ namespace MasterOfInsec
             {
                 Render.Circle.DrawCircle(Player.Position, 375f, Color.Green);
             }
-            //draw % de vida
-            foreach (AIHeroClient hero in HeroManager.Enemies)
-            {
 
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = GetComboDamage;
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = dmgAfterComboItem.GetValue<bool>();
-                dmgAfterComboItem.ValueChanged += delegate (object sender, OnValueChangeEventArgs eventArgs)
-                    { LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = eventArgs.GetNewValue<bool>(); };
-            }
             if (menu.Item("InstaFlashRkey").GetValue<KeyBind>().Active && menu.Item("DrawInsec").GetValue<bool>())
             {
                 var target = TargetSelector.GetTarget(1300, TargetSelector.DamageType.Physical);

@@ -233,11 +233,11 @@ using EloBuddy;
             drawingMenu.AddMItem("Draw 100% dead enemies", new Circle(drawDeadEnemies, Color.FromArgb(150, Color.LightGreen)), (sender, args) => _deadDrawing = args.GetNewValue<Circle>());
             drawingMenu.AddMItem("Damage indicator", new Circle(true, Color.FromArgb(150, Color.Goldenrod)), (sender, args) =>
             {
-                DamageIndicator.Enabled = args.GetNewValue<Circle>().Active;
-                DamageIndicator.Fill = true;
-                DamageIndicator.FillColor = Color.FromArgb(100, args.GetNewValue<Circle>().Color);
-                DamageIndicator.Color = Color.FromArgb(200, DamageIndicator.FillColor);
-                DamageIndicator.DamageToUnit = GetComboDamage;
+                //DamageIndicator.Enabled = args.GetNewValue<Circle>().Active;
+                //DamageIndicator.Fill = true;
+                //DamageIndicator.FillColor = Color.FromArgb(100, args.GetNewValue<Circle>().Color);
+                //DamageIndicator.Color = Color.FromArgb(200, //DamageIndicator.FillColor);
+                //DamageIndicator.DamageToUnit = GetComboDamage;
             });
         }
 

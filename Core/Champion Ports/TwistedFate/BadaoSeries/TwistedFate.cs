@@ -124,10 +124,10 @@ using EloBuddy;
             Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
             Orbwalking.AfterAttack += Orbwalking_AfterAttack;
             Orbwalking.OnAttack += Orbwalking_OnAttack;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = TwistedFateDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = drawhp;
-            CustomDamageIndicator.Initialize(TwistedFateDamage);
-            CustomDamageIndicator.Enabled = drawhp;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = TwistedFateDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = drawhp;
+            //Custom//DamageIndicator.Initialize(TwistedFateDamage);
+            //Custom//DamageIndicator.Enabled = drawhp;
         }
 
 
@@ -162,8 +162,8 @@ using EloBuddy;
             if (!Enable) return;
             if (sender != null)
             {
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = e.GetNewValue<bool>();
-                CustomDamageIndicator.Enabled = e.GetNewValue<bool>();
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = e.GetNewValue<bool>();
+                //Custom//DamageIndicator.Enabled = e.GetNewValue<bool>();
             }
         }
 
@@ -353,8 +353,8 @@ using EloBuddy;
         {
             if (!Enable)
             {
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = false;
-                CustomDamageIndicator.Enabled = false;
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = false;
+                //Custom//DamageIndicator.Enabled = false;
                 return;
             }
             AutoHelper();

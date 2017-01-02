@@ -160,10 +160,10 @@ namespace FioraProject
             Orbwalking.OnAttack += OnAttack;
             Obj_AI_Base.OnSpellCast += oncast;
             Game.OnWndProc += Game_OnWndProc;
-            //Utility.HpBarDamageIndicator.DamageToUnit = GetFastDamage;
-            //Utility.HpBarDamageIndicator.Enabled = DrawHP;
-            CustomDamageIndicator.Initialize(GetFastDamage);
-            CustomDamageIndicator.Enabled = DrawHP;
+            //Utility.HpBar//DamageIndicator.DamageToUnit = GetFastDamage;
+            //Utility.HpBar//DamageIndicator.Enabled = DrawHP;
+            
+            //Custom//DamageIndicator.Enabled = DrawHP;
 
             //evade
             FioraProject.Evade.Evade.Evading += EvadeSkillShots.Evading;
@@ -399,8 +399,8 @@ namespace FioraProject
         {
             if (sender != null)
             {
-                //Utility.HpBarDamageIndicator.Enabled = e.GetNewValue<bool>();
-                CustomDamageIndicator.Enabled = e.GetNewValue<bool>();
+                //Utility.HpBar//DamageIndicator.Enabled = e.GetNewValue<bool>();
+                //Custom//DamageIndicator.Enabled = e.GetNewValue<bool>();
             }
         }
         private static void Drawing_OnDraw(EventArgs args)

@@ -38,7 +38,7 @@ namespace SharpShooter.Plugins
             MenuProvider.Champion.Drawings.AddDrawWrange(Color.FromArgb(100, Color.DeepSkyBlue), false);
             MenuProvider.Champion.Drawings.AddDrawErange(Color.FromArgb(100, Color.DeepSkyBlue), false);
             MenuProvider.Champion.Drawings.AddItem("R Pierce Line", true);
-            MenuProvider.Champion.Drawings.AddDamageIndicator(GetComboDamage);
+            
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;

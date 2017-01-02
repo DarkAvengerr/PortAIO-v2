@@ -177,7 +177,7 @@ namespace Flowers_ADC_Series.Pluging
                     new MenuItem("DrawThinkness", "Draw Circle Thinkness", true).SetValue(new Slider(3, 1, 10)));
                 drawMenu.AddItem(new MenuItem("DrawE", "Draw E Range", true).SetValue(false));
                 ManaManager.AddDrawFarm(drawMenu);
-                DamageIndicator.AddToMenu(drawMenu);
+                //DamageIndicator.AddToMenu(drawMenu);
             }
 
             Game.OnWndProc += OnWndProc;

@@ -118,7 +118,7 @@ using EloBuddy;
             PassiveText.VisibleCondition += sender => Menu.Item("DrawPassive").IsActive();
             PassiveText.Add();
 
-            DamageIndicator.DamageToUnit = GetComboDamage;
+            //DamageIndicator.DamageToUnit = GetComboDamage;
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;

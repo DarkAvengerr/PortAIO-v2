@@ -938,7 +938,7 @@ using EloBuddy;
                 //new SoundObject(Resources.OnLoad).Play();
             }
 
-            DamageIndicator.DamageToUnit = GetComboDamage;
+            //DamageIndicator.DamageToUnit = GetComboDamage;
             PassiveManager.Initialize();
 
             Game.OnUpdate += Game_OnGameUpdate;

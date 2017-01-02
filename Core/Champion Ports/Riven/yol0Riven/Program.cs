@@ -94,7 +94,7 @@ using EloBuddy;
             _menu.SubMenu("Draw").AddItem(new MenuItem("drawDamage", "Draw Damage on Healthbar").SetValue(true));
 
 
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = GetDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = GetDamage;
             _menu.AddToMainMenu();
 
             _R.SetSkillshot(0.25f, 60f, 2200, false, SkillshotType.SkillshotCone);
@@ -184,7 +184,7 @@ using EloBuddy;
 
         private static void OnUpdate(EventArgs args)
         {
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = _menu.SubMenu("Draw").Item("drawDamage").GetValue<bool>();
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = _menu.SubMenu("Draw").Item("drawDamage").GetValue<bool>();
             CheckBuffs();
             KillSecure();
             if (_orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo)

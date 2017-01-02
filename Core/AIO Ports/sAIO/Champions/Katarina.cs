@@ -78,20 +78,20 @@ using EloBuddy;
             menu.AddSubMenu(new Menu("Ward jump", "WJ"));
             CreateMenuKeyBind("WJ", "WJ.Key", "Key", 'G', KeyBindType.Press);
 
-            DrawDamage.DamageToUnit = GetComboDamage;
-            DrawDamage.Enabled = GetValueMenuBool("Draw.CBDamage");
-            DrawDamage.Fill = menu.Item("Draw.DrawColor").GetValue<Circle>().Active;
-            DrawDamage.FillColor = menu.Item("Draw.DrawColor").GetValue<Circle>().Color;
+            //DrawDamage.DamageToUnit = GetComboDamage;
+            //DrawDamage.Enabled = GetValueMenuBool("Draw.CBDamage");
+            //DrawDamage.Fill = menu.Item("Draw.DrawColor").GetValue<Circle>().Active;
+            //DrawDamage.FillColor = menu.Item("Draw.DrawColor").GetValue<Circle>().Color;
 
             menu.Item("Draw.CBDamage").ValueChanged += delegate(object sender, OnValueChangeEventArgs eventArgs)
             {
-                DrawDamage.Enabled = eventArgs.GetNewValue<bool>();
+                //DrawDamage.Enabled = eventArgs.GetNewValue<bool>();
             };
 
             menu.Item("Draw.DrawColor").ValueChanged += delegate(object sender, OnValueChangeEventArgs eventArgs)
             {
-                DrawDamage.Fill = eventArgs.GetNewValue<Circle>().Active;
-                DrawDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
+                //DrawDamage.Fill = eventArgs.GetNewValue<Circle>().Active;
+                //DrawDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
             };
             menu.AddToMainMenu();                    
 

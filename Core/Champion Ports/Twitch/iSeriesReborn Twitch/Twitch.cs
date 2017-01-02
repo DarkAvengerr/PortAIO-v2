@@ -6,7 +6,6 @@ using iSeriesReborn.Champions.Kalista.Modules;
 using iSeriesReborn.Champions.Kalista.Skills;
 using iSeriesReborn.Champions.Twitch.Skills;
 using iSeriesReborn.Utility;
-using iSeriesReborn.Utility.Drawings;
 using iSeriesReborn.Utility.MenuUtility;
 using iSeriesReborn.Utility.ModuleHelper;
 using LeagueSharp;
@@ -34,8 +33,6 @@ using EloBuddy;
         protected override void OnChampLoad()
         {
             spells[SpellSlot.W].SetSkillshot(0.25f, 120f, 1400f, false, SkillshotType.SkillshotCircle);
-            DamageIndicator.DamageToUnit = TwitchE.GetDamage;
-            DamageIndicator.Enabled = true;
 
         }
 

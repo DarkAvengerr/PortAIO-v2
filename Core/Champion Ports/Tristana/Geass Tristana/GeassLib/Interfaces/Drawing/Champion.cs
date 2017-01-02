@@ -7,7 +7,7 @@ using EloBuddy;
 {
     public interface Champion
     {
-        //LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnitDelegate DamageToEnemy { get; set; }
+        ////LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnitDelegate DamageToEnemy { get; set; }
 
         void OnDrawEnemy(EventArgs args);
 

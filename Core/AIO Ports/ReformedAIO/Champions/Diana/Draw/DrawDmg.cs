@@ -47,8 +47,8 @@ namespace ReformedAIO.Champions.Diana.Draw
                                    ? new ColorBGRA(0, 255, 0, 120)
                                    : new ColorBGRA(255, 255, 0, 120);
 
-                drawDamage.Unit = enemy;
-                drawDamage.DrawDmg(logic.ComboDmg(enemy), easyKill);
+                //DrawDamage.Unit = enemy;
+                //DrawDamage.DrawDmg(logic.ComboDmg(enemy), easyKill);
             }
         }
 

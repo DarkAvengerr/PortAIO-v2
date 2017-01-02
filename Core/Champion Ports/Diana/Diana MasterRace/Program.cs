@@ -124,21 +124,21 @@ namespace Diana_Masterrace
             var drawFill = new MenuItem("RushDrawDamageFill", "Combo Damage Fill").SetValue(new Circle(true, Color.Yellow));
             Config.SubMenu("Draw Settings").AddItem(drawDamageMenu);
             Config.SubMenu("Draw Settings").AddItem(drawFill);
-            DamageIndicator.DamageToUnit = GetComboDamage;
-            DamageIndicator.Enabled = drawDamageMenu.GetValue<bool>();
-            DamageIndicator.Fill = drawFill.GetValue<Circle>().Active;
-            DamageIndicator.FillColor = drawFill.GetValue<Circle>().Color;
+            //DamageIndicator.DamageToUnit = GetComboDamage;
+            //DamageIndicator.Enabled = drawDamageMenu.GetValue<bool>();
+            //DamageIndicator.Fill = drawFill.GetValue<Circle>().Active;
+            //DamageIndicator.FillColor = drawFill.GetValue<Circle>().Color;
 
             drawDamageMenu.ValueChanged +=
             delegate (object sender, OnValueChangeEventArgs eventArgs)
             {
-                DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
+                //DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
             };
             drawFill.ValueChanged +=
             delegate (object sender, OnValueChangeEventArgs eventArgs)
             {
-                DamageIndicator.Fill = eventArgs.GetNewValue<Circle>().Active;
-                DamageIndicator.FillColor = eventArgs.GetNewValue<Circle>().Color;
+                //DamageIndicator.Fill = eventArgs.GetNewValue<Circle>().Active;
+                //DamageIndicator.FillColor = eventArgs.GetNewValue<Circle>().Color;
             };
             Config.AddToMainMenu();
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;

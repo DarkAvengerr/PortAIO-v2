@@ -7,7 +7,7 @@ using SCommon;
 using SCommon.PluginBase;
 using SPrediction;
 using SCommon.Orbwalking;
-using SUtility.Drawings;
+
 using SharpDX;
 //typedefs
 using TargetSelector = SCommon.TS.TargetSelector;
@@ -53,7 +53,7 @@ namespace SAutoCarry.Champions
 
             Menu misc = new Menu("Misc", "SAutoCarry.Shyvana.Misc");
             misc.AddItem(new MenuItem("SAutoCarry.Shyvana.Misc.LastHitE", "Last Hit E").SetValue(true));
-            DamageIndicator.Initialize((t) => (float)CalculateComboDamage(t), misc);
+            //DamageIndicator.Initialize((t) => (float)CalculateComboDamage(t), misc);
 
             ConfigMenu.AddSubMenu(combo);
             ConfigMenu.AddSubMenu(harass);

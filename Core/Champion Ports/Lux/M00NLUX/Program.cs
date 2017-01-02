@@ -635,8 +635,8 @@ using EloBuddy;
 
             CreateMenu();
 
-            DamageIndicator.DamageToUnit = DamageToUnit;
-            DamageIndicator.Enabled = true;
+            //DamageIndicator.DamageToUnit = DamageToUnit;
+            //DamageIndicator.Enabled = true;
 
             Game.OnUpdate += Game_OnUpdate;
             AttackableUnit.OnDamage += AttackableUnit_OnDamage;

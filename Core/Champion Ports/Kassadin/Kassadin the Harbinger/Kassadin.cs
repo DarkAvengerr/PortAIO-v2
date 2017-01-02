@@ -46,9 +46,9 @@ using EloBuddy;
                 ShowNotification("Kassadin the Harbinger", Color.DarkOrange, 10000);
                 ShowNotification("by blacky - Loaded", Color.DarkOrange, 10000);
 
-                DamageIndicator.Initialize(GetComboDamage);
-                DamageIndicator.Enabled = true;
-                DamageIndicator.DrawingColor = Color.GreenYellow;
+                //DamageIndicator.Initialize(GetComboDamage);
+                //DamageIndicator.Enabled = true;
+                //DamageIndicator.DrawingColor = Color.GreenYellow;
 
                 ManaManager = new ManaManager();
                 MenuGenerator.Load();

@@ -109,8 +109,8 @@ using EloBuddy;
 
             CreateMenu();
 
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = DamageToUnit;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = DamageToUnit;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = true;
 
             RRectangle = new Geometry.Polygon.Rectangle(Player.Position, Player.Position, R.Width);
 

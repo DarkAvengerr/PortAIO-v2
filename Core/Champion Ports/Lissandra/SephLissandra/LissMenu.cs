@@ -112,21 +112,21 @@ namespace SephLissandra
             Drawings.AddItem(drawFill);
             Drawings.AddItem(dmgAfterE);
 
-            DamageIndicator.DamageToUnit = Lissandra.GetAvailableDamage;
-            DamageIndicator.Enabled = dmgAfterE.GetValue<bool>();
-            DamageIndicator.Fill = drawFill.GetValue<Circle>().Active;
-            DamageIndicator.FillColor = drawFill.GetValue<Circle>().Color;
+            //DamageIndicator.DamageToUnit = Lissandra.GetAvailableDamage;
+            //DamageIndicator.Enabled = dmgAfterE.GetValue<bool>();
+            //DamageIndicator.Fill = drawFill.GetValue<Circle>().Active;
+            //DamageIndicator.FillColor = drawFill.GetValue<Circle>().Color;
 
             dmgAfterE.ValueChanged +=
                 delegate (object sender, OnValueChangeEventArgs eventArgs)
                 {
-                    DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
+                    //DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
                 };
 
             drawFill.ValueChanged += delegate (object sender, OnValueChangeEventArgs eventArgs)
             {
-                DamageIndicator.Fill = eventArgs.GetNewValue<Circle>().Active;
-                DamageIndicator.FillColor = eventArgs.GetNewValue<Circle>().Color;
+                //DamageIndicator.Fill = eventArgs.GetNewValue<Circle>().Active;
+                //DamageIndicator.FillColor = eventArgs.GetNewValue<Circle>().Color;
             };
 
             Drawings.AddItem(new MenuItem("Drawing.DrawQ", "Draw Q").SetValue(new Circle(false, Color.White)));

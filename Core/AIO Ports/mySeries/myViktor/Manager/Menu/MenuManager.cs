@@ -134,7 +134,7 @@ namespace myViktor.Manager.Menu
                 drawMenu.AddItem(new MenuItem("DrawEMax", "Draw EMax Range", true).SetValue(false));
                 drawMenu.AddItem(new MenuItem("DrawR", "Draw R Range", true).SetValue(false));
                 ManaManager.AddDrawFarm(drawMenu);
-                DamageIndicator.AddToMenu(drawMenu, DamageCalculate.GetComboDamage);
+                //DamageIndicator.AddToMenu(drawMenu, DamageCalculate.GetComboDamage);
             }
 
             Menu.AddItem(new MenuItem("asd ad asd ", " ", true));

@@ -67,11 +67,11 @@ using EloBuddy;
 
             drawingMenu.AddMItem("Damage Indicator", new Circle(true, Color.FromArgb(100, Color.Goldenrod)), (sender, args) =>
             {
-                DamageIndicator.DamageToUnit = _comboProvider.GetComboDamage;
-                DamageIndicator.Enabled = args.GetNewValue<Circle>().Active;
-                DamageIndicator.FillColor = args.GetNewValue<Circle>().Color;
-                DamageIndicator.Fill = true;
-                DamageIndicator.Color = Color.FromArgb(255, DamageIndicator.FillColor);
+                //DamageIndicator.DamageToUnit = _comboProvider.GetComboDamage;
+                //DamageIndicator.Enabled = args.GetNewValue<Circle>().Active;
+                //DamageIndicator.FillColor = args.GetNewValue<Circle>().Color;
+                //DamageIndicator.Fill = true;
+                //DamageIndicator.Color = Color.FromArgb(255, //DamageIndicator.FillColor);
             });
             drawingMenu.AddMItem("Draw R Range", new Circle(true, Color.Goldenrod), (sender, args) => _drawR = args.GetNewValue<Circle>());
             drawingMenu.AddMItem("Draw Flash-R Indicator", new Circle(true, Color.Red), (sender, args) => _drawFlashUlt = args.GetNewValue<Circle>());

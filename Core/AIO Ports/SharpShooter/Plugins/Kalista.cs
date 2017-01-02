@@ -66,9 +66,7 @@ namespace SharpShooter.Plugins
             MenuProvider.Champion.Drawings.AddDrawErange(Color.FromArgb(100, Color.DeepSkyBlue), false);
             MenuProvider.Champion.Drawings.AddDrawRrange(Color.FromArgb(100, Color.DeepSkyBlue), false);
             MenuProvider.Champion.Drawings.AddItem("Draw E Damage Percent", true);
-            MenuProvider.Champion.Drawings.AddDamageIndicator(GetComboDamage);
-            MenuProvider.Champion.Drawings.AddDamageIndicatorForJungle(GetJungleDamage);
-
+            
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             Orbwalking.OnNonKillableMinion += Orbwalking_OnNonKillableMinion;

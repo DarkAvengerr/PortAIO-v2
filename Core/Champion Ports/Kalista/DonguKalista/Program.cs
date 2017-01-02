@@ -101,22 +101,22 @@ namespace DonguKalista
             Chat.Print("DonguKalista by dongu54321 Loaded");
             Orbwalking.OnNonKillableMinion += Orbwalking_OnNonKillableMinion;
             AIHeroClient.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = GetEDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
-            DamageIndicator.DamageToUnit = GetEDamage;
-            DamageIndicator.Enabled = drawEDamageMenu.GetValue<bool>();
-            DamageIndicator.Fill = drawFill.GetValue<Circle>().Active;
-            DamageIndicator.FillColor = drawFill.GetValue<Circle>().Color;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = GetEDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = true;
+            //DamageIndicator.DamageToUnit = GetEDamage;
+            //DamageIndicator.Enabled = drawEDamageMenu.GetValue<bool>();
+            //DamageIndicator.Fill = drawFill.GetValue<Circle>().Active;
+            //DamageIndicator.FillColor = drawFill.GetValue<Circle>().Color;
             drawEDamageMenu.ValueChanged +=
                 delegate (object sender, OnValueChangeEventArgs eventArgs)
                 {
-                    DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
+                    //DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
                 };
             drawFill.ValueChanged +=
                 delegate (object sender, OnValueChangeEventArgs eventArgs)
                 {
-                    DamageIndicator.Fill = eventArgs.GetNewValue<Circle>().Active;
-                    DamageIndicator.FillColor = eventArgs.GetNewValue<Circle>().Color;
+                    //DamageIndicator.Fill = eventArgs.GetNewValue<Circle>().Active;
+                    //DamageIndicator.FillColor = eventArgs.GetNewValue<Circle>().Color;
                 };
 
         }

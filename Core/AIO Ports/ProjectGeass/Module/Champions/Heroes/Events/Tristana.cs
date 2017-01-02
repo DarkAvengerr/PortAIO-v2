@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
-using _Project_Geass.Drawing.Champions;
+
 using _Project_Geass.Functions;
 using _Project_Geass.Humanizer.TickTock;
 using _Project_Geass.Module.Champions.Core;
@@ -43,7 +43,6 @@ using EloBuddy;
 
             EloBuddy.Drawing.OnDraw+=OnDraw;
             EloBuddy.Drawing.OnDraw+=OnDrawEnemy;
-            _damageIndicator=new DamageIndicator(GetDamage, 2000);
             Orbwalker=orbwalker;
         }
 
@@ -107,24 +106,12 @@ using EloBuddy;
         /// </param>
         public void OnDrawEnemy(EventArgs args)
         {
-            if (!StaticObjects.ProjectMenu.Item(Names.Menu.DrawingItemBase+StaticObjects.Player.ChampionName+".Boolean.DrawOnEnemy.ComboDamage").GetValue<Circle>().Active)
-            {
-                _damageIndicator.SetFillEnabled(false);
-                _damageIndicator.SetKillableEnabled(false);
-                return;
-            }
-
-            _damageIndicator.SetFillEnabled(true);
-            _damageIndicator.SetFill(StaticObjects.ProjectMenu.Item(Names.Menu.DrawingItemBase+StaticObjects.Player.ChampionName+".Boolean.DrawOnEnemy.ComboDamage").GetValue<Circle>().Color);
-
-            _damageIndicator.SetKillableEnabled(false);
         }
 
         #endregion Public Methods
 
         #region Private Fields
 
-        private readonly DamageIndicator _damageIndicator;
         private readonly Mana _manaManager;
 
         #endregion Private Fields

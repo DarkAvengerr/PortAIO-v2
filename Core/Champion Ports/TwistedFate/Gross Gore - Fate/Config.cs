@@ -128,22 +128,22 @@ using LeagueSharp.Common;
 
             #region DamageDrawings
 
-            DrawingDamage.DamageToUnit = Computed.GetComboDamage;
-            DrawingDamage.Enabled = TwistedFateMenu.Item("drawComboDmg").GetValue<bool>();
-            DrawingDamage.Fill = TwistedFateMenu.Item("fillDmg").GetValue<Circle>().Active;
-            DrawingDamage.FillColor = TwistedFateMenu.Item("fillDmg").GetValue<Circle>().Color;
+            //DrawingDamage.DamageToUnit = Computed.GetComboDamage;
+            //DrawingDamage.Enabled = TwistedFateMenu.Item("drawComboDmg").GetValue<bool>();
+            //DrawingDamage.Fill = TwistedFateMenu.Item("fillDmg").GetValue<Circle>().Active;
+            //DrawingDamage.FillColor = TwistedFateMenu.Item("fillDmg").GetValue<Circle>().Color;
 
             TwistedFateMenu.Item("drawComboDmg").ValueChanged +=
             delegate (object sender, OnValueChangeEventArgs eventArgs)
             {
-                DrawingDamage.Enabled = eventArgs.GetNewValue<bool>();
+                //DrawingDamage.Enabled = eventArgs.GetNewValue<bool>();
             };
 
             TwistedFateMenu.Item("fillDmg").ValueChanged +=
             delegate (object sender, OnValueChangeEventArgs eventArgs)
             {
-                DrawingDamage.Fill = eventArgs.GetNewValue<Circle>().Active;
-                DrawingDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
+                //DrawingDamage.Fill = eventArgs.GetNewValue<Circle>().Active;
+                //DrawingDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
             };
 
             #endregion

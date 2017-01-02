@@ -60,8 +60,8 @@ using EloBuddy;
             ForceUltimate = new CommonForceUltimate(this);
             UltimateRange = Spells.R.Range;
             ForceUltimate.ForceUltimate = AnnieOrbwalker.Ultimate;
-            DrawDamage.AmountOfDamage = Spells.MaxComboDamage;
-            DrawDamage.Active = true;
+            //DrawDamage.AmountOfDamage = Spells.MaxComboDamage;
+            //DrawDamage.Active = true;
 
             Tibbers = new AnnieTibbers(this);
 

@@ -154,7 +154,7 @@ namespace Staberina
             dmg.AddCircle("HPColor", "Predicted Health Color", Color.White);
             dmg.AddCircle("FillColor", "Damage Color", Color.HotPink);
             dmg.AddBool("Killable", "Killable Text");
-            DamageIndicator.Initialize(dmg, Utility.GetComboDamage);
+            //DamageIndicator.Initialize(dmg, Utility.GetComboDamage);
 
             Menu.AddInfo("MenuInfo", "-- Misc --", ScriptColor);
             Menu.AddList("ComboMode", "Combo Mode", new[] { "E->Q->W", "Q->E->W" });

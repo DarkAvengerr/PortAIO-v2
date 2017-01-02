@@ -117,20 +117,20 @@ namespace xSaliceResurrected_Rework.Pluging
                 var drawFill = new MenuItem("Draw_Fill", "Draw Combo Damage Fill", true).SetValue(new Circle(true, Color.FromArgb(90, 255, 169, 4)));
                 drawMenu.AddItem(drawComboDamageMenu);
                 drawMenu.AddItem(drawFill);
-                DamageIndicator.DamageToUnit = GetComboDamage;
-                DamageIndicator.Enabled = drawComboDamageMenu.GetValue<bool>();
-                DamageIndicator.Fill = drawFill.GetValue<Circle>().Active;
-                DamageIndicator.FillColor = drawFill.GetValue<Circle>().Color;
+                //DamageIndicator.DamageToUnit = GetComboDamage;
+                //DamageIndicator.Enabled = drawComboDamageMenu.GetValue<bool>();
+                //DamageIndicator.Fill = drawFill.GetValue<Circle>().Active;
+                //DamageIndicator.FillColor = drawFill.GetValue<Circle>().Color;
                 drawComboDamageMenu.ValueChanged +=
                     delegate (object sender, OnValueChangeEventArgs eventArgs)
                     {
-                        DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
+                        //DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
                     };
                 drawFill.ValueChanged +=
                     delegate (object sender, OnValueChangeEventArgs eventArgs)
                     {
-                        DamageIndicator.Fill = eventArgs.GetNewValue<Circle>().Active;
-                        DamageIndicator.FillColor = eventArgs.GetNewValue<Circle>().Color;
+                        //DamageIndicator.Fill = eventArgs.GetNewValue<Circle>().Active;
+                        //DamageIndicator.FillColor = eventArgs.GetNewValue<Circle>().Color;
                     };
                 Menu.AddSubMenu(drawMenu);
             }

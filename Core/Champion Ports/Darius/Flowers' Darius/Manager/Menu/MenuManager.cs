@@ -100,7 +100,7 @@ namespace Flowers_Darius.Manager.Menu
                 drawMenu.AddItem(new MenuItem("DrawE", "Draw E Range", true).SetValue(false));
                 drawMenu.AddItem(new MenuItem("DrawR", "Draw R Range", true).SetValue(false));
                 drawMenu.AddItem(new MenuItem("DrawRStatus", "Draw R Status", true).SetValue(true));
-                DamageIndicator.AddToMenu(drawMenu);
+                //DamageIndicator.AddToMenu(drawMenu);
             }
 
             Menu.AddItem(new MenuItem("asdvre1w56", "  "));

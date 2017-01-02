@@ -174,20 +174,20 @@ namespace SurvivorMalzahar
             var drawFill =
                 DrawingMenu.AddItem(new MenuItem("SurvivorMalzahar.DrawColour", "Fill Color", true).SetValue(
                     new Circle(true, System.Drawing.Color.FromArgb(204, 255, 0, 1))));
-            DrawDamage.DamageToUnit = CalculateDamage;
-            DrawDamage.Enabled = dmgAfterShave.GetValue<bool>();
-            DrawDamage.Fill = drawFill.GetValue<Circle>().Active;
-            DrawDamage.FillColor = drawFill.GetValue<Circle>().Color;
+            //DrawDamage.DamageToUnit = CalculateDamage;
+            //DrawDamage.Enabled = dmgAfterShave.GetValue<bool>();
+            //DrawDamage.Fill = drawFill.GetValue<Circle>().Active;
+            //DrawDamage.FillColor = drawFill.GetValue<Circle>().Color;
             dmgAfterShave.ValueChanged +=
                 delegate(object sender, OnValueChangeEventArgs eventArgs)
                 {
-                    DrawDamage.Enabled = eventArgs.GetNewValue<bool>();
+                    //DrawDamage.Enabled = eventArgs.GetNewValue<bool>();
                 };
 
             drawFill.ValueChanged += delegate(object sender, OnValueChangeEventArgs eventArgs)
             {
-                DrawDamage.Fill = eventArgs.GetNewValue<Circle>().Active;
-                DrawDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
+                //DrawDamage.Fill = eventArgs.GetNewValue<Circle>().Active;
+                //DrawDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
             };
 
             #endregion

@@ -35,8 +35,8 @@ using LeagueSharp.Common;
 
             Q.SetCharged(250, 1600, 1.2f);
 
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = GetComboDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = GetComboDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = true;
 
             Obj_AI_Base.OnProcessSpellCast += AIHeroClient_OnProcessSpellCast;
         }

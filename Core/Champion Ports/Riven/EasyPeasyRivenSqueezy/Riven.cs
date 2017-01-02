@@ -95,8 +95,8 @@ using EloBuddy;
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloserOnOnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Interrupter2OnOnInterruptableTarget;
 
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = RivenCombo.GetDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = true;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = RivenCombo.GetDamage;
 
             NotificationHandler.ShowWelcome();
 

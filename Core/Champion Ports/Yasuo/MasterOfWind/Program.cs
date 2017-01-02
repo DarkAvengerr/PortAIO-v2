@@ -150,11 +150,11 @@ namespace MasterOfWind
             if (menu.Item("Draw R Range").GetValue<bool>())
                 Render.Circle.DrawCircle(getPlayer().Position, 1200f, System.Drawing.Color.GreenYellow,3);
 
-            /*    LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = base.getMainComboDamage;
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = dmgAfterComboItem.GetValue<bool>();
+            /*    //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = base.getMainComboDamage;
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = dmgAfterComboItem.GetValue<bool>();
                 dmgAfterComboItem.ValueChanged += delegate(object sender, OnValueChangeEventArgs eventArgs)
                 {
-                    LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
+                    //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
                 };/
             */
 

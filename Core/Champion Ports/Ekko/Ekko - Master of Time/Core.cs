@@ -90,11 +90,11 @@ using EloBuddy;
                 }
             }
             /*MenuItem dmgAfterComboItem= Menu.GetMenu.Item("DDM");
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit += hero => (float)riskCheck.GetDamageInput(new List<Spell> {Spells.Q,Spells.E,Spells.R},hero );
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit += hero => (float)riskCheck.GetDamageInput(new List<Spell> {Spells.Q,Spells.E,Spells.R},hero );
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = true;
             dmgAfterComboItem.ValueChanged += delegate (object sender, OnValueChangeEventArgs eventArgs)
             {
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
             };*/
         }
 

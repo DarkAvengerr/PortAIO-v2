@@ -7,7 +7,6 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using System.Drawing;
-using MasterOfPlants;
 using SebbyLib;
 using Orbwalking = LeagueSharp.Common.Orbwalking;
 
@@ -152,15 +151,12 @@ using LeagueSharp.Common;
             if (menu.Item("Draw R Range").GetValue<bool>())
                 Render.Circle.DrawCircle(getPlayer().Position,700f, System.Drawing.Color.Blue,2);           
         }
-
-        private DamageIndicator indicator;
         public void load()
         {
             player = ObjectManager.Player;
             if (player.ChampionName != "Zyra") return;
             Chat.Print(getName()+" load good luck ;) " + getVersion());
             loadMenu();
-           indicator = new DamageIndicator(this);
             Drawing.OnDraw += draw;
 
             Game.OnUpdate += update;

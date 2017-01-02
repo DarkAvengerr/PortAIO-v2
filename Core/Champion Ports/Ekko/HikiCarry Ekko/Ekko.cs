@@ -121,7 +121,7 @@ using EloBuddy;
             }
             Config.AddItem(new MenuItem("CRHITCHANCE", "Skillshot Hit Chance").SetValue<StringList>(new StringList(SSHCommon.Utility.HitchanceNameArray, 1)));
             Config.AddToMainMenu();
-            DamageIndicator.DamageToUnit = (t) => (float)CalculateComboDamage(t);
+            //DamageIndicator.DamageToUnit = (t) => (float)CalculateComboDamage(t);
             Game.OnUpdate += Game_OnGameUpdate;
             Orbwalking.AfterAttack += Orbwalking_AfterAttack;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;

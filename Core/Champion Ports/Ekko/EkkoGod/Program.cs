@@ -90,8 +90,8 @@ using EloBuddy;
             drawingsMenu.AddItem(new MenuItem("drawGhost", "R range (around ghost)").SetValue(new Circle(true, Color.FromArgb(100, 255, 255, 255))));
             drawingsMenu.AddItem(new MenuItem("drawPassiveStacks", "Passive stacks").SetValue(new Circle(true, Color.FromArgb(100, 255, 255, 255))));
             var dmgAfterCombo = new MenuItem("DamageAfterCombo", "Draw damage after combo").SetValue(true);
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = ComboDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = dmgAfterCombo.GetValue<bool>();
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = ComboDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = dmgAfterCombo.GetValue<bool>();
             drawingsMenu.AddItem(dmgAfterCombo);
             Config.AddSubMenu(drawingsMenu);
 

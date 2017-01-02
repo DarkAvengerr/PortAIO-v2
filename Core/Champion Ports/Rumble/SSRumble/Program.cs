@@ -214,31 +214,6 @@ namespace SSRumble
 
             #region DrawDamage
 
-            var drawdamage = DrawingMenu.AddSubMenu(new Menu(":: Draw Damage", "drawdamage"));
-            {
-                var dmgAfterShave =
-                    drawdamage.AddItem(
-                        new MenuItem("SurvivorRumble.DrawComboDamage", "Draw Damage on Enemy's HP Bar").SetValue(true));
-                var drawFill =
-                    drawdamage.AddItem(new MenuItem("SurvivorRumble.DrawColour", "Fill Color", true).SetValue(
-                        new Circle(true, System.Drawing.Color.Chartreuse)));
-                DrawDamage.DamageToUnit = CalculateDamage;
-                DrawDamage.Enabled = dmgAfterShave.GetValue<bool>();
-                DrawDamage.Fill = drawFill.GetValue<Circle>().Active;
-                DrawDamage.FillColor = drawFill.GetValue<Circle>().Color;
-                dmgAfterShave.ValueChanged +=
-                    delegate(object sender, OnValueChangeEventArgs eventArgs)
-                    {
-                        DrawDamage.Enabled = eventArgs.GetNewValue<bool>();
-                    };
-
-                drawFill.ValueChanged += delegate(object sender, OnValueChangeEventArgs eventArgs)
-                {
-                    DrawDamage.Fill = eventArgs.GetNewValue<Circle>().Active;
-                    DrawDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
-                };
-            }
-
             #endregion
 
             // Add everything to the main config/menu/root.

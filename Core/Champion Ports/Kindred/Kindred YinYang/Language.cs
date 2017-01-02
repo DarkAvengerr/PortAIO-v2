@@ -128,7 +128,7 @@ namespace Kindred___YinYang
             {
                 var damageDraw = new Menu("Damage Draw", "Damage Draw");
                 {
-                    damageDraw.AddItem(new MenuItem("aa.indicator", "AA Indicator").SetValue(new Circle(true, System.Drawing.Color.Gold)));
+                    //Damagedraw.AddItem(new MenuItem("aa.indicator", "AA Indicator").SetValue(new Circle(true, System.Drawing.Color.Gold)));
                     drawMenu.AddSubMenu(damageDraw);
                 }
                 drawMenu.AddItem(new MenuItem("q.drawx", "Q Range").SetValue(new Circle(true, System.Drawing.Color.White)));
@@ -236,7 +236,7 @@ namespace Kindred___YinYang
                 {
                     var damageDraw = new Menu("데미지 표시", "데미지 표시");
                     {
-                        damageDraw.AddItem(new MenuItem("aa.indicator", "AA 표시기").SetValue(new Circle(true, Color.Gold)));
+                        //Damagedraw.AddItem(new MenuItem("aa.indicator", "AA 표시기").SetValue(new Circle(true, Color.Gold)));
                         drawMenu.AddSubMenu(damageDraw);
                     }
                     drawMenu.AddItem(new MenuItem("q.drawx", "Q 사거리 표시").SetValue(new Circle(true, Color.White)));
@@ -346,7 +346,7 @@ namespace Kindred___YinYang
             {
                 var damageDraw = new Menu("Hasar Çizimleri", "Hasar Çizimleri");
                 {
-                    damageDraw.AddItem(new MenuItem("aa.indicator", "AA Göstergesi").SetValue(new Circle(true, System.Drawing.Color.Gold)));
+                    //Damagedraw.AddItem(new MenuItem("aa.indicator", "AA Göstergesi").SetValue(new Circle(true, System.Drawing.Color.Gold)));
                     drawMenu.AddSubMenu(damageDraw);
                 }
                 drawMenu.AddItem(new MenuItem("q.drawx", "Q Menzili").SetValue(new Circle(true, System.Drawing.Color.White)));
@@ -455,7 +455,7 @@ namespace Kindred___YinYang
             {
                 var damageDraw = new Menu("Desenho do dan", "Desenho do dano");
                 {
-                    damageDraw.AddItem(new MenuItem("aa.indicator", "AA Indicator").SetValue(new Circle(true, System.Drawing.Color.Gold)));
+                    //Damagedraw.AddItem(new MenuItem("aa.indicator", "AA Indicator").SetValue(new Circle(true, System.Drawing.Color.Gold)));
                     drawMenu.AddSubMenu(damageDraw);
                 }
                 drawMenu.AddItem(new MenuItem("q.drawx", "Q Range").SetValue(new Circle(true, System.Drawing.Color.White)));
@@ -564,7 +564,7 @@ namespace Kindred___YinYang
             {
                 var damageDraw = new Menu("Visuel des degats", "Visuel des degats");
                 {
-                    damageDraw.AddItem(new MenuItem("aa.indicator", "AA Indicator").SetValue(new Circle(true, System.Drawing.Color.Gold)));
+                    //Damagedraw.AddItem(new MenuItem("aa.indicator", "AA Indicator").SetValue(new Circle(true, System.Drawing.Color.Gold)));
                     drawMenu.AddSubMenu(damageDraw);
                 }
                 drawMenu.AddItem(new MenuItem("q.drawx","Range du (Q)").SetValue(new Circle(true, System.Drawing.Color.White)));

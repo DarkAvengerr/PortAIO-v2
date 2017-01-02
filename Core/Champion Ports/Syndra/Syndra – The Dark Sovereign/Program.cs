@@ -109,20 +109,20 @@ namespace Syndra______The_Dark_Sovereign
             Config.SubMenu("Draw").AddItem(drawFill);
             Config.SubMenu("Draw").AddItem(dmg);
 
-            DrawDamage.DamageToUnit = GetComboDamage;
-            DrawDamage.Enabled = dmg.GetValue<bool>();
-            DrawDamage.Fill = drawFill.GetValue<Circle>().Active;
-            DrawDamage.FillColor = drawFill.GetValue<Circle>().Color;
+            //DrawDamage.DamageToUnit = GetComboDamage;
+            //DrawDamage.Enabled = dmg.GetValue<bool>();
+            //DrawDamage.Fill = drawFill.GetValue<Circle>().Active;
+            //DrawDamage.FillColor = drawFill.GetValue<Circle>().Color;
 
             dmg.ValueChanged += delegate (object sender, OnValueChangeEventArgs eventArgs)
             {
-                DrawDamage.Enabled = eventArgs.GetNewValue<bool>();
+                //DrawDamage.Enabled = eventArgs.GetNewValue<bool>();
             };
 
             drawFill.ValueChanged += delegate (object sender, OnValueChangeEventArgs eventArgs)
             {
-                DrawDamage.Fill = eventArgs.GetNewValue<Circle>().Active;
-                DrawDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
+                //DrawDamage.Fill = eventArgs.GetNewValue<Circle>().Active;
+                //DrawDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
             };
 
 

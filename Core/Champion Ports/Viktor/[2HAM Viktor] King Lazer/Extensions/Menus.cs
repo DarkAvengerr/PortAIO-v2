@@ -85,22 +85,22 @@ using LeagueSharp.Common;
                 DrawMenu.SubMenu("Damage Draws").AddItem(drawDamageMenu);
                 DrawMenu.SubMenu("Damage Draws").AddItem(drawFill);
 
-                DrawingDamage.DamageToUnit = Champions.Viktor.CalculateDamage;
-                DrawingDamage.Enabled = drawDamageMenu.GetValue<bool>();
-                DrawingDamage.Fill = drawFill.GetValue<Circle>().Active;
-                DrawingDamage.FillColor = drawFill.GetValue<Circle>().Color;
+                //DrawingDamage.DamageToUnit = Champions.Viktor.CalculateDamage;
+                //DrawingDamage.Enabled = drawDamageMenu.GetValue<bool>();
+                //DrawingDamage.Fill = drawFill.GetValue<Circle>().Active;
+                //DrawingDamage.FillColor = drawFill.GetValue<Circle>().Color;
 
                 drawDamageMenu.ValueChanged +=
                 delegate (object sender, OnValueChangeEventArgs eventArgs)
                 {
-                    DrawingDamage.Enabled = eventArgs.GetNewValue<bool>();
+                    //DrawingDamage.Enabled = eventArgs.GetNewValue<bool>();
                 };
 
                 drawFill.ValueChanged +=
                 delegate (object sender, OnValueChangeEventArgs eventArgs)
                 {
-                    DrawingDamage.Fill = eventArgs.GetNewValue<Circle>().Active;
-                    DrawingDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
+                    //DrawingDamage.Fill = eventArgs.GetNewValue<Circle>().Active;
+                    //DrawingDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
                 };
                 #endregion
 

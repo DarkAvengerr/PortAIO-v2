@@ -30,8 +30,8 @@ using EloBuddy;
         {
             this.CreateMenu();
 
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = this.DamageToUnit;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = this.DamageToUnit;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = true;
         }
 
         #endregion

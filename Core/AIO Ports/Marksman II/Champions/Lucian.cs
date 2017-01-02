@@ -554,10 +554,6 @@ using LeagueSharp.Common;
             var dmgAfterComboItem = new MenuItem("DamageAfterCombo", "Damage After Combo").SetValue(true);
             config.AddItem(dmgAfterComboItem);
             
-            //LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = GetComboDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = dmgAfterComboItem.GetValue<bool>();
-            dmgAfterComboItem.ValueChanged +=
-                (sender, args) => { LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = args.GetNewValue<bool>(); };
             return true;
         }
 

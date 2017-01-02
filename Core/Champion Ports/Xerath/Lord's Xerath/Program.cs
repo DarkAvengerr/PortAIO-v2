@@ -49,9 +49,9 @@ namespace Lords_Xerath
             HasIgnite = player.GetSpellSlot("SummonerDot") != SpellSlot.Unknown;
 
             // Initialize damage indicator
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = Damages.GetTotalDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Color = System.Drawing.Color.Aqua;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = Damages.GetTotalDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Color = System.Drawing.Color.Aqua;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = true;
 
             // Listend to some other events
             Game.OnUpdate += Game_OnGameUpdate;

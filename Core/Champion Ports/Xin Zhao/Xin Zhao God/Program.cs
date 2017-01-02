@@ -86,8 +86,8 @@ using EloBuddy;
             drawingsMenu.AddItem(new MenuItem("rRange", "R Range").SetValue(new Circle(true, Color.FromArgb(100, 255, 255, 255))));
             drawingsMenu.AddItem(new MenuItem("challenged", "Circle Challenged Target").SetValue(new Circle(true, Color.FromArgb(100, 255, 255, 255))));
             var dmgAfterCombo = new MenuItem("DamageAfterCombo", "Draw Damage After Combo").SetValue(true);
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = ComboDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = dmgAfterCombo.GetValue<bool>();
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = ComboDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = dmgAfterCombo.GetValue<bool>();
             drawingsMenu.AddItem(dmgAfterCombo);
             Config.AddSubMenu(drawingsMenu);
 

@@ -155,10 +155,10 @@ using EloBuddy;
             Obj_AI_Base.OnSpellCast +=Obj_AI_Base_OnProcessSpellCast;
             AntiGapcloser.OnEnemyGapcloser += Gapcloser_OnGapCloser;
             Interrupter2.OnInterruptableTarget += InterruptableSpell_OnInterruptableTarget;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = AhriDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = drawhp;
-            CustomDamageIndicator.Initialize(AhriDamage);
-            CustomDamageIndicator.Enabled = drawhp;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = AhriDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = drawhp;
+            //Custom//DamageIndicator.Initialize(AhriDamage);
+            //Custom//DamageIndicator.Enabled = drawhp;
         }
 
         private void Ahri_ValueChanged(object sender, OnValueChangeEventArgs e)
@@ -166,8 +166,8 @@ using EloBuddy;
             if (!Enable) return;
             if (sender != null)
             {
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = e.GetNewValue<bool>();
-                CustomDamageIndicator.Enabled = e.GetNewValue<bool>();
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = e.GetNewValue<bool>();
+                //Custom//DamageIndicator.Enabled = e.GetNewValue<bool>();
             }
         }
         private static bool comboq { get { return MainMenu.Item("Qc").GetValue<bool>(); } }
@@ -288,8 +288,8 @@ using EloBuddy;
         {
             if (!Enable)
             {
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = false;
-                CustomDamageIndicator.Enabled = false;
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = false;
+                //Custom//DamageIndicator.Enabled = false;
                 return;
             }
             if ((IsCombo || IsHarass) && Orbwalking.CanMove(50)

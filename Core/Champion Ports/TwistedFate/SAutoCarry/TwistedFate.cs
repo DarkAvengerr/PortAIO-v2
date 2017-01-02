@@ -6,7 +6,7 @@ using SCommon;
 using SCommon.PluginBase;
 using SCommon.Orbwalking;
 using SCommon.Database;
-using SUtility.Drawings;
+
 using SharpDX;
 //typedefs
 using TargetSelector = SCommon.TS.TargetSelector;
@@ -51,7 +51,7 @@ namespace SAutoCarry.Champions
             misc.AddItem(new MenuItem("SAutoCarry.TwistedFate.Misc.DrawR", "Draw R Range").SetValue(true));
             misc.AddItem(new MenuItem("SAutoCarry.TwistedFate.Misc.DrawRMinimap", "Draw R Range On Minimap").SetValue(true));
             
-            DamageIndicator.Initialize((t) => (float)CalculateComboDamage(t), misc);
+            //DamageIndicator.Initialize((t) => (float)CalculateComboDamage(t), misc);
 
             ConfigMenu.AddSubMenu(combo);
             ConfigMenu.AddSubMenu(harass);

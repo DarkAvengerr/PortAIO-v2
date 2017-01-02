@@ -131,8 +131,8 @@ public class EasyAhriCore : EasyLib2.Champion
         if (BoolLinks["drawing_r"].Value)
             LeagueSharp.Common.Utility.DrawCircle(Player.Position, R.Range, Color.FromArgb(100, 0, 255, 0));
 
-        LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = BoolLinks["drawing_damage"].Value;
-        LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = DamageCalculation;
+        //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = BoolLinks["drawing_damage"].Value;
+        //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = DamageCalculation;
     }
 
     protected override void OnPossibleToInterrupt(Obj_AI_Base unit, InterruptableSpell spell)

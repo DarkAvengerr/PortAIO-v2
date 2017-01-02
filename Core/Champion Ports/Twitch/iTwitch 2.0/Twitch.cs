@@ -145,7 +145,7 @@ using EloBuddy;
         {
             if (ObjectManager.Player.ChampionName != "Twitch") return;
 
-            CustomDamageIndicator.Initialize(Extensions.GetPoisonDamage);
+            //Custom//DamageIndicator.Initialize(Extensions.GetPoisonDamage);
 
             LoadSpells();
             LoadMenu();
@@ -220,7 +220,7 @@ using EloBuddy;
 
         private void OnDraw(EventArgs args)
         {
-            CustomDamageIndicator.Enabled = Menu.Item("com.itwitch.drawing.eDamage").GetValue<Circle>().Active;
+            //Custom//DamageIndicator.Enabled = Menu.Item("com.itwitch.drawing.eDamage").GetValue<Circle>().Active;
 
             if (Menu.Item("com.itwitch.drawing.drawRRange").GetValue<bool>())
             {

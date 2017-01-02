@@ -27,8 +27,8 @@ using LeagueSharp.Common;
             E = new Spell(SpellSlot.E, 1200);
             R = new Spell(SpellSlot.R, 1000);
 
-             //LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = GetComboDamage;
-             //LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
+             ////LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = GetComboDamage;
+             ////LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = true;
             Utils.Utils.PrintMessage("Twitch");
         }
 

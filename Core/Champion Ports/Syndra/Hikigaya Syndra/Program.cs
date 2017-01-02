@@ -209,27 +209,27 @@ namespace Hikigaya_Syndra
                     Config.AddSubMenu(drawMenu);
                 }
                 var drawDamageMenu = new MenuItem("combo.damage.damageindicator", "Combo Damage").SetValue(true);
-                var drawFill = new MenuItem("combo.damage.damageindicator.fill", "Combo Damage Fill").SetValue(new Circle(true, Color.Gold));
+                var drawFill = new MenuItem("combo.damage.//DamageIndicator.fill", "Combo Damage Fill").SetValue(new Circle(true, Color.Gold));
 
                 drawMenu.SubMenu("Damage Draws").AddItem(drawDamageMenu);
                 drawMenu.SubMenu("Damage Draws").AddItem(drawFill);
 
-                DamageIndicator.DamageToUnit = Helper.TotalDamage;
-                DamageIndicator.Enabled = drawDamageMenu.GetValue<bool>();
-                DamageIndicator.Fill = drawFill.GetValue<Circle>().Active;
-                DamageIndicator.FillColor = drawFill.GetValue<Circle>().Color;
+                //DamageIndicator.DamageToUnit = Helper.TotalDamage;
+                //DamageIndicator.Enabled = drawDamageMenu.GetValue<bool>();
+                //DamageIndicator.Fill = drawFill.GetValue<Circle>().Active;
+                //DamageIndicator.FillColor = drawFill.GetValue<Circle>().Color;
 
                 drawDamageMenu.ValueChanged +=
                 delegate (object sender, OnValueChangeEventArgs eventArgs)
                 {
-                    DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
+                    //DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
                 };
 
                 drawFill.ValueChanged +=
                 delegate (object sender, OnValueChangeEventArgs eventArgs)
                 {
-                    DamageIndicator.Fill = eventArgs.GetNewValue<Circle>().Active;
-                    DamageIndicator.FillColor = eventArgs.GetNewValue<Circle>().Color;
+                    //DamageIndicator.Fill = eventArgs.GetNewValue<Circle>().Active;
+                    //DamageIndicator.FillColor = eventArgs.GetNewValue<Circle>().Color;
                 };
                 Config.AddItem(new MenuItem("credits.x1", "                Developed by Hikigaya").SetFontStyle(FontStyle.Bold, SharpDX.Color.DodgerBlue));
                 Config.AddToMainMenu();

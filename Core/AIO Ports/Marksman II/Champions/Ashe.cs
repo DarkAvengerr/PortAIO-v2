@@ -38,8 +38,8 @@ using LeagueSharp.Common;
             R.SetSkillshot(0.25f, 130f, 1600f, false, SkillshotType.SkillshotLine);
 
 
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = GetComboDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = GetComboDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = true;
             
             Obj_AI_Base.OnBuffGain += (sender, args) =>
             {

@@ -60,7 +60,7 @@ namespace SharpShooter.Plugins
             MenuProvider.Champion.Drawings.AddItem("Draw R Killable", new Circle(true, Color.GreenYellow));
             MenuProvider.Champion.Drawings.AddItem("Draw Q Cone",
                 new Circle(true, Color.FromArgb(150, Color.GreenYellow)));
-            MenuProvider.Champion.Drawings.AddDamageIndicator(GetComboDamage);
+            
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;

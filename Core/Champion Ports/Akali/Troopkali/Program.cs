@@ -116,8 +116,8 @@ using EloBuddy;
 
             Menu.AddToMainMenu();
 
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = DamageToUnit;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = DamageToUnit;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = true;
 
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Drawing.OnDraw += OnDraw;

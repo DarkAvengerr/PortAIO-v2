@@ -8,7 +8,7 @@ using SCommon.Database;
 using SCommon.PluginBase;
 using SPrediction;
 using SCommon.Orbwalking;
-using SUtility.Drawings;
+
 using EloBuddy;
 using SharpDX;
 //typedefs

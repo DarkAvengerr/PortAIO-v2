@@ -133,12 +133,12 @@ namespace CheerleaderLux.Extensions
         {
             if (Config.Item("optimize").GetValue<bool>())
             {
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = false;
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = false;
                 return;
             }
             if (Config.Item("disable.dmg").GetValue<bool>())
             {
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = false;
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = false;
                 return;
             }
 
@@ -170,7 +170,7 @@ namespace CheerleaderLux.Extensions
                             Drawing.DrawLine(
                                 (float)comboXPos + i, hpBarPos.Y + 2, (float)comboXPos + i,
                                 hpBarPos.Y + 10, 1, Config.Item("drawing.dmg.color").GetValue<Circle>().Color);
-                            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = false;
+                            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = false;
                         }
 
                     }
@@ -178,9 +178,9 @@ namespace CheerleaderLux.Extensions
             }
             if (mode == 0)
             {
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = CalcDamage;
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Color = Config.Item("drawing.dmg.color").GetValue<Circle>().Color;
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = CalcDamage;
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Color = Config.Item("drawing.dmg.color").GetValue<Circle>().Color;
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = true;
             }
         }
 

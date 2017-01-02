@@ -129,11 +129,11 @@ using EloBuddy;
                     {
                         MenuLocal.AddItem(dmgAfterComboItem);
 
-                        LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = CommonMath.GetComboDamage;
-                        LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = dmgAfterComboItem.GetValue<bool>();
+                        //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = CommonMath.GetComboDamage;
+                        //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = dmgAfterComboItem.GetValue<bool>();
                         dmgAfterComboItem.ValueChanged += delegate (object sender, OnValueChangeEventArgs eventArgs)
                         {
-                            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
+                            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
                         };
                     }
                 }

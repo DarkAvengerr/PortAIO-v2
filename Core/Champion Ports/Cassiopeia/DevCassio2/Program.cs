@@ -336,13 +336,10 @@ namespace DevCassio
                 }
             };
 
-            Config.Item("EDamage").ValueChanged +=
-                (sender, e) => { LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = e.GetNewValue<bool>(); };
-
             if (Config.Item("EDamage").GetValue<bool>())
             {
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit += GetEDamage;
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit += GetEDamage;
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = true;
             }
 
             Config.Item("UltRange").ValueChanged += (sender, e) => { R.Range = e.GetNewValue<Slider>().Value; };

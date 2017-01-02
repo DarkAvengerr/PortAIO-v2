@@ -103,8 +103,8 @@ namespace EasyGraves
             DrawCircle("Drawing_e", "E");
             DrawCircle("Drawing_r", "R");
 
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = UltimateDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = Menu.Item("Drawing_rdamage").GetValue<bool>();
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = UltimateDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = Menu.Item("Drawing_rdamage").GetValue<bool>();
         }
 
         protected override void Update()

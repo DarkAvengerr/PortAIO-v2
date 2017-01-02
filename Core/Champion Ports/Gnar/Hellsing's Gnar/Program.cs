@@ -50,8 +50,8 @@ namespace Gnar
             HasIgnite = player.GetSpellSlot("SummonerDot") != SpellSlot.Unknown;
 
             // Enable damage indicators
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = Damages.GetTotalDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = Damages.GetTotalDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = true;
                         TextAxe = new Font(
                 Drawing.Direct3DDevice,
                 new FontDescription

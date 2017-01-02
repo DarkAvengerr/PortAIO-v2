@@ -76,11 +76,6 @@ using EloBuddy;
             Config.SubMenu("Drawing").AddItem(new MenuItem("drawKill", "Draw Killable").SetValue(true));
 
             Config.AddToMainMenu();
-
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = delegate(AIHeroClient enemy)
-            {
-                return (float)GetDamage(enemy);
-            };
             
             _Q.SetSkillshot(0.625f, 50f, 1600f, true, SkillshotType.SkillshotLine);
             _W.SetSkillshot(1.0f, 240f, int.MaxValue, false, SkillshotType.SkillshotCircle);
@@ -154,7 +149,7 @@ using EloBuddy;
 
         private static void OnUpdate(EventArgs args)
         {
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = Config.SubMenu("Drawing").Item("drawDamage").GetValue<bool>();
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = Config.SubMenu("Drawing").Item("drawDamage").GetValue<bool>();
 
             if (_orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
             {

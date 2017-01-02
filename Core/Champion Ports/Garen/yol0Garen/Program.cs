@@ -87,8 +87,8 @@ using EloBuddy;
             _menu.SubMenu("Drawing").AddItem(new MenuItem("drawKillability", "Draw Killable").SetValue(true));
             _menu.SubMenu("Drawing").AddItem(new MenuItem("drawDamage", "Draw Damage to Target").SetValue(true));
 
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit += GetComboDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Color = Color.GreenYellow;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit += GetComboDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Color = Color.GreenYellow;
             
             _menu.AddToMainMenu();
 
@@ -102,7 +102,7 @@ using EloBuddy;
 
         private static void OnGameUpdate(EventArgs args)
         {
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = _menu.SubMenu("Drawing").Item("drawDamage").GetValue<bool>();
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = _menu.SubMenu("Drawing").Item("drawDamage").GetValue<bool>();
             _target = TargetSelector.GetTarget(500, TargetSelector.DamageType.Physical);
 
             if (_orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo || _orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.LaneClear)

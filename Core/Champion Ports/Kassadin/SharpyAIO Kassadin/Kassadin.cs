@@ -112,11 +112,11 @@ using EloBuddy;
 
             Menu.AddToMainMenu();
 
-            new DamageIndicator();
-            DamageIndicator.DamageToUnit = getcombodamage;
-            DamageIndicator.Enabled = Menu.Item("DIA").GetValue<bool>();
-            DamageIndicator.Fill = Menu.Item("DIF").GetValue<Circle>().Active;
-            DamageIndicator.FillColor = Menu.Item("DIF").GetValue<Circle>().Color;
+            //new DamageIndicator();
+            //DamageIndicator.DamageToUnit = getcombodamage;
+            //DamageIndicator.Enabled = Menu.Item("DIA").GetValue<bool>();
+            //DamageIndicator.Fill = Menu.Item("DIF").GetValue<Circle>().Active;
+            //DamageIndicator.FillColor = Menu.Item("DIF").GetValue<Circle>().Color;
 
             Menu.Item("DIA").ValueChanged += Kassadin_ValueChanged;
             Menu.Item("DIF").ValueChanged += Kassadin_ValueChanged1;
@@ -132,13 +132,13 @@ using EloBuddy;
 
         private void Kassadin_ValueChanged1(object sender, OnValueChangeEventArgs e)
         {
-            DamageIndicator.Fill = e.GetNewValue<Circle>().Active;
-            DamageIndicator.FillColor = e.GetNewValue<Circle>().Color;
+            //DamageIndicator.Fill = e.GetNewValue<Circle>().Active;
+            //DamageIndicator.FillColor = e.GetNewValue<Circle>().Color;
         }
 
         private void Kassadin_ValueChanged(object sender, OnValueChangeEventArgs e)
         {
-            DamageIndicator.Enabled = e.GetNewValue<bool>();
+            //DamageIndicator.Enabled = e.GetNewValue<bool>();
         }
 
         private void Drawing_OnDraw(EventArgs args)

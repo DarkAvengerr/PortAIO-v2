@@ -212,9 +212,9 @@ using EloBuddy;
                     .AddItem(new MenuItem("CircleThickness", "Circles Thickness").SetValue(new Slider(1, 10, 1)));
                 _config.AddToMainMenu();
                 new AssassinManager();
-                new DamageIndicator();
+                //new DamageIndicator();
 
-                DamageIndicator.DamageToUnit = ComboDamage;
+                //DamageIndicator.DamageToUnit = ComboDamage;
                 Chat.Print("<font color='#881df2'>Zed is Back by jackisback</font> Loaded.");
                 Chat.Print("<font color='#f2881d'>if you wanna help me to pay my internet bills^^ paypal= bulut@live.co.uk</font>");
 

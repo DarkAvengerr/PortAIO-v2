@@ -64,7 +64,7 @@ namespace SharpShooter.Plugins
             MenuProvider.Champion.Drawings.AddDrawRrange(Color.FromArgb(100, Color.DeepSkyBlue), false);
             MenuProvider.Champion.Drawings.AddItem("Draw Rocket explosion range on AutoAttack Target", true);
             MenuProvider.Champion.Drawings.AddItem("Draw R Killable", new Circle(true, Color.GreenYellow));
-            MenuProvider.Champion.Drawings.AddDamageIndicator(GetComboDamage);
+            
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;

@@ -495,11 +495,11 @@ using LeagueSharp.Common;
             var damageAfterE = new MenuItem("DamageAfterE", "Damage After E").SetValue(true);
             config.AddItem(damageAfterE);
 
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = GetEDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = damageAfterE.GetValue<bool>();
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = GetEDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = damageAfterE.GetValue<bool>();
             damageAfterE.ValueChanged += delegate (object sender, OnValueChangeEventArgs eventArgs)
             {
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
             };
 
             return true;

@@ -214,7 +214,7 @@ using EloBuddy;
 
             _Q.SetSkillshot(0.25f, 60f, 1750f, true, SkillshotType.SkillshotLine);
 
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = enemy => (float) GetDamage(enemy);
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = enemy => (float) GetDamage(enemy);
             GameObject.OnCreate += OnCreateObject;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
             Obj_AI_Base.OnProcessSpellCast += KillCombo_OnProcessSpellCast;
@@ -332,7 +332,7 @@ using EloBuddy;
 
         private static void OnUpdate(EventArgs args)
         {
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = _menu.SubMenu("Draw").Item("drawDamage").GetValue<bool>();
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = _menu.SubMenu("Draw").Item("drawDamage").GetValue<bool>();
             _target = TargetSelector.GetTarget(2000, TargetSelector.DamageType.Physical);
             Buff();
             if (_menu.SubMenu("Keys").Item("Escape").GetValue<KeyBind>().Active)

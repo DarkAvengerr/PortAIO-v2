@@ -8,7 +8,7 @@ using SCommon.Database;
 using SCommon.PluginBase;
 using SPrediction;
 using SCommon.Orbwalking;
-using SUtility.Drawings;
+
 using SharpDX;
 //typedefs
 using TargetSelector = SCommon.TS.TargetSelector;
@@ -67,7 +67,6 @@ namespace SAutoCarry.Champions
             //
             misc.AddSubMenu(autograb);
 
-            DamageIndicator.Initialize((t) => (float)CalculateComboDamage(t), misc);
 
             ConfigMenu.AddSubMenu(combo);
             ConfigMenu.AddSubMenu(harass);

@@ -44,7 +44,7 @@ namespace SharpShooter.Plugins
 
             MenuProvider.Champion.Drawings.AddDrawQrange(Color.FromArgb(100, Color.DeepSkyBlue), false);
             MenuProvider.Champion.Drawings.AddDrawRrange(Color.FromArgb(100, Color.DeepSkyBlue), false);
-            MenuProvider.Champion.Drawings.AddDamageIndicator(GetComboDamage);
+            
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;

@@ -67,7 +67,7 @@ using EloBuddy;
             LoadModules();
             Prediction.Initialize(Menu);
             PopulateList();
-            CustomDamageIndicator.Initialize(Helper.GetRendDamage);
+            //Custom//DamageIndicator.Initialize(Helper.GetRendDamage);
             Game.OnUpdate += OnUpdate;
             Drawing.OnDraw += OnDraw;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpell;
@@ -509,7 +509,7 @@ using EloBuddy;
         /// <param name="args">even more gay</param>
         private void OnDraw(EventArgs args)
         {
-            CustomDamageIndicator.Enabled = Menu.Item("com.ikalista.drawing.eDamage").GetValue<Circle>().Active;
+            //Custom//DamageIndicator.Enabled = Menu.Item("com.ikalista.drawing.eDamage").GetValue<Circle>().Active;
 
             if (Menu.Item("com.ikalista.drawing.spellRanges").GetValue<bool>())
             {

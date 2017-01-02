@@ -182,7 +182,7 @@ namespace LuluLicious
             dmg.AddCircle("HPColor", "Predicted Health Color", System.Drawing.Color.White);
             dmg.AddCircle("FillColor", "Damage Color", System.Drawing.Color.MediumPurple);
             dmg.AddBool("Killable", "Killable Text");
-            DamageIndicator.Initialize(dmg, Utility.GetComboDamage);
+            //DamageIndicator.Initialize(dmg, Utility.GetComboDamage);
 
             ManaBarIndicator.Initialize(draw, ManaCostDictionary);
             Pix.Initialize(Menu.Item("DrawPix"));

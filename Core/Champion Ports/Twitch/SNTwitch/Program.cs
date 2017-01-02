@@ -91,7 +91,7 @@ using EloBuddy;
             Game.OnUpdate += OnUpdate;
             Drawing.OnDraw += OnDraw;
 
-            CustomDamageIndicator.Initialize(GetDamage);
+            //Custom//DamageIndicator.Initialize(GetDamage);
 
             
         }
@@ -273,8 +273,8 @@ using EloBuddy;
 
         public static void OnDraw(EventArgs args)
         {
-            CustomDamageIndicator.DrawingColor = System.Drawing.Color.DarkSeaGreen;
-            CustomDamageIndicator.Enabled = true;
+            //Custom//DamageIndicator.DrawingColor = System.Drawing.Color.DarkSeaGreen;
+            //Custom//DamageIndicator.Enabled = true;
             if (!p.IsDead && W.Level > 0 && W.IsReady() && m.Item("drawW").GetValue<bool>())
             {
                 Render.Circle.DrawCircle(p.Position, W.Range, System.Drawing.Color.DarkGreen);

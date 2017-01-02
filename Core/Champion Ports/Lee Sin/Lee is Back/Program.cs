@@ -256,7 +256,7 @@ namespace LeeSin
             }
 
 
-            new DamageIndicator();
+            //new DamageIndicator();
 
             Game.OnUpdate += Game_OnUpdate;
             Game.OnUpdate += Game_OnUpdate_RKillSteal;
@@ -282,7 +282,7 @@ namespace LeeSin
             ////Drawing.OnDraw += Drawing_OnDraw_GetBestPositionForWQCombo;
 
             ////Drawing.OnDraw += Drawing_OnDraw_Enemy2;
-            DamageIndicator.DamageToUnit = ComboDamage;
+            //DamageIndicator.DamageToUnit = ComboDamage;
         }
 
         internal enum QCastStage { NotReady, IsReady, IsCasted }

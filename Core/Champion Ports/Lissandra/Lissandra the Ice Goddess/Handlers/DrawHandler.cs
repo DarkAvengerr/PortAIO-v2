@@ -24,8 +24,8 @@ using EloBuddy;
                 return;
             }
 
-            DamageIndicator.DrawingColor = drawDamage.Color;
-            DamageIndicator.Enabled = drawDamage.Active;
+            //DamageIndicator.DrawingColor = //DrawDamage.Color;
+            //DamageIndicator.Enabled = //DrawDamage.Active;
 
             if (drawQ.Active)
             {

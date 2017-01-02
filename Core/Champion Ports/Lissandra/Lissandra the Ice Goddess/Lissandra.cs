@@ -92,9 +92,9 @@ using EloBuddy;
                 ShowNotification("Lissandra the Ice Goddess", Color.DeepSkyBlue, 10000);
                 ShowNotification("by blacky & Asuna - Loaded", Color.DeepSkyBlue, 10000);
 
-                DamageIndicator.Initialize(GetComboDamage);
-                DamageIndicator.Enabled = true;
-                DamageIndicator.DrawingColor = Color.GreenYellow;
+                //DamageIndicator.Initialize(GetComboDamage);
+                //DamageIndicator.Enabled = true;
+                //DamageIndicator.DrawingColor = Color.GreenYellow;
 
                 ManaManager = new ManaManager();
                 MenuGenerator.Load();

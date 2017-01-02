@@ -15,8 +15,8 @@
             Spells = new CommonSpells(this);
             ForceUltimate = new CommonForceUltimate(this);
             DrawDamage = new CommonDamageDrawing(this);
-            DrawDamage.AmountOfDamage = Spells.MaxComboDamage;
-            DrawDamage.Active = true;
+            //DrawDamage.AmountOfDamage = Spells.MaxComboDamage;
+            //DrawDamage.Active = true;
             commonEvolveUltimate = new CommonEvolveUltimate();
             DisableAA = new CommonDisableAA(this);
         }

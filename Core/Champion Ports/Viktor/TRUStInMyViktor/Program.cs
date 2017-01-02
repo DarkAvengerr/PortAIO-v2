@@ -841,12 +841,12 @@ using EloBuddy; namespace Viktor
             ProcessLink("drawRangeR", subMenu.AddLinkedCircle("R range", false, Color.FromArgb(150, Color.Red), R.Range));
             ProcessLink("dmgdraw", subMenu.AddLinkedBool("Draw dmg on healthbar"));
             var dmgAfterComboItem = menu.MainMenu.MenuHandle.SubMenu("Dmg Drawing").AddItem(new MenuItem("dmgdraw", "Draw dmg on healthbar").SetValue(true));
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = GetComboDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = boolLinks["dmgdraw"].Value;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = GetComboDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = boolLinks["dmgdraw"].Value;
             dmgAfterComboItem.ValueChanged += delegate (object sender, OnValueChangeEventArgs eventArgs)
             {
                 Console.WriteLine("menu changed");
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
             };
 
 

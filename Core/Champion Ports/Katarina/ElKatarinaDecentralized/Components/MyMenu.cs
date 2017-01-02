@@ -200,21 +200,21 @@ using LeagueSharp.Common;
                 node.SubMenu("Combo drawings").AddItem(drawFill);
                 node.SubMenu("Combo drawings").AddItem(dmgAfterE);
 
-                DrawDamage.DamageToUnit = RealDamages.GetTotalDamage;
-                DrawDamage.Enabled = dmgAfterE.GetValue<bool>();
-                DrawDamage.Fill = drawFill.GetValue<Circle>().Active;
-                DrawDamage.FillColor = drawFill.GetValue<Circle>().Color;
+                //DrawDamage.DamageToUnit = RealDamages.GetTotalDamage;
+                //DrawDamage.Enabled = dmgAfterE.GetValue<bool>();
+                //DrawDamage.Fill = drawFill.GetValue<Circle>().Active;
+                //DrawDamage.FillColor = drawFill.GetValue<Circle>().Color;
 
                 dmgAfterE.ValueChanged +=
                     delegate (object sender, OnValueChangeEventArgs eventArgs)
                     {
-                        DrawDamage.Enabled = eventArgs.GetNewValue<bool>();
+                        //DrawDamage.Enabled = eventArgs.GetNewValue<bool>();
                     };
 
                 drawFill.ValueChanged += delegate (object sender, OnValueChangeEventArgs eventArgs)
                 {
-                    DrawDamage.Fill = eventArgs.GetNewValue<Circle>().Active;
-                    DrawDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
+                    //DrawDamage.Fill = eventArgs.GetNewValue<Circle>().Active;
+                    //DrawDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
                 };
             }
 

@@ -110,10 +110,10 @@ using EloBuddy;
             DrawMenu.SubMenu("Draw Damage").AddItem(new MenuItem("damagedraw", "Draw Combo Damage").SetValue(true));
             DrawMenu.SubMenu("Draw Damage").AddItem(new MenuItem("damagedrawfill", "Fill Color").SetValue(new Circle(true, System.Drawing.Color.Gold)));
 
-            damageindicator.DamageToUnit = TotalDamage;
-            damageindicator.Enabled = DrawMenu.SubMenu("Draw Damage").Item("damagedraw").GetValue<bool>();
-            damageindicator.Fill = DrawMenu.SubMenu("Draw Damage").Item("damagedrawfill").GetValue<Circle>().Active;
-            damageindicator.FillColor = DrawMenu.SubMenu("Draw Damage").Item("damagedrawfill").GetValue<Circle>().Color;
+            //DamageIndicator.DamageToUnit = TotalDamage;
+            //DamageIndicator.Enabled = DrawMenu.SubMenu("Draw Damage").Item("damagedraw").GetValue<bool>();
+            //DamageIndicator.Fill = DrawMenu.SubMenu("Draw Damage").Item("damagedrawfill").GetValue<Circle>().Active;
+            //DamageIndicator.FillColor = DrawMenu.SubMenu("Draw Damage").Item("damagedrawfill").GetValue<Circle>().Color;
 
 
             Drawing.OnDraw += Drawing_Ondraw;

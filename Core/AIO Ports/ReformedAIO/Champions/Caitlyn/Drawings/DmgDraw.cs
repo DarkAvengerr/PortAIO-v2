@@ -30,16 +30,6 @@ namespace ReformedAIO.Champions.Caitlyn.Drawings
 
         public void OnDraw(EventArgs args)
         {
-            if (ObjectManager.Player.IsDead) return;
-
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(1500)))
-            {
-                drawDamage.Unit = enemy;
-
-                drawDamage.DrawDmg(logic.EwqrDmg(enemy), logic.CanExecute(enemy) 
-                    ? Color.LimeGreen 
-                    : Color.Green);
-            }
         }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)

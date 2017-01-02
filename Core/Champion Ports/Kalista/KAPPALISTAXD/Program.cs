@@ -8,7 +8,6 @@ using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
 using globals = KAPPALISTAXD.Core.KappalistaGlobals;
-using KappalistaDamageIndicator = KAPPALISTAXD.Core.KappalistaDamageIndicator;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
@@ -45,9 +44,6 @@ using EloBuddy;
                 Game.OnUpdate += OnUpdate;
                 Orbwalking.OnNonKillableMinion += OnNonKillableMinion;
                 Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
-
-                KappalistaDamageIndicator.DamageToUnit = GetRealDamage;
-                KappalistaDamageIndicator.Enabled = true;
             }
         }
 

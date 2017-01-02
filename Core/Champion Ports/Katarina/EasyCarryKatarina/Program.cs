@@ -606,24 +606,15 @@ using EloBuddy;
                 drawing.AddItem(new MenuItem("drawing.drawQ", "Draw Q Range")).SetValue(true);
                 drawing.AddItem(new MenuItem("drawing.drawW", "Draw W Range")).SetValue(true);
                 drawing.AddItem(new MenuItem("drawing.drawE", "Draw E Range")).SetValue(true);
-                drawing.AddItem(new MenuItem("drawing.drawDamage.enabled", "Draw Damage").SetValue(true));
-                drawing.AddItem(new MenuItem("drawing.drawDamage.fill", "Draw Damage Fill Color").SetValue(new Circle(true, Color.FromArgb(90, 255, 169, 4))));
+                drawing.AddItem(new MenuItem("drawing.//DrawDamage.enabled", "Draw Damage").SetValue(true));
+                drawing.AddItem(new MenuItem("drawing.//DrawDamage.fill", "Draw Damage Fill Color").SetValue(new Circle(true, Color.FromArgb(90, 255, 169, 4))));
             }
             _config.AddSubMenu(drawing);
 
-            DamageIndicator.DamageToUnit = GetDamage;
-            DamageIndicator.Enabled = _config.Item("drawing.drawDamage.enabled").GetValue<bool>();
-            DamageIndicator.Fill = _config.Item("drawing.drawDamage.fill").GetValue<Circle>().Active;
-            DamageIndicator.FillColor = _config.Item("drawing.drawDamage.fill").GetValue<Circle>().Color;
-
-            _config.Item("drawing.drawDamage.enabled").ValueChanged +=
-                delegate(object sender, OnValueChangeEventArgs eventArgs) { DamageIndicator.Enabled = eventArgs.GetNewValue<bool>(); };
-            _config.Item("drawing.drawDamage.fill").ValueChanged +=
-                delegate(object sender, OnValueChangeEventArgs eventArgs)
-                {
-                    DamageIndicator.Fill = eventArgs.GetNewValue<Circle>().Active;
-                    DamageIndicator.FillColor = eventArgs.GetNewValue<Circle>().Color;
-                };
+            //DamageIndicator.DamageToUnit = GetDamage;
+            //DamageIndicator.Enabled = _config.Item("drawing.//DrawDamage.enabled").GetValue<bool>();
+            //DamageIndicator.Fill = _config.Item("drawing.//DrawDamage.fill").GetValue<Circle>().Active;
+            //DamageIndicator.FillColor = _config.Item("drawing.//DrawDamage.fill").GetValue<Circle>().Color;
 
             var resmanager = new Menu("[Katarina] Resource Manager", "katarina.resmanager");
             {

@@ -125,8 +125,8 @@ using EloBuddy;
 
             Variable.Config.AddToMainMenu();
 
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = Internal.ComboDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = Internal.ComboDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = true;
 
             Drawing.OnDraw += Drawing_OnDraw;
             Game.OnUpdate += Game_OnGameUpdate;

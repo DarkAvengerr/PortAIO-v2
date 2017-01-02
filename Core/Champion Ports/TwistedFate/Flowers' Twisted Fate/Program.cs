@@ -90,11 +90,11 @@ using EloBuddy;
             Menu.SubMenu("Draw").AddItem(new MenuItem("drawingAA", "Real AA&W Range(Flowers Style)").SetValue(true));
 
             var dmgAfterComboItem = new MenuItem("DamageAfterCombo", "Draw damage after combo").SetValue(true);
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = ComboDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = dmgAfterComboItem.GetValue<bool>();
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = ComboDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = dmgAfterComboItem.GetValue<bool>();
             dmgAfterComboItem.ValueChanged += delegate(object sender, OnValueChangeEventArgs eventArgs)
             {
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
             };
             Menu.SubMenu("Draw").AddItem(dmgAfterComboItem);
 

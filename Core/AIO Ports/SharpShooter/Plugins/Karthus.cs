@@ -54,7 +54,7 @@ namespace SharpShooter.Plugins
             MenuProvider.Champion.Drawings.AddDrawWrange(Color.FromArgb(100, Color.DeepSkyBlue), false);
             MenuProvider.Champion.Drawings.AddDrawErange(Color.FromArgb(100, Color.DeepSkyBlue), false);
             MenuProvider.Champion.Drawings.AddItem("Draw R Killable Mark", new Circle(true, Color.GreenYellow));
-            MenuProvider.Champion.Drawings.AddDamageIndicator(GetComboDamage);
+            
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;

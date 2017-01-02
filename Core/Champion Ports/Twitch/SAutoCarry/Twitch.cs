@@ -8,7 +8,7 @@ using SCommon.PluginBase;
 using SPrediction;
 using SCommon.Orbwalking;
 using SCommon.Database;
-using SUtility.Drawings;
+
 using SharpDX;
 //typedefs
 using TargetSelector = SCommon.TS.TargetSelector;
@@ -52,7 +52,7 @@ namespace SAutoCarry.Champions
             misc.AddItem(new MenuItem("SAutoCarry.Twitch.Misc.SaveManaE", "Save Mana for E").SetValue(true));
             misc.AddItem(new MenuItem("SAutoCarry.Twitch.Misc.RecallQ", "Use Q When Recalling").SetValue(new KeyBind('G', KeyBindType.Press)));
 
-            DamageIndicator.Initialize((t) => (float)CalculateDamageE(t), misc);
+            //DamageIndicator.Initialize((t) => (float)CalculateDamageE(t), misc);
 
             ConfigMenu.AddSubMenu(combo);
             ConfigMenu.AddSubMenu(harass);

@@ -286,8 +286,8 @@ using EloBuddy;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
             
             Drawing.OnDraw += Drawing_OnDraw;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = ComboDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = ComboDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = true;
 
             Notifications.AddNotification(String.Format("{0} Loaded", ChampionName), 4000);
         }

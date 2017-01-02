@@ -9,7 +9,7 @@ using SCommon.PluginBase;
 using SPrediction;
 using SCommon.Orbwalking;
 using SCommon.Maths;
-using SUtility.Drawings;
+
 using SharpDX;
 //typedefs
 using TargetSelector = SCommon.TS.TargetSelector;

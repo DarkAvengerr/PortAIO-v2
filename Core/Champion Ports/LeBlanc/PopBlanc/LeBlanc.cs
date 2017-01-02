@@ -157,7 +157,7 @@ using EloBuddy;
             Menu.AddInfo("Info", "By Trees and Lilith!", Color.Red);
 
             ManaBarIndicator.Initialize(draw, manaCost);
-            DamageIndicator.Initialize(damage, GetComboDamage);
+            //DamageIndicator.Initialize(damage, GetComboDamage);
             SpellManager.Initialize(Menu, Orbwalker);
             WBackPosition.Initialize();
 

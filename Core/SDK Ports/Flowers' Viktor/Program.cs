@@ -180,15 +180,6 @@ using EloBuddy;
                     Render.Circle.DrawCircle(Target.Position, Target.BoundingRadius, System.Drawing.Color.Red, 2);
                 }
             }
-
-            if (DrawDamage.Value)
-            {
-                foreach (var e in ObjectManager.Get<AIHeroClient>().Where(e => e.IsValidTarget() && !e.IsZombie))
-                {
-                    DrawHpBar.Unit = e;
-                    DrawHpBar.DrawDmg(GetComboDamage(e), new ColorBGRA(255, 204, 0, 170));
-                }
-            }
         }
 
         private static float GetComboDamage(AIHeroClient e)

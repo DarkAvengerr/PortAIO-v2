@@ -174,22 +174,22 @@ using EloBuddy;
                 var drawFill =
                     new MenuItem("SurvivorKhaZix.DrawColour", "Fill Color", true).SetValue(
                         new Circle(true, System.Drawing.Color.Chartreuse));
-                drawdamage.AddItem(drawFill);
-                drawdamage.AddItem(dmgAfterShave);
-                DrawDamage.DamageToUnit = CalculateDamage;
-                DrawDamage.Enabled = dmgAfterShave.GetValue<bool>();
-                DrawDamage.Fill = drawFill.GetValue<Circle>().Active;
-                DrawDamage.FillColor = drawFill.GetValue<Circle>().Color;
+                //DrawDamage.AddItem(drawFill);
+                //DrawDamage.AddItem(dmgAfterShave);
+                //DrawDamage.DamageToUnit = CalculateDamage;
+                //DrawDamage.Enabled = dmgAfterShave.GetValue<bool>();
+                //DrawDamage.Fill = drawFill.GetValue<Circle>().Active;
+                //DrawDamage.FillColor = drawFill.GetValue<Circle>().Color;
                 dmgAfterShave.ValueChanged +=
                     delegate(object sender, OnValueChangeEventArgs eventArgs)
                     {
-                        DrawDamage.Enabled = eventArgs.GetNewValue<bool>();
+                        //DrawDamage.Enabled = eventArgs.GetNewValue<bool>();
                     };
 
                 drawFill.ValueChanged += delegate(object sender, OnValueChangeEventArgs eventArgs)
                 {
-                    DrawDamage.Fill = eventArgs.GetNewValue<Circle>().Active;
-                    DrawDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
+                    //DrawDamage.Fill = eventArgs.GetNewValue<Circle>().Active;
+                    //DrawDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
                 };
             }
 

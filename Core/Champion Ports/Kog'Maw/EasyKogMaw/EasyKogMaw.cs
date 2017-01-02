@@ -116,13 +116,6 @@ namespace EasyKogMaw
             DrawCircle("Drawing_q", "Q");
             DrawCircle("Drawing_e", "E");
             DrawCircle("Drawing_r", "R");
-
-            if (Player.HasBuff("KogMawIcathianSurprise"))
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = PassiveDamage;
-            else
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = UltimateDamage;
-            
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = Menu.Item("Drawing_rdamage").GetValue<bool>();
         }
 
         protected override void Update()

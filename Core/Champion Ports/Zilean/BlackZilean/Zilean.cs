@@ -45,9 +45,9 @@ using EloBuddy;
 
                 ShowNotification("BlackZilean by blacky - Loaded", Color.Crimson, 10000);
 
-                DamageIndicator.Initialize(GetComboDamage);
-                DamageIndicator.Enabled = true;
-                DamageIndicator.DrawingColor = Color.GreenYellow;
+                //DamageIndicator.Initialize(GetComboDamage);
+                //DamageIndicator.Enabled = true;
+                //DamageIndicator.DrawingColor = Color.GreenYellow;
 
                 ManaManager = new ManaManager();
                 MenuGenerator.Load();

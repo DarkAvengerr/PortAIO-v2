@@ -230,7 +230,7 @@ namespace Flowers_Riven_Reborn.Manager.Menu
                 drawMenu.AddItem(new MenuItem("DrawW", "Draw W Range", true).SetValue(false));
                 drawMenu.AddItem(new MenuItem("DrawBurst", "Draw Burst Range", true).SetValue(true));
                 drawMenu.AddItem(new MenuItem("DrawRStatus", "Draw R Status", true).SetValue(true));
-                DamageIndicator.AddToMenu(drawMenu, DamageCalculate.GetComboDamage);
+                //DamageIndicator.AddToMenu(drawMenu, DamageCalculate.GetComboDamage);
             }
 
             Menu.AddItem(new MenuItem("asdvre1w56", "  "));

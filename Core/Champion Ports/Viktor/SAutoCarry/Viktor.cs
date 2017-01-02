@@ -8,7 +8,7 @@ using SCommon.Database;
 using SCommon.PluginBase;
 using SCommon.Orbwalking;
 using SPrediction;
-using SUtility.Drawings;
+
 using SharpDX;
 //typedefs
 using TargetSelector = SCommon.TS.TargetSelector;
@@ -59,7 +59,7 @@ namespace SAutoCarry.Champions
             misc.AddItem(new MenuItem("SAutoCarry.Viktor.Misc.AntiGapW", "Anti Gap Closer With W").SetValue(true));
             misc.AddItem(new MenuItem("SAutoCarry.Viktor.Misc.ImmobileW", "Auto W To Immobile Target").SetValue(true));
 
-            DamageIndicator.Initialize((t) => (float)CalculateComboDamage(t), misc);
+            //DamageIndicator.Initialize((t) => (float)CalculateComboDamage(t), misc);
 
             ConfigMenu.AddSubMenu(combo);
             ConfigMenu.AddSubMenu(harass);

@@ -46,7 +46,7 @@ namespace SharpShooter.Plugins
             MenuProvider.Champion.Misc.AddItem("Q Delay3", new Slider(350, 0, 1000));
             MenuProvider.Champion.Misc.AddItem("Use legit cancel", true);
 
-            MenuProvider.Champion.Drawings.AddDamageIndicator(GetComboDamage);
+            
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;

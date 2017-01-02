@@ -472,13 +472,13 @@ using EloBuddy;
 
             //Stolen from Honda7's code, cause i'm lazy fuck ( -_-)
             var dmgAfterComboItem = new MenuItem("DamageAfterCombo", "Draw damage after a rotation").SetValue<Circle>(new Circle(true, Color.Aqua));
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit += hero => (float)CalculateDamage(hero);
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = dmgAfterComboItem.GetValue<Circle>().Active;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Color = dmgAfterComboItem.GetValue<Circle>().Color;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit += hero => (float)CalculateDamage(hero);
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = dmgAfterComboItem.GetValue<Circle>().Active;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Color = dmgAfterComboItem.GetValue<Circle>().Color;
             dmgAfterComboItem.ValueChanged += (object sender, OnValueChangeEventArgs eventArgs) =>
                 {
-                    LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = eventArgs.GetNewValue<Circle>().Active;
-                    LeagueSharp.Common.Utility.HpBarDamageIndicator.Color = eventArgs.GetNewValue<Circle>().Color;
+                    //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = eventArgs.GetNewValue<Circle>().Active;
+                    //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Color = eventArgs.GetNewValue<Circle>().Color;
                 };
             // Drawings
             Menu drawings = new Menu("Drawings", "drawings");

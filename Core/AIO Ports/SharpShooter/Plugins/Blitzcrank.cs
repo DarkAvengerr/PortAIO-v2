@@ -49,7 +49,7 @@ namespace SharpShooter.Plugins
             MenuProvider.Champion.Drawings.AddItem("Draw Q Target Mark",
                 new Circle(true, Color.FromArgb(100, Color.DeepSkyBlue)));
             MenuProvider.Champion.Drawings.AddItem("Draw Whitelisted Target Mark", new Circle(true, Color.White));
-            MenuProvider.Champion.Drawings.AddDamageIndicator(GetComboDamage);
+            
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;

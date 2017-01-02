@@ -88,11 +88,10 @@ using EloBuddy;
             Interrupter.OnPossibleToInterrupt += Interrupter_OnPossibleToInterrupt;
             Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
 
-            Config.Item("ComboDamage").ValueChanged += (object sender, OnValueChangeEventArgs e) => { LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = e.GetNewValue<bool>(); };
             if (Config.Item("ComboDamage").GetValue<bool>())
             {
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = GetComboDamage;
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = GetComboDamage;
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = true;
             }
         }
 

@@ -171,7 +171,7 @@ using EloBuddy;
                 new SoundObject(Resources.OnLoad).Play();
             }*/
 
-            DamageIndicator.DamageToUnit = GetComboDamage;
+            //DamageIndicator.DamageToUnit = GetComboDamage;
             UltimateManager.Initialize();
 
             Game.OnUpdate += Game_OnGameUpdate;

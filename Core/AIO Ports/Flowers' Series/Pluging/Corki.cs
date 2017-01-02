@@ -122,7 +122,7 @@ namespace Flowers_ADC_Series.Pluging
                 drawMenu.AddItem(new MenuItem("DrawE", "Draw E Range", true).SetValue(false));
                 drawMenu.AddItem(new MenuItem("DrawR", "Draw R Range", true).SetValue(false));
                 ManaManager.AddDrawFarm(drawMenu);
-                DamageIndicator.AddToMenu(drawMenu);
+                //DamageIndicator.AddToMenu(drawMenu);
             }
 
             Obj_AI_Base.OnSpellCast += OnSpellCast;

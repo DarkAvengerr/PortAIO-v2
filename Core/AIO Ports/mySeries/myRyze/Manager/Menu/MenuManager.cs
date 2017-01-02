@@ -133,7 +133,7 @@ namespace myRyze.Manager.Menu
                 drawMenu.AddItem(new MenuItem("DrawRMin", "Draw R Range(MinMap)", true).SetValue(false));
                 drawMenu.AddItem(new MenuItem("DrawMode", "Draw Combo Mode Status", true).SetValue(true));
                 ManaManager.AddDrawFarm(drawMenu);
-                DamageIndicator.AddToMenu(drawMenu, DamageCalculate.GetComboDamage);
+                //DamageIndicator.AddToMenu(drawMenu, DamageCalculate.GetComboDamage);
             }
 
             Menu.AddItem(new MenuItem("asd ad asd ", " ", true));

@@ -26,7 +26,7 @@ using LeagueSharp.Common;
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawings.Drawing_OnDraw;
-            //LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = ComboDamage;
+            ////LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = ComboDamage;
         }
 
         private static void Game_OnUpdate(EventArgs args)

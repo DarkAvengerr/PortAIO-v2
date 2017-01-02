@@ -554,8 +554,8 @@ using EloBuddy;
                 drawingsMenu.AddItem(new MenuItem("drawE", "Draw E").SetValue(true));
                 drawingsMenu.AddItem(new MenuItem("drawR", "Draw R").SetValue(true));
                 var dmgAfterQ = new MenuItem("dmgAfterCombo", "Draw Q damage on target").SetValue(true);
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = qDamage;
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = dmgAfterQ.GetValue<bool>();
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = qDamage;
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = dmgAfterQ.GetValue<bool>();
                 drawingsMenu.AddItem(dmgAfterQ);
                 Config.AddSubMenu(drawingsMenu);
             }

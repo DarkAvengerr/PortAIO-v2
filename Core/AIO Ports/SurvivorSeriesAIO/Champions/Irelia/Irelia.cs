@@ -40,10 +40,10 @@ using EloBuddy;
 
         private void InitHpbarOverlay()
         {
-            DrawDamage.DamageToUnit = CalculateDamage;
-            DrawDamage.Enabled = () => Config.DrawComboDamage.GetValue<bool>();
-            DrawDamage.Fill = () => Config.FillColor.GetValue<Circle>().Active;
-            DrawDamage.FillColor = () => Config.FillColor.GetValue<Circle>().Color;
+            //DrawDamage.DamageToUnit = CalculateDamage;
+            //DrawDamage.Enabled = () => Config.DrawComboDamage.GetValue<bool>();
+            //DrawDamage.Fill = () => Config.FillColor.GetValue<Circle>().Active;
+            //DrawDamage.FillColor = () => Config.FillColor.GetValue<Circle>().Color;
         }
 
         private void WUsage(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)

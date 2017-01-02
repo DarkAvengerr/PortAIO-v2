@@ -178,7 +178,7 @@ namespace PewPewTristana
         {
             if (Config.Item("disable.dmg").GetValue<bool>())
             {
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = false;
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = false;
                 return;
             }
             int mode = Config.Item("dmgdrawer", true).GetValue<StringList>().SelectedIndex;

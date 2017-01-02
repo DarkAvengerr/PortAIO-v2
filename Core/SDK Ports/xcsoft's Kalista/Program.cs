@@ -36,12 +36,6 @@ using EloBuddy;
             OathswornManager.Initialize();
             SoulHandler.Initialize();
 
-            DamageIndicator.Initialize(new List<DamageIndicator.DamageInfo>
-            {
-                new DamageIndicator.DamageInfo("Q", () => Config.Drawings.QDamageColor, unit => SpellManager.Q.IsReady() ? (float)unit.GetQDamage() : 0f, () => Config.Drawings.DrawQDamage),
-                new DamageIndicator.DamageInfo("E", () => Config.Drawings.EDamageColor, unit => SpellManager.E.IsReady() ? (float)unit.GetEDamage() : 0f, () => Config.Drawings.DrawEDamage)
-            }, () => Config.Drawings.DamageIndicatorEnabled, () => Config.Drawings.HerosEnabled, () => Config.Drawings.JunglesEnabled);
-
             Drawing.OnDraw += Drawing_OnDraw;
             Variables.Orbwalker.OnAction += Orbwalker_OnAction;
 

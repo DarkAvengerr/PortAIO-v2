@@ -64,7 +64,7 @@ namespace SharpShooter.Plugins
             MenuProvider.Champion.Drawings.AddItem("Draw The Number of Passive Stacks", true);
             MenuProvider.Champion.Drawings.AddItem("Draw Remaining Time of Charged Passive", true);
             MenuProvider.Champion.Drawings.AddItem("Draw Auto Keep Passive Status", true);
-            MenuProvider.Champion.Drawings.AddDamageIndicator(GetComboDamage);
+            
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;

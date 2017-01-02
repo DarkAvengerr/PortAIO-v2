@@ -43,8 +43,8 @@ using EloBuddy;
             Drawing.OnDraw += OnDraw;
             Drawing.OnEndScene += OnEndScene;
 
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = Computed.GetComboDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = Config.IsChecked("draw.dmg");
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = Computed.GetComboDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = Config.IsChecked("draw.dmg");
         }
 
         private static void OnDraw(EventArgs args)

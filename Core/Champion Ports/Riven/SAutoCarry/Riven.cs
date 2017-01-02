@@ -9,7 +9,7 @@ using SPrediction;
 using SCommon.Maths;
 using SCommon.Database;
 using SCommon.Evade;
-using SUtility.Drawings;
+
 using SAutoCarry.Champions.Helpers;
 using SharpDX;
 using EloBuddy;
@@ -109,7 +109,7 @@ namespace SAutoCarry.Champions
             misc.AddItem(new MenuItem("DRAWULTSTATUS", "Draw Always R Status").SetValue(true));
 
             m_targetedEvader = new TargetedSpellEvader(TargetedSpell_Evade, misc);
-            DamageIndicator.Initialize((t) => (float)CalculateComboDamage(t) + (float)CalculateDamageR2(t), misc);
+            //DamageIndicator.Initialize((t) => (float)CalculateComboDamage(t) + (float)CalculateDamageR2(t), misc);
 
 
             ConfigMenu.AddSubMenu(combo);

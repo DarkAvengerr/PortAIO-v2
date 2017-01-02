@@ -76,20 +76,20 @@ using EloBuddy;
 			CreateMenuBool("Draw", "Draw.CBDamage", "Draw Combo Damage", true);
 			menu.SubMenu("Draw").AddItem(new MenuItem("Draw.DrawColor", "Fill color").SetValue(new Circle(true, Color.FromArgb(204, 255, 0, 1))));
 
-			Damagedraw.DamageToUnit = GetComboDamage;
-			Damagedraw.Enabled = GetValueMenuBool("Draw.CBDamage");
-			Damagedraw.Fill = menu.Item("Draw.DrawColor").GetValue<Circle>().Active;
-			Damagedraw.FillColor = menu.Item("Draw.DrawColor").GetValue<Circle>().Color;
+			//Damagedraw.DamageToUnit = GetComboDamage;
+			//Damagedraw.Enabled = GetValueMenuBool("Draw.CBDamage");
+			//Damagedraw.Fill = menu.Item("Draw.DrawColor").GetValue<Circle>().Active;
+			//Damagedraw.FillColor = menu.Item("Draw.DrawColor").GetValue<Circle>().Color;
 
 			menu.Item("Draw.CBDamage").ValueChanged += delegate(object sender, OnValueChangeEventArgs eventArgs)
 			{
-				Damagedraw.Enabled = eventArgs.GetNewValue<bool>();
+				//Damagedraw.Enabled = eventArgs.GetNewValue<bool>();
 			};
 
 			menu.Item("Draw.DrawColor").ValueChanged += delegate(object sender, OnValueChangeEventArgs eventArgs)
 			{
-				Damagedraw.Fill = eventArgs.GetNewValue<Circle>().Active;
-				Damagedraw.FillColor = eventArgs.GetNewValue<Circle>().Color;
+				//Damagedraw.Fill = eventArgs.GetNewValue<Circle>().Active;
+				//Damagedraw.FillColor = eventArgs.GetNewValue<Circle>().Color;
 			};
 			menu.AddToMainMenu();                    
 

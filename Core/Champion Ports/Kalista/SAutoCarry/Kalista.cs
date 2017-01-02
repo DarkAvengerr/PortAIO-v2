@@ -7,7 +7,7 @@ using SCommon;
 using SCommon.PluginBase;
 using SPrediction;
 using SCommon.Orbwalking;
-using SUtility.Drawings;
+
 using SharpDX;
 
 

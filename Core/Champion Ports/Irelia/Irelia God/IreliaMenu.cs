@@ -71,8 +71,8 @@ using EloBuddy;
                 drawingsMenu.AddItem(new MenuItem("drawings.e", "Draw E").SetValue(true));
                 drawingsMenu.AddItem(new MenuItem("drawings.r", "Draw R").SetValue(true));
                 var dmgAfterCombo = new MenuItem("dmgAfterCombo", "Draw combo damage on target").SetValue(true);
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = Program.ComboDamage;
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = dmgAfterCombo.GetValue<bool>();
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = Program.ComboDamage;
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = dmgAfterCombo.GetValue<bool>();
                 drawingsMenu.AddItem(dmgAfterCombo);
                 Config.AddSubMenu(drawingsMenu);
             }

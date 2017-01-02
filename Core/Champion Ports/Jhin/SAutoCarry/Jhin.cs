@@ -9,7 +9,7 @@ using SCommon.PluginBase;
 using SCommon.Maths;
 using SPrediction;
 using SCommon.Orbwalking;
-using SUtility.Drawings;
+
 using SharpDX;
 using EloBuddy;
 

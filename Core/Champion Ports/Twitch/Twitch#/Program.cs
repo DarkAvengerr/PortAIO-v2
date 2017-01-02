@@ -64,7 +64,7 @@ using EloBuddy;
             _config.AddToMainMenu();
 
             // Enable E damage indicators
-            CustomDamageIndicator.Initialize(GetDamage);
+            //Custom//DamageIndicator.Initialize(GetDamage);
 
             //Listen to events
             Game.OnUpdate += Game_OnUpdate;
@@ -74,8 +74,8 @@ using EloBuddy;
         private static void Drawing_OnDraw(EventArgs args)
         {
             // E damage on healthbar
-            CustomDamageIndicator.DrawingColor = _config.Item("EDamage").GetValue<Circle>().Color;
-            CustomDamageIndicator.Enabled = _config.Item("EDamage").GetValue<Circle>().Active;
+            //Custom//DamageIndicator.DrawingColor = _config.Item("EDamage").GetValue<Circle>().Color;
+            //Custom//DamageIndicator.Enabled = _config.Item("EDamage").GetValue<Circle>().Active;
 
         }
 

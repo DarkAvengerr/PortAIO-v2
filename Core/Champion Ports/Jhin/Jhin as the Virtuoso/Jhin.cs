@@ -66,7 +66,7 @@ namespace Jhin_As_The_Virtuoso
                 PingList.Add(enemy.NetworkId, 0);
             }
 
-            DamageIndicator.DamageToUnit = GetRDmg;
+            //DamageIndicator.DamageToUnit = GetRDmg;
 
             if (IsChinese)
             {
@@ -711,8 +711,8 @@ namespace Jhin_As_The_Virtuoso
             #endregion
 
             var ShowD = Config.Item("大招伤害").GetValue<Circle>();
-            DamageIndicator.Enabled = ShowD.Active;
-            DamageIndicator.Color = ShowD.Color;
+            //DamageIndicator.Enabled = ShowD.Active;
+            //DamageIndicator.Color = ShowD.Color;
 
             var ShowT = Config.Item("击杀文本提示").GetValue<Circle>();
             if (ShowT.Active && KillableList?.Count > 0)

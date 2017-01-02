@@ -38,8 +38,8 @@ using LeagueSharp.Common;
             E = new Spell(SpellSlot.E, 703);
             R = new Spell(SpellSlot.R, 703);
 
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = TristanaData.GetComboDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = TristanaData.GetComboDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = true;
 
             AntiGapcloser.OnEnemyGapcloser += AntiGapcloser_OnEnemyGapcloser;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;

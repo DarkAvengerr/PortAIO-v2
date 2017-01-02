@@ -117,8 +117,8 @@ namespace EasyJinx
             DrawCircle("Drawing_w", "W");
             DrawCircle("Drawing_e", "E");
 
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = UltimateDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = Menu.Item("Drawing_rdamage").GetValue<bool>();
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = UltimateDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = Menu.Item("Drawing_rdamage").GetValue<bool>();
         }
 
         protected override void Update()

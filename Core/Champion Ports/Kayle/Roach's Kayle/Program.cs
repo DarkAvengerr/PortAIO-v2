@@ -129,12 +129,12 @@ namespace RoachKayle
             Variable.Config.SubMenu("Misc").AddItem(new MenuItem("SupportMode", "Support Mode").SetValue(false));
 
             var comboDmg = new MenuItem("ComboDamage", "Draw damage after combo").SetValue(true);
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = Internal.ComboDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = comboDmg.GetValue<bool>();
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = Internal.ComboDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = comboDmg.GetValue<bool>();
             comboDmg.ValueChanged +=
                 delegate (object sender, OnValueChangeEventArgs eventArgs)
                 {
-                    LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
+                    //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
                 };
 
             Variable.Config.AddSubMenu(new Menu("Drawings", "Drawings"));

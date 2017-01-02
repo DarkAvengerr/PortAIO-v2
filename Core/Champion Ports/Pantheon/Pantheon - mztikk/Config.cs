@@ -124,7 +124,7 @@ using EloBuddy;
 
         private static void OnValueChange(object sender, OnValueChangeEventArgs e)
         {
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = e.GetNewValue<bool>();
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = e.GetNewValue<bool>();
         }
 
         #endregion

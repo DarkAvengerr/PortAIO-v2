@@ -61,7 +61,7 @@ using EloBuddy;
             Config.AddSubMenu(misc);
             Config.AddToMainMenu();
 
-            DamageIndicator.DamageToUnit = (t) => (float)CalculateComboDamage(t);
+            //DamageIndicator.DamageToUnit = (t) => (float)CalculateComboDamage(t);
 
             BeforeOrbWalking += BeforeOrbwalk;
             OrbwalkingFunctions[OrbwalkingComboMode] += Combo;

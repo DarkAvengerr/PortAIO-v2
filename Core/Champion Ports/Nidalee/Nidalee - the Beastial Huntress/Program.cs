@@ -79,8 +79,8 @@ using EloBuddy;
 
             Circle damageCircle = MainMenu.Item("drawDamage").GetValue<Circle>();
 
-            DamageIndicator.DrawingColor = damageCircle.Color;
-            DamageIndicator.Enabled = damageCircle.Active;
+            //DamageIndicator.DrawingColor = damageCircle.Color;
+            //DamageIndicator.Enabled = damageCircle.Active;
         }
 
         #endregion
@@ -812,9 +812,9 @@ using EloBuddy;
                 return;
             }
 
-            DamageIndicator.Initialize(GetComboDamage);
-            DamageIndicator.Enabled = true;
-            DamageIndicator.DrawingColor = Color.Green;
+            //DamageIndicator.Initialize(GetComboDamage);
+            //DamageIndicator.Enabled = true;
+            //DamageIndicator.DrawingColor = Color.Green;
 
             _javelinToss = new Spell(SpellSlot.Q, 1500f);
             _takedown = new Spell(SpellSlot.Q, 200f);

@@ -44,8 +44,8 @@ namespace ReformedAIO.Champions.Ashe.Drawings
 
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(1500)))
             {
-                drawDamage.Unit = enemy;
-                drawDamage.DrawDmg(logic.ComboDamage(enemy), Color.LawnGreen);
+                //DrawDamage.Unit = enemy;
+                //DrawDamage.DrawDmg(logic.ComboDamage(enemy), Color.LawnGreen);
             }
         }
 

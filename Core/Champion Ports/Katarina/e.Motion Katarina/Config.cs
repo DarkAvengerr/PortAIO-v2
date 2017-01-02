@@ -90,19 +90,19 @@ namespace e.Motion_Katarina
 
         public static void InitDamageDrawings()
         {
-            DrawDamage.DamageToUnit = Logic.GetDamage;
-            DrawDamage.Enabled = config.Item("drawings.hpbar").GetValue<bool>();
-            DrawDamage.Fill = config.Item("drawings.fill").GetValue<Circle>().Active;
-            DrawDamage.FillColor = config.Item("drawings.fill").GetValue<Circle>().Color;
+            //DrawDamage.DamageToUnit = Logic.GetDamage;
+            //DrawDamage.Enabled = config.Item("drawings.hpbar").GetValue<bool>();
+            //DrawDamage.Fill = config.Item("drawings.fill").GetValue<Circle>().Active;
+            //DrawDamage.FillColor = config.Item("drawings.fill").GetValue<Circle>().Color;
             config.Item("drawings.hpbar").ValueChanged +=
                 delegate (object sender, OnValueChangeEventArgs eventArgs)
                 {
-                    DrawDamage.Enabled = eventArgs.GetNewValue<bool>();
+                    //DrawDamage.Enabled = eventArgs.GetNewValue<bool>();
                 };
             config.Item("drawings.fill").ValueChanged += delegate (object sender, OnValueChangeEventArgs eventArgs)
             {
-                DrawDamage.Fill = eventArgs.GetNewValue<Circle>().Active;
-                DrawDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
+                //DrawDamage.Fill = eventArgs.GetNewValue<Circle>().Active;
+                //DrawDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
             };
         }
 

@@ -10,7 +10,7 @@ using SCommon.PluginBase;
 using SPrediction;
 using SCommon.Orbwalking;
 using SCommon.Evade;
-using SUtility.Drawings;
+
 using SharpDX;
 using EloBuddy;
 
@@ -82,7 +82,7 @@ namespace SAutoCarry.Champions
             misc.AddItem(new MenuItem("DDRAWBALL", "Draw Ball Position").SetValue(false));
             misc.AddItem(new MenuItem("DDRAWKILL", "Draw Killable Enemy").SetValue(true));
 
-            DamageIndicator.Initialize((t) => (float)CalculateComboDamage(t), misc);
+            //DamageIndicator.Initialize((t) => (float)CalculateComboDamage(t), misc);
             m_targetedEvader = new TargetedSpellEvader(TargetedSpell_Evade, misc);
 
             ConfigMenu.AddSubMenu(combo);

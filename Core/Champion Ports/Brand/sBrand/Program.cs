@@ -113,25 +113,25 @@ using EloBuddy;
             menu.SubMenu("Drawing").AddItem(new MenuItem("Drawing.R", "Draw R Range").SetValue(true));
             //Draw Damage
             menu.AddSubMenu(new Menu("Draw Damage", "DrawDamage"));
-            menu.SubMenu("DrawDamage").AddItem(new MenuItem("DrawDamage.Enable", "Enable").SetValue(true));
-            menu.SubMenu("DrawDamage").AddItem(new MenuItem("DrawDamage.DrawColor", "Fill color").SetValue(new Circle(true, Color.FromArgb(204, 255, 0, 1))));
+            menu.SubMenu("DrawDamage").AddItem(new MenuItem("//DrawDamage.Enable", "Enable").SetValue(true));
+            menu.SubMenu("DrawDamage").AddItem(new MenuItem("//DrawDamage.DrawColor", "Fill color").SetValue(new Circle(true, Color.FromArgb(204, 255, 0, 1))));
 
             menu.AddToMainMenu();
 
-            DrawDamage.DamageToUnit = GetComboDamage;
-            DrawDamage.Enabled = menu.Item("DrawDamage.Enable").GetValue<bool>();
-            DrawDamage.Fill = menu.Item("DrawDamage.DrawColor").GetValue<Circle>().Active;
-            DrawDamage.FillColor = menu.Item("DrawDamage.DrawColor").GetValue<Circle>().Color;
+            //DrawDamage.DamageToUnit = GetComboDamage;
+            //DrawDamage.Enabled = menu.Item("//DrawDamage.Enable").GetValue<bool>();
+            //DrawDamage.Fill = menu.Item("//DrawDamage.DrawColor").GetValue<Circle>().Active;
+            //DrawDamage.FillColor = menu.Item("//DrawDamage.DrawColor").GetValue<Circle>().Color;
 
-            menu.Item("DrawDamage.Enable").ValueChanged += delegate(object sender, OnValueChangeEventArgs eventArgs)
+            menu.Item("//DrawDamage.Enable").ValueChanged += delegate(object sender, OnValueChangeEventArgs eventArgs)
             {
-                DrawDamage.Enabled = eventArgs.GetNewValue<bool>();
+                //DrawDamage.Enabled = eventArgs.GetNewValue<bool>();
             };
 
-            menu.Item("DrawDamage.DrawColor").ValueChanged += delegate(object sender, OnValueChangeEventArgs eventArgs)
+            menu.Item("//DrawDamage.DrawColor").ValueChanged += delegate(object sender, OnValueChangeEventArgs eventArgs)
             {
-                DrawDamage.Fill = eventArgs.GetNewValue<Circle>().Active;
-                DrawDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
+                //DrawDamage.Fill = eventArgs.GetNewValue<Circle>().Active;
+                //DrawDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
             };
 
             Drawing.OnDraw += Drawing_OnDraw;

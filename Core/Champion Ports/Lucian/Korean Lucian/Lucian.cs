@@ -23,7 +23,7 @@ using EloBuddy;
             ForceUltimate.ForceUltimate = core.Ultimate;
             drawing = new Drawing(this);
             killSteal = new KillSteal(this);
-            DrawDamage.AmountOfDamage = KoreanLucian.Spells.MaxComboDamage;
+            //DrawDamage.AmountOfDamage = KoreanLucian.Spells.MaxComboDamage;
             semiAutomaticE = new SemiAutomaticE(this);
             ExtendedQ.Load(this);
         }

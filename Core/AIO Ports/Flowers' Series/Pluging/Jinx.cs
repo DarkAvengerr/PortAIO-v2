@@ -132,7 +132,7 @@ namespace Flowers_ADC_Series.Pluging
                 drawMenu.AddItem(new MenuItem("DrawW", "Draw W Range", true).SetValue(false));
                 drawMenu.AddItem(new MenuItem("DrawE", "Draw E Range", true).SetValue(false));
                 ManaManager.AddDrawFarm(drawMenu);
-                DamageIndicator.AddToMenu(drawMenu);
+                //DamageIndicator.AddToMenu(drawMenu);
             }
 
             AntiGapcloser.OnEnemyGapcloser += OnEnemyGapcloser;

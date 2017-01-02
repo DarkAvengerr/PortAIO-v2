@@ -100,7 +100,7 @@ namespace Illaoi___Tentacle_Kitty
                 {
                     var damageDraw = new Menu("Damage Draw", "Damage Draw");
                     {
-                        damageDraw.AddItem(new MenuItem("aa.indicator", "AA Indicator").SetValue(new Circle(true, Color.Gold)));
+                        //Damagedraw.AddItem(new MenuItem("aa.indicator", "AA Indicator").SetValue(new Circle(true, Color.Gold)));
                         drawMenu.AddSubMenu(damageDraw);
                     }
                     drawMenu.AddItem(new MenuItem("q.draw", "Q Range").SetValue(new Circle(true, Color.White)));

@@ -240,8 +240,8 @@ namespace Pantheon
                 var dmgAfterComboItem = new MenuItem("DamageAfterCombo", "Damage After Combo").SetValue(true);
                 Config.SubMenu("Drawings").AddItem(dmgAfterComboItem);
 
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = ComboDamage;
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = ComboDamage;
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = true;
             }
 
             menuLane.Item("Lane.Mana.MinMana")

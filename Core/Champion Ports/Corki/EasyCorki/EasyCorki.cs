@@ -104,8 +104,8 @@ namespace EasyCorki
             DrawCircle("Drawing_q", "Q");
             DrawCircle("Drawing_r", "R");
             
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = ComboDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = Menu.Item("Drawing_damage").GetValue<bool>();
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = ComboDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = Menu.Item("Drawing_damage").GetValue<bool>();
         }
         protected override void Update()
         {

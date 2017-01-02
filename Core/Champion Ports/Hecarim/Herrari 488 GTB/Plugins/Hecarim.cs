@@ -68,7 +68,7 @@ using EloBuddy;
 
             MenuProvider.Champion.Drawings.addDrawQrange(Color.White, true);
             MenuProvider.Champion.Drawings.addDrawRrange(Color.IndianRed, true);
-            MenuProvider.Champion.Drawings.addDamageIndicator(getcombodamage);
+            
 
 
             Game.OnUpdate += Game_OnUpdate;

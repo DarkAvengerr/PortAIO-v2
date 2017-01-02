@@ -178,8 +178,8 @@ using EloBuddy;
             Chat.Print("<font color=\"#7CFC00\"><b>Irelia Reloaded:</b></font> Loaded");
 
             // Setup Dmg Indicator
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = DamageToUnit;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = DamageToUnit;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = true;
 
             // Subscribe to needed events
             Game.OnUpdate += Game_OnGameUpdate;

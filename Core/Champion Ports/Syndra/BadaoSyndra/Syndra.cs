@@ -295,10 +295,10 @@ namespace BadaoSeries.Plugin
             AntiGapcloser.OnEnemyGapcloser += Gapcloser_OnGapCloser;
             Interrupter2.OnInterruptableTarget += InterruptableSpell_OnInterruptableTarget;
             //Orb.OnAction += Orbwalker_OnAction;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = SyndraDamage;
-            CustomDamageIndicator.Initialize(SyndraDamage);
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = drawhp;
-            CustomDamageIndicator.Enabled = drawhp;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = SyndraDamage;
+            //Custom//DamageIndicator.Initialize(SyndraDamage);
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = drawhp;
+            //Custom//DamageIndicator.Enabled = drawhp;
             Obj_AI_Base.OnLevelUp += Obj_AI_Base_OnLevelUp;
         }
         private static bool castRtarget(AIHeroClient target)
@@ -330,8 +330,8 @@ namespace BadaoSeries.Plugin
             if (!Enable) return;
             if (sender != null)
             {
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = e.GetNewValue<bool>();
-                CustomDamageIndicator.Enabled = e.GetNewValue<bool>();
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = e.GetNewValue<bool>();
+                //Custom//DamageIndicator.Enabled = e.GetNewValue<bool>();
             }
         }
 
@@ -359,8 +359,8 @@ namespace BadaoSeries.Plugin
         {
             if (!Enable)
             {
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = false;
-                CustomDamageIndicator.Enabled = false;
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = false;
+                //Custom//DamageIndicator.Enabled = false;
                 return;
             }
             helper();

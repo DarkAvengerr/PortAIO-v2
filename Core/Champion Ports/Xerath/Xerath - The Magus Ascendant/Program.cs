@@ -446,7 +446,7 @@ namespace Xerath___The_Magus_Ascendant
             }
             if (Config.Item("drawkill").GetValue<bool>())
             {
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit += hero => (float)Player.GetSpellDamage(hero, SpellSlot.R) * 3;
+                //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit += hero => (float)Player.GetSpellDamage(hero, SpellSlot.R) * 3;
             }
             if (Config.Item("UseQKS").GetValue<bool>())
             {

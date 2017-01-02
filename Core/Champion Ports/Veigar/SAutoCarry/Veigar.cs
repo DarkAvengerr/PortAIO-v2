@@ -7,7 +7,7 @@ using SCommon.Maths;
 using SCommon.Database;
 using SCommon.PluginBase;
 using SPrediction;
-using SUtility.Drawings;
+
 using SharpDX;
 //typedefs
 using TargetSelector = SCommon.TS.TargetSelector;
@@ -66,7 +66,7 @@ namespace SAutoCarry.Champions
             ConfigMenu.AddSubMenu(misc);
             ConfigMenu.AddToMainMenu();
 
-            DamageIndicator.Initialize((t) => (float)CalculateComboDamage(t), misc);
+            //DamageIndicator.Initialize((t) => (float)CalculateComboDamage(t), misc);
         }
 
         public override void SetSpells()

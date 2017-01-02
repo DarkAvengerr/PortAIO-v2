@@ -51,8 +51,8 @@ using LeagueSharp.Common;
             R2 = new Spell(SpellSlot.R, 700f);
             R2.SetSkillshot(0f, 110f, 1500f, false, SkillshotType.SkillshotCone);
 
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = GetComboDamage;
-            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = GetComboDamage;
+            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = true;
 
             Drawing.OnDraw += DrawingOnOnDraw;
 

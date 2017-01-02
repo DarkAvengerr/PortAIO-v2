@@ -107,7 +107,7 @@ namespace Flowers_ADC_Series.Pluging
                 drawMenu.AddItem(new MenuItem("DrawQ", "Draw Q Range", true).SetValue(false));
                 drawMenu.AddItem(new MenuItem("DrawE", "Draw E Range", true).SetValue(false));
                 ManaManager.AddDrawFarm(drawMenu);
-                DamageIndicator.AddToMenu(drawMenu);
+                //DamageIndicator.AddToMenu(drawMenu);
             }
 
             GameObject.OnCreate += OnCreate;

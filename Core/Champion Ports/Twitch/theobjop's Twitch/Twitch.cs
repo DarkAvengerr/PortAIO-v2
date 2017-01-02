@@ -69,7 +69,7 @@ namespace Twiitch
             // Menu
             TwitchMenu.Init();
 
-            CustomDamageIndicator.Initialize(GetDamage);
+            //Custom//DamageIndicator.Initialize(GetDamage);
 
             // Listen to Events
             Game.OnUpdate += Game_OnUpdate;
@@ -111,8 +111,8 @@ namespace Twiitch
 
         private static void Drawing_OnDraw(EventArgs args)
         {
-            CustomDamageIndicator.DrawingColor = TwitchMenu.Item("EDamage").GetValue<Circle>().Color;
-            CustomDamageIndicator.Enabled = TwitchMenu.Item("EDamage").GetValue<Circle>().Active;
+            //Custom//DamageIndicator.DrawingColor = TwitchMenu.Item("EDamage").GetValue<Circle>().Color;
+            //Custom//DamageIndicator.Enabled = TwitchMenu.Item("EDamage").GetValue<Circle>().Active;
 
             if (TwitchMenu.Item("DrawQRange").GetValue<bool>())
                 Drawing.DrawCircle(buffPosition, _q.Range, Color.Green);

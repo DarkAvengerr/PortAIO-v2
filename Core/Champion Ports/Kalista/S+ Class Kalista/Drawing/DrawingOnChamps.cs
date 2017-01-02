@@ -41,63 +41,8 @@ namespace S_Plus_Class_Kalista.Drawing
             return menu;
         }
 
-        private static Utility.HpBarDamageIndicator.DamageToUnitDelegate _damageToEnemy;
-
-        public static Utility.HpBarDamageIndicator.DamageToUnitDelegate DamageToEnemy
-        {
-            get { return _damageToEnemy; }
-
-            set
-            {
-                if (_damageToEnemy == null)
-                {
-                    EloBuddy.Drawing.OnDraw += OnDrawEnemy;
-                }
-                _damageToEnemy = value;
-            }
-        }
-
         public static void OnDrawEnemy(EventArgs args)
         {
-            if (!SMenu.Item(_MenuItemBase + "Boolean.DrawOnEnemy").GetValue<bool>() || DamageToEnemy == null)
-                return;
-
-            foreach (
-                var unit in
-                    HeroManager.Enemies.Where(
-                        unit => unit.IsValid && unit.IsHPBarRendered && Champion.E.IsInRange(unit)))
-            {
-                const int xOffset = 10;
-                const int yOffset = 20;
-                const int width = 103;
-                const int height = 8;
-
-                var barPos = unit.HPBarPosition;
-                var damage = Libaries.Damage.DamageCalc.CalculateRendDamage(unit);
-                var percentHealthAfterDamage = Math.Max(0, unit.Health - damage)/unit.MaxHealth;
-                var yPos = barPos.Y + yOffset;
-                var xPosDamage = barPos.X + xOffset + width*percentHealthAfterDamage;
-                var xPosCurrentHp = barPos.X + xOffset + width*unit.Health/unit.MaxHealth;
-
-                if (SMenu.Item(_MenuItemBase + "Boolean.DrawOnEnemy.KillableColor").GetValue<Circle>().Active &&
-                    damage > unit.Health)
-                    EloBuddy.Drawing.DrawText(barPos.X + xOffset, barPos.Y + yOffset - 13,
-                        SMenu.Item(_MenuItemBase + "Boolean.DrawOnEnemy.KillableColor").GetValue<Circle>().Color,
-                        "Killable");
-
-                EloBuddy.Drawing.DrawLine(xPosDamage, yPos, xPosDamage, yPos + height, 1, Color.LightGray);
-
-                if (!SMenu.Item(_MenuItemBase + "Boolean.DrawOnEnemy.FillColor").GetValue<Circle>().Active) return;
-
-                var differenceInHp = xPosCurrentHp - xPosDamage;
-                var pos1 = barPos.X + 9 + (107*percentHealthAfterDamage);
-
-                for (var i = 0; i < differenceInHp; i++)
-                {
-                    EloBuddy.Drawing.DrawLine(pos1 + i, yPos, pos1 + i, yPos + height, 1,
-                        SMenu.Item(_MenuItemBase + "Boolean.DrawOnEnemy.FillColor").GetValue<Circle>().Color);
-                }
-            }
         }
 
         private static Color GetColor(bool b)

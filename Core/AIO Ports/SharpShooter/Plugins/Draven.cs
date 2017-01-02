@@ -62,7 +62,7 @@ namespace SharpShooter.Plugins
             MenuProvider.Champion.Drawings.AddDrawRrange(Color.FromArgb(100, Color.DeepSkyBlue), false);
             MenuProvider.Champion.Drawings.AddItem("Draw Catch Axe Range", new Circle(true, Color.FromArgb(100, Color.YellowGreen)));
             MenuProvider.Champion.Drawings.AddItem("Draw Axe Drop Objects", true);
-            MenuProvider.Champion.Drawings.AddDamageIndicator(GetComboDamage);
+            
 
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;

@@ -109,21 +109,21 @@ namespace SephKhazix
             draw.AddItem(drawFill);
             draw.AddItem(dmgAfterE);
 
-            DamageIndicator.DamageToUnit = K6.GetBurstDamage;
-            DamageIndicator.Enabled = dmgAfterE.GetValue<bool>() && !GetBool("Drawings.Disable");
-            DamageIndicator.Fill = drawFill.GetValue<Circle>().Active;
-            DamageIndicator.FillColor = drawFill.GetValue<Circle>().Color;
+            //DamageIndicator.DamageToUnit = K6.GetBurstDamage;
+            //DamageIndicator.Enabled = dmgAfterE.GetValue<bool>() && !GetBool("Drawings.Disable");
+            //DamageIndicator.Fill = drawFill.GetValue<Circle>().Active;
+            //DamageIndicator.FillColor = drawFill.GetValue<Circle>().Color;
 
             dmgAfterE.ValueChanged +=
                 delegate (object sender, OnValueChangeEventArgs eventArgs)
                 {
-                    DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
+                    //DamageIndicator.Enabled = eventArgs.GetNewValue<bool>();
                 };
 
             drawFill.ValueChanged += delegate (object sender, OnValueChangeEventArgs eventArgs)
             {
-                DamageIndicator.Fill = eventArgs.GetNewValue<Circle>().Active;
-                DamageIndicator.FillColor = eventArgs.GetNewValue<Circle>().Color;
+                //DamageIndicator.Fill = eventArgs.GetNewValue<Circle>().Active;
+                //DamageIndicator.FillColor = eventArgs.GetNewValue<Circle>().Color;
             };
 
 

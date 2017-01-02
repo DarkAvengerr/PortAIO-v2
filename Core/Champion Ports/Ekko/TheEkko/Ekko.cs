@@ -68,11 +68,11 @@ using EloBuddy;
 
             drawingMenu.AddMItem("Damage indicator", new Circle(true, Color.Yellow), (sender, args) =>
             {
-                DamageIndicator.Enabled = args.GetNewValue<Circle>().Active;
-                DamageIndicator.Fill = true;
-                DamageIndicator.FillColor = Color.FromArgb(100, args.GetNewValue<Circle>().Color);
-                DamageIndicator.Color = Color.FromArgb(200, DamageIndicator.FillColor);
-                DamageIndicator.DamageToUnit = _comboProvider.GetComboDamage;
+                //DamageIndicator.Enabled = args.GetNewValue<Circle>().Active;
+                //DamageIndicator.Fill = true;
+                //DamageIndicator.FillColor = Color.FromArgb(100, args.GetNewValue<Circle>().Color);
+                //DamageIndicator.Color = Color.FromArgb(200, //DamageIndicator.FillColor);
+                //DamageIndicator.DamageToUnit = _comboProvider.GetComboDamage;
             }).ProcStoredValueChanged<Circle>();
 
             miscMenu.AddMItem("When clearing harass if enemy near", true, (sender, args) => _comboProvider.GetSkills().ToList().ForEach(skill => skill.SwitchClearToHarassOnTarget = args.GetNewValue<bool>()));

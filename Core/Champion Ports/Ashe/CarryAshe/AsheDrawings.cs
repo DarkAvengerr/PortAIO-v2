@@ -25,21 +25,21 @@ using EloBuddy;
         {
             var drawOffMenu = _parentAssembly.Menu.GetItemEndKey("Off",_menuName);
             var drawFillColorMenu = _parentAssembly.Menu.GetItemEndKey("FillColor",_menuName);
-            DrawDamage.DamageToUnit = _parentAssembly.GetComboDamage;
+            //DrawDamage.DamageToUnit = _parentAssembly.GetComboDamage;
 
-            DrawDamage.Enabled = drawOffMenu.GetValue<bool>();
-            DrawDamage.Fill = drawFillColorMenu.GetValue<Circle>().Active;
-            DrawDamage.FillColor = drawFillColorMenu.GetValue<Circle>().Color;
+            //DrawDamage.Enabled = drawOffMenu.GetValue<bool>();
+            //DrawDamage.Fill = drawFillColorMenu.GetValue<Circle>().Active;
+            //DrawDamage.FillColor = drawFillColorMenu.GetValue<Circle>().Color;
 
             drawOffMenu.ValueChanged += (sender, eventArgs) =>
             {
-                DrawDamage.Enabled = eventArgs.GetNewValue<bool>();
+                //DrawDamage.Enabled = eventArgs.GetNewValue<bool>();
             };
 
             drawFillColorMenu.ValueChanged += ( sender, eventArgs) =>
             {
-                DrawDamage.Fill = eventArgs.GetNewValue<Circle>().Active;
-                DrawDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
+                //DrawDamage.Fill = eventArgs.GetNewValue<Circle>().Active;
+                //DrawDamage.FillColor = eventArgs.GetNewValue<Circle>().Color;
             };
         }
 
