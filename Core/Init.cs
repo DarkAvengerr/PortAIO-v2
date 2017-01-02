@@ -2992,7 +2992,7 @@ namespace PortAIO
                     switch (Misc.menu.Item(ObjectManager.Player.Hero.ToString()).GetValue<StringList>().SelectedIndex)
                     {
                         case 0: // Seph Soraka
-                            SephSoraka.Soraka.SorakaMain();
+                            SephSoraka.Soraka.Main();
                             break;
                         case 1: // FreshBooster
                             FreshBooster.Program.Game_OnGameLoad();

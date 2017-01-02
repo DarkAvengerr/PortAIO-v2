@@ -1,10 +1,11 @@
-﻿using System;
+using System;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using SharpDX;
-using EloBuddy;
 
+using EloBuddy; 
+using LeagueSharp.Common; 
 namespace SephSoraka
 {
     class Misc
@@ -63,6 +64,12 @@ namespace SephSoraka
                 ObjectManager.Get<Obj_AI_Turret>().Where(t => t.IsAlly && Vector3.Distance(t.Position, Point) < 900f);
             return AllyTurrets.Any();
         }
+        public static PredictionOutput GetQPrediction(Obj_AI_Base target)
+         {
+             var divider = target.Position.Distance(ObjectManager.Player.Position) / Soraka.Spells[SpellSlot.Q].Range;
+            Soraka.Spells[SpellSlot.Q].Delay = 0.2f + 0.8f * divider;
 
+            return Soraka.Spells[SpellSlot.Q].GetPrediction(target,true);
+       }
     }
 }

@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using LeagueSharp;
 using LeagueSharp.Common;
 using System.Drawing;
-using SPrediction;
-using EloBuddy;
 
+using EloBuddy; 
+using LeagueSharp.Common; 
 namespace SephSoraka
 {
 	class SorakaMenu
@@ -20,7 +20,6 @@ namespace SephSoraka
 			{
 				Config = new Menu("SephSoraka", "Soraka", true);
 
-				SPrediction.Prediction.Initialize(Config);
 				Menu TSMenu = new Menu("Target Selector", "TS", false);
 				TargetSelector.AddToMenu(TSMenu);
 				Config.AddSubMenu(TSMenu);
