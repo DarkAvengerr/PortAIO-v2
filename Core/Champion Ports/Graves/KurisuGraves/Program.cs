@@ -19,7 +19,6 @@ using EloBuddy;
         internal static AIHeroClient Target;
         internal static Orbwalking.Orbwalker Orbwalker;
         internal static readonly AIHeroClient Me = ObjectManager.Player;
-        internal static HpBarIndicator HPi = new HpBarIndicator();
         internal static int LE, LR, LM;
 
 
@@ -303,14 +302,6 @@ using EloBuddy;
         #region Drawing
         internal static void GravesOnEndScene(EventArgs args)
         {
-            if (!MainMenu.Item("drawfill").GetValue<bool>())
-                return;
-
-            foreach (var enemy in HeroManager.Enemies.Where(ene => ene.IsValidTarget() && !ene.IsZombie))
-            {
-                HPi.unit = enemy;
-                HPi.drawDmg(GetRDamage(enemy), new ColorBGRA(255, 255, 0, 90));
-            }
         }
 
         internal static void GravesOnDraw(EventArgs args)

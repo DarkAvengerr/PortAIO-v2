@@ -8,7 +8,6 @@ using LeagueSharp.Common;
 using System.Drawing;
 using Color = System.Drawing.Color;
 using ItemData = LeagueSharp.Common.Data.ItemData;
-using YorickTheStafferHpBarIndicator;
 
 using EloBuddy; 
  using LeagueSharp.Common; 
@@ -22,7 +21,6 @@ using EloBuddy;
         private static Menu Menu;
         private static Orbwalking.Orbwalker orbwalker;
         private static Spell Q, W, E, R;
-        private static readonly HpBarIndicator Indicator = new HpBarIndicator();
         private static bool MuramanaOn;
         private static bool allowMuramana;
         // Declaration Ends here XD
@@ -691,12 +689,6 @@ using EloBuddy;
         //Thx BestTuks and Hoola
         private static void Drawing_OnEndScene(EventArgs args)
         {
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>()
-                .Where(ene => ene.IsValidTarget()))
-            {
-                Indicator.unit = enemy;
-                Indicator.drawDmg(getComboDamage(enemy), SharpDX.Color.Aqua);
-            }
         }
 
         private static float getComboDamage(Obj_AI_Base enemy)

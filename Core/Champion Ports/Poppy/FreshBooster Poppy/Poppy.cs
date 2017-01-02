@@ -19,7 +19,7 @@ using EloBuddy;
         public const string ChampName = "Poppy";   // Edit
         public static AIHeroClient Player;
         public static Spell _Q, _W, _E, _R;
-        public static HpBarIndicator Indicator = new HpBarIndicator();
+        
         // Default Setting
 
         public static AIHeroClient Enemy_Obj;
@@ -224,15 +224,6 @@ using EloBuddy;
         {
             try
             {
-                if (Player.IsDead) return;
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
-                {
-                    if (_MainMenu.Item("Poppy_Indicator").GetValue<bool>())
-                    {
-                        Indicator.unit = enemy;
-                        Indicator.drawDmg(getComboDamage(enemy), new ColorBGRA(255, 204, 0, 160));
-                    }
-                }
             }
             catch (Exception)
             {

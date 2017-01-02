@@ -16,7 +16,7 @@ using EloBuddy;
     internal class Program // No other assemblies can access this class
     {
         private static readonly AIHeroClient Player = ObjectManager.Player; // We're only going to read off of the given API "Player"
-        private static readonly HpBarIndicator Indicator = new HpBarIndicator(); // Loads in HpBarIndicator.cs into Program.cs, which makes us able to make use of it
+         // Loads in HpBarIndicator.cs into Program.cs, which makes us able to make use of it
         private static readonly Dmg dmg = new Dmg();
 
         /// <summary>
@@ -305,14 +305,6 @@ using EloBuddy;
 
         private static void Drawing_OnEndScene(EventArgs args)
         {
-            // if there are valid targts in E spell range, execute the following code within the brackets
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(Spells.E.Range)))
-            {
-                if (!MenuConfig.Dind) continue; 
-
-                Indicator.Unit = enemy;
-                Indicator.DrawDmg(dmg.GetDamage(enemy), Color.LawnGreen);
-            }
         }
     }
 }

@@ -35,7 +35,7 @@ using EloBuddy;
 
         public static Menu Config;
 
-        public static HpBarIndicator hpi = new HpBarIndicator();
+        
 
         public KhazixSharp()
         {
@@ -131,14 +131,6 @@ using EloBuddy;
 
         private static void onDraw(EventArgs args)
         {
-            foreach (
-                            var enemy in
-                                ObjectManager.Get<AIHeroClient>()
-                                    .Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsVisible))
-            {
-                hpi.unit = enemy;
-                hpi.drawDmg(Khazix.fullComboDmgOn(enemy), Color.Yellow);
-            }
             Drawing.DrawCircle(Khazix.Player.Position, Khazix.Q.Range, Color.Pink);
             Drawing.DrawCircle(Khazix.Player.Position, Khazix.W.Range, Color.Pink);
             Drawing.DrawCircle(Khazix.Player.Position, Khazix.E.Range, Color.Pink);

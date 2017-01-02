@@ -66,15 +66,8 @@ using EloBuddy;
             
         }
 
-        private static readonly HpBarIndicator Indicator = new HpBarIndicator();
-
         private static void Drawing_OnEndScene(EventArgs args)
         {
-           foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(1500) && !ene.IsDead && ene.IsVisible))
-            {
-                Indicator.Unit = enemy;
-                Indicator.DrawDmg(Dmg.ComboDmg(enemy), enemy.Health <= Dmg.ComboDmg(enemy) * 1.65 ? Color.LawnGreen : Color.Yellow);
-            }
         }
     }
 }

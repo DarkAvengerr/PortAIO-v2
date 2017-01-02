@@ -13,7 +13,7 @@ namespace LadyGragas
     internal class Program
     {
         public const string ChampName = "Gragas";
-        public static HpBarIndicator Hpi = new HpBarIndicator();
+        
         public static Menu Config;
         public static Orbwalking.Orbwalker Orbwalker;
         public static Spell Q;
@@ -374,18 +374,6 @@ namespace LadyGragas
 
         private static void OnEndScene(EventArgs args)
         {
-            {
-                //Damage Indicator
-                if (Config.SubMenu("Gragas: Misc Settings").Item("DrawD").GetValue<bool>())
-                {
-                    foreach (var enemy in
-                        ObjectManager.Get<AIHeroClient>().Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsVisible))
-                    {
-                        Hpi.unit = enemy;
-                        Hpi.drawDmg(CalcDamage(enemy), Color.Gold);
-                    }
-                }
-            }
         }
 
         private static int CalcDamage(Obj_AI_Base target)

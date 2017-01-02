@@ -76,20 +76,9 @@ namespace Arcane_Ryze
             KillSteal.Killsteal();
 
         }
-        public static HpBarDraw HpBarDraw = new HpBarDraw();
         private static void Drawing_OnEndScene(EventArgs args)
         {
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
-            {
-                if (MenuConfig.dind)
-                {
-                    var EasyFuckingKill = Spells.Q.IsReady() && Dmg.EasyFuckingKillKappa(enemy)
-                        ? new ColorBGRA(0, 255, 0, 120)
-                        : new ColorBGRA(255, 255, 0, 120);
-                    HpBarDraw.unit = enemy;
-                    HpBarDraw.drawDmg(Dmg.EDmg(enemy) + Dmg.QDmg(enemy) + Dmg.WDmg(enemy), EasyFuckingKill);
-                }
-            }
+            
         }
     }
 }

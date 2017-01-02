@@ -72,20 +72,9 @@ using EloBuddy;
 
             }
         }
-        private static readonly HpBarIndicator Indicator = new HpBarIndicator();
+        
         private static void Drawing_OnEndScene(EventArgs args)
         {
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
-            {
-                if (MenuConfig.dind)
-                {
-                    var EasyKill = Champion.Q.IsReady() && Dmg.IsLethal(enemy)
-                       ? new ColorBGRA(0, 255, 0, 120)
-                       : new ColorBGRA(255, 255, 0, 120);
-                    Indicator.unit = enemy;
-                    Indicator.drawDmg(Dmg.ComboDmg(enemy), EasyKill);
-                }
-            }
         }
     }
 }

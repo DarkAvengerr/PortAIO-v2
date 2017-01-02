@@ -17,7 +17,7 @@ using EloBuddy;
     internal class Program
     {
         public const string ChampName = "Shyvana";
-        public static HpBarIndicator Hpi = new HpBarIndicator();
+        
         public static Menu Config;
         public static Orbwalking.Orbwalker Orbwalker;
         public static Spell Q, W, E, R;

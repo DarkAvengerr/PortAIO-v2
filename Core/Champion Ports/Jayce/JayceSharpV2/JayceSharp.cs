@@ -38,7 +38,7 @@ using EloBuddy;
 
         public static Menu Config;
 
-        public static HpBarIndicator hpi = new HpBarIndicator();
+        
 
         internal static Orbwalking.Orbwalker Orbwalker;
 
@@ -162,17 +162,6 @@ using EloBuddy;
 
         private static void OnEndScene(EventArgs args)
         {
-            if (Config.Item("awsPress").GetValue<KeyBind>().Active)
-            {
-                hpi.drawAwsomee();
-            }
-
-            if (Config.Item("drawFull").GetValue<bool>())
-                foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsVisible))
-                {
-                    hpi.unit = enemy;
-                    hpi.drawDmg(Jayce.getJayceFullComoDmg(enemy), Color.Yellow);
-                }
         }
 
 

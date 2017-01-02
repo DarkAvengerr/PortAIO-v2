@@ -12,7 +12,7 @@ using EloBuddy;
     class Program
     {
         public static readonly AIHeroClient Player = ObjectManager.Player;
-        private static readonly HpBarIndicator Indicator = new HpBarIndicator();
+        
         private static Orbwalking.Orbwalker _orbwalker;
         public static void Main()
         {
@@ -191,14 +191,6 @@ using EloBuddy;
         }
         private static void Drawing_OnEndScene(EventArgs args)
         {
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(1200) && !ene.IsZombie))
-            {
-                var EasyKill = Spells.R.IsReady() && Spells.R.IsReady() && Dmg.IsLethal(enemy)
-                       ? new ColorBGRA(0, 255, 0, 120)
-                       : new ColorBGRA(255, 255, 0, 120);
-                Indicator.unit = enemy;
-                Indicator.drawDmg(Dmg.ComboDmg(enemy), EasyKill);
-            }
         }
     }
 }

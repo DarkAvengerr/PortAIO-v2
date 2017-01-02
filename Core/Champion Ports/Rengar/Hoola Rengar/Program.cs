@@ -19,7 +19,7 @@ using EloBuddy;
         private static Menu Menu;
         private static Orbwalking.Orbwalker Orbwalker;
         private static AIHeroClient Player = ObjectManager.Player;
-        private static HpBarIndicator Indicator = new HpBarIndicator();
+        
         private static Spell Q, W, E, R;
         public static AttackableUnit DashTarget;
         public static int dashcount, dashtime;

@@ -17,12 +17,6 @@ using EloBuddy;
         private static int Item => Items.CanUseItem(3077) && Items.HasItem(3077) ? 3077 : Items.CanUseItem(3074) && Items.HasItem(3074) ? 3074 : 0;
         private static void Drawing_OnEndScene(EventArgs args)
         {
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>()
-                .Where(ene => ene.IsValidTarget() && !ene.IsZombie).Where(enemy => Dind))
-            {
-                Indicator.unit = enemy;
-                Indicator.drawDmg(getComboDamage(enemy), SharpDX.Color.Aqua);
-            }
         }
         private static bool HasTitan() => (Items.HasItem(3748) && Items.CanUseItem(3748));
 
@@ -35,7 +29,6 @@ using EloBuddy;
         }
         private static Orbwalking.Orbwalker Orbwalker;
         private static readonly AIHeroClient Player = ObjectManager.Player;
-        private static readonly HpBarIndicator Indicator = new HpBarIndicator();
         private static Spell Q, E, R;
         private static bool LQ => Menu.Item("LQ").GetValue<bool>();
         private static bool LE => Menu.Item("LE").GetValue<bool>();

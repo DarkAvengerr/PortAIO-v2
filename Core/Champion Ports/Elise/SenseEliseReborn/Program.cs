@@ -36,7 +36,7 @@ namespace Sense_EliseReborn
         private static float _spidQcd, _spidWcd, _spidEcd;
         private static float _humaQcd, _humaWcd, _humaEcd;
         private static float _spideQcd, _spideWcd, _spideEcd;
-        public static HpBarIndicator Indicator = new HpBarIndicator();
+        
         private static AIHeroClient Player => ObjectManager.Player;
 
         public static void Main()
@@ -538,13 +538,6 @@ namespace Sense_EliseReborn
 
         private static void Drawing_OnEndScene(EventArgs args)
         {
-            if (Player.IsDead) return;
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
-                if (Option_Item("DamageAfterCombo"))
-                {
-                    Indicator.unit = enemy;
-                    Indicator.drawDmg(GetComboDamage(enemy), new ColorBGRA(255, 204, 0, 160));
-                }
         }
 
         private static void Drawing_OnDraw(EventArgs args)

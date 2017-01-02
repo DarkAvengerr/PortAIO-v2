@@ -21,7 +21,7 @@ namespace Nechrito_Gragas
 
         public static AIHeroClient Player => ObjectManager.Player;
 
-        private static readonly HpBarIndicator Indicator = new HpBarIndicator();
+        
 
         public static void Main()
         {
@@ -207,18 +207,6 @@ namespace Nechrito_Gragas
         }
         private static void Drawing_OnEndScene(EventArgs args)
         {
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
-            {
-                if (MenuConfig.dind)
-                {
-                    var lethal = Spells.R.IsReady() && Dmg.IsLethal(enemy)
-                        ? new ColorBGRA(0, 255, 0, 120)
-                        : new ColorBGRA(255, 255, 0, 120);
-
-                    Indicator.unit = enemy;
-                    Indicator.drawDmg(Dmg.ComboDmg(enemy), lethal);
-                }
-            }
         }
         protected static void SmiteCombo()
         {

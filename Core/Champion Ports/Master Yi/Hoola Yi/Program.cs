@@ -17,7 +17,7 @@ namespace HoolaMasterYi
         private static Menu Menu;
         private static Orbwalking.Orbwalker Orbwalker;
         private static readonly AIHeroClient Player = ObjectManager.Player;
-        private static readonly HpBarIndicator Indicator = new HpBarIndicator();
+        
         private static Spell Q, W, E, R;
         private static bool AutoQ => Menu.Item("AutoQ").GetValue<bool>();
         private static bool AutoQOnly => Menu.Item("AutoQOnly").GetValue<bool>();
@@ -387,19 +387,6 @@ namespace HoolaMasterYi
 
         static void Drawing_OnEndScene(EventArgs args)
         {
-            foreach (
-                var enemy in
-                    ObjectManager.Get<AIHeroClient>()
-                        .Where(ene => ene.IsValidTarget() && !ene.IsZombie))
-            {
-                if (Dind)
-                {
-                    Indicator.unit = enemy;
-                    Indicator.drawDmg(getComboDamage(enemy), new ColorBGRA(255, 204, 0, 160));
-                }
-
-
-            }
         }
     }
 }

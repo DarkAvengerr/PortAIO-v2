@@ -19,8 +19,6 @@ using EloBuddy;
         public static Orbwalking.Orbwalker orbwalker;
         public static SpellSlot Ignite = ObjectManager.Player.GetSpellSlot("summonerDot");
 
-        public static HpBarIndicator Indicator = new HpBarIndicator();
-
         public static void Game_OnGameLoad()
         {
             Player = ObjectManager.Player;
@@ -418,11 +416,6 @@ using EloBuddy;
             if (Player.IsDead) return;
             foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
             {
-                if (Option_item("DamageAfterCombo"))
-                {
-                    Indicator.unit = enemy;
-                    Indicator.drawDmg(GetComboDamage(enemy), new ColorBGRA(255, 204, 0, 160));
-                }
             }
         }
 

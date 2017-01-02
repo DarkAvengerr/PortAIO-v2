@@ -18,7 +18,7 @@ using EloBuddy;
     {
         public const string ChampName = "Sivir";
         public const string Menuname = "JustSivir";
-        public static HpBarIndicator Hpi = new HpBarIndicator();
+        
         public static Menu Config;
         public static Orbwalking.Orbwalker Orbwalker;
         public static Spell Q, W, E, R;

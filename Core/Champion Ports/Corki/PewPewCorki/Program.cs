@@ -17,7 +17,7 @@ using EloBuddy;
     internal class Program
     {
         public const string ChampName = "Corki";
-        public static HpBarIndicator Hpi = new HpBarIndicator();
+        
         public static Menu Config;
         public static Orbwalking.Orbwalker Orbwalker;
         public static Spell Q;
@@ -176,15 +176,6 @@ using EloBuddy;
 
         private static void OnEndScene(EventArgs args)
         {
-            if (Config.SubMenu("[PewPew]: Misc Settings").Item("DrawD").GetValue<bool>())
-            {
-                foreach (var enemy in
-                    ObjectManager.Get<AIHeroClient>().Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsVisible))
-                {
-                    Hpi.unit = enemy;
-                    Hpi.drawDmg(CalcDamage(enemy), Color.Green);
-                }
-            }
         }
 
         private static void combo()

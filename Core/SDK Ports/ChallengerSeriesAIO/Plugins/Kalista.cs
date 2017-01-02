@@ -30,7 +30,7 @@ using EloBuddy;
             base.Q.SetSkillshot(0.25f, 40f, 1200f, true, SkillshotType.SkillshotLine);
             InitMenu();
             DelayedOnUpdate += OnUpdate;
-            Drawing.OnDraw += HpBarDamageIndicator.Drawing_OnDraw;
+            
             Drawing.OnDraw += OnDraw;
             Orbwalker.OnAction += OnOrbwalkerAction;
             Obj_AI_Base.OnProcessSpellCast += UltLogic_OnSpellcast;
@@ -111,12 +111,6 @@ using EloBuddy;
                     1400,
                     Color.DarkRed);
             }
-
-            if (DrawEDamage)
-            {
-                HpBarDamageIndicator.DamageToUnit = GetFloatRendDamage;
-            }
-            HpBarDamageIndicator.Enabled = DrawEDamage;
         }
 
         private Menu ComboMenu;

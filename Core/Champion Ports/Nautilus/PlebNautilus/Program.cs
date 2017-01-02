@@ -27,7 +27,7 @@ using EloBuddy;
         private static readonly int[] SmiteRed = { 3715, 3718, 3717, 3716, 3714 };
         private static readonly int[] SmiteBlue = { 3706, 3710, 3709, 3708, 3707 };
 
-        public static HpBarIndicator Hpi = new HpBarIndicator();
+        
 
         private static SpellSlot _ignite;
  
@@ -180,15 +180,6 @@ using EloBuddy;
 
         private static void OnEndScene(EventArgs args)
         {
-            if (_menu.Item("drawingsdrawHP").GetValue<bool>())
-            {
-                foreach (var enemy in
-                    ObjectManager.Get<AIHeroClient>().Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsVisible))
-                {
-                    Hpi.unit = enemy;
-                    Hpi.DrawDmg(CalcDamage(enemy), Color.Green);
-                }
-            }
         }
 
         private static void Game_OnUpdate(EventArgs args)

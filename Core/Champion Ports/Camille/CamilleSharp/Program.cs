@@ -17,7 +17,7 @@ namespace Camille
         internal static Spell Q, W, E, R;
         internal static Orbwalking.Orbwalker Orbwalker;
         internal static AIHeroClient Player => ObjectManager.Player;
-        internal static HpBarIndicator BarIndicator = new HpBarIndicator();
+        
 
         internal static bool tt;
         internal static bool HasQ2 => Player.HasBuff(Q2BuffName);
@@ -288,21 +288,6 @@ namespace Camille
 
         private static void Drawing_OnEndScene(EventArgs args)
         {
-            if (RootMenu.Item("drawhpbarfill").GetValue<bool>())
-            {
-                foreach (
-                    var enemy in
-                        ObjectManager.Get<AIHeroClient>()
-                            .Where(ene => ene.IsValidTarget() && !ene.IsZombie))
-                {
-                    var color = R.IsReady() && IsLethal(enemy)
-                        ? new ColorBGRA(0, 255, 0, 90)
-                        : new ColorBGRA(255, 255, 0, 90);
-
-                    BarIndicator.unit = enemy;
-                    BarIndicator.drawDmg((float) ComboDamage(enemy), color);
-                }
-            }
         }
 
         private static void Drawing_OnDraw(EventArgs args)

@@ -17,7 +17,7 @@ using EloBuddy;
     {
         public const string ChampName = "Nautilus";
         public const string Menuname = "JustNautilus";
-        public static HpBarIndicator Hpi = new HpBarIndicator();
+        
         public static Menu Config;
         public static Orbwalking.Orbwalker Orbwalker;
         public static Spell Q, W, E, R;
@@ -165,15 +165,6 @@ using EloBuddy;
 
         private static void OnEndScene(EventArgs args)
         {
-            if (Config.SubMenu("Draw").Item("DrawD").GetValue<bool>())
-            {
-                foreach (var enemy in
-                    ObjectManager.Get<AIHeroClient>().Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsVisible))
-                {
-                    Hpi.unit = enemy;
-                    Hpi.drawDmg(CalcDamage(enemy), Color.Green);
-                }
-            }
         }
 
         private static void combo()

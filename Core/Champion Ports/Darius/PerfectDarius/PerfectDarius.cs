@@ -14,7 +14,7 @@ using EloBuddy;
         internal static Menu Config;
         internal static int LastGrabTimeStamp;
         internal static int LastDunkTimeStamp;
-        internal static HpBarIndicator HPi = new HpBarIndicator();
+
         internal static Orbwalking.Orbwalker Orbwalker;
         static Items.Item HealthPot;
         static Items.Item ManaPot;
@@ -102,16 +102,6 @@ using EloBuddy;
 
         internal static void Drawing_OnEndScene(EventArgs args)
         {
-            if (!Config.Item("drawfill").GetValue<bool>() || Lib.Player.IsDead)
-            {
-                return;
-            }
-
-            foreach (var enemy in HeroManager.Enemies.Where(ene => ene.IsValidTarget() && ene.IsHPBarRendered))
-            {
-                HPi.unit = enemy;
-                HPi.drawDmg(Lib.RDmg(enemy, PassiveCount(enemy)), new ColorBGRA(255, 255, 0, 90));
-            }
         }
         internal static void Game_OnUpdate(EventArgs args)
         {

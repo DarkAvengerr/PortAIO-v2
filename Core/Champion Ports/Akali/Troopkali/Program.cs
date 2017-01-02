@@ -41,7 +41,7 @@ using EloBuddy;
 
         public static Spell R;
 
-        public static HpBarIndicator Indicator = new HpBarIndicator();
+        
 
 
 
@@ -131,15 +131,6 @@ using EloBuddy;
 
         public static void Drawing_OnEndScene(EventArgs args)
         {
-            if (Player.IsDead) return;
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
-            {
-                if (Menu.Item("ComboDMG").GetValue<bool>()) ;
-                {
-                    Indicator.unit = enemy;
-                    Indicator.drawDmg(DamageToUnit(enemy), new ColorBGRA(352, 142, 0, 280));
-                }
-            }
         }
 
         private static float DamageToUnit(AIHeroClient target)

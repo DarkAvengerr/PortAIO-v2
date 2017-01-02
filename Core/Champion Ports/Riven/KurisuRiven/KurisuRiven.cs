@@ -38,7 +38,6 @@ namespace KurisuRiven
         private static Spell q, w, e, r;
         private static Orbwalking.Orbwalker orbwalker;
         private static AIHeroClient player = ObjectManager.Player;
-        private static HpBarIndicator hpi = new HpBarIndicator();
         private static Obj_AI_Base qtarg; // semi q target
 
         private static int qq;
@@ -1878,26 +1877,6 @@ namespace KurisuRiven
                             menu.Item("drawburst").GetValue<Circle>().Color, menu.Item("linewidth").GetValue<Slider>().Value);
                     }
                 }
-            };
-
-            Drawing.OnEndScene += args =>
-            {
-                if (!menubool("drawdmg"))
-                    return;
-
-                foreach (
-                    var enemy in
-                        ObjectManager.Get<AIHeroClient>()
-                            .Where(ene => ene.IsValidTarget() && !ene.IsZombie))
-                {
-                    var color = r.IsReady() && IsLethal(enemy)
-                        ? new ColorBGRA(0, 255, 0, 90)
-                        : new ColorBGRA(255, 255, 0, 90);
-
-                    hpi.unit = enemy;
-                    hpi.drawDmg(ComboDamage(enemy), color);
-                }
-
             };
         }
 

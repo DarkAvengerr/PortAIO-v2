@@ -19,7 +19,6 @@ using EloBuddy;
         private static Menu Menu;
         private static Orbwalking.Orbwalker Orbwalker;
         private static AIHeroClient Player = ObjectManager.Player;
-        private static HpBarIndicator Indicator = new HpBarIndicator();
         private static Spell Q, Q1, W, E, R;
         private static bool AAPassive;
         private static bool HEXQ => Menu.Item("HEXQ").GetValue<bool>();
@@ -386,18 +385,6 @@ using EloBuddy;
         }
         static void Drawing_OnEndScene(EventArgs args)
         {
-            if (Dind)
-            {
-                foreach (
-                    var enemy in
-                        ObjectManager.Get<AIHeroClient>()
-                            .Where(ene => ene.IsValidTarget() && !ene.IsZombie))
-                {
-                    Indicator.unit = enemy;
-                    Indicator.drawDmg(getComboDamage(enemy), new ColorBGRA(255, 204, 0, 160));
-
-                }
-            }
         }
     }
 }

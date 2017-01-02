@@ -42,7 +42,7 @@ using EloBuddy;
 
         public static Menu Config;
 
-        public static HpBarIndicator hpi = new HpBarIndicator();
+        
 
         public static Vector3 tempTestPos = new Vector3();
         public AzirSharp()
@@ -276,12 +276,6 @@ using EloBuddy;
 
         private static void OnEndScene(EventArgs args)
         {
-            if (Config.Item("drawFullDmg").GetValue<bool>())
-                foreach (var enemy in EloBuddy.SDK.EntityManager.Heroes.Enemies.Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsVisible))
-                {
-                    hpi.unit = enemy;
-                    hpi.drawDmg(Azir.getFullDmgOn(enemy), Color.Yellow);
-                }
         }
 
         private static void OnCreateObject(GameObject sender, EventArgs args)

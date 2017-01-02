@@ -13,7 +13,6 @@ namespace HoolaRiven
         public static Menu Menu;
         private static Orbwalking.Orbwalker Orbwalker;
         private static readonly AIHeroClient Player = ObjectManager.Player;
-        private static readonly HpBarIndicator Indicator = new HpBarIndicator();
         private const string IsFirstR = "RivenFengShuiEngine";
         private const string IsSecondR = "RivenIzunaBlade";
         private static readonly SpellSlot Flash = Player.GetSpellSlot("summonerFlash");
@@ -102,17 +101,6 @@ namespace HoolaRiven
         }
         private static void Drawing_OnEndScene(EventArgs args)
         {
-            foreach (
-                var enemy in
-                    ObjectManager.Get<AIHeroClient>()
-                        .Where(ene => ene.IsValidTarget() && !ene.IsZombie))
-            {
-                if (Dind)
-                {
-                    Indicator.unit = enemy;
-                    Indicator.drawDmg(getComboDamage(enemy), new ColorBGRA(255, 204, 0, 170));
-                }
-            }
         }
 
         private static void OnDoCastLC(Obj_AI_Base Sender, GameObjectProcessSpellCastEventArgs args)

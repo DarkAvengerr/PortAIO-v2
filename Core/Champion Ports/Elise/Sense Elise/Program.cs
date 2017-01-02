@@ -28,7 +28,7 @@ using EloBuddy;
         private static float _spidQcd = 0, _spidWcd = 0, _spidEcd = 0;
         private static float _humaQcd = 0, _humaWcd = 0, _humaEcd = 0;
         private static float _spideQcd = 0, _spideWcd = 0, _spideEcd = 0;
-        public static HpBarIndicator Indicator = new HpBarIndicator();
+        
 
         public static void Main()
         {
@@ -575,15 +575,6 @@ using EloBuddy;
 
         static void Drawing_OnEndScene(EventArgs args)
         {
-            if (Player.IsDead) return;
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget() && !ene.IsZombie))
-            {
-                if (Option_Item("DamageAfterCombo"))
-                {
-                    Indicator.unit = enemy;
-                    Indicator.drawDmg(GetComboDamage(enemy), new ColorBGRA(255, 204, 0, 160));
-                }
-            }
         }
 
         static void Drawing_OnDraw(EventArgs args)

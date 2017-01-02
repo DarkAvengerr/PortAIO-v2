@@ -19,7 +19,7 @@ using EloBuddy;
         private static Menu Menu;
         private static Orbwalking.Orbwalker Orbwalker;
         private static AIHeroClient Player = ObjectManager.Player;
-        private static HpBarIndicator Indicator = new HpBarIndicator();
+        
         private static Spell Q, W, E, R;
         private static String IsFirstR = "TalonShadowAssault";
         private static String IsSecondR = "talonshadowassaulttoggle";
@@ -364,18 +364,6 @@ using EloBuddy;
         }
         private static void OnEndScene(EventArgs args)
         {
-            foreach (
-                var enemy in
-                    ObjectManager.Get<AIHeroClient>()
-                        .Where(ene => ene.IsValidTarget() && !ene.IsZombie))
-            {
-                if (Dind)
-                {
-                    Indicator.unit = enemy;
-                    Indicator.drawDmg(getComboDamage(enemy), new SharpDX.ColorBGRA(255, 204, 0, 170));
-                }
-
-            }
         }
     }
 }

@@ -62,8 +62,6 @@ namespace TRUStInMyViktor
 
         }
 
-        private static readonly TRUStInMyViktor.HpBarIndicator Indicator = new TRUStInMyViktor.HpBarIndicator();
-
 
         public static void Game_OnGameLoad()
         {
@@ -99,13 +97,6 @@ namespace TRUStInMyViktor
 
         public static void DrawDmg(EventArgs args)
         {
-            foreach (var enemy in ObjectManager.Get<AIHeroClient>().Where(ene => ene.IsValidTarget(1350)))
-            {
-                if (DrawMenu["dmgdraw"].GetValue<MenuBool>()) continue;
-
-                Indicator.Unit = enemy;
-                Indicator.DrawDmg(TotalDmg(enemy, true, true, true, true), SharpDX.Color.LawnGreen);
-            }
         }
 
 

@@ -17,7 +17,7 @@ namespace PewPewTristana
     internal class Program
     {
         public const string ChampName = "Tristana";
-        public static HpBarIndicator Hpi = new HpBarIndicator();
+        
         public static Menu Config;
         public static Orbwalking.Orbwalker Orbwalker;
         public static Spell Q;
@@ -184,20 +184,9 @@ namespace PewPewTristana
             int mode = Config.Item("dmgdrawer", true).GetValue<StringList>().SelectedIndex;
             if (mode == 0)
             {
-                foreach (var enemy in
-                    ObjectManager.Get<AIHeroClient>().Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsVisible))
-                {
-                    Hpi.unit = enemy;
-                    Hpi.drawDmg(CalcDamage(enemy), Color.Green);
-                    LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = false;
-                }
             }
             if (mode == 1)
             {
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = CalcDamage;
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Color = Color.Aqua;
-                LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
-
             }
         }
 

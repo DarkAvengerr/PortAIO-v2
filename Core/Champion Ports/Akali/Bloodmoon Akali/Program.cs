@@ -17,7 +17,7 @@ using EloBuddy;
         public static Orbwalking.Orbwalker Orbwalker;
         public static Spell Q, W, E, R;
         private static SpellSlot Ignite;
-        public static HpBarIndicator Hpi = new HpBarIndicator();
+        
         private static readonly AIHeroClient Player = ObjectManager.Player;
 
         public static void Game_OnGameLoad()
@@ -173,16 +173,6 @@ using EloBuddy;
 
         private static void OnEndScene(EventArgs args)
         {
-            if (Config.Item("drawdmg").GetValue<bool>())
-            {
-                foreach (var enemy in
-                    ObjectManager.Get<AIHeroClient>().Where(ene => !ene.IsDead && ene.IsEnemy && ene.IsVisible))
-                {
-                    Hpi.unit = enemy;
-                    Hpi.drawDmg(CalcDamage(enemy), System.Drawing.Color.IndianRed);
-
-                }
-            }
         }
 
         private static void Game_OnGameUpdate(EventArgs args)
