@@ -47,7 +47,7 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Combo
 
             if (Menu.Item("Combo.E.Mode").GetValue<StringList>().SelectedIndex == 0)
             {
-                eSpell.Spell.Cast(dashSmart.ToSafePosition(target, target.Position, Menu.Item("Combo.E.Distance").GetValue<Slider>().Value));
+                eSpell.Spell.Cast(dashSmart.ToSafePosition(target, Menu.Item("Combo.E.Distance").GetValue<Slider>().Value));
             }
         }
 
@@ -73,7 +73,7 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Combo
                         eSpell.Spell.Cast(dashSmart.Kite(target.Position.To2D(), Menu.Item("Combo.E.Distance").GetValue<Slider>().Value).To3D());
                         break;
                     case 2:
-                        eSpell.Spell.Cast(dashSmart.ToSafePosition(target, target.Position, Menu.Item("Combo.E.Distance").GetValue<Slider>().Value));
+                        eSpell.Spell.Cast(dashSmart.ToSafePosition(target, Menu.Item("Combo.E.Distance").GetValue<Slider>().Value));
                         break;
                 }
             }

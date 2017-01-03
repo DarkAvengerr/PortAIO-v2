@@ -30,7 +30,7 @@ namespace ReformedAIO.Champions.Gragas.Core.Spells
             LastCastPosition = LastPos;
             HasThrown = true;
 
-            LeagueSharp.Common.Utility.DelayAction.Add(5600, () => HasThrown = false);
+            LeagueSharp.Common.Utility.DelayAction.Add(5300, () => HasThrown = false);
         }
 
         public void ExplodeHandler(Obj_AI_Base target)

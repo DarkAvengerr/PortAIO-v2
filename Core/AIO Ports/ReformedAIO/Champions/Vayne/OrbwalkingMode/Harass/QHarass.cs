@@ -16,12 +16,9 @@ namespace ReformedAIO.Champions.Vayne.OrbwalkingMode.Harass
 
         private readonly QSpell spell;
 
-        private readonly DashSmart dashSmart;
-
-        public QHarass(QSpell spell, DashSmart dashSmart)
+        public QHarass(QSpell spell)
         {
             this.spell = spell;
-            this.dashSmart = dashSmart;
         }
 
         private AIHeroClient Target => TargetSelector.GetTarget(spell.Spell.Range + ObjectManager.Player.AttackRange, TargetSelector.DamageType.Physical);
@@ -43,10 +40,7 @@ namespace ReformedAIO.Champions.Vayne.OrbwalkingMode.Harass
                     spell.Spell.Cast(ObjectManager.Player.Position.Extend(Game.CursorPos, spell.Spell.Range));
                     break;
                 case 1:
-                    spell.Spell.Cast(dashSmart.Kite(Target.Position.Extend(Target.Direction, spell.Spell.Range).To2D(), spell.Spell.Range).To3D());
-                    break;
-                case 2:
-                    spell.Spell.Cast(dashSmart.ToSafePosition(Target, Target.Position, spell.Spell.Range));
+                    spell.Spell.Cast(spell.CastTo(Target, spell.Spell.Range));
                     break;
             }
         }
@@ -69,7 +63,7 @@ namespace ReformedAIO.Champions.Vayne.OrbwalkingMode.Harass
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("Vayne.Harass.Q.Mode", "Mode").SetValue(new StringList(new[] { "Cursor", "Kite", "Automatic" })));
+            Menu.AddItem(new MenuItem("Vayne.Harass.Q.Mode", "Mode").SetValue(new StringList(new[] { "Cursor", "Kite"})));
 
             Menu.AddItem(new MenuItem("Vayne.Harass.Q.Stack", "Only Q To Proc W").SetValue(false));
 

@@ -48,13 +48,18 @@ namespace ReformedAIO.Champions.Vayne.OrbwalkingMode.Combo
             switch (Menu.Item("Vayne.Combo.R.Mode").GetValue<StringList>().SelectedIndex)
             {
                 case 0:
+
+                    if (ObjectManager.Player.CountAlliesInRange(1000) <= 1 
+                     && ObjectManager.Player.CountEnemiesInRange(1000) > 2)
+                    {
+                        return;
+                    }
+
                     spell.Spell.Cast();
                     break;
                 case 1:
 
-                    if (info.Unkillable(Target)
-                        || target.Health < damages.GetComboDamage(Target) * 3
-                        || ObjectManager.Player.CountAlliesInRange(1000) < ObjectManager.Player.CountEnemiesInRange(1000) + 1)
+                    if (target.Health > damages.GetComboDamage(Target) * 4 || ObjectManager.Player.HealthPercent <= 20)
                     {
                         return;
                     }

@@ -11,6 +11,7 @@ namespace ReformedAIO.Library.Dash_Handler
 
     internal class DashSmart
     {
+       
         /// <summary>
         /// Dashes to side if dangerous, else to cursor. (Needs work)
         /// </summary>
@@ -18,11 +19,11 @@ namespace ReformedAIO.Library.Dash_Handler
         /// <param name="targetPosition"></param>
         /// <param name="distance"></param>
         /// <returns></returns>
-        public Vector3 ToSafePosition(Obj_AI_Base target, Vector3 targetPosition, double distance)
+        public Vector3 ToSafePosition(Obj_AI_Base target, double distance)
         {
             return IsDangerous(target) 
                 ? Kite(target.Position.To2D(), distance).To3D()
-                : Game.CursorPos;
+                : Kite(Game.CursorPos.To2D().Extend(target.Position.To2D(), 60), distance).To3D();
         }
 
         /// <summary>

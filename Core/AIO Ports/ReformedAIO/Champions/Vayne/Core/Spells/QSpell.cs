@@ -5,14 +5,25 @@ namespace ReformedAIO.Champions.Vayne.Core.Spells
     using LeagueSharp;
     using LeagueSharp.Common;
 
+    using ReformedAIO.Library.Dash_Handler;
+
     using RethoughtLib.FeatureSystem.Implementations;
     using RethoughtLib.FeatureSystem.Switches;
+
+    using SharpDX;
 
     internal class QSpell : SpellChild
     {
         public override string Name { get; set; } = "Tumble";
 
         public override Spell Spell { get; set; }
+
+        private DashSmart dashSmart;
+
+        public Vector3 CastTo(Obj_AI_Base target, double distance)
+        {
+            return dashSmart.ToSafePosition(target, distance);
+        }
 
         public float GetDamage(Obj_AI_Base target)
         {
@@ -29,6 +40,8 @@ namespace ReformedAIO.Champions.Vayne.Core.Spells
             base.OnLoad(sender, eventArgs);
 
             Spell = new Spell(SpellSlot.Q, 300);
+
+            dashSmart = new DashSmart();
         }
 
         protected override void SetSwitch()

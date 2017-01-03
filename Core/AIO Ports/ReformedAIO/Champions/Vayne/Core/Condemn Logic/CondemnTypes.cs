@@ -16,24 +16,24 @@ namespace ReformedAIO.Champions.Vayne.Core.Condemn_Logic
 
         private static Vector3 ReformedPosition(Obj_AI_Base target, float range, Spell spell)
         {
-            if (!Orbwalking.CanMove(5) || !Orbwalking.CanAttack())
+            if (!Orbwalking.CanMove(1) || !Orbwalking.CanAttack())
             {
                 return Vector3.Zero;
             }
 
             var prediction = spell.GetPrediction(target).UnitPosition;
 
-            for (float i = 0; i < range; i += range / 5f)
-            {
-                var newprediction = prediction.Extend(ObjectManager.Player.ServerPosition, -i);
+            //for (float i = 0; i < range; i += range / 5f)
+            //{
+            //    var newprediction = prediction.Extend(ObjectManager.Player.ServerPosition, -i);
 
-                if (NavMesh.GetCollisionFlags(newprediction) == CollisionFlags.Wall
-                || NavMesh.GetCollisionFlags(newprediction) == CollisionFlags.Building
-                || newprediction.IsWall())
-                {
-                    return newprediction;
-                }
-            }
+            //    if (NavMesh.GetCollisionFlags(newprediction) == CollisionFlags.Wall
+            //    || NavMesh.GetCollisionFlags(newprediction) == CollisionFlags.Building
+            //    || newprediction.IsWall())
+            //    {
+            //        return newprediction;
+            //    }
+            //}
 
             var finalPosition = prediction.Extend(ObjectManager.Player.ServerPosition, -range);
 
@@ -57,8 +57,7 @@ namespace ReformedAIO.Champions.Vayne.Core.Condemn_Logic
         {
             for (var i = 1; i < 8; i++)
             {
-                var targetBehind = target.Position
-                                   + Vector3.Normalize(target.ServerPosition - ObjectManager.Player.Position) * i * 50;
+                var targetBehind = target.Position + Vector3.Normalize(target.ServerPosition - ObjectManager.Player.Position) * i * 50;
 
                 if (targetBehind.IsWall() && target.IsValidTarget(spell.Range))
                 {
@@ -77,9 +76,7 @@ namespace ReformedAIO.Champions.Vayne.Core.Condemn_Logic
             {
                 if (i > pushDistance) return false;
 
-                var posCF =
-                    NavMesh.GetCollisionFlags(
-                        prediction.UnitPosition.To2D().Extend(ObjectManager.Player.Position.To2D(), -i).To3D());
+                var posCF = NavMesh.GetCollisionFlags(prediction.UnitPosition.To2D().Extend(ObjectManager.Player.Position.To2D(), -i).To3D());
 
                 if (posCF.HasFlag(CollisionFlags.Wall) || posCF.HasFlag(CollisionFlags.Building))
                 {

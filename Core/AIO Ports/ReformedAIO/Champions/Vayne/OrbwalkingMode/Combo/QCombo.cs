@@ -6,7 +6,6 @@ namespace ReformedAIO.Champions.Vayne.OrbwalkingMode.Combo
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Vayne.Core.Spells;
-    using ReformedAIO.Library.Dash_Handler;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
@@ -16,12 +15,9 @@ namespace ReformedAIO.Champions.Vayne.OrbwalkingMode.Combo
 
         private readonly QSpell spell;
 
-        private readonly DashSmart dashSmart;
-
-        public QCombo(QSpell spell, DashSmart dashSmart)
+        public QCombo(QSpell spell)
         {
             this.spell = spell;
-            this.dashSmart = dashSmart;
         }
 
         private AIHeroClient Target => TargetSelector.GetTarget(spell.Spell.Range + ObjectManager.Player.AttackRange, TargetSelector.DamageType.Physical);
@@ -48,10 +44,7 @@ namespace ReformedAIO.Champions.Vayne.OrbwalkingMode.Combo
                     spell.Spell.Cast(ObjectManager.Player.Position.Extend(Game.CursorPos, spell.Spell.Range));
                     break;
                 case 1:
-                    spell.Spell.Cast(dashSmart.Kite(Target.Position.Extend(Target.Direction, spell.Spell.Range).To2D(), spell.Spell.Range).To3D());
-                    break;
-                case 2:
-                    spell.Spell.Cast(dashSmart.ToSafePosition(Target, Target.Position, spell.Spell.Range));
+                    spell.Spell.Cast(spell.CastTo(Target, spell.Spell.Range));
                     break;
             }
         }
@@ -74,7 +67,7 @@ namespace ReformedAIO.Champions.Vayne.OrbwalkingMode.Combo
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("Vayne.Combo.Q.Mode", "Mode").SetValue(new StringList(new[] { "Cursor", "Kite", "Automatic" })));
+            Menu.AddItem(new MenuItem("Vayne.Combo.Q.Mode", "Mode").SetValue(new StringList(new[] { "Cursor", "Kite" })));
 
             Menu.AddItem(new MenuItem("Vayne.Combo.Q.Melee", "Anti-Melee").SetValue(true));
 

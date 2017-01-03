@@ -60,7 +60,7 @@ namespace ReformedAIO.Champions.Ezreal.OrbwalkingMode.Combo
                     eSpell.Spell.Cast(dashSmart.Kite(Target.Position.To2D(), eSpell.Spell.Range).To3D());
                     break;
                 case 2:
-                    eSpell.Spell.Cast(dashSmart.ToSafePosition(Target, Target.Position, eSpell.Spell.Range));
+                    eSpell.Spell.Cast(dashSmart.ToSafePosition(Target, eSpell.Spell.Range));
                     break;
             }
         }

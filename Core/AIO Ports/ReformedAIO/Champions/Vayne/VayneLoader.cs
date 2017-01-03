@@ -54,13 +54,7 @@ namespace ReformedAIO.Champions.Vayne
             var rSpell = new RSpell();
 
             var spellParent = new SpellParent();
-            spellParent.Add(new List<Base>
-                                  {
-                                     qSpell,
-                                     wSpell,
-                                     eSpell,
-                                     rSpell
-                                  });
+            spellParent.Add(new List<Base> { qSpell, wSpell, eSpell, rSpell });
             spellParent.Load();
 
             var orbwalkerModule = new OrbwalkerModule();
@@ -76,8 +70,7 @@ namespace ReformedAIO.Champions.Vayne
 
             var condemnTypes = new CondemnTypes();
             var dmg = new Damages(qSpell, wSpell, eSpell, rSpell);
-            var dashSmart = new DashSmart();
-
+            
             var mustNotBeWindingUpGuardian = new PlayerMustNotBeWindingUp();
             var qReadyGuardian = new SpellMustBeReady(SpellSlot.Q);
             var wReadyGuardian = new SpellMustBeReady(SpellSlot.W);
@@ -86,31 +79,31 @@ namespace ReformedAIO.Champions.Vayne
 
             comboParent.Add(new List<Base>()
                                 {
-                                    new QCombo(qSpell, dashSmart).Guardian(mustNotBeWindingUpGuardian).Guardian(qReadyGuardian),
+                                    new QCombo(qSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(qReadyGuardian),
                                     new ECombo(eSpell, condemnTypes).Guardian(eReadyGuardian),
                                     new RCombo(rSpell, qSpell, dmg).Guardian(mustNotBeWindingUpGuardian).Guardian(rReadyGuardian)
                                 });
 
             harassParent.Add(new List<Base>
             {
-                new QHarass(qSpell, dashSmart).Guardian(mustNotBeWindingUpGuardian).Guardian(qReadyGuardian),
+                new QHarass(qSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(qReadyGuardian),
                 new EHarass(eSpell, condemnTypes).Guardian(mustNotBeWindingUpGuardian).Guardian(eReadyGuardian)
             });
 
             laneParent.Add(new List<Base>()
                                {
-                                  new QLane(qSpell, dashSmart, dmg)
+                                  new QLane(qSpell, dmg)
                                });
 
             jungleParent.Add(new List<Base>()
                                  {
-                                   new QJungle(qSpell, dashSmart).Guardian(mustNotBeWindingUpGuardian).Guardian(qReadyGuardian),
+                                   new QJungle(qSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(qReadyGuardian),
                                    new EJungle(eSpell, condemnTypes).Guardian(eReadyGuardian),
                                  });
 
             killstealParnet.Add(new List<Base>
                                     {
-                                        new QKillsteal(qSpell, dashSmart).Guardian(mustNotBeWindingUpGuardian).Guardian(qReadyGuardian),
+                                        new QKillsteal(qSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(qReadyGuardian),
                                         new EKillsteal(eSpell).Guardian(mustNotBeWindingUpGuardian).Guardian(eReadyGuardian)
                                     });
 

@@ -53,7 +53,7 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Harass
                         eSpell.Spell.Cast(dashSmart.Kite(target.Position.To2D(), Menu.Item("Harass.E.Distance").GetValue<Slider>().Value).To3D());
                         break;
                     case 2:
-                        eSpell.Spell.Cast(dashSmart.ToSafePosition(target, target.Position, Menu.Item("Harass.E.Distance").GetValue<Slider>().Value));
+                        eSpell.Spell.Cast(dashSmart.ToSafePosition(target, Menu.Item("Harass.E.Distance").GetValue<Slider>().Value));
                         break;
                 }
             }
