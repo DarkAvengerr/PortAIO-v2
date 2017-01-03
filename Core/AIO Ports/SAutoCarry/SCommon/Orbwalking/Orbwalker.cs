@@ -82,8 +82,10 @@ namespace SCommon.Orbwalking
             m_fnShouldWait = null;
 
             Game.OnUpdate += Game_OnUpdate;
-            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnBasicAttack += Obj_AI_Base_OnBasicAttack;
             Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnDoCast;
+
             Obj_AI_Base.OnBuffGain += Obj_AI_Base_OnBuffAdd;
             Obj_AI_Base.OnBuffLose += Obj_AI_Base_OnBuffRemove;
             Obj_AI_Base.OnNewPath += Obj_AI_Base_OnNewPath;
@@ -93,6 +95,26 @@ namespace SCommon.Orbwalking
             PacketHandler.Register(0x31, PacketHandler_AfterAttack);
             PacketHandler.Register(0x155, PacketHandler_CancelWindup);
             new Drawings(this);
+        }
+
+        private void Obj_AI_Base_OnBasicAttack(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        {
+            if (sender.IsMe)
+            {
+                m_IslastCastedAA = true;
+                OnAttackArgs onAttackArgs = Events.FireOnAttack(this, args.Target as AttackableUnit);
+                if (!onAttackArgs.Cancel)
+                {
+                    m_lastAATick = Utils.TickCount - Game.Ping / 2;
+                    m_lastWindUpTime = (int)Math.Round(sender.AttackCastDelay * 1000);
+                    m_lastAttackCooldown = (int)Math.Round(sender.AttackDelay * 1000);
+                    m_lastAttackCompletesAt = m_lastAATick + m_lastWindUpTime;
+                    m_lastAttackPos = ObjectManager.Player.ServerPosition.To2D();
+                    m_attackInProgress = true;
+                }
+                if (m_baseAttackSpeed == 0.5f)
+                    SetOrbwalkValues();
+            }
         }
 
         /// <summary>
@@ -214,7 +236,7 @@ namespace SCommon.Orbwalking
         {
             m_baseAttackSpeed = 0.5f;
         }
-        
+
         /// <summary>
         /// Sets orbwalk values
         /// </summary>
@@ -264,7 +286,13 @@ namespace SCommon.Orbwalking
             if (m_fnCanAttack != null)
                 return m_fnCanAttack();
 
-            return EloBuddy.SDK.Orbwalker.CanAutoAttack;
+            if (ObjectManager.Player.CharData.BaseSkinName == "Graves" && !ObjectManager.Player.HasBuff("GravesBasicAttackAmmo1") && !ObjectManager.Player.HasBuff("GravesBasicAttackAmmo2"))
+                return false;
+
+            if (ObjectManager.Player.CharData.BaseSkinName == "Jhin" && ObjectManager.Player.HasBuff("JhinPassiveReload"))
+                return false;
+
+            return Utils.TickCount + t + Game.Ping - m_lastAATick - m_Configuration.ExtraWindup - (m_Configuration.LegitMode && !ObjectManager.Player.IsMelee ? Math.Max(100, ObjectManager.Player.AttackDelay * 1000) : 0) * m_Configuration.LegitPercent / 100f >= 1000 / (ObjectManager.Player.GetAttackSpeed() * m_baseAttackSpeed);
         }
 
         /// <summary>
@@ -276,11 +304,18 @@ namespace SCommon.Orbwalking
             if (!m_Move)
                 return false;
 
+            if (Utils.TickCount - m_lastWindUpEndTick < (ObjectManager.Player.AttackDelay - ObjectManager.Player.AttackCastDelay) * 1000f + (Game.Ping <= 30 ? 30 : 0))
+                return true;
+
             if (m_fnCanMove != null)
                 return m_fnCanMove();
 
-            return EloBuddy.SDK.Orbwalker.CanMove;
+            if (Utility.IsNonCancelChamp(ObjectManager.Player.CharData.BaseSkinName))
+                return Utils.TickCount - m_lastMoveTick >= 70 + m_rnd.Next(0, Game.Ping);
+
+            return Utils.TickCount + t - 20 - m_lastAATick - m_Configuration.ExtraWindup - m_Configuration.MovementDelay >= 1000 / (ObjectManager.Player.GetAttackSpeed() * m_baseWindUp);
         }
+
 
         /// <summary>
         /// Checks if player can orbwalk given target
@@ -375,12 +410,12 @@ namespace SCommon.Orbwalking
                         BeforeAttackArgs args = Events.FireBeforeAttack(this, target);
                         if (args.Process)
                         {
-                            if(!m_Configuration.DisableAA || target.Type != GameObjectType.AIHeroClient)
+                            if (!m_Configuration.DisableAA || target.Type != GameObjectType.AIHeroClient)
                                 Attack(target);
                         }
                         else
                         {
-                            if (EloBuddy.SDK.Orbwalker.CanMove)
+                            if (CanMove())
                             {
                                 if (m_Configuration.DontMoveInRange && target.Type == GameObjectType.AIHeroClient)
                                     return;
@@ -390,7 +425,7 @@ namespace SCommon.Orbwalking
                             }
                         }
                     }
-                    else if (EloBuddy.SDK.Orbwalker.CanMove)
+                    else if (CanMove())
                     {
                         if (m_Configuration.DontMoveInRange && target.Type == GameObjectType.AIHeroClient)
                             return;
@@ -403,7 +438,7 @@ namespace SCommon.Orbwalking
                     Move(point);
             }
         }
-       
+
         /// <summary>
         /// Gets AA Animation Time
         /// </summary>
@@ -428,7 +463,7 @@ namespace SCommon.Orbwalking
         /// <param name="pos"></param>
         private void Move(Vector3 pos)
         {
-            if (!m_attackInProgress && EloBuddy.SDK.Orbwalker.CanMove && (!CanAttack(60) || EloBuddy.SDK.Orbwalker.CanAutoAttack))
+            if (!m_attackInProgress && CanMove() && (!CanAttack(60) || CanAttack()))
             {
                 Vector3 playerPos = ObjectManager.Player.ServerPosition;
 
@@ -453,7 +488,7 @@ namespace SCommon.Orbwalking
                 }
             }
         }
-        
+
         /// <summary>
         /// Orders attack hero to given target
         /// </summary>
@@ -604,7 +639,7 @@ namespace SCommon.Orbwalking
                         minion => minion.IsValidTarget() && minion.Team != GameObjectTeam.Neutral &&
                                   MinionManager.IsMinion(minion, false) && !minion.IsSiegeMinion() &&
                                   underTurret.Distance(minion.ServerPosition) < 950f);
-                
+
             }
 
             if (m_fnShouldWait != null)
@@ -629,7 +664,7 @@ namespace SCommon.Orbwalking
         public AttackableUnit GetTarget()
         {
             bool wait = false;
-            if(ActiveMode == Mode.LaneClear)
+            if (ActiveMode == Mode.LaneClear)
                 wait = ShouldWait();
 
             if (ActiveMode == Mode.LaneClear || ActiveMode == Mode.LastHit || ActiveMode == Mode.Mixed)
@@ -658,7 +693,7 @@ namespace SCommon.Orbwalking
                     if (m_towerTarget.Health - Damage.AutoAttack.GetDamage(m_towerTarget) * 2f <= 0)
                     {
                         float twoAaTime = ObjectManager.Player.AttackDelay + ObjectManager.Player.AttackCastDelay + 2 * (ObjectManager.Player.Distance(m_towerTarget.ServerPosition) / Utility.GetProjectileSpeed());
-                        float towerAaTime = m_sourceTower.AttackCastDelay + m_sourceTower.Distance(m_towerTarget.ServerPosition)  / m_sourceTower.BasicAttack.MissileSpeed;
+                        float towerAaTime = m_sourceTower.AttackCastDelay + m_sourceTower.Distance(m_towerTarget.ServerPosition) / m_sourceTower.BasicAttack.MissileSpeed;
                         if (twoAaTime <= towerAaTime)
                             return m_towerTarget;
                     }
@@ -833,38 +868,19 @@ namespace SCommon.Orbwalking
         {
             if (sender.IsMe)
             {
-                if (Utility.IsAutoAttack(args.SData.Name))
+                m_IslastCastedAA = false;
+                if (Utility.IsAutoAttackReset(args.SData.Name))
                 {
-                    m_IslastCastedAA = true;
-                    OnAttackArgs onAttackArgs = Events.FireOnAttack(this, args.Target as AttackableUnit);
-                    if (!onAttackArgs.Cancel)
-                    {
-                        m_lastAATick = Utils.TickCount - Game.Ping / 2;
-                        m_lastWindUpTime = (int)Math.Round(sender.AttackCastDelay * 1000);
-                        m_lastAttackCooldown = (int)Math.Round(sender.AttackDelay * 1000);
-                        m_lastAttackCompletesAt = m_lastAATick + m_lastWindUpTime;
-                        m_lastAttackPos = ObjectManager.Player.ServerPosition.To2D();
-                        m_attackInProgress = true;
-                    }
-                    if (m_baseAttackSpeed == 0.5f)
-                        SetOrbwalkValues();
+                    ResetAATimer();
                 }
-                else
+                else if (!Utility.IsAutoAttackReset(args.SData.Name))
                 {
-                    m_IslastCastedAA = false;
-                    if (Utility.IsAutoAttackReset(args.SData.Name))
-                    {
+                    if (m_attackInProgress)
                         ResetAATimer();
-                    }
-                    else if (!Utility.IsAutoAttackReset(args.SData.Name))
-                    {
-                        if (m_attackInProgress)
-                            ResetAATimer();
-                    }
-                    else if (args.SData.Name == "AspectOfTheCougar")
-                    {
-                        ResetOrbwalkValues();
-                    }
+                }
+                else if (args.SData.Name == "AspectOfTheCougar")
+                {
+                    ResetOrbwalkValues();
                 }
             }
             else
@@ -1001,7 +1017,7 @@ namespace SCommon.Orbwalking
         /// <param name="args">The args.</param>
         private void Spellbook_OnStopCast(Obj_AI_Base sender, SpellbookStopCastEventArgs args)
         {
-            if (sender.IsValid && sender.IsMe && args.DestroyMissile && args.StopAnimation)
+            if (sender.IsValid && sender.IsMe && EloBuddy.SDK.Orbwalker.IsRanged && args.DestroyMissile && args.StopAnimation && !EloBuddy.SDK.Orbwalker.CanBeAborted)// CanCancelAttack)
                 ResetAATimer();
         }
     }
