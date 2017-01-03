@@ -36,6 +36,7 @@ namespace UnderratedAIO.Champions
             Helpers.Jungle.setSmiteSlot();
             
             Obj_AI_Base.OnProcessSpellCast += Game_ProcessSpell;
+            Obj_AI_Base.OnSpellCast += Game_ProcessSpell;
             AntiGapcloser.OnEnemyGapcloser += OnEnemyGapcloser;
         }
 

@@ -103,6 +103,7 @@ namespace SorakaToTheChallenger
             };
             AntiGapcloser.OnEnemyGapcloser += OnEnemyGapcloser;
             Obj_AI_Base.OnProcessSpellCast += OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += OnProcessSpellCast;
             GameObject.OnCreate += (sender, eventArgs) =>
             {
                 if (Menu.Item("sttc.mode").GetValue<StringList>().SelectedValue == "ONLYHEAL") return;

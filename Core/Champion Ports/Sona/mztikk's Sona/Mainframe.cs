@@ -31,7 +31,11 @@ using EloBuddy;
             AntiGapcloser.OnEnemyGapcloser += Gapclose.OnGapclose;
 
             Obj_AI_Base.OnProcessSpellCast += Computed.OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += Computed.OnProcessSpellCast;
+
             Obj_AI_Base.OnProcessSpellCast += AutoW.OnProcessSpellCast;
+            Obj_AI_Base.OnSpellCast += AutoW.OnProcessSpellCast;
+            Obj_AI_Base.OnBasicAttack += AutoW.OnProcessSpellCast;
 
             Drawing.OnDraw += Drawings.OnDraw;
         }

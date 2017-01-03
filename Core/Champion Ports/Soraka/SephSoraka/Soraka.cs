@@ -99,6 +99,7 @@ namespace SephSoraka
             AntiGapcloser.OnEnemyGapcloser += OnGapClose;
             Interrupter2.OnInterruptableTarget += OnInterruptableTarget;
 
+            Obj_AI_Base.OnSpellCast += DangerDetector;
             Obj_AI_Base.OnProcessSpellCast += DangerDetector;
 
             Orbwalking.BeforeAttack += BeforeAttack;

@@ -24,6 +24,7 @@ using EloBuddy;
         {
             Game.OnUpdate += OnUpdate;
             Obj_AI_Base.OnSpellCast += Events.SavingGrace;
+            Obj_AI_Base.OnProcessSpellCast += Events.SavingGrace;
             Obj_AI_Base.OnSpellCast += NerfEverything.Interrupts;
             Drawing.OnDraw += OnDraw;
             Orbwalking.BeforeAttack += Events.OnBeforeAttack;
