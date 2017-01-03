@@ -15,7 +15,8 @@
      - YasuoPro
      - e.Motion Katarina
      - OKTW
-- Removed all HP Bar Indicators (caused HP drops and weren't even accurate)
+- Removed all HP Bar Indicators (caused FPS drops and weren't even accurate)
+- Fixed SAutoCarry Orbwalker
 
 [12/31/16]
 - Fixed ElEasy Malphite's E Range
