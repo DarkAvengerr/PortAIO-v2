@@ -460,7 +460,7 @@ namespace PortAIO.Dual_Port
             dutility.AddItem(new MenuItem("Humanizer", "Which Humanizer?").SetValue(new StringList(new[] { "Humanizer#" })));
 
             dutility.AddItem(new MenuItem("enablePredictioner", "Enable Predictioner?").SetValue(false));
-            dutility.AddItem(new MenuItem("Predictioner", "Which Predictioner?").SetValue(new StringList(new[] { "SPredictioner", "OKTWPredictioner" })));
+            dutility.AddItem(new MenuItem("Predictioner", "Which Predictioner?").SetValue(new StringList(new[] { "SPredictioner", "OKTWPredictioner", "L#Predictioner" })));
 
             dutility.AddItem(new MenuItem("enableCamera", "Enable Camera-Mod?").SetValue(false));
             dutility.AddItem(new MenuItem("Camera", "Which Camera-Mod?").SetValue(new StringList(new[] { "HSCamera" })));

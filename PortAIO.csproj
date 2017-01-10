@@ -3498,6 +3498,7 @@
     <Compile Include="Core\Library Ports\NLog\Time\FastUtcTimeSource.cs" />
     <Compile Include="Core\Library Ports\NLog\Time\TimeSource.cs" />
     <Compile Include="Core\Library Ports\NLog\Time\TimeSourceAttribute.cs" />
+    <Compile Include="Core\Library Ports\Prediction.cs" />
     <Compile Include="Core\Library Ports\RethoughtLib\ActionManager\Abstract Classes\IActionManager.cs" />
     <Compile Include="Core\Library Ports\RethoughtLib\ActionManager\Implementations\ActionManagerModule.cs" />
     <Compile Include="Core\Library Ports\RethoughtLib\Algorithm\Graphs\Graph.cs" />
@@ -6071,6 +6072,12 @@
     <Compile Include="Core\Utility Ports\HSCamera\Handlers\CameraMovement.cs" />
     <Compile Include="Core\Utility Ports\HSCamera\Handlers\Modes.cs" />
     <Compile Include="Core\Utility Ports\HSCamera\Program.cs" />
+    <Compile Include="Core\Utility Ports\LSPredictioner\EventHandlers.cs" />
+    <Compile Include="Core\Utility Ports\LSPredictioner\LSPredictioner.cs" />
+    <Compile Include="Core\Utility Ports\LSPredictioner\Program.cs" />
+    <Compile Include="Core\Utility Ports\LSPredictioner\ShineCommon\Utility.cs" />
+    <Compile Include="Core\Utility Ports\LSPredictioner\SpellData.cs" />
+    <Compile Include="Core\Utility Ports\LSPredictioner\SpellDatabase.cs" />
     <Compile Include="Core\Utility Ports\OKTWPredictioner\EventHandlers.cs" />
     <Compile Include="Core\Utility Ports\OKTWPredictioner\Program.cs" />
     <Compile Include="Core\Utility Ports\OKTWPredictioner\ShineCommon\Utility.cs" />

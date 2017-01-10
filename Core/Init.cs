@@ -135,6 +135,9 @@ namespace PortAIO
                     case 1: // OKTW Predictioner
                         OKTWPredictioner.Program.Main();
                         break;
+                    case 2: // L#Predictioner
+                        LSPredictioner.Program.Main();
+                        break;
                 }
             }
 
