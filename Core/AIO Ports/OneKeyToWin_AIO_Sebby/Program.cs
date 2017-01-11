@@ -200,13 +200,13 @@ namespace OneKeyToWin_AIO_Sebby
             #endregion
 
 
-            Config.SubMenu("Prediction MODE").AddItem(new MenuItem("Qpred", "Q Prediction MODE", true).SetValue(new StringList(new[] { "Common prediction", "OKTW© PREDICTION", "SPediction press F5 if not loaded", "SDK", "Exory prediction" }, 0)));
+            Config.SubMenu("Prediction MODE").AddItem(new MenuItem("Qpred", "Q Prediction MODE", true).SetValue(new StringList(new[] { "EB prediction", "OKTW© PREDICTION", "SPediction press F5 if not loaded", "SDK", "Exory prediction", "L# prediction" }, 0)));
             Config.SubMenu("Prediction MODE").AddItem(new MenuItem("QHitChance", "Q Hit Chance", true).SetValue(new StringList(new[] { "Very High", "High", "Medium" }, 0)));
-            Config.SubMenu("Prediction MODE").AddItem(new MenuItem("Wpred", "W Prediction MODE", true).SetValue(new StringList(new[] { "Common prediction", "OKTW© PREDICTION", "SPediction press F5 if not loaded", "SDK", "Exory prediction" }, 0)));
+            Config.SubMenu("Prediction MODE").AddItem(new MenuItem("Wpred", "W Prediction MODE", true).SetValue(new StringList(new[] { "EB prediction", "OKTW© PREDICTION", "SPediction press F5 if not loaded", "SDK", "Exory prediction", "L# prediction" }, 0)));
             Config.SubMenu("Prediction MODE").AddItem(new MenuItem("WHitChance", "W Hit Chance", true).SetValue(new StringList(new[] { "Very High", "High", "Medium" }, 0)));
-            Config.SubMenu("Prediction MODE").AddItem(new MenuItem("Epred", "E Prediction MODE", true).SetValue(new StringList(new[] { "Common prediction", "OKTW© PREDICTION", "SPediction press F5 if not loaded", "SDK", "Exory prediction" }, 0)));
+            Config.SubMenu("Prediction MODE").AddItem(new MenuItem("Epred", "E Prediction MODE", true).SetValue(new StringList(new[] { "EB prediction", "OKTW© PREDICTION", "SPediction press F5 if not loaded", "SDK", "Exory prediction", "L# prediction" }, 0)));
             Config.SubMenu("Prediction MODE").AddItem(new MenuItem("EHitChance", "E Hit Chance", true).SetValue(new StringList(new[] { "Very High", "High", "Medium" }, 0)));
-            Config.SubMenu("Prediction MODE").AddItem(new MenuItem("Rpred", "R Prediction MODE", true).SetValue(new StringList(new[] { "Common prediction", "OKTW© PREDICTION", "SPediction press F5 if not loaded", "SDK", "Exory prediction" }, 0)));
+            Config.SubMenu("Prediction MODE").AddItem(new MenuItem("Rpred", "R Prediction MODE", true).SetValue(new StringList(new[] { "EB prediction", "OKTW© PREDICTION", "SPediction press F5 if not loaded", "SDK", "Exory prediction", "L# prediction" }, 0)));
             Config.SubMenu("Prediction MODE").AddItem(new MenuItem("RHitChance", "R Hit Chance", true).SetValue(new StringList(new[] { "Very High", "High", "Medium" }, 0)));
 
             Config.SubMenu("Prediction MODE").AddItem(new MenuItem("debugPred", "Draw Aiming OKTW© PREDICTION").SetValue(false));
@@ -538,6 +538,60 @@ namespace OneKeyToWin_AIO_Sebby
                 else
                 {
                     QWER.CastIfHitchanceEquals(target, HitChance.High);
+                }
+            }
+            else if (predIndex == 5)
+            {
+
+                PortAIO.SkillshotType CoreType2 = PortAIO.SkillshotType.SkillshotLine;
+                bool aoe2 = false;
+
+                if (QWER.Type == SkillshotType.SkillshotCircle)
+                {
+                    CoreType2 = PortAIO.SkillshotType.SkillshotCircle;
+                    aoe2 = true;
+                }
+
+                if (QWER.Width > 80 && !QWER.Collision)
+                    aoe2 = true;
+
+                var predInput2 = new PortAIO.PredictionInput
+                {
+                    Aoe = aoe2,
+                    Collision = QWER.Collision,
+                    Speed = QWER.Speed,
+                    Delay = QWER.Delay,
+                    Range = QWER.Range,
+                    From = Player.ServerPosition,
+                    Radius = QWER.Width,
+                    Unit = target,
+                    Type = CoreType2
+                };
+                var poutput2 = PortAIO.Prediction.GetPrediction(predInput2);
+
+                if (QWER.Speed != float.MaxValue && OktwCommon.CollisionYasuo(Player.ServerPosition, poutput2.CastPosition))
+                    return;
+
+                if ((int)hitchance == 6)
+                {
+                    if (poutput2.Hitchance >= PortAIO.HitChance.VeryHigh)
+                        QWER.Cast(poutput2.CastPosition);
+                    else if (predInput2.Aoe && poutput2.AoeTargetsHitCount > 1 && poutput2.Hitchance >= PortAIO.HitChance.High)
+                    {
+                        QWER.Cast(poutput2.CastPosition);
+                    }
+
+                }
+                else if ((int)hitchance == 5)
+                {
+                    if (poutput2.Hitchance >= PortAIO.HitChance.High)
+                        QWER.Cast(poutput2.CastPosition);
+
+                }
+                else if ((int)hitchance == 4)
+                {
+                    if (poutput2.Hitchance >= PortAIO.HitChance.Medium)
+                        QWER.Cast(poutput2.CastPosition);
                 }
             }
         }
