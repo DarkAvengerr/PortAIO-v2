@@ -35,6 +35,8 @@ namespace ReformedAIO.Champions.Xerath.OrbwalkingMode.Lane
                 return;
             }
 
+            //Hacks.DisableCastIndicator = spell.Charging;
+
             foreach (var m in Minion)
             {
                 if (m.Health > spell.GetDamage(m) && Menu.Item("Xerath.Lane.Q.Killable").GetValue<bool>())

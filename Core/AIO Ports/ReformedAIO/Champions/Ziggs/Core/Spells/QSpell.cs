@@ -71,7 +71,7 @@ namespace ReformedAIO.Champions.Ziggs.Core.Spells
             base.OnLoad(sender, eventArgs);
 
             Spell = new Spell(SpellSlot.Q, 1400);
-            Spell.SetSkillshot(.4f, 125f, 1500, false, LeagueSharp.Common.SkillshotType.SkillshotCircle);
+            Spell.SetSkillshot(.35f, 130f, 1700, false, LeagueSharp.Common.SkillshotType.SkillshotCircle);
         }
 
         protected override void SetSwitch()

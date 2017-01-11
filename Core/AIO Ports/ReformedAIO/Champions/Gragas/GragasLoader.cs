@@ -11,6 +11,7 @@ namespace ReformedAIO.Champions.Gragas
     using ReformedAIO.Champions.Gragas.Core.Damage;
     using ReformedAIO.Champions.Gragas.Core.Spells;
     using ReformedAIO.Champions.Gragas.Drawings.Damage;
+    using ReformedAIO.Champions.Gragas.Drawings.Insec;
     using ReformedAIO.Champions.Gragas.Drawings.Spells;
     using ReformedAIO.Champions.Gragas.Killsteal;
     using ReformedAIO.Champions.Gragas.Misc;
@@ -117,6 +118,7 @@ namespace ReformedAIO.Champions.Gragas
             drawingParent.Add(new List<Base>
                                   {
                                     new DamageDrawing(GragasDmg),
+                                    new InsecDrawing(qSpell, rSpell),
                                     new QDrawing(qSpell),
                                     new WDrawing(wSpell),
                                     new EDrawing(eSpell),

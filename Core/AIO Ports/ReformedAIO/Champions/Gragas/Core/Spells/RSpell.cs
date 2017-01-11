@@ -2,6 +2,8 @@ using EloBuddy;
 using LeagueSharp.Common; 
 namespace ReformedAIO.Champions.Gragas.Core.Spells
 {
+    using System.Linq;
+
     using LeagueSharp;
     using LeagueSharp.Common;
 
@@ -21,9 +23,37 @@ namespace ReformedAIO.Champions.Gragas.Core.Spells
             return Spell.GetDamage(target);
         }
 
+        public Vector3 InsecPositioner(Obj_AI_Base target, bool turret = false, bool ally = false)
+        {
+            var allies = Ally;
+            var allyTurret = AllyTurret;
+
+            if (turret && allyTurret != null)
+            {
+                return InsecPosition(target, allyTurret.Position);
+            }
+
+            if (ally && allies != null)
+            {
+                return InsecPosition(target, allies.Position);
+            }
+            return InsecPosition(target, Game.CursorPos, true);
+        }
+
+        public Vector3 InsecPosition(Obj_AI_Base target, Vector3 Object, bool reverted = false)
+        {
+            var amount = 260;
+
+            var revertedPos = target.Position + (Object - target.Position).Normalized() * amount;
+
+            var pos = target.Position + (target.Position - Object).Normalized() * amount;
+
+            return reverted ? revertedPos : pos;
+        }
+
         public Vector3 CastPosition(Obj_AI_Base target)
         {
-            return target.Position.Extend(OKTW(target).CastPosition, 140);
+            return InsecPosition(target, ObjectManager.Player.Position);
         }
 
         public SebbyLib.Prediction.PredictionOutput OKTW(Obj_AI_Base target)
@@ -61,5 +91,13 @@ namespace ReformedAIO.Champions.Gragas.Core.Spells
         {
             Switch = new UnreversibleSwitch(Menu);
         }
+
+        private static AIHeroClient Ally
+          => HeroManager.Allies.Where(x => x.IsAlly && !x.IsMe && !x.IsMinion)
+              .FirstOrDefault(x => x.Distance(ObjectManager.Player) < 1000);
+
+        private static Obj_AI_Turret AllyTurret
+            => ObjectManager.Get<Obj_AI_Turret>()
+                .FirstOrDefault(x => x.Distance(ObjectManager.Player) < 600 && x.IsAlly && !x.IsDead);
     }
 }

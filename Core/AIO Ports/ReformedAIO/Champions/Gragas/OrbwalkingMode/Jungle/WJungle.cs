@@ -7,7 +7,6 @@ namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Jungle
 
     using LeagueSharp;
     using LeagueSharp.Common;
-    using LeagueSharp.SDK.Utils;
 
     using ReformedAIO.Champions.Gragas.Core.Spells;
 

@@ -11,10 +11,6 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Harass
 
     using RethoughtLib.FeatureSystem.Implementations;
 
-    using SharpDX;
-
-    using Color = System.Drawing.Color;
-
     internal sealed class WHarass : OrbwalkingChild
     {
         public override string Name { get; set; } = "W";

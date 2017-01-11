@@ -8,8 +8,6 @@ namespace ReformedAIO.Champions.Yasuo.Core.Spells
     using RethoughtLib.FeatureSystem.Implementations;
     using RethoughtLib.FeatureSystem.Switches;
 
-    using SharpDX;
-
     internal class ESpell : SpellChild
     {
         public override string Name { get; set; } = "Sweeping Blade";

@@ -2,8 +2,6 @@ using EloBuddy;
 using LeagueSharp.Common; 
 namespace ReformedAIO.Champions.Thresh.Core.Spells
 {
-    using System.Linq;
-
     using LeagueSharp;
     using LeagueSharp.Common;
 

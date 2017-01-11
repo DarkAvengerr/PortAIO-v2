@@ -26,7 +26,7 @@ namespace ReformedAIO.Champions.Olaf.OrbwalkingMode.Combo
 
         private SpellInformation spellInfo;
 
-        private AIHeroClient Target => TargetSelector.GetTarget(spell.Spell.Range, TargetSelector.DamageType.Physical);
+        private AIHeroClient Target => TargetSelector.GetTarget(spell.Spell.Range - 70, TargetSelector.DamageType.Physical);
 
         private void OnUpdate(EventArgs args)
         {
@@ -43,19 +43,19 @@ namespace ReformedAIO.Champions.Olaf.OrbwalkingMode.Combo
                 case 0:
                     if (pred.Hitchance >= HitChance.Medium)
                     {
-                        spell.Spell.Cast(pred.CastPosition + 30);
+                        spell.Spell.Cast(pred.CastPosition + 70);
                     }
                     break;
                 case 1:
                     if (pred.Hitchance >= HitChance.High)
                     {
-                        spell.Spell.Cast(pred.CastPosition + 30);
+                        spell.Spell.Cast(pred.CastPosition + 70);
                     }
                     break;
                 case 2:
                     if (pred.Hitchance >= HitChance.VeryHigh)
                     {
-                        spell.Spell.Cast(pred.CastPosition + 30);
+                        spell.Spell.Cast(pred.CastPosition + 70);
                     }
                     break;
             }

@@ -40,7 +40,7 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.Harass
                 return;
             }
 
-            if (!Menu.Item("Harass.Q.Extended").GetValue<bool>() || target.Distance(ObjectManager.Player) <= q2Spell.Spell.Range)
+            if (!Menu.Item("Harass.Q.Extended").GetValue<bool>())
             {
                 return;
             }

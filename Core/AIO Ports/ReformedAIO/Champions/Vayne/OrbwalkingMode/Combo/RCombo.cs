@@ -48,13 +48,6 @@ namespace ReformedAIO.Champions.Vayne.OrbwalkingMode.Combo
             switch (Menu.Item("Vayne.Combo.R.Mode").GetValue<StringList>().SelectedIndex)
             {
                 case 0:
-
-                    if (ObjectManager.Player.CountAlliesInRange(1000) <= 1 
-                     && ObjectManager.Player.CountEnemiesInRange(1000) > 2)
-                    {
-                        return;
-                    }
-
                     spell.Spell.Cast();
                     break;
                 case 1:

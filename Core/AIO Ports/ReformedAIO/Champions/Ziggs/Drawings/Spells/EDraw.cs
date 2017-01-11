@@ -3,8 +3,6 @@ using LeagueSharp.Common;
 namespace ReformedAIO.Champions.Ziggs.Drawings.Spells
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
 
     using LeagueSharp;
     using LeagueSharp.Common;
@@ -12,8 +10,6 @@ namespace ReformedAIO.Champions.Ziggs.Drawings.Spells
     using ReformedAIO.Champions.Ziggs.Core.Spells;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;
-
-    using SharpDX;
 
     using Color = System.Drawing.Color;
 

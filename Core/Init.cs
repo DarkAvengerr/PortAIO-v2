@@ -2039,6 +2039,9 @@ namespace PortAIO
                         case 10: // MasterOfInsec
                             MasterOfInsec.Program.Main();
                             break;
+                        case 11: // ReformedAIO
+                            ReformedAIO.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Leona:

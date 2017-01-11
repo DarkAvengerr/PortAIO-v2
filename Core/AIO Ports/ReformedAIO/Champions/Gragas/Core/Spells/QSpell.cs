@@ -2,10 +2,6 @@ using EloBuddy;
 using LeagueSharp.Common; 
 namespace ReformedAIO.Champions.Gragas.Core.Spells
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-
     using LeagueSharp;
     using LeagueSharp.Common;
 
@@ -35,11 +31,13 @@ namespace ReformedAIO.Champions.Gragas.Core.Spells
 
         public void ExplodeHandler(Obj_AI_Base target)
         {
-            if (target.Distance(LastCastPosition) < 110f && HasThrown)
+            if (target.Distance(LastCastPosition) > 115f || !HasThrown)
             {
-                Spell.Cast();
-                HasThrown = false;
+                return;
             }
+
+            HasThrown = false;
+            Spell.Cast();
         }
 
         public float GetDamage(Obj_AI_Base target)

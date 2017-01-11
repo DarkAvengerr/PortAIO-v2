@@ -9,7 +9,6 @@ namespace ReformedAIO.Champions.Thresh.Drawings.Damage
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Thresh.Core.Damage;
-    using ReformedAIO.Champions._Example.Core.Damage;
     using ReformedAIO.Library.Drawings;
 
     using RethoughtLib.FeatureSystem.Abstract_Classes;

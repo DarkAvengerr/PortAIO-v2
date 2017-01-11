@@ -38,6 +38,8 @@ namespace ReformedAIO.Champions.Xerath.OrbwalkingMode.Jungle
                 return;
             }
 
+            //Hacks.DisableCastIndicator = spell.Charging;
+
             if (!spell.Charging)
             {
                 LeagueSharp.Common.Utility.DelayAction.Add(10, ()=> spell.Spell.StartCharging());

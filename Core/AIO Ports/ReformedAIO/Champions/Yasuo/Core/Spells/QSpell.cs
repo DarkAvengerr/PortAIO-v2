@@ -2,8 +2,6 @@ using EloBuddy;
 using LeagueSharp.Common; 
 namespace ReformedAIO.Champions.Yasuo.Core.Spells
 {
-    using System;
-
     using LeagueSharp;
     using LeagueSharp.Common;
 

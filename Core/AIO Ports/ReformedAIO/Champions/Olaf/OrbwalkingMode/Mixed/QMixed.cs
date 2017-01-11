@@ -9,6 +9,8 @@ namespace ReformedAIO.Champions.Olaf.OrbwalkingMode.Mixed
 
     using Core.Spells;
 
+    using ReformedAIO.Library.Spell_Information;
+
     using RethoughtLib.FeatureSystem.Implementations;
 
     internal sealed class QMixed : OrbwalkingChild
@@ -22,37 +24,38 @@ namespace ReformedAIO.Champions.Olaf.OrbwalkingMode.Mixed
             this.spell = spell;
         }
 
-        private AIHeroClient Target => TargetSelector.GetTarget(spell.Spell.Range, TargetSelector.DamageType.Physical);
+        private SpellInformation spellInfo;
+
+        private AIHeroClient Target => TargetSelector.GetTarget(spell.Spell.Range - 70, TargetSelector.DamageType.Physical);
 
         private void OnUpdate(EventArgs args)
         {
-            if (Target == null
-                || !CheckGuardians()
+            if (Target == null || !CheckGuardians()
                 || (Menu.Item("Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent))
             {
                 return;
             }
 
-            var prediction = spell.Spell.GetPrediction(Target, true);
+            var pred = spell.Spell.GetPrediction(Target);
 
             switch (Menu.Item("Hitchance").GetValue<StringList>().SelectedIndex)
             {
                 case 0:
-                    if (prediction.Hitchance >= HitChance.Medium)
+                    if (pred.Hitchance >= HitChance.Medium)
                     {
-                        spell.Spell.Cast(prediction.CastPosition.Extend(ObjectManager.Player.Position, -Menu.Item("Distance").GetValue<Slider>().Value));
+                        spell.Spell.Cast(pred.CastPosition + 70);
                     }
                     break;
                 case 1:
-                    if (prediction.Hitchance >= HitChance.High)
+                    if (pred.Hitchance >= HitChance.High)
                     {
-                        spell.Spell.Cast(prediction.CastPosition.Extend(ObjectManager.Player.Position, -Menu.Item("Distance").GetValue<Slider>().Value));
+                        spell.Spell.Cast(pred.CastPosition + 70);
                     }
                     break;
                 case 2:
-                    if (prediction.Hitchance >= HitChance.VeryHigh)
+                    if (pred.Hitchance >= HitChance.VeryHigh)
                     {
-                        spell.Spell.Cast(prediction.CastPosition.Extend(ObjectManager.Player.Position, -Menu.Item("Distance").GetValue<Slider>().Value));
+                        spell.Spell.Cast(pred.CastPosition + 70);
                     }
                     break;
             }
@@ -76,11 +79,15 @@ namespace ReformedAIO.Champions.Olaf.OrbwalkingMode.Mixed
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("Hitchance", "Hitchance").SetValue(new StringList(new[] { "Medium", "High", "Very High" }, 2)));
+            Menu.AddItem(
+                new MenuItem("Hitchance", "Hitchance").SetValue(
+                    new StringList(new[] { "Medium", "High", "Very High" }, 1)));
 
-            Menu.AddItem(new MenuItem("Distance", "Shortened Throw Distance").SetValue(new Slider(20, 0, 100)));
+            // Menu.AddItem(new MenuItem("Distance", "Shortened Throw Distance").SetValue(new Slider(10, 0, 50)));
 
-            Menu.AddItem(new MenuItem("Mana", "Min Mana %").SetValue(new Slider(40, 0, 100)));
+            Menu.AddItem(new MenuItem("Mana", "Min Mana %").SetValue(new Slider(0, 0, 100)));
+
+            spellInfo = new SpellInformation();
         }
     }
 }

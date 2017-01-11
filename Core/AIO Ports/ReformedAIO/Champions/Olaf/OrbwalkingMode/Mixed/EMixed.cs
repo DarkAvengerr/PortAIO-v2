@@ -33,10 +33,10 @@ namespace ReformedAIO.Champions.Olaf.OrbwalkingMode.Mixed
                 return;
             }
 
-            if (Target.HealthPercent <= Menu.Item("Health").GetValue<Slider>().Value)
-            {
-                spell.Spell.Cast(Target);
-            }
+            // if (Target.HealthPercent <= Menu.Item("Health").GetValue<Slider>().Value)
+            // {
+            spell.Spell.Cast(Target);
+            // }
         }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
@@ -57,9 +57,9 @@ namespace ReformedAIO.Champions.Olaf.OrbwalkingMode.Mixed
         {
             base.OnLoad(sender, eventArgs);
 
-            Menu.AddItem(new MenuItem("Health", "Use When Target Health %").SetValue(new Slider(100, 0, 100)));
+            // Menu.AddItem(new MenuItem("Health", "Use When Target Health %").SetValue(new Slider(100, 0, 100)));
 
-            Menu.AddItem(new MenuItem("Mana", "Min Mana %").SetValue(new Slider(80, 0, 100)));
+            Menu.AddItem(new MenuItem("Mana", "Min Mana %").SetValue(new Slider(0, 0, 100)));
         }
     }
 }

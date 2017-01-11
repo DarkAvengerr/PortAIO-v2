@@ -10,7 +10,6 @@ namespace ReformedAIO.Champions.Thresh.Core.Spells
 
     using SebbyLib;
 
-    using HitChance = SebbyLib.Prediction.HitChance;
     using PredictionOutput = LeagueSharp.Common.PredictionOutput;
     using SkillshotType = SebbyLib.Prediction.SkillshotType;
 

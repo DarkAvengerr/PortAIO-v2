@@ -20,7 +20,6 @@ namespace ReformedAIO.Champions.Yasuo
     using ReformedAIO.Champions.Yasuo.OrbwalkingMode.Jungle;
     using ReformedAIO.Champions.Yasuo.OrbwalkingMode.Lasthit;
     using ReformedAIO.Champions.Yasuo.Stack;
-
     using ReformedAIO.Library.SpellParent;
 
     using RethoughtLib.FeatureSystem.Guardians;
@@ -30,7 +29,7 @@ namespace ReformedAIO.Champions.Yasuo
     using RethoughtLib.Orbwalker.Implementations;
 
     using Color = SharpDX.Color;
-   
+
     internal sealed class YasuoLoader : LoadableBase
     {
         public override string DisplayName { get; set; } = "Reformed Yasuo";

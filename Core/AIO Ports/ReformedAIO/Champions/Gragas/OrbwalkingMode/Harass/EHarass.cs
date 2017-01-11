@@ -7,7 +7,6 @@ namespace ReformedAIO.Champions.Gragas.OrbwalkingMode.Harass
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using ReformedAIO.Champions.Gragas.Core.Damage;
     using ReformedAIO.Champions.Gragas.Core.Spells;
 
     using RethoughtLib.FeatureSystem.Implementations;

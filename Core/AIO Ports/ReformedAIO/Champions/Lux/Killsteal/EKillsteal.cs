@@ -11,8 +11,6 @@ namespace ReformedAIO.Champions.Lux.Killsteal
 
     using RethoughtLib.FeatureSystem.Implementations;
 
-    using HitChance = SebbyLib.Prediction.HitChance;
-
     internal sealed class EKillsteal : OrbwalkingChild
     {
         public override string Name { get; set; } = "E";

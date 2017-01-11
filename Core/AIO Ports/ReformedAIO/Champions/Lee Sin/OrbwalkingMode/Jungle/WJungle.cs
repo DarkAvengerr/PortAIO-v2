@@ -1,45 +1,51 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
-namespace ReformedAIO.Champions.Vayne.OrbwalkingMode.Jungle
+namespace ReformedAIO.Champions.Lee_Sin.OrbwalkingMode.Jungle
 {
-    using System.Collections.Generic;
+    using System.Linq;
 
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using ReformedAIO.Champions.Vayne.Core.Spells;
+    using ReformedAIO.Champions.Lee_Sin.Core.Spells;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
-    internal sealed class QJungle : OrbwalkingChild
+    internal sealed class WJungle : OrbwalkingChild
     {
-        public override string Name { get; set; } = "Q";
+        public override string Name { get; set; } = "W";
 
-        private readonly QSpell spell;
+        private readonly WSpell spell;
 
-        public QJungle(QSpell spell)
+        public WJungle(WSpell spell)
         {
             this.spell = spell;
         }
 
-        private List<Obj_AI_Base> Mob =>
-             MinionManager.GetMinions(ObjectManager.Player.Position,
-                 spell.Spell.Range,
-                 MinionTypes.All,
-                 MinionTeam.Neutral);
+        private Obj_AI_Base Mob =>
+              MinionManager.GetMinions(ObjectManager.Player.Position,
+                  500,
+                  MinionTypes.All,
+                  MinionTeam.Neutral).FirstOrDefault();
 
-      
         private void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
             if (!CheckGuardians()
-                 || Mob == null
-                 || !sender.IsMe
-                 || Menu.Item("Vayne.Jungle.Q.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
+                || Mob == null
+                || !sender.IsMe
+                || !args.SData.IsAutoAttack())
             {
                 return;
             }
 
-            spell.Spell.Cast(ObjectManager.Player.Position.Extend(Game.CursorPos, spell.Spell.Range));
+            if (spell.W1)
+            {
+                spell.Spell.Cast();
+            }
+            else if(!spell.W1 && spell.PassiveStacks <= 1)
+            {
+                spell.Spell.CastOnUnit(ObjectManager.Player);
+            }
         }
 
         protected override void OnDisable(object sender, FeatureBaseEventArgs eventArgs)
@@ -59,8 +65,6 @@ namespace ReformedAIO.Champions.Vayne.OrbwalkingMode.Jungle
         protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
             base.OnLoad(sender, eventArgs);
-
-            Menu.AddItem(new MenuItem("Vayne.Jungle.Q.Mana", "Min Mana %").SetValue(new Slider(0, 0, 100)));
         }
     }
 }

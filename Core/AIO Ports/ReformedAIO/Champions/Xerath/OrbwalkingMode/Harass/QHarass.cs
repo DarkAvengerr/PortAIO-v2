@@ -35,9 +35,16 @@ namespace ReformedAIO.Champions.Xerath.OrbwalkingMode.Harass
                 return;
             }
 
+            //Hacks.DisableCastIndicator = spell.Charging;
+
             if (!spell.Charging)
             {
                 spell.Spell.StartCharging();
+                return;
+            }
+
+            if (Menu.Item("Xerath.Harass.Q.Legit").GetValue<bool>() && !spell.IsInsideRect(Target))
+            {
                 return;
             }
 
@@ -79,6 +86,8 @@ namespace ReformedAIO.Champions.Xerath.OrbwalkingMode.Harass
         protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
             base.OnLoad(sender, eventArgs);
+
+            Menu.AddItem(new MenuItem("Xerath.Harass.Q.Legit", "Legit Mode").SetValue(false).SetTooltip("Will Q near cursor only"));
 
             Menu.AddItem(new MenuItem("Xerath.Harass.Q.Prediction", "Prediction: ").SetValue(new StringList(new[] { "SDK", "OKTW", "Target Position" })));
 

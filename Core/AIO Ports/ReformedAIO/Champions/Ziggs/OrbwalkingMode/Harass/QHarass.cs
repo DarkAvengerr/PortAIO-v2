@@ -13,8 +13,6 @@ namespace ReformedAIO.Champions.Ziggs.OrbwalkingMode.Harass
 
     using SPrediction;
 
-    using Prediction = SPrediction.Prediction;
-
     internal sealed class QHarass : OrbwalkingChild
     {
         public override string Name { get; set; } = "Q";

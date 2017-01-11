@@ -8,8 +8,6 @@ namespace ReformedAIO.Champions.Ziggs.Core.Spells
     using RethoughtLib.FeatureSystem.Implementations;
     using RethoughtLib.FeatureSystem.Switches;
 
-    using SebbyLib;
-
     using SharpDX;
 
     using Prediction = SPrediction.Prediction;

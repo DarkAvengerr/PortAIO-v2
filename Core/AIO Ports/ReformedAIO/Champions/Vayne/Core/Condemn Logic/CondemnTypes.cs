@@ -23,17 +23,17 @@ namespace ReformedAIO.Champions.Vayne.Core.Condemn_Logic
 
             var prediction = spell.GetPrediction(target).UnitPosition;
 
-            //for (float i = 0; i < range; i += range / 5f)
-            //{
-            //    var newprediction = prediction.Extend(ObjectManager.Player.ServerPosition, -i);
+            for (float i = 0; i < range; i += range / range)
+            {
+                var newprediction = prediction.Extend(ObjectManager.Player.ServerPosition, -i);
 
-            //    if (NavMesh.GetCollisionFlags(newprediction) == CollisionFlags.Wall
-            //    || NavMesh.GetCollisionFlags(newprediction) == CollisionFlags.Building
-            //    || newprediction.IsWall())
-            //    {
-            //        return newprediction;
-            //    }
-            //}
+                if (NavMesh.GetCollisionFlags(newprediction) == CollisionFlags.Wall
+                || NavMesh.GetCollisionFlags(newprediction) == CollisionFlags.Building
+                || newprediction.IsWall())
+                {
+                    return newprediction;
+                }
+            }
 
             var finalPosition = prediction.Extend(ObjectManager.Player.ServerPosition, -range);
 

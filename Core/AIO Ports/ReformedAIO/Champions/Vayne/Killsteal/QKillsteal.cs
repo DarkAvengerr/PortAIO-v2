@@ -9,8 +9,6 @@ namespace ReformedAIO.Champions.Vayne.Killsteal
 
     using Core.Spells;
 
-    using ReformedAIO.Library.Dash_Handler;
-
     using RethoughtLib.FeatureSystem.Implementations;
 
     internal sealed class QKillsteal : OrbwalkingChild

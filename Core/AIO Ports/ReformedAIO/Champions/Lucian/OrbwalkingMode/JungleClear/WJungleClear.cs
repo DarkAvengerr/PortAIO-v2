@@ -20,21 +20,18 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.JungleClear
             this.wSpell = wSpell;
         }
 
-        private void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
+        private void AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (!sender.IsMe
-                || Menu.Item("Jungle.W.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent
-                || !CheckGuardians())
+            if (!CheckGuardians() 
+                || Menu.Item("Jungle.W.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
             {
                 return;
             }
 
-            var mob =
-                MinionManager.GetMinions(
-                    ObjectManager.Player.Position,
-                    wSpell.Spell.Range,
-                    MinionTypes.All,
-                    MinionTeam.Neutral);
+            var mob = MinionManager.GetMinions(ObjectManager.Player.Position,
+                                               wSpell.Spell.Range,
+                                               MinionTypes.All,
+                                               MinionTeam.Neutral);
 
             if (mob == null)
             {
@@ -47,7 +44,6 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.JungleClear
             }
         }
 
-
         protected override void OnLoad(object sender, FeatureBaseEventArgs eventArgs)
         {
             base.OnLoad(sender, eventArgs);
@@ -59,14 +55,14 @@ namespace ReformedAIO.Champions.Lucian.OrbwalkingMode.JungleClear
         {
             base.OnDisable(sender, eventArgs);
 
-            Obj_AI_Base.OnSpellCast -= OnSpellCast;
+            Orbwalking.AfterAttack -= AfterAttack;
         }
 
         protected override void OnEnable(object sender, FeatureBaseEventArgs eventArgs)
         {
             base.OnEnable(sender, eventArgs);
 
-            Obj_AI_Base.OnSpellCast += OnSpellCast;
+            Orbwalking.AfterAttack += AfterAttack;
         }
     }
 }

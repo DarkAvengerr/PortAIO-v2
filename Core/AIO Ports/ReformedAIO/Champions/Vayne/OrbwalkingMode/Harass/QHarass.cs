@@ -6,7 +6,6 @@ namespace ReformedAIO.Champions.Vayne.OrbwalkingMode.Harass
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Vayne.Core.Spells;
-    using ReformedAIO.Library.Dash_Handler;
 
     using RethoughtLib.FeatureSystem.Implementations;
 

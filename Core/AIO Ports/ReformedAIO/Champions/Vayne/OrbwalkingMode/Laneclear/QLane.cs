@@ -10,7 +10,6 @@ namespace ReformedAIO.Champions.Vayne.OrbwalkingMode.Laneclear
 
     using ReformedAIO.Champions.Vayne.Core.Damage;
     using ReformedAIO.Champions.Vayne.Core.Spells;
-    using ReformedAIO.Library.Dash_Handler;
 
     using RethoughtLib.FeatureSystem.Implementations;
 
@@ -34,17 +33,17 @@ namespace ReformedAIO.Champions.Vayne.OrbwalkingMode.Laneclear
 
         private void OnSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (Minion == null
+            if (!CheckGuardians()
+                 || Minion == null
                  || ObjectManager.Player.UnderTurret(true)
                  || !sender.IsMe
                  || Menu.Item("Vayne.Lane.Q.Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent
                  || (Menu.Item("Vayne.Lane.Q.Enemy").GetValue<bool>() && ObjectManager.Player.CountEnemiesInRange(1250) >= 1)
-                 || Minion.Count() < 2
-                 || !CheckGuardians())
+                 || Minion.Count() < 2)
             {
                 return;
             }
-
+            
             foreach (var m in Minion)
             {
                 switch (Menu.Item("Vayne.Lane.Q.Mode").GetValue<StringList>().SelectedIndex)

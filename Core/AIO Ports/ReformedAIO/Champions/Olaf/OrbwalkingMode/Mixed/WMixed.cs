@@ -22,13 +22,13 @@ namespace ReformedAIO.Champions.Olaf.OrbwalkingMode.Mixed
             this.spell = spell;
         }
 
-        private static AIHeroClient Target => TargetSelector.GetTarget(ObjectManager.Player.AttackRange, TargetSelector.DamageType.Physical);
+        private static AIHeroClient Target => TargetSelector.GetTarget(ObjectManager.Player.AttackRange + 100, TargetSelector.DamageType.Physical);
 
         private void OnUpdate(EventArgs args)
         {
             if (Target == null
                 || !CheckGuardians()
-                || (Menu.Item("Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent))
+                || Menu.Item("Mana").GetValue<Slider>().Value > ObjectManager.Player.ManaPercent)
             {
                 return;
             }

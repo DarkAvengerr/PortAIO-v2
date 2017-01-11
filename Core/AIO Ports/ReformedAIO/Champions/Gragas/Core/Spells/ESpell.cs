@@ -5,11 +5,8 @@ namespace ReformedAIO.Champions.Gragas.Core.Spells
     using LeagueSharp;
     using LeagueSharp.Common;
 
-    using RethoughtLib.Extensions;
     using RethoughtLib.FeatureSystem.Implementations;
     using RethoughtLib.FeatureSystem.Switches;
-
-    using SebbyLib;
 
     internal sealed class ESpell : SpellChild
     {

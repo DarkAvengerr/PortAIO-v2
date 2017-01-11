@@ -2,7 +2,6 @@ using EloBuddy;
 using LeagueSharp.Common; 
 namespace ReformedAIO.Champions.Brand.Misc
 {
-    using LeagueSharp;
     using LeagueSharp.Common;
 
     using ReformedAIO.Champions.Brand.Core.Spells;

@@ -80,7 +80,6 @@ namespace ReformedAIO.Champions.Lucian
 
             reformedUtilityParent.Add(new LucianSkinchanger());
 
-           // var new PlayerMustHaveBuff("LucianPassiveBuff") { Negated = true } = new PlayerMustHaveBuff("LucianPassiveBuff") { Negated = true };
             var eMustNotBeReadyGuardian = new SpellMustBeReady(SpellSlot.E) { Negated = true };
             var wMustNotBeReadyGuardian = new SpellMustBeReady(SpellSlot.W) { Negated = true };
             var qMustNotBeReadyGuardian = new SpellMustBeReady(SpellSlot.Q) { Negated = true };
@@ -117,7 +116,7 @@ namespace ReformedAIO.Champions.Lucian
             laneParent.Add(new List<Base>
                                {
                                     new QLaneClear(qSpell).Guardian(new PlayerMustHaveBuff("LucianPassiveBuff") { Negated = true }).Guardian(qReadyGuardian).Guardian(eMustNotBeReadyGuardian),
-                                    new WLaneClear(wSpell).Guardian(new PlayerMustHaveBuff("LucianPassiveBuff") { Negated = true }).Guardian(wReadyGuardian).Guardian(eMustNotBeReadyGuardian),
+                                    new WLaneClear(wSpell).Guardian(new PlayerMustHaveBuff("LucianPassiveBuff") { Negated = true }).Guardian(wReadyGuardian).Guardian(qMustNotBeReadyGuardian),
                                     new ELaneClear(eSpell, dashSmart).Guardian(new PlayerMustHaveBuff("LucianPassiveBuff") { Negated = true }).Guardian(eReadyGuardian),
                                });
 
@@ -162,6 +161,8 @@ namespace ReformedAIO.Champions.Lucian
 
             superParent.Menu.Style = FontStyle.Bold;
             superParent.Menu.Color = Color.Cyan;
+
+            Chat.Print("<b><font color=\"#FFFFFF\">[</font></b><b><font color=\"#00e5e5\">Reformed AIO</font></b><b><font color=\"#FFFFFF\">]</font></b><b><font color=\"#FFFFFF\"> - Lucian!</font></b>");
         }
     }
 }
