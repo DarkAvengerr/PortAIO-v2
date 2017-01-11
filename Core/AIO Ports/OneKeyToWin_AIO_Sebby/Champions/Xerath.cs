@@ -54,8 +54,9 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("autoRlast", "Cast last position if no target", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("useR", "Semi-manual cast R key", true).SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press))); //32 == space
             Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("trinkiet", "Auto blue trinkiet", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("delayR", "custome R delay ms (1000ms = 1 sec)", true).SetValue(new Slider(0, 3000, 0)));
+            Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("delayR", "custome R delay ms ", true).SetValue(new Slider(0, 3000, 0))).SetTooltip("1000ms = 1 sec");
             Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("MaxRangeR", "Max R adjustment (R range - slider)", true).SetValue(new Slider(0, 5000, 0)));
+            Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("mouseZone", "cast R only near mouse zone", true).SetValue(new Slider(0, 1000, 0))).SetTooltip("0 = disable"); ;
 
             Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("separate", "Separate laneclear from harras", true).SetValue(false));
             Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("farmQ", "Lane clear Q", true).SetValue(true));
@@ -212,12 +213,22 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             R.Range = 2000 + R.Level * 1200;
             if (!IsCastingR)
                 R.Range = R.Range - Config.Item("MaxRangeR", true).GetValue<Slider>().Value;
+
             
+
             var t = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
             if (t.IsValidTarget() )
             {
                 if (IsCastingR)
                 {
+                    var mouseZone = Config.Item("mouseZone", true).GetValue<Slider>().Value;
+                    if (mouseZone > 0)
+                    {
+                        if(Game.CursorPos.Distance(t.Position) < mouseZone)
+                            Program.CastSpell(R, t);
+                        return;
+                    }
+
                     var del = (float)Config.Item("delayR", true).GetValue<Slider>().Value;
                     if (del == 0)
                         Program.CastSpell(R, t);
@@ -472,6 +483,17 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 }
                 else
                     LeagueSharp.Common.Utility.DrawCircle(Player.Position, R.Range, System.Drawing.Color.Gray, 1, 1);
+            }
+
+            
+
+            if (IsCastingR)
+            {
+                var mouseZone = Config.Item("mouseZone", true).GetValue<Slider>().Value;
+                if (mouseZone > 0)
+                {
+                    LeagueSharp.Common.Utility.DrawCircle(Game.CursorPos, mouseZone, System.Drawing.Color.Aqua, 1, 1);
+                }
             }
 
             if (Config.Item("noti", true).GetValue<bool>() && R.IsReady())

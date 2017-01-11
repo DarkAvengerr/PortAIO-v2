@@ -50,7 +50,6 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             Config.SubMenu(Player.ChampionName).SubMenu("R Config").SubMenu("R Jungle stealer").AddItem(new MenuItem("Rjungle", "R Jungle stealer", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("R Config").SubMenu("R Jungle stealer").AddItem(new MenuItem("Rdragon", "Dragon", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("R Config").SubMenu("R Jungle stealer").AddItem(new MenuItem("Rbaron", "Baron", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("hitchanceR", "Hit Chance R", true).SetValue(new Slider(2, 3, 0)));
             Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("useR", "OneKeyToCast R", true).SetValue(new KeyBind("T".ToCharArray()[0], KeyBindType.Press))); //32 == space
             Config.SubMenu(Player.ChampionName).SubMenu("R Config").AddItem(new MenuItem("Rturrent", "Don't R under turret", true).SetValue(true));
 
@@ -88,8 +87,15 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 if(realDistance < GetRealPowPowRange(minion) || Player.ManaPercent < Config.Item("Mana", true).GetValue<Slider>().Value)
                 {
                     Q.Cast();
+                    return;
+                }
+                else if(HeroManager.Enemies.Any( tar => tar.IsValidTarget(1000) && args.Target.Position.Distance(Prediction.GetPrediction(tar,0.25f).CastPosition) < 200))
+                {
+                    Q.Cast();
+                    return;
                 }
             }
+
         }
 
         private void AntiGapcloser_OnEnemyGapcloser(ActiveGapcloser gapcloser)
@@ -293,7 +299,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                     {
                         if ( GetRealDistance(target) > bonusRange() + 300 + target.BoundingRadius && target.CountAlliesInRange(500) == 0 && Player.CountEnemiesInRange(400) == 0)
                         {
-                            castR(target);
+                            Program.CastSpell(R, target);
                         }
                         else if (target.CountEnemiesInRange(200) > 2)
                         {
@@ -304,30 +310,6 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             }
         }
 
-        private void castR(AIHeroClient target)
-        {
-            var inx = Config.Item("hitchanceR", true).GetValue<Slider>().Value;
-            if (inx == 0)
-            {
-                R.Cast(R.GetPrediction(target).CastPosition);
-            }
-            else if (inx == 1)
-            {
-                R.Cast(target);
-            }
-            else if (inx == 2)
-            {
-                Program.CastSpell(R, target);
-            }
-            else if (inx == 3)
-            {
-                List<Vector2> waypoints = target.Path.ToList().To2D();
-                if ((Player.Distance(waypoints.Last<Vector2>().To3D()) - Player.Distance(target.Position)) > 400)
-                {
-                    Program.CastSpell(R, target);
-                }
-            }
-        }
 
         private float bonusRange() { return 670f + Player.BoundingRadius + 25 * ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Level; }
 

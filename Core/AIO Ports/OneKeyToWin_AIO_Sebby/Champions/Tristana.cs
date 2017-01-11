@@ -89,13 +89,14 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             {
                 if (t.IsValidTarget())
                 {
-                    if (E.GetDamage(t) > t.Health)
+                    var predHel = t.Health - OktwCommon.GetIncomingDamage(t) - Player.GetAutoAttackDamage(t, true);
+                    if (E.GetDamage(t) + Player.GetAutoAttackDamage(t, true) * 4 > predHel)
                     {
                         E.Cast(t);
                         if(!Player.HasBuff("itemstatikshankcharge"))
                             args.Process = false;
                     }
-                    else if (R.IsReady() && E.GetDamage(t) + R.GetDamage(t) > t.Health && Player.Mana > RMANA + EMANA)
+                    else if (R.IsReady() && E.GetDamage(t) + R.GetDamage(t) > predHel && Player.Mana > RMANA + EMANA)
                     {
                         E.Cast(t);
                         if (!Player.HasBuff("itemstatikshankcharge"))
