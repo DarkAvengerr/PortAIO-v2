@@ -22,15 +22,17 @@ namespace NechritoRiven.Event.Interrupters_Etc
                 return;
             }
 
-            if (Spells.E.IsReady())
+            if (Spells.E.IsReady()
+                && args.Target.IsMe
+                && (BackgroundData.AntigapclosingSpells.Contains(args.SData.Name) 
+                || BackgroundData.TargetedSpells.Contains(args.SData.Name)))
             {
-                if (BackgroundData.AntigapclosingSpells.Contains(args.SData.Name) || (BackgroundData.TargetedSpells.Contains(args.SData.Name) && args.Target.IsMe))
-                {
-                    LeagueSharp.Common.Utility.DelayAction.Add(120, ()=> Spells.E.Cast(Game.CursorPos));
-                }
+                    LeagueSharp.Common.Utility.DelayAction.Add(30, ()=> Spells.E.Cast(Game.CursorPos));   
             }
 
-            if (!BackgroundData.InterrupterSpell.Contains(args.SData.Name) || !Spells.W.IsReady() || !BackgroundData.InRange(sender))
+            if (!BackgroundData.InterrupterSpell.Contains(args.SData.Name) 
+                || !Spells.W.IsReady() 
+                || !BackgroundData.InRange(sender))
             {
                 return;
             }
