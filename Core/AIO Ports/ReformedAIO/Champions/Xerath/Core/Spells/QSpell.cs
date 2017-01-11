@@ -8,10 +8,6 @@ namespace ReformedAIO.Champions.Xerath.Core.Spells
     using RethoughtLib.FeatureSystem.Implementations;
     using RethoughtLib.FeatureSystem.Switches;
 
-    using SebbyLib;
-    using SebbyLib.Movement;
-
-    using HitChance = SebbyLib.Prediction.HitChance;
     using PredictionOutput = LeagueSharp.Common.PredictionOutput;
     using SkillshotType = SebbyLib.Prediction.SkillshotType;
 
@@ -22,6 +18,15 @@ namespace ReformedAIO.Champions.Xerath.Core.Spells
         public override Spell Spell { get; set; }
 
         public bool Charging => Spell.IsCharging;
+
+        public Geometry.Polygon.Rectangle Rect;
+
+        public bool IsInsideRect(Obj_AI_Base target)
+        {
+            Rect = new Geometry.Polygon.Rectangle(ObjectManager.Player.Position, Game.CursorPos, 75);
+
+            return !Rect.IsOutside(target.Position.To2D());
+        }
 
         public float GetDamage(Obj_AI_Base target)
         {

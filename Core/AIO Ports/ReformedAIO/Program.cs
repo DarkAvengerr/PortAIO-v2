@@ -23,6 +23,8 @@ namespace ReformedAIO
     using Champions.Yasuo;
     using Champions.Ziggs;
 
+    using ReformedAIO.Champions.Lee_Sin;
+
     using RethoughtLib.Bootstraps.Abstract_Classes;
 
     #endregion
@@ -42,6 +44,7 @@ namespace ReformedAIO
                 new DianaLoader(),
                 new GnarLoader(),
                 new GragasLoader(),
+                new LeeSinLoader(),
                 new EzrealLoader(),
                 new LucianLoader(),
                 new LuxLoader(),
