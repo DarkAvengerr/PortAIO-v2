@@ -6,7 +6,6 @@ using EloBuddy; namespace YasuoPro
 
         public static void Main()
         {
-            Yasuo = new Yasuo();
         }         
     }
 }

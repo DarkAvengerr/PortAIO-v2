@@ -19,11 +19,6 @@ namespace YasuoPro
         public AIHeroClient CurrentTarget;
         public bool Fleeing;
 
-        public Yasuo()
-        {
-            OnLoad();
-        }
-
         public void OnLoad()
         {
             Yasuo = ObjectManager.Player;
