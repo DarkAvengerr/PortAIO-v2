@@ -23,6 +23,8 @@
 - Updated and improved (faster/more accurate) OKTW/SDK/L# Prediction
 - Fixed MF Ult Canceling
 - Fixed YasuoPro loading issue
+- Fixed Kalista Damage Calculation
+- [Temp] Fixed L#Common > Damage > CalcDamage method
 
 [1/10/17]
 - Removed Autoplay
