@@ -2732,6 +2732,9 @@ namespace PortAIO
                         case 11: // RivenToTheChallenger  
                             RivenToTheChallenger.Program.Main();
                             break;
+                        case 12: // MoonRiven
+                            MoonRiven.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Rumble:
