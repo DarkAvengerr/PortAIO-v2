@@ -32,7 +32,6 @@ namespace AlqoholicGalio.Managers
 
     using LeagueSharp;
     using LeagueSharp.Common;
-    using SebbyLib;
 
     using Color = SharpDX.Color;
 
@@ -70,6 +69,8 @@ namespace AlqoholicGalio.Managers
 
         public static bool AutoHarass => HarassMenu.Item("autoHarass").GetValue<KeyBind>().Active;
 
+        public static bool AutoW => WMenu.Item("wAuto").GetValue<bool>();
+
         public static bool DrawDamage => DrawMenu.Item("drawDamage").GetValue<bool>();
 
         public static bool DrawE => DrawMenu.Item("drawE").GetValue<bool>();
@@ -98,7 +99,7 @@ namespace AlqoholicGalio.Managers
 
         public static bool RFlash => MiscMenu.Item("miscRFlash").GetValue<KeyBind>().Active;
 
-        public static bool Test => MiscMenu.Item("test").GetValue<KeyBind>().Active;
+        public static int WIncDmg => WMenu.Item("wIncDamage").GetValue<Slider>().Value;
 
         #endregion
 
@@ -118,7 +119,8 @@ namespace AlqoholicGalio.Managers
             var orbwalkerMenu = new Menu("Alqoholic Galio - Orbwalker", "orbwalkerMenu");
 
             Menu = new Menu("Alqoholic Galio", "AlqoholicGalio", true).SetFontStyle(FontStyle.Underline, Color.Gold);
-            Orbwalker = new LeagueSharp.Common.Orbwalking.Orbwalker(orbwalkerMenu.SetFontStyle(FontStyle.Bold, Color.Gold));
+            Orbwalker =
+                new LeagueSharp.Common.Orbwalking.Orbwalker(orbwalkerMenu.SetFontStyle(FontStyle.Bold, Color.Gold));
             Menu.AddSubMenu(orbwalkerMenu);
 
             Menu.AddItem(

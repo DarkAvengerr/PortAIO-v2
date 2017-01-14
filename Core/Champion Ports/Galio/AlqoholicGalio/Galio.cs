@@ -37,8 +37,6 @@ namespace AlqoholicGalio
 
     using SharpDX;
 
-    using SebbyLib;
-
     using SPrediction;
 
     using OrbwalkingMode = LeagueSharp.Common.Orbwalking.OrbwalkingMode;
@@ -261,17 +259,18 @@ namespace AlqoholicGalio
             {
                 Cast(SpellManager.E, eTarget);
             }
-            if (!MenuManager.ComboMenu.Item("comboR").GetValue<bool>() || !SpellManager.R.IsReady()
-                || rTargets < MenuManager.RAmount)
+            if (MenuManager.ComboMenu.Item("comboR").GetValue<bool>() && SpellManager.R.IsReady()
+                && rTargets >= MenuManager.RAmount)
             {
-                return;
+                if (SpellManager.W.IsReady())
+                {
+                    SpellManager.W.Cast(ObjectManager.Player);
+                }
+                else
+                {
+                    SpellManager.R.Cast();
+                }
             }
-            if (SpellManager.W.IsReady())
-            {
-                SpellManager.W.Cast(ObjectManager.Player);
-                SpellManager.R.Cast();
-            }
-            SpellManager.R.Cast();
         }
 
         /// <summary>
@@ -441,8 +440,10 @@ namespace AlqoholicGalio
                     return;
                 }
                 var wTarget =
-                    HeroManager.Allies.FirstOrDefault(
-                        f => f.Position.Distance(ObjectManager.Player.Position) <= SpellManager.W.Range);
+                    HeroManager.Allies.ToList()
+                        .Where(ally => ally.Distance(ObjectManager.Player.Position) <= SpellManager.W.Range)
+                        .OrderByDescending(ally => ally.HealthPercent)
+                        .FirstOrDefault();
 
                 if (wTarget != null
                     && (((AIHeroClient)args.Target).Health / sender.GetSpellDamage(wTarget, args.SData.Name) * 100)
