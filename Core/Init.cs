@@ -2085,6 +2085,9 @@ namespace PortAIO
                         case 2: // Lissandra The Ice Goddess
                             Lissandra_the_Ice_Goddess.Program.Main();
                             break;
+                        case 3: // AlqoholicLissandra
+                            AlqoholicLissandra.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Lucian:

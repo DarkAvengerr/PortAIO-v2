@@ -1724,6 +1724,17 @@
     <Compile Include="Core\Champion Ports\Leona\Kuroko%27s Leona\Extensions\Spells.cs" />
     <Compile Include="Core\Champion Ports\Leona\Kuroko%27s Leona\Extensions\Utilities.cs" />
     <Compile Include="Core\Champion Ports\Leona\Kuroko%27s Leona\Program.cs" />
+    <Compile Include="Core\Champion Ports\Lissandra\AlqoholicLissandra\Managers\DamageManager.cs" />
+    <Compile Include="Core\Champion Ports\Lissandra\AlqoholicLissandra\Managers\DrawingManager.cs" />
+    <Compile Include="Core\Champion Ports\Lissandra\AlqoholicLissandra\Managers\SpellManager.cs" />
+    <Compile Include="Core\Champion Ports\Lissandra\AlqoholicLissandra\Menu\AlqoholicMenu.cs" />
+    <Compile Include="Core\Champion Ports\Lissandra\AlqoholicLissandra\Program.cs" />
+    <Compile Include="Core\Champion Ports\Lissandra\AlqoholicLissandra\Spells\E.cs" />
+    <Compile Include="Core\Champion Ports\Lissandra\AlqoholicLissandra\Spells\Q.cs" />
+    <Compile Include="Core\Champion Ports\Lissandra\AlqoholicLissandra\Spells\R.cs" />
+    <Compile Include="Core\Champion Ports\Lissandra\AlqoholicLissandra\Spells\SpellBase.cs" />
+    <Compile Include="Core\Champion Ports\Lissandra\AlqoholicLissandra\Spells\Spells.cs" />
+    <Compile Include="Core\Champion Ports\Lissandra\AlqoholicLissandra\Spells\W.cs" />
     <Compile Include="Core\Champion Ports\Lucian\Lord%27s Lucian\HpBar.cs" />
     <Compile Include="Core\Champion Ports\Lucian\Lord%27s Lucian\Lucian.cs" />
     <Compile Include="Core\Champion Ports\Lucian\Lord%27s Lucian\Program.cs" />
