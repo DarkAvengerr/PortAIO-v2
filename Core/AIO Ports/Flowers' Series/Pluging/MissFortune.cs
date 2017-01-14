@@ -173,6 +173,7 @@ namespace Flowers_ADC_Series.Pluging
             {
                 Orbwalker.SetAttack(false);
                 Orbwalker.SetMovement(false);
+                Player.IssueOrder(GameObjectOrder.Stop, Player.Instance.Position);
                 return;
             }
 
