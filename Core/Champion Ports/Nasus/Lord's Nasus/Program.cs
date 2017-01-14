@@ -18,6 +18,8 @@ namespace HelpingLSharpNasus
     {
         private const string ChampionName = "Nasus";
 
+        public static int Sheen = 3057, Iceborn = 3025;
+
         public static Orbwalking.Orbwalker Orbwalker;
         public static AIHeroClient Player { get { return ObjectManager.Player; } }
         public static Menu Config;
@@ -91,6 +93,8 @@ namespace HelpingLSharpNasus
             drawMenu.AddItem(new MenuItem("DQ", "Draw Q Range").SetValue(true));
             drawMenu.AddItem(new MenuItem("DW", "Draw W Range").SetValue(true));
             drawMenu.AddItem(new MenuItem("DE", "Draw E Range").SetValue(true));
+            drawMenu.AddItem(new MenuItem("LH", "LastHit Minions").SetValue(true));
+
             Config.AddSubMenu(drawMenu);
 
             // Credits to this boy ;) 
@@ -105,7 +109,7 @@ namespace HelpingLSharpNasus
             Drawing.OnDraw += Drawing_OnDraw;
         }
 
-        private static void Drawing_OnDraw(EventArgs args)
+        private static void   Drawing_OnDraw(EventArgs args)
         {
             // Accurate Draw AutoAttack
             if (Config.Item("DQ").GetValue<bool>())
@@ -114,6 +118,41 @@ namespace HelpingLSharpNasus
                 Render.Circle.DrawCircle(Player.Position, W.Range, Color.DeepPink);
             if (Config.Item("DE").GetValue<bool>())
                 Render.Circle.DrawCircle(Player.Position, E.Range, Color.DeepSkyBlue);
+            if (Config.Item("LH").GetValue<bool>())
+            {
+                var minions = MinionManager.GetMinions(
+                    ObjectManager.Player.ServerPosition,
+                    E.Range,
+                    MinionTypes.All,
+                    MinionTeam.NotAlly);
+                foreach (var minion in minions)
+                {
+                    if (minion != null)
+                    {
+                        if ((GetBonusDmg(minion) > minion.Health))
+                        {
+                            Render.Circle.DrawCircle(minion.ServerPosition, minion.BoundingRadius, Color.Green);
+                        }
+                    }
+                }
+            }
+        }
+        private static double GetBonusDmg(Obj_AI_Base target)
+        {
+            double dmgItem = 0;
+            if (Items.HasItem(Sheen) && (Items.CanUseItem(Sheen) || Player.HasBuff("sheen"))
+                && Player.BaseAttackDamage > dmgItem)
+            {
+                dmgItem = Player.GetAutoAttackDamage(target);
+            }
+
+            if (Items.HasItem(Iceborn) && (Items.CanUseItem(Iceborn) || Player.HasBuff("itemfrozenfist"))
+                && Player.BaseAttackDamage * 1.25 > dmgItem)
+            {
+                dmgItem = Player.GetAutoAttackDamage(target) * 1.25;
+            }
+
+            return Q.GetDamage(target) + Player.GetAutoAttackDamage(target) + dmgItem;
         }
 
         private static void Combo()
