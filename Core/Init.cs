@@ -204,6 +204,11 @@ namespace PortAIO
             {
                 CS_Counter.CsCounter.Main();
             }
+
+            if (Misc.menu.Item("SharedExperience").GetValue<bool>())
+            {
+                SharedExperience.Program.Main();
+            }
         }
 
         public static void LoadChampion()

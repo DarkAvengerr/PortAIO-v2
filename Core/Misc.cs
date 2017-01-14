@@ -479,6 +479,7 @@ namespace PortAIO.Dual_Port
             utility.AddItem(new MenuItem("StandaloneOrbwalker", "Enable StandaloneOrbwalker?").SetValue(false));
             utility.AddItem(new MenuItem("BasicChatBlock", "Enable BasicChatBlock?").SetValue(false));
             utility.AddItem(new MenuItem("CSCounter", "Enable CSCounter?").SetValue(false));
+            utility.AddItem(new MenuItem("SharedExperience", "Enable SharedExperience?").SetValue(false));
             menu.AddSubMenu(utility);
 
             menu.AddItem(new MenuItem("UtilityOnly", "Utility Only?").SetValue(false));
