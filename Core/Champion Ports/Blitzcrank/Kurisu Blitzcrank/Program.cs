@@ -6,8 +6,8 @@ using LeagueSharp.Common;
 using Color = System.Drawing.Color;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Blitzcrank
+using LeagueSharp.Common; 
+namespace Blitzcrank
 {
     class Program
     {
@@ -20,6 +20,7 @@ using EloBuddy;
 
         internal static int Limiter;
         internal static int LastFlash;
+
         public static void Game_OnGameLoad()
         {
             if (Player.ChampionName != "Blitzcrank")
@@ -54,9 +55,15 @@ using EloBuddy;
             var qsmenu = new Menu("Config", "qsmenu");
 
             var auqmenu = new Menu("Auto Grab", "auqmenu");
+
+            auqmenu.AddItem(new MenuItem("autogimmobile", "Immobile/Rooted")).SetValue(true);
+            auqmenu.AddItem(new MenuItem("autogdashing", "Dashing")).SetValue(true);
+            auqmenu.AddItem(new MenuItem("autogcasting", "Casting/AA")).SetValue(false);
+
+
             foreach (var hero in HeroManager.Enemies)
                 auqmenu.AddItem(new MenuItem("auq" + hero.ChampionName, hero.ChampionName))
-                    .SetValue(false).SetTooltip("Auto grab " + hero.ChampionName + " (Dashing/Immobile/Casting)");
+                    .SetValue(false);
 
             qsmenu.AddSubMenu(auqmenu);
 
@@ -98,6 +105,7 @@ using EloBuddy;
             {
                 if (!eventArgs.GetNewValue<bool>())
                 {
+                    //ObjectManager.//Player.SetSkin(ObjectManager.Player.BaseSkinName, ObjectManager.Player.SkinId);
                 }
             };
 
@@ -114,11 +122,15 @@ using EloBuddy;
             Game.OnUpdate += Game_OnUpdate;
             Drawing.OnDraw += Drawing_OnDraw;
             Orbwalking.BeforeAttack += Orbwalking_BeforeAttack;
-            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Interrupter2.OnInterruptableTarget += Interrupter2_OnInterruptableTarget;
 
             Chat.Print("<b>Blitzcrank#</b> - Loaded!");
+            LeagueSharp.Common.Utility.DelayAction.Add(1000, CheckActivator);
+        }
 
+        private static void CheckActivator()
+        {
             if (Menu.GetMenu("Activator", "activator") == null &&
                 Menu.GetMenu("ElUtilitySuite", "ElUtilitySuite") == null &&
                 Menu.GetMenu("adcUtility", "adcUtility") == null &&
@@ -223,7 +235,8 @@ using EloBuddy;
                     {
                         if (hero.Distance(Player.ServerPosition) > Root.Item("minq").GetValue<Slider>().Value)
                         {
-                            Q.CastIfHitchanceEquals(hero, HitChance.VeryHigh);
+                            if (Root.Item("autogcasting").GetValue<bool>())
+                                Q.CastIfHitchanceEquals(hero, HitChance.VeryHigh);
                         }
                     }
                 }
@@ -247,6 +260,7 @@ using EloBuddy;
 
             if (Root.Item("useskin").GetValue<bool>())
             {
+                //Player.SetSkin(Player.BaseSkinName, Root.Item("skinid").GetValue<Slider>().Value);
             }
 
             foreach (var ene in HeroManager.Enemies.Where(x => x.IsValidTarget(Root.Item("maxq").GetValue<Slider>().Value)))
@@ -256,13 +270,16 @@ using EloBuddy;
                     return;
                 }
 
-                if (!Root.Item("blq" + ene.ChampionName).GetValue<bool>() && 
-                     Root.Item("auq" + ene.ChampionName).GetValue<bool>())
+                if (!Root.Item("blq" + ene.ChampionName).GetValue<bool>() && Root.Item("auq" + ene.ChampionName).GetValue<bool>())
                 {
                     if (ene.Distance(Player.ServerPosition) > Root.Item("minq").GetValue<Slider>().Value && Q.IsReady())
                     {
-                        Q.CastIfHitchanceEquals(ene, HitChance.Dashing, true);
-                        Q.CastIfHitchanceEquals(ene, HitChance.Immobile, true);
+
+                        if (Root.Item("autogdashing").GetValue<bool>())
+                            Q.CastIfHitchanceEquals(ene, HitChance.Dashing, true);
+
+                        if (Root.Item("autogimmobile").GetValue<bool>())
+                            Q.CastIfHitchanceEquals(ene, HitChance.Immobile, true);
                     }
                 }
             }
