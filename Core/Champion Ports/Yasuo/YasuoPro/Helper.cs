@@ -15,7 +15,7 @@ namespace YasuoPro
 
         internal static AIHeroClient Yasuo;
 
-        internal float QRadius = 170;
+        internal float QRadius = 150;
 
         internal static Obj_Shop shop;
 
@@ -376,10 +376,11 @@ namespace YasuoPro
             Youmu = new ItemManager.Item(3142, 185f, ItemManager.ItemCastType.SelfCast, 1, 3);
         }
 
-        internal bool TowerCheck(Obj_AI_Base unit, bool isCombo = false)
+        internal bool SafetyCheck(Obj_AI_Base unit, bool isCombo = false)
         {
-            return (isCombo && Helper.GetBool("Combo.ETower") || Helper.GetKeyBind("Misc.TowerDive") ||
-                    !GetDashPos(unit).PointUnderEnemyTurret());
+            var pos = GetDashPos(unit);
+            return ((isCombo && Helper.GetBool("Combo.ETower") && (!GetBool("Combo.AvoidDanger") || Evade.Program.IsSafe(pos).IsSafe)) || Helper.GetKeyBind("Misc.TowerDive") ||
+                   !pos.PointUnderEnemyTurret());
         }
 
         internal bool ShouldDive(Obj_AI_Base unit)

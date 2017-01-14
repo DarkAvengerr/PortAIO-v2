@@ -38,6 +38,7 @@ using EloBuddy; namespace EvadeYas
             //Detect when the skillshots are created.
             //Game.OnProcessPacket += GameOnOnGameProcessPacket; // Used only for viktor's Laser :^)
             Obj_AI_Base.OnSpellCast += ObjAiHeroOnOnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += ObjAiHeroOnOnProcessSpellCast;
 
             //Detect when projectiles collide.
             GameObject.OnDelete += ObjSpellMissileOnOnDelete;
