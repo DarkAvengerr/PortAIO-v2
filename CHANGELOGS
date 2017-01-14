@@ -1,3 +1,42 @@
+[1/14/17]
+- Updated :
+	- Flowers' Yasuo
+	- ElXerath
+	- AlqoholicGalio
+	- VayneHunterReborn
+	- Kurisu Blitzcrank
+	- KurisuRiven
+	- vEvade
+	- ElKatarinaDecentralized
+	- MoonDraven
+	- Lord's Nasus
+	- Lord's Vayne
+	- YasuoPro
+	- OKTW
+	- Activator#
+	- HERMES Kalista
+- Added
+	- AlqoholicKarthus
+	- AlqoholicLissandra
+	- MoonRiven
+	- SharedExp
+- Updated and improved (faster/more accurate) OKTW/SDK/L# Prediction
+- Fixed MF Ult Canceling
+- Fixed YasuoPro loading issue
+
+[1/10/17]
+- Removed Autoplay
+- Updated :
+	- ReformedAIO
+	- Camille#
+	- NechritoRiven
+	- OKTW
+- SebbyLib Prediction improved
+- Added L# Prediction to OKTW
+
+[1/9/17]
+- Added L# Predictioner (forces the usage of L# prediction in ANY assembly)
+
 [1/2/17]
 - Updated :
      - ReformedAIO
