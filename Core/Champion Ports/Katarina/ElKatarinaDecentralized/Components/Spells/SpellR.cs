@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ElKatarinaDecentralized.Components.Spells
+namespace ElKatarinaDecentralized.Components.Spells
 {
     using System;
     using System.Linq;
@@ -38,7 +38,12 @@ using LeagueSharp.Common;
         /// <summary>
         ///     Cancel ult.
         /// </summary>
-        private static bool CancellingUlt;
+        private static bool _cancellingUlt;
+
+        /// <summary>
+        ///     Last stealth ult.
+        /// </summary>
+        private static int _lastStealthedUlt;
 
         #endregion
 
@@ -76,7 +81,18 @@ using LeagueSharp.Common;
                         case 1:
                             if (target.IsValidTarget(this.Range))
                             {
-                                this.SpellObject.Cast();
+                                if (Misc.SpellW.SpellObject.IsReady() && target.IsValidTarget(this.Range - 150)) // just check melee range
+                                {
+                                    Misc.SpellW.SpellObject.Cast();
+                                }
+                                else if (Misc.SpellW.SpellObject.IsReady())
+                                {
+                                    Misc.SpellQ.SpellObject.CastOnUnit(target);
+                                }
+                                else
+                                {
+                                    this.SpellObject.Cast();
+                                }
                             }
                             break;
                     }
@@ -102,16 +118,24 @@ using LeagueSharp.Common;
         /// </summary>
         internal override void OnUpdate()
         {
+            if (MyMenu.RootMenu.Item("combo.stealth").IsActive() && this.SpellObject.IsReady() && ObjectManager.Player.CountEnemiesInRange(this.Range) == 0 
+                && this.SpellObject.Cast())
+            {
+                _lastStealthedUlt = Utils.TickCount;
+                return;
+            }
+
             var importantSpell = ObjectManager.Player.IsChannelingImportantSpell();
             if (importantSpell)
             {
-                if (MyMenu.RootMenu.Item("combo.r.no.enemies").IsActive() && ObjectManager.Player.CountEnemiesInRange(550f) == 0 && !CancellingUlt)
+                if (MyMenu.RootMenu.Item("combo.r.no.enemies").IsActive() && ObjectManager.Player.CountEnemiesInRange(this.Range + 379) == 0 
+                    && !_cancellingUlt && Utils.TickCount - _lastStealthedUlt > 2500)
                 {
-                    CancellingUlt = true;
+                    _cancellingUlt = true;
                     LeagueSharp.Common.Utility.DelayAction.Add(
                        300, () =>
                        {
-                           CancellingUlt = false;
+                           _cancellingUlt = false;
                            if (ObjectManager.Player.CountEnemiesInRange(550f) == 0)
                            {
                                EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, ObjectManager.Player.ServerPosition.Randomize(10, 20), false);

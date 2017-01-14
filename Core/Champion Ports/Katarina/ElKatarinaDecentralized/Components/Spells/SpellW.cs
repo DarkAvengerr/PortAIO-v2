@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ElKatarinaDecentralized.Components.Spells
+namespace ElKatarinaDecentralized.Components.Spells
 {
     using System;
     using System.Linq;
@@ -59,7 +59,10 @@ using LeagueSharp.Common;
                 var target = Misc.GetTarget(this.Range, this.DamageType);
                 if (target != null)
                 {
-                    this.SpellObject.Cast();
+                    if (!Misc.SpellE.SpellObject.IsReady())
+                    {
+                        this.SpellObject.Cast();
+                    }
                 }
             }
             catch (Exception e)

@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ElKatarinaDecentralized.Utils
+namespace ElKatarinaDecentralized.Utils
 {
     using System;
 

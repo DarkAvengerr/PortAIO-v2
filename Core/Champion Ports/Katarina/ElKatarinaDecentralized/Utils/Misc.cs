@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ElKatarinaDecentralized.Utils
+namespace ElKatarinaDecentralized.Utils
 {
     using System;
     using System.Linq;
@@ -24,6 +24,11 @@ using LeagueSharp.Common;
         public static SpellQ SpellQ;
 
         /// <summary>
+        ///     Spell W
+        /// </summary>
+        public static SpellW SpellW;
+
+        /// <summary>
         ///     Spell E
         /// </summary>
         public static SpellE SpellE;
@@ -33,13 +38,11 @@ using LeagueSharp.Common;
         /// </summary>
         public static SpellR SpellR;
 
+        
         /// <summary>
         ///     Gets the auto attack range.
         /// </summary>
-        internal static float KatarinaAutoAttackRange
-        {
-            get { return Orbwalking.GetRealAutoAttackRange(ObjectManager.Player); }
-        }
+        internal static float KatarinaAutoAttackRange => Orbwalking.GetRealAutoAttackRange(ObjectManager.Player);
 
         /// <summary>
         ///     Checks if spell is castable.

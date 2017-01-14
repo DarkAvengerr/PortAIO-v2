@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ElKatarinaDecentralized.Components.Spells
+namespace ElKatarinaDecentralized.Components.Spells
 {
     using System;
     using System.Linq;
@@ -62,7 +62,6 @@ using LeagueSharp.Common;
                 {
                     return;
                 }
-
 
                 var target =
                     HeroManager.Enemies.Where(x => x.IsValidTarget(this.Range) && !x.IsDead && !x.IsZombie)

@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace ElKatarinaDecentralized.Enumerations
+namespace ElKatarinaDecentralized.Enumerations
 {
     /// <summary>
     ///     The entry type.
