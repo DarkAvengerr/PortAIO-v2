@@ -47,8 +47,6 @@ namespace PortAIO
             }
 
             Console.WriteLine("[PortAIO] Core loaded.");
-
-            PortAIOMsg("PLEASE DO NOT ENABLE MORE THAN 2-3 UTILITIES OR YOU WILL CRASH.");
         }
 
         private static void Game_OnUpdate(EventArgs args)
