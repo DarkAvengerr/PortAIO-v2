@@ -1,5 +1,3 @@
-using EloBuddy;
-using LeagueSharp.Common;
 namespace PortAIO
 {
     using System;
@@ -7,7 +5,9 @@ namespace PortAIO
     using System.Linq;
     using System.Text.RegularExpressions;
 
+    using LeagueSharp.Common;
     using SharpDX;
+    using EloBuddy;
 
     /// <summary>
     ///     Represents the chance of hitting an enemy.
@@ -232,7 +232,7 @@ namespace PortAIO
         {
             get
             {
-                return this.UseBoundingRadius ? this.Radius + this.Unit.BoundingRadius : this.Radius;
+                return this.UseBoundingRadius ? this.Radius : this.Radius;
             }
         }
 
@@ -415,13 +415,6 @@ namespace PortAIO
             return GetPrediction(input, true, true);
         }
 
-        /// <summary>
-        ///     Initializes this instance.
-        /// </summary>
-        public static void Initialize()
-        {
-        }
-
         public static void Shutdown()
         {
             Menu.Remove(_menu);
@@ -524,7 +517,7 @@ namespace PortAIO
         {
             speed = (Math.Abs(speed - (-1)) < float.Epsilon) ? input.Unit.MoveSpeed : speed;
 
-            if (input.Unit.Path.ToList().To2D().Count <= 1 || (input.Unit.Spellbook.IsAutoAttacking && !input.Unit.IsDashing()))
+            if (path.Count <= 1 || (input.Unit.Spellbook.IsAutoAttacking && !input.Unit.IsDashing()))
             {
                 return new PredictionOutput
                 {
@@ -535,7 +528,7 @@ namespace PortAIO
                 };
             }
 
-            var pLength = input.Unit.Path.ToList().To2D().PathLength();
+            var pLength = path.PathLength();
 
             //Skillshots with only a delay
             if (pLength >= input.Delay * speed - input.RealRadius
@@ -543,10 +536,10 @@ namespace PortAIO
             {
                 var tDistance = input.Delay * speed - input.RealRadius;
 
-                for (var i = 0; i < input.Unit.Path.Length - 1; i++)
+                for (var i = 0; i < path.Count - 1; i++)
                 {
-                    var a = input.Unit.Path[i];
-                    var b = input.Unit.Path[i + 1];
+                    var a = path[i];
+                    var b = path[i + 1];
                     var d = a.Distance(b);
 
                     if (d >= tDistance)
@@ -556,15 +549,15 @@ namespace PortAIO
                         var cp = a + direction * tDistance;
                         var p = a
                                 + direction
-                                * ((i == input.Unit.Path.Length - 2)
+                                * ((i == path.Count - 2)
                                        ? Math.Min(tDistance + input.RealRadius, d)
                                        : (tDistance + input.RealRadius));
 
                         return new PredictionOutput
                         {
                             Input = input,
-                            CastPosition = cp,
-                            UnitPosition = p,
+                            CastPosition = cp.To3D(),
+                            UnitPosition = p.To3D(),
                             Hitchance =
                                            PathTracker.GetCurrentPath(input.Unit).Time < 0.1d
                                                ? HitChance.VeryHigh
@@ -589,32 +582,32 @@ namespace PortAIO
                     }
                 }
 
-                path = input.Unit.Path.ToList().To2D().CutPath(d);
+                path = path.CutPath(d);
                 var tT = 0f;
-                for (var i = 0; i < input.Unit.Path.Length - 1; i++)
+                for (var i = 0; i < path.Count - 1; i++)
                 {
-                    var a = input.Unit.Path[i];
-                    var b = input.Unit.Path[i + 1];
+                    var a = path[i];
+                    var b = path[i + 1];
                     var tB = a.Distance(b) / speed;
                     var direction = (b - a).Normalized();
                     a = a - speed * tT * direction;
-                    var sol = Geometry.VectorMovementCollision(a.To2D(), b.To2D(), speed, input.From.To2D(), input.Speed, tT);
+                    var sol = Geometry.VectorMovementCollision(a, b, speed, input.From.To2D(), input.Speed, tT);
                     var t = (float)sol[0];
                     var pos = (Vector2)sol[1];
 
                     if (pos.IsValid() && t >= tT && t <= tT + tB)
                     {
                         if (pos.Distance(b, true) < 20) break;
-                        var p = pos.To3D() + input.RealRadius * direction;
+                        var p = pos + input.RealRadius * direction;
 
                         if (input.Type == SkillshotType.SkillshotLine && false)
                         {
-                            var alpha = (input.From.To2D() - p.To2D()).AngleBetween(a.To2D() - b.To2D());
+                            var alpha = (input.From.To2D() - p).AngleBetween(a - b);
                             if (alpha > 30 && alpha < 180 - 30)
                             {
                                 var beta = (float)Math.Asin(input.RealRadius / p.Distance(input.From));
-                                var cp1 = input.From.To2D() + (p.To2D() - input.From.To2D()).Rotated(beta);
-                                var cp2 = input.From.To2D() + (p.To2D() - input.From.To2D()).Rotated(-beta);
+                                var cp1 = input.From.To2D() + (p - input.From.To2D()).Rotated(beta);
+                                var cp2 = input.From.To2D() + (p - input.From.To2D()).Rotated(-beta);
 
                                 pos = cp1.Distance(pos, true) < cp2.Distance(pos, true) ? cp1 : cp2;
                             }
@@ -624,7 +617,7 @@ namespace PortAIO
                         {
                             Input = input,
                             CastPosition = pos.To3D(),
-                            UnitPosition = p,
+                            UnitPosition = p.To3D(),
                             Hitchance =
                                            PathTracker.GetCurrentPath(input.Unit).Time < 0.1d
                                                ? HitChance.VeryHigh
@@ -635,12 +628,12 @@ namespace PortAIO
                 }
             }
 
-            var position = input.Unit.Path.Last();
+            var position = path.Last();
             return new PredictionOutput
             {
                 Input = input,
-                CastPosition = position,
-                UnitPosition = position,
+                CastPosition = position.To3D(),
+                UnitPosition = position.To3D(),
                 Hitchance = HitChance.Medium
             };
         }
@@ -691,6 +684,10 @@ namespace PortAIO
                 if (remainingImmobileT >= 0d)
                 {
                     result = GetImmobilePrediction(input, remainingImmobileT);
+                }
+                else
+                {
+                    input.Range = input.Range;
                 }
             }
 
@@ -759,7 +756,7 @@ namespace PortAIO
                 speed /= 1.5f;
             }
 
-            var result = GetPositionOnPath(input, input.Unit.Path.ToList().To2D(), speed);
+            var result = GetPositionOnPath(input, EloBuddy.SDK.Prediction.Position.GetRealPath(input.Unit).ToList().To2D(), speed);
 
             if (result.Hitchance >= HitChance.High && input.Unit is AIHeroClient)
             {

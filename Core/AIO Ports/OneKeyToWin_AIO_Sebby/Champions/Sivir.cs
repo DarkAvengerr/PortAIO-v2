@@ -14,6 +14,9 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
         public static Core.MissileReturn missileManager;
 
+
+        private static string[] AAspelss = { "UdyrBearAttack", "RedCardPreAttack", "BlueCardPreAttack" , "NautilusRavageStrikeAttack", "PowerFist", "LeonaShieldOfDaybreak" };
+        private static string[] AAspelssBuffs = { "PowerFist", "LeonaShieldOfDaybreak" , "VolibearQ", "goldcardpreattack" };
         public Sivir()
         {
             Q = new Spell(SpellSlot.Q, 1200f);
@@ -126,20 +129,14 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                  || args.SData.Name.ToLower() == "tormentedsoil")
                 return;
 
-            if (args.SData.IsAutoAttack())
+            if (args.Target != null && args.SData.IsAutoAttack() && args.Target.IsMe)
             {
-                switch (args.SData.Name)
-                {
-                    case "UdyrBearAttack":
-                    case "GoldCardPreAttack":
-                    case "RedCardPreAttack":
-                    case "BlueCardPreAttack":
-                    case "NautilusRavageStrikeAttack":
-                        {
-                            E.Cast();
-                        }
-                        break;
-                }
+
+                if(AAspelss.Any(x => x.ToLower().Contains(args.SData.Name.ToLower())))
+                    E.Cast();
+                if (AAspelssBuffs.Any(x => sender.HasBuff(x)))
+                    E.Cast();
+               
                 return;
             }
 

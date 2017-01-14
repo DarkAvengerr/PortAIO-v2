@@ -219,7 +219,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             var t = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Magical);
             if (t.IsValidTarget() )
             {
-                if (IsCastingR)
+                if (IsCastingR && OktwCommon.ValidUlt(t))
                 {
                     var mouseZone = Config.Item("mouseZone", true).GetValue<Slider>().Value;
                     if (mouseZone > 0)
@@ -243,7 +243,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 }
                 if (!t.IsValidTarget(W.Range) && Config.Item("autoR", true).GetValue<bool>() && !IsCastingR && t.CountAlliesInRange(500) == 0 && Player.CountEnemiesInRange(1100) == 0)
                 {
-                    if (OktwCommon.GetKsDamage(t, R) + (R.GetDamage(t) * R.Level)  > t.Health)
+                    if (OktwCommon.GetKsDamage(t, R) + (R.GetDamage(t) * R.Level)  > t.Health && OktwCommon.ValidUlt(t))
                     {
                         R.Cast();
                     }

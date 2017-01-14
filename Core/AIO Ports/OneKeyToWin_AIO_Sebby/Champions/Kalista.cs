@@ -58,13 +58,15 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             Config.SubMenu(Player.ChampionName).SubMenu("Balista Config").AddItem(new MenuItem("balista", "Balista R", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("Balista Config").AddItem(new MenuItem("rangeBalista", "Balista min range", true).SetValue(new Slider(300, 1400, 0)));
 
+            Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("jungleE", "Jungle ks E", true).SetValue(true));
             Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("farmQ", "Lane clear Q", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("farmE", "Lane clear E", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("farmQcount", "Lane clear Q if x minions", true).SetValue(new Slider(2, 10, 1)));
 
             Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("farmEcount", "Auto E if x minions", true).SetValue(new Slider(2, 10, 1)));
-            Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("farmQcount", "Lane clear Q if x minions", true).SetValue(new Slider(2, 10, 1)));
             Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("minionE", "Auto E big minion", true).SetValue(true));
-            Config.SubMenu(Player.ChampionName).SubMenu("Farm").SubMenu("E Config").AddItem(new MenuItem("jungleE", "Jungle ks E", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("minionEout", "Auto E out AA range minion", true).SetValue(true));
+            Config.SubMenu(Player.ChampionName).SubMenu("Farm").AddItem(new MenuItem("minionEturret", "Auto E under turret", true).SetValue(true));
+            
         }
 
         private void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
@@ -137,15 +139,13 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
         private void SurvivalLogic()
         {
-            if (E.IsReady() && Player.HealthPercent < 50 && Config.Item("Edead", true).GetValue<bool>() )
+            if (E.IsReady() && Player.HealthPercent < 70 && Config.Item("Edead", true).GetValue<bool>() )
             {
                 double dmg = OktwCommon.GetIncomingDamage(Player);
                 if (dmg > 0)
                 {
                     if (Player.Health - dmg < Player.CountEnemiesInRange(700) * Player.Level * 5)
-                        CastE();
-                    else if (Player.Health - dmg < Player.Level * 5)
-                        CastE();
+                        E.Cast();
                 }
             }
 
@@ -253,22 +253,21 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             foreach (var minion in minions.Where(minion => minion.IsValidTarget(E.Range) && minion.HealthPercent < 80))
             {
                 var eDmg = E.GetDamage(minion);
-                if (minion.Health < eDmg - minion.HPRegenRate && eDmg > 0)
+                if (minion.Health < eDmg && eDmg > 0)
                 {
-                    if (GetPassiveTime(minion) > 0.5 && SebbyLib.HealthPrediction.GetHealthPrediction(minion, 300) > minion.GetAutoAttackDamage(minion) && !minion.HasBuff("kindredrnodeathbuff"))
+                    if (GetPassiveTime(minion) > 0.5 && SebbyLib.HealthPrediction.GetHealthPrediction(minion, 250) > 0 && !minion.HasBuff("kindredrnodeathbuff"))
                     {
                         count++;
+
                         if (!Orbwalking.InAutoAttackRange(minion))
-                        {
                             outRange++;
-                        }
-                        if (eBigMinion)
+                        
+                        if (eBigMinion && Program.Farm)
                         {
                             var minionName = minion.BaseSkinName.ToLower();
                             if (minionName.Contains("siege") || minionName.Contains("super"))
-                            {
-                                outRange++;
-                            }
+                                CastE();
+                            
                         }
                     }
                 }
@@ -280,30 +279,21 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             {
                 var eDmg = GetEdmg(target);
                 if (target.Health < eDmg)
-                {
                     CastE();
-                }
-                if (0 < eDmg && count > 0 && Config.Item("Ekillmin", true).GetValue<bool>())
-                {
+                else if (0 < eDmg && count > 0 && Config.Item("Ekillmin", true).GetValue<bool>())
                     CastE();
-
-                }
-                if (GetEStacks(target) >= countE && (GetPassiveTime(target) < 1 || near700) && Player.Mana > RMANA + EMANA)
-                {
+                else if (target.GetBuffCount("kalistaexpungemarker") >= countE && (GetPassiveTime(target) < 1 || near700) && Player.Mana > RMANA + EMANA)
                     CastE();
-                }
             }
 
-            if (Program.Farm && count > 0 && Config.Item("farmE", true).GetValue<bool>())
+            if (Program.Farm && count > 0 )
             {
-                if (outRange > 0)
-                {
+                if (outRange > 0 && Config.Item("minionEout", true).GetValue<bool>() )
                     CastE();
-                }
-                if ((count >= Config.Item("farmEcount", true).GetValue<Slider>().Value || ((Player.UnderTurret(false) && !Player.UnderTurret(true)) && Player.Mana > RMANA + QMANA + EMANA)))
-                {
+                else if (count >= Config.Item("farmEcount", true).GetValue<Slider>().Value)
                     CastE();
-                }
+                else if (Player.UnderAllyTurret() && Config.Item("minionEturret", true).GetValue<bool>())
+                    CastE();
             }
         }
 
@@ -366,7 +356,6 @@ namespace OneKeyToWin_AIO_Sebby.Champions
 
         private void JungleE()
         {
-
             if (!Config.Item("jungleE", true).GetValue<bool>())
                 return;
 
@@ -374,9 +363,10 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             if (mobs.Count > 0)
             {
                 var mob = mobs[0];
-                var dmg = GetEdmg(mob);
+                var dmg = E.GetDamage(mob);
 
-
+                if (Player.HasBuff("summonerexhaust"))
+                    dmg = dmg * 0.6f;
                 if (mob.Name.Contains("Baron") && Player.HasBuff("barontarget"))
                 {
                     dmg = dmg * 0.5f;
@@ -411,8 +401,6 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 }
             }
 
-            eDamage -= t.HPRegenRate;
-            eDamage -= t.PercentLifeStealMod * 0.005f * t.FlatPhysicalDamageMod;
             eDamage = eDamage * 0.01f * (float)Config.Item("Edmg", true).GetValue<Slider>().Value;
 
             return eDamage;
@@ -456,16 +444,6 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                     .Where(buff => buff.Name == "kalistaexpungemarker")
                     .Select(buff => buff.EndTime)
                     .FirstOrDefault() - Game.Time;
-        }
-
-        private int GetEStacks(Obj_AI_Base target)
-        {
-            foreach (var buff in target.Buffs)
-            {
-                if (buff.Name == "kalistaexpungemarker")
-                    return buff.Count;
-            }
-            return 0;
         }
 
         private void LogicR()
@@ -522,7 +500,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                 foreach (var enemy in HeroManager.Enemies.Where(target => target.IsValidTarget(E.Range + 500) && target.IsEnemy))
                 {
                     float hp = enemy.Health - E.GetDamage(enemy);
-                    int stack = GetEStacks(enemy);
+                    int stack = enemy.GetBuffCount("kalistaexpungemarker");
                     float dmg = (float)Player.GetAutoAttackDamage(enemy) * 2f;
                     if (stack > 0)
                         dmg = (float)Player.GetAutoAttackDamage(enemy) + (E.GetDamage(enemy) / (float)stack);

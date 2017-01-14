@@ -125,7 +125,7 @@ namespace SebbyLib.Movement
 
         internal float RealRadius
         {
-            get { return UseBoundingRadius ? Radius + Unit.BoundingRadius : Radius; }
+            get { return UseBoundingRadius ? Radius : Radius; }
         }
     }
 
@@ -504,7 +504,7 @@ namespace SebbyLib.Movement
                 //input.Delay /= 2;
                 speed /= 1.5f;
             }
-            return GetPositionOnPath(input, input.Unit.Path.ToList().To2D(), speed);
+            return GetPositionOnPath(input, EloBuddy.SDK.Prediction.Position.GetRealPath(input.Unit).ToList().To2D(), speed);
         }
 
         internal static double GetAngle(Vector3 from, Obj_AI_Base target)
