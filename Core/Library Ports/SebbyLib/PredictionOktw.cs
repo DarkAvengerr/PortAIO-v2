@@ -286,7 +286,7 @@ namespace SebbyLib.Prediction
                 if (!wallPoint.IsZero)
                 {
                     result.Hitchance = HitChance.High;
-                    //result.CastPosition = wallPoint.Extend(result.CastPosition, moveOutWall);
+                    result.CastPosition = wallPoint.Extend(result.CastPosition, moveOutWall);
                 }
             }
 
@@ -304,21 +304,6 @@ namespace SebbyLib.Prediction
                     Math.Pow(input.Range + (input.Type == SkillshotType.SkillshotCircle ? input.RealRadius : 0), 2))
                 {
                     result.Hitchance = HitChance.OutOfRange;
-                }
-
-                /* This does not need to be handled for the updated predictions, but left as a reference.*/
-                if (input.RangeCheckFrom.Distance(result.CastPosition, true) > Math.Pow(input.Range, 2))
-                {
-                    if (result.Hitchance != HitChance.OutOfRange)
-                    {
-                        result.CastPosition = input.RangeCheckFrom +
-                                              input.Range *
-                                              (result.UnitPosition - input.RangeCheckFrom).To2D().Normalized().To3D();
-                    }
-                    else
-                    {
-                        result.Hitchance = HitChance.OutOfRange;
-                    }
                 }
             }
 
