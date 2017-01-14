@@ -9,17 +9,16 @@ using LeagueSharp.Common;
 using HERMES_Kalista.MyLogic.Others;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace HERMES_Kalista.MyInitializer
+using LeagueSharp.Common; 
+namespace HERMES_Kalista.MyInitializer
 {
     public static partial class HERMESLoader
     {
         public static void Draw()
         {
-            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.DamageToUnit = GetRealDamage;
-            //LeagueSharp.Common.Utility.HpBar//DamageIndicator.Enabled = true;
+            LeagueSharp.Common.Utility.HpBarDamageIndicator.DamageToUnit = GetRealDamage;
+            LeagueSharp.Common.Utility.HpBarDamageIndicator.Enabled = true;
 
-            //Custom//DamageIndicator.Initialize(GetRealDamage);
             Drawing.OnDraw += args =>
             {
                 if (!Program.DrawingsMenu.Item("streamingmode").GetValue<bool>()) return;
@@ -31,7 +30,6 @@ using EloBuddy;
                         Color.LightGreen);
                     }
 
-                //Custom//DamageIndicator.DrawingColor = Color.LightGreen;
 
                     foreach (var source in
                         HeroManager.Enemies.Where(x => ObjectManager.Player.Distance(x) <= 2000f && !x.IsDead))

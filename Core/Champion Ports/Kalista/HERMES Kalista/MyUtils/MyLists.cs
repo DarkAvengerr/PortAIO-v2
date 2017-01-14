@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace HERMES_Kalista.MyUtils
+using LeagueSharp.Common; 
+namespace HERMES_Kalista.MyUtils
 {
     public static class Lists
     {

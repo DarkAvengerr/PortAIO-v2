@@ -9,15 +9,15 @@ using LeagueSharp;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace HERMES_Kalista.MyLogic.Others
+using LeagueSharp.Common; 
+namespace HERMES_Kalista.MyLogic.Others
 {
     public static class Damages
     {
         public static bool IsRendKillable(this Obj_AI_Base target)
         {
             if (target.HasBuff("kindredrnodeathbuff")) return false;
-            if (target.Name.Contains("Baron") || target.Name.Contains("Dragon") || target.Health > 20)
+            if (target.Name.Contains("Baron") || target.Name.Contains("Dragon") || target.Health > 5)
             {
                 if (target is AIHeroClient)
                 {
@@ -32,13 +32,21 @@ using EloBuddy;
                 {
                     dmg *= 0.55f;
                 }
-                if (target.Name.Contains("Baron") && ObjectManager.Player.HasBuff("barontarget"))
+                if (target.Name.Contains("Baron"))
                 {
-                    dmg *= 0.5f;
+                    dmg -= 20;
+                    if (ObjectManager.Player.HasBuff("barontarget"))
+                    {
+                        dmg *= 0.5f;
+                    }
                 }
-                if (target.Name.Contains("Dragon") && ObjectManager.Player.HasBuff("s5test_dragonslayerbuff"))
+                if (target.Name.Contains("Dragon"))
                 {
-                    dmg *= (1f - (0.07f * ObjectManager.Player.GetBuffCount("s5test_dragonslayerbuff")));
+                    dmg -= 20;
+                    if (ObjectManager.Player.HasBuff("s5test_dragonslayerbuff"))
+                    {
+                        dmg *= (1f - (0.07f*ObjectManager.Player.GetBuffCount("s5test_dragonslayerbuff")));
+                    }
                 }
                 return dmg > target.Health;
             }

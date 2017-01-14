@@ -1,8 +1,8 @@
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace HERMES_Kalista.MyInitializer
+using LeagueSharp.Common; 
+namespace HERMES_Kalista.MyInitializer
 {
     public static partial class HERMESLoader
     {

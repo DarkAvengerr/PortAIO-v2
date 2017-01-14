@@ -2510,7 +2510,6 @@
     <Compile Include="Core\Champion Ports\Kalista\HERMES Kalista\MyLogic\Others\SoulboundSaver.cs" />
     <Compile Include="Core\Champion Ports\Kalista\HERMES Kalista\MyLogic\Others\Zezzy.cs" />
     <Compile Include="Core\Champion Ports\Kalista\HERMES Kalista\MyLogic\Spells.cs" />
-    <Compile Include="Core\Champion Ports\Kalista\HERMES Kalista\MyUtils\HealthPrediction.cs" />
     <Compile Include="Core\Champion Ports\Kalista\HERMES Kalista\MyUtils\MActivator.cs" />
     <Compile Include="Core\Champion Ports\Kalista\HERMES Kalista\MyUtils\MyCache.cs" />
     <Compile Include="Core\Champion Ports\Kalista\HERMES Kalista\MyUtils\MyExtensions.cs" />

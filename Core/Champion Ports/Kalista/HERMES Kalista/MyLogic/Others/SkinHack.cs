@@ -9,8 +9,8 @@ using LeagueSharp.Common;
 using HERMES_Kalista.MyUtils;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace HERMES_Kalista.MyLogic.Others
+using LeagueSharp.Common; 
+namespace HERMES_Kalista.MyLogic.Others
 {
     public static class SkinHack
     {

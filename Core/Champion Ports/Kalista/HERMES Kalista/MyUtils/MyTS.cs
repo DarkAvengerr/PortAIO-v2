@@ -33,8 +33,8 @@ using LeagueSharp.Common;
 #endregion
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace HERMES_Kalista.MyUtils
+using LeagueSharp.Common; 
+namespace HERMES_Kalista.MyUtils
 {
     public class TargetSelector
     {

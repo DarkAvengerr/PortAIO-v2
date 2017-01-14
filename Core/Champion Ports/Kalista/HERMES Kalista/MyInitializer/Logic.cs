@@ -8,21 +8,20 @@ using LeagueSharp.Common;
 using HERMES_Kalista.MyUtils;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace HERMES_Kalista.MyInitializer
+using LeagueSharp.Common; 
+namespace HERMES_Kalista.MyInitializer
 {
     public static partial class HERMESLoader
     {
         public static void LoadLogic()
         {
-            MyLogic.Spells.OnLoad();
+            MyLogic.Spells.OnLoad(new EventArgs());
             Game.OnUpdate += MyLogic.Others.SoulboundSaver.OnUpdate;
-            Obj_AI_Base.OnSpellCast += MyLogic.Others.SoulboundSaver.OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += MyLogic.Others.SoulboundSaver.OnProcessSpellCast;
 
             #region Others
-
-            Game.OnUpdate += MyLogic.Others.Events.OnUpdate;
-            Obj_AI_Base.OnSpellCast += MyLogic.Others.Events.OnProcessSpellcast;
+            
+            Obj_AI_Base.OnProcessSpellCast += MyLogic.Others.Events.OnProcessSpellcast;
             Drawing.OnDraw += MyLogic.Others.Events.OnDraw;
             Game.OnUpdate += MyLogic.Others.SkinHack.OnUpdate;
 

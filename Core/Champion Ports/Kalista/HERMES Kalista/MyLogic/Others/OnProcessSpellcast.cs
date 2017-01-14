@@ -9,8 +9,8 @@ using HERMES_Kalista.MyUtils;
 using HERMES_Kalista.Utils;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace HERMES_Kalista.MyLogic.Others
+using LeagueSharp.Common; 
+namespace HERMES_Kalista.MyLogic.Others
 {
     public static partial class Events
     {

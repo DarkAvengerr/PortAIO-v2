@@ -8,8 +8,8 @@ using SharpDX;
 // ReSharper disable InconsistentNaming
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace HERMES_Kalista.MyUtils
+using LeagueSharp.Common; 
+namespace HERMES_Kalista.MyUtils
 {
     public static class Traps
     {

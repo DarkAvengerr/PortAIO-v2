@@ -15,13 +15,13 @@ using TargetSelector = LeagueSharp.Common.TargetSelector;
 using HERMES_Kalista.MyLogic.Others;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace HERMES_Kalista.MyLogic
+using LeagueSharp.Common; 
+namespace HERMES_Kalista.MyLogic
 {
     public static class Spells
     {
         //c+p'd from hellsing
-        public static void OnLoad()
+        public static void OnLoad(EventArgs args)
         {
             Game.OnUpdate += OnUpdate;
             Orbwalking.OnNonKillableMinion += OnNonKillableMinion;
@@ -82,6 +82,21 @@ using EloBuddy;
                                 Program.E.Cast();
                                 return;
                             }
+                            if (Program.ComboMenu.Item("UseE2Tilt").GetValue<bool>())
+                            {
+                                if (ObjectManager.Player.CountEnemiesInRange(300) == 0)
+                                {
+                                    if (
+                                        HeroManager.Enemies.Where(e => !e.HasUndyingBuff() && !e.HasSpellShield())
+                                            .Select(en => en.GetRendBuff())
+                                            .Any(buf => buf != null &&
+                                                        buf.Count >= 1))
+                                        {
+                                            Program.E.Cast();
+                                            return;
+                                        }
+                                }
+                            }
                         }
                     }
                     if (Program.ComboMenu.Item("QCombo").GetValue<bool>() && ObjectManager.Player.ManaPercent > Program.ComboMenu.Item("QMinMana").GetValue<Slider>().Value && Program.Q.IsReady())
@@ -103,7 +118,7 @@ using EloBuddy;
                          MinionManager.GetMinions(1000f).Count(m => m.IsRendKillable()) >
                          Program.LaneClearMenu.Item("LaneclearEMinions").GetValue<Slider>().Value) ||
                         MinionManager.GetMinions(1000f, MinionTypes.All, MinionTeam.Neutral)
-                            .Any(m => m.IsRendKillable()))
+                            .Any(m => m.IsRendKillable()) || (ObjectManager.Player.UnderAllyTurret() && MinionManager.GetMinions(1000f).Any(m => m.IsRendKillable())))
                     {
                         Program.E.Cast();
                     }
@@ -120,7 +135,6 @@ using EloBuddy;
                     }
                     break;
                 default:
-
                     //E poke, slow
                     if ((from enemy in HeroManager.Enemies.Where(e => Program.E.IsInRange(e))
                         let buff = enemy.GetRendBuff()

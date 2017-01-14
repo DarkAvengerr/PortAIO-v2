@@ -3,8 +3,8 @@ using LeagueSharp.Common;
 using HERMES_Kalista.MyUtils;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace HERMES_Kalista
+using LeagueSharp.Common; 
+namespace HERMES_Kalista
 {
     public class Program
     {

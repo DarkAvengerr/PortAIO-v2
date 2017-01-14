@@ -10,7 +10,7 @@ namespace HERMES_Kalista.MyInitializer
     {
         public static void Init()
         {
-            if (ObjectManager.Player.CharData.BaseSkinName == "Kalista")
+            if (ObjectManager.Player.BaseSkinName == "Kalista")
             {
                 MyUtils.Cache.Load();
                 LoadMenu();

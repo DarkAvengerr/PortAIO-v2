@@ -16,7 +16,7 @@
 *   (without him there would be no sharp.)
 *
 *  h3h3, Trees, L33T, blacky, zezzy, xQx,
-*  iJava, Kurisu, Asuna, iMeh,
+*  iJava, ChewyMoon, Kurisu, Asuna, iMeh,
 *  Sebby, Beaving, xcsoft, Sida, jQuery,
 *  legacy, xQx, Kortatu, OutrageousMe
 *        and everyone using this
@@ -38,8 +38,8 @@ using Paths = System.Collections.Generic.List<System.Collections.Generic.List<Cl
 using GamePath = System.Collections.Generic.List<SharpDX.Vector2>;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace HERMES_Kalista.MyUtils
+using LeagueSharp.Common; 
+namespace HERMES_Kalista.MyUtils
 {
     /// <summary>
     /// Class that contains the geometry related methods.

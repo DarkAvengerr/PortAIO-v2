@@ -8,8 +8,8 @@ using LeagueSharp;
 using LeagueSharp.Common;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace HERMES_Kalista.MyLogic.Others
+using LeagueSharp.Common; 
+namespace HERMES_Kalista.MyLogic.Others
 {
     public static class ZezzysPunisher
     {

@@ -9,11 +9,9 @@ using LeagueSharp.Common;
 using SharpDX;
 using SpellSlot = EloBuddy.SpellSlot;
 
-// TILTED
-
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace HERMES_Kalista.MyUtils
+using LeagueSharp.Common; 
+namespace HERMES_Kalista.MyUtils
 {
     public class MActivator
     {
@@ -48,10 +46,10 @@ using EloBuddy;
 
         public MActivator()
         {
-            onLoad();
+            onLoad(new EventArgs());
         }
 
-        private void onLoad()
+        private void onLoad(EventArgs args)
         {
             try
             {
