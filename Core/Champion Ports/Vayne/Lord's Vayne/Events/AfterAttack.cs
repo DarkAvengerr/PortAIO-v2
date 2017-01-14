@@ -83,11 +83,10 @@ namespace Lord_s_Vayne.Events
                 Misc.zzRotCondemn.RotE();
             }
 
-
             if (Program.emenu.Item("UseEaa").GetValue<KeyBind>().Active)
             {
                 Program.E.Cast((Obj_AI_Base)target);
-                Program.emenu.Item("UseEaa").SetValue<KeyBind>(new KeyBind("G".ToCharArray()[0], KeyBindType.Toggle));
+                
             }
 
             //QLogic
@@ -199,6 +198,10 @@ namespace Lord_s_Vayne.Events
                     {
                         QLogic.Hiki.SafePositionQ(htarget);
                         EloBuddy.Player.DoEmote(Emote.Dance);
+                    }
+                    if (value == 8)
+                    {
+                      
                     }
                 }
              }

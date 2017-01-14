@@ -1944,6 +1944,8 @@
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Condemn\Flowers.cs" />
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Condemn\Gosu.cs" />
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Condemn\Lords.cs" />
+    <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Condemn\LordsUtils\HeroExtension.cs" />
+    <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Condemn\LordsUtils\SafePostion.cs" />
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Condemn\Marksman.cs" />
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Condemn\OKTW.cs" />
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Condemn\OLDPRADA.cs" />
@@ -1963,8 +1965,10 @@
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Events\Game_SpellProcess .cs" />
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Events\Interrupter.cs" />
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Events\OnCreates.cs" />
+    <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Events\OnSpellProcess.cs" />
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Events\Play.cs" />
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Misc\CheckTarget.cs" />
+    <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Misc\CondemnFlash.cs" />
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Misc\Distance.cs" />
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Misc\zzRotCondemn.cs" />
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\Program.cs" />
@@ -1972,8 +1976,10 @@
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\QLogic\Cursor.cs" />
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\QLogic\Gosu.cs" />
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\QLogic\Hiki.cs" />
+    <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\QLogic\Lords.cs" />
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\QLogic\Prada.cs" />
     <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\QLogic\QLogic.cs" />
+    <Compile Include="Core\Champion Ports\Vayne\Lord%27s Vayne\QLogic\VHR.cs" />
     <Compile Include="Core\Champion Ports\Vayne\PRADA Vayne Reborn\MyInitializer\Logic.cs" />
     <Compile Include="Core\Champion Ports\Vayne\PRADA Vayne Reborn\MyInitializer\Menu.cs" />
     <Compile Include="Core\Champion Ports\Vayne\PRADA Vayne Reborn\MyInitializer\Notifications.cs" />
