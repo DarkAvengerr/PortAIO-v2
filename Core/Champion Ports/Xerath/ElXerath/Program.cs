@@ -1,6 +1,6 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ElXerath
+using LeagueSharp.Common; 
+namespace ElXerath
 {
     using LeagueSharp.Common;
 
@@ -10,7 +10,7 @@ using EloBuddy;
 
         public static void Main()
         {
-            Xerath.Game_OnGameLoad();
+            Xerath.Game_OnGameLoad(new System.EventArgs());
         }
 
         #endregion

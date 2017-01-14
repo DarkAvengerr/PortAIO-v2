@@ -1,6 +1,6 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ElXerath
+using LeagueSharp.Common; 
+namespace ElXerath
 {
     using System;
 

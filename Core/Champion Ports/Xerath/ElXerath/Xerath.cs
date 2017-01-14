@@ -1,6 +1,6 @@
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace ElXerath
+using LeagueSharp.Common; 
+namespace ElXerath
 {
     using System;
     using System.Collections.Generic;
@@ -80,9 +80,9 @@ using EloBuddy;
 
         #region Public Methods and Operators
 
-        public static void Game_OnGameLoad()
+        public static void Game_OnGameLoad(EventArgs args)
         {
-            if (ObjectManager.Player.CharData.BaseSkinName != "Xerath")
+            if (ObjectManager.Player.BaseSkinName != "Xerath")
             {
                 return;
             }
@@ -263,16 +263,16 @@ using EloBuddy;
                 return;
             }
 
-            var comboQ = ElXerathMenu.Menu.Item("ElXerath.Combo.Q").IsActive();
-            var comboW = ElXerathMenu.Menu.Item("ElXerath.Combo.W").IsActive();
-            var comboE = ElXerathMenu.Menu.Item("ElXerath.Combo.E").IsActive();
-
-            if (comboE && spells[Spells.E].IsReady() && Player.Distance(target) < spells[Spells.E].Range)
+            if (ElXerathMenu.Menu.Item("ElXerath.Combo.E").IsActive() && spells[Spells.E].IsReady() && target.IsValidTarget(spells[Spells.E].Range) && !spells[Spells.Q].IsCharging)
             {
-                spells[Spells.E].Cast(target);
+                var prediction = spells[Spells.E].GetPrediction(target);
+                if (prediction.Hitchance >= HitChance.VeryHigh)
+                {
+                    spells[Spells.E].Cast(target);
+                }
             }
 
-            if (comboW && spells[Spells.W].IsReady())
+            if (ElXerathMenu.Menu.Item("ElXerath.Combo.W").IsActive() && spells[Spells.W].IsReady())
             {
                 var prediction = spells[Spells.W].GetPrediction(target);
                 if (prediction.Hitchance >= HitChance.VeryHigh)
@@ -281,7 +281,7 @@ using EloBuddy;
                 }
             }
 
-            if (comboQ && spells[Spells.Q].IsReady() && target.IsValidTarget(spells[Spells.Q].ChargedMaxRange))
+            if (ElXerathMenu.Menu.Item("ElXerath.Combo.Q").IsActive() && spells[Spells.Q].IsReady() && target.IsValidTarget(spells[Spells.Q].ChargedMaxRange))
             {
                 if (!spells[Spells.Q].IsCharging)
                 {
@@ -301,7 +301,7 @@ using EloBuddy;
             if (Player.Distance(target) <= 600 && IgniteDamage(target) >= target.Health
                 && ElXerathMenu.Menu.Item("ElXerath.Ignite").IsActive())
             {
-                Player.Spellbook.CastSpell(_ignite, target);
+                ObjectManager.Player.Spellbook.CastSpell(_ignite, target);
             }
         }
 
@@ -369,7 +369,7 @@ using EloBuddy;
 
         private static float IgniteDamage(Obj_AI_Base target)
         {
-            if (_ignite == SpellSlot.Unknown || Player.Spellbook.CanUseSpell(_ignite) != SpellState.Ready)
+            if (_ignite == SpellSlot.Unknown || ObjectManager.Player.Spellbook.CanUseSpell(_ignite) != SpellState.Ready)
             {
                 return 0f;
             }
