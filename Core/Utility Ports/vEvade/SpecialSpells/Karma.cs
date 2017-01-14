@@ -1,10 +1,8 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace vEvade.SpecialSpells
+namespace vEvade.SpecialSpells
 {
     #region
-
-    using System.Linq;
 
     using LeagueSharp;
 
@@ -33,28 +31,32 @@ using LeagueSharp.Common;
             }
 
             init = true;
-            SpellDetector.OnCreateSpell += KarmaQ;
+            SpellDetector.OnProcessSpell += KarmaQ;
         }
 
         #endregion
 
         #region Methods
 
-        private static void KarmaQ(Obj_AI_Base sender, MissileClient missile, SpellData data, SpellArgs spellArgs)
+        private static void KarmaQ(
+            Obj_AI_Base sender,
+            GameObjectProcessSpellCastEventArgs args,
+            SpellData data,
+            SpellArgs spellArgs)
         {
-            if (data.MenuName != "KarmaQMantra")
+            if (data.MenuName != "KarmaQ" || !sender.HasBuff("KarmaMantra"))
             {
                 return;
             }
 
-            var spell =
-                Evade.DetectedSpells.Values.FirstOrDefault(
-                    i => i.Data.MenuName == "KarmaQ" && i.Unit.NetworkId == sender.NetworkId);
+            SpellData mantraData;
 
-            if (spell != null)
+            if (Evade.OnProcessSpells.TryGetValue("KarmaQMantra", out mantraData))
             {
-                Evade.DetectedSpells.Remove(spell.SpellId);
+                SpellDetector.AddSpell(sender, sender.ServerPosition, args.End, mantraData);
             }
+
+            spellArgs.NoProcess = true;
         }
 
         #endregion

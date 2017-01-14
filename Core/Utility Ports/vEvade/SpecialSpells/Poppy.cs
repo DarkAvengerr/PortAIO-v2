@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace vEvade.SpecialSpells
+namespace vEvade.SpecialSpells
 {
     #region
 
@@ -9,6 +9,7 @@ using LeagueSharp.Common;
     using LeagueSharp;
 
     using vEvade.Core;
+    using vEvade.Helpers;
     using vEvade.Spells;
 
     using SpellData = vEvade.Spells.SpellData;
@@ -66,7 +67,7 @@ using LeagueSharp.Common;
 
             var spell =
                 Evade.DetectedSpells.Values.FirstOrDefault(
-                    i => i.Data.MenuName == data.MenuName && i.Unit.NetworkId == sender.NetworkId);
+                    i => i.Data.MenuName == data.MenuName && i.Unit.CompareId(sender));
 
             if (spell != null)
             {

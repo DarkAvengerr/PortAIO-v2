@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace vEvade.Spells
+namespace vEvade.Spells
 {
     #region
 
@@ -36,6 +36,27 @@ using LeagueSharp.Common;
         {
             this.IsSafe = isSafe;
             this.Intersect = intersect;
+        }
+
+        #endregion
+    }
+
+    public struct SafePoint
+    {
+        #region Fields
+
+        public bool IsSafe;
+
+        public List<SpellInstance> Spells;
+
+        #endregion
+
+        #region Constructors and Destructors
+
+        public SafePoint(List<SpellInstance> spells)
+        {
+            this.Spells = spells;
+            this.IsSafe = this.Spells.Count == 0;
         }
 
         #endregion
@@ -88,9 +109,9 @@ using LeagueSharp.Common;
 
         public int EndTick;
 
-        public Geometry.Polygon EvadePolygon;
-
         public bool ForceDisabled;
+
+        public bool IsFromFoW;
 
         public Polygons.Line Line;
 
@@ -101,6 +122,8 @@ using LeagueSharp.Common;
         public Geometry.Polygon PathFindingOuterPolygon;
 
         public Geometry.Polygon Polygon;
+
+        public Vector2 PredEnd;
 
         public Polygons.Ring Ring;
 
@@ -123,8 +146,6 @@ using LeagueSharp.Common;
         private int cachedValueTick;
 
         private int lastCalcColTick;
-
-        private Vector2 predEnd;
 
         private int radius;
 
@@ -195,8 +216,7 @@ using LeagueSharp.Common;
 
                 this.cachedValueTick = Utils.GameTimeTickCount;
 
-                if (!this.GetValue<bool>("IsDangerous")
-                    && Configs.Menu.Item("DodgeDangerous").GetValue<KeyBind>().Active)
+                if (Configs.DodgeDangerous && !this.GetValue<bool>("IsDangerous"))
                 {
                     this.cachedValue = false;
 
@@ -211,22 +231,25 @@ using LeagueSharp.Common;
                     {
                         case SpellType.Line:
                         case SpellType.MissileLine:
-                            this.cachedValue = Configs.Menu.Item("DodgeLine").GetValue<bool>();
+                            this.cachedValue = Configs.DodgeLine;
                             break;
                         case SpellType.Cone:
                         case SpellType.MissileCone:
-                            this.cachedValue = Configs.Menu.Item("DodgeCone").GetValue<bool>();
+                            this.cachedValue = Configs.DodgeCone;
                             break;
                         case SpellType.Circle:
-                            this.cachedValue =
-                                Configs.Menu.Item(
-                                    "Dodge" + (!string.IsNullOrEmpty(this.Data.TrapName) ? "Trap" : "Circle"))
-                                    .GetValue<bool>();
+                            this.cachedValue = !string.IsNullOrEmpty(this.Data.TrapName)
+                                                   ? Configs.DodgeTrap
+                                                   : Configs.DodgeCircle;
                             break;
                     }
 
-                    if (Configs.Menu.Item("CheckHp").GetValue<bool>()
-                        && ObjectManager.Player.HealthPercent >= this.GetValue<Slider>("IgnoreHp").Value)
+                    if (Configs.CheckHp)
+                    {
+                        this.cachedValue = ObjectManager.Player.HealthPercent <= this.GetValue<Slider>("IgnoreHp").Value;
+                    }
+
+                    if (this.IsFromFoW && Configs.DodgeFoW == 1)
                     {
                         this.cachedValue = false;
                     }
@@ -255,7 +278,7 @@ using LeagueSharp.Common;
         private int GetRadius
             =>
                 this.Type == SpellType.Circle && (this.Data.HasStartExplosion || this.Data.HasEndExplosion)
-                    ? this.Data.RadiusEx
+                    ? this.Data.RadiusEx + (int)ObjectManager.Player.BoundingRadius
                     : this.Data.Radius;
 
         private bool IsGlobal => this.Data.RawRange == 25000;
@@ -264,9 +287,9 @@ using LeagueSharp.Common;
         {
             get
             {
-                if (this.predEnd.IsValid())
+                if (this.PredEnd.IsValid())
                 {
-                    return this.predEnd;
+                    return this.PredEnd;
                 }
 
                 if (this.IsGlobal)
@@ -298,11 +321,12 @@ using LeagueSharp.Common;
                 Render.Circle.DrawCircle(this.Start.To3D(), this.Data.Range, Color.White);
             }
 
-            if (this.Type == SpellType.MissileLine
-                && (!Configs.Debug
-                    || (this.MissileObject != null && this.MissileObject.IsValid && this.MissileObject.IsVisible)))
+            if (this.Type == SpellType.MissileLine)
             {
-                var pos = !Configs.Debug ? this.GetMissilePosition(0) : this.MissileObject.Position.To2D();
+                var pos = Configs.Debug && this.MissileObject != null && this.MissileObject.IsValid
+                          && this.MissileObject.IsVisible
+                              ? this.MissileObject.Position.To2D()
+                              : this.GetMissilePosition(0);
                 Util.DrawLine(
                     pos + this.Radius * this.Direction.Perpendicular(),
                     pos - this.Radius * this.Direction.Perpendicular(),
@@ -358,32 +382,22 @@ using LeagueSharp.Common;
 
         public bool IsAboutToHit(int time, Obj_AI_Base unit)
         {
+            if (this.IsSafePoint(unit.ServerPosition.To2D()))
+            {
+                return false;
+            }
+
             if (this.Type == SpellType.MissileLine)
             {
                 return unit.ServerPosition.To2D()
                            .Distance(this.GetMissilePosition(0), this.GetMissilePosition(time), true) < this.Radius;
             }
 
-            if (this.IsSafe(unit.ServerPosition.To2D()))
-            {
-                return false;
-            }
-
             return this.Data.ExtraDuration + (this.EndTick - this.StartTick)
                    - (Utils.GameTimeTickCount - this.StartTick) <= time;
         }
 
-        public bool IsDanger(Vector2 pos)
-        {
-            return !this.IsSafe(pos);
-        }
-
-        public bool IsSafe(Vector2 pos)
-        {
-            return this.Polygon.IsOutside(pos);
-        }
-
-        public SafePath IsSafePath(List<Vector2> paths, int time, int speed = -1, int delay = 0)
+        public SafePath IsSafePath(List<Vector2> paths, int time, int speed, int delay)
         {
             var dist = 0f;
             time += Game.Ping / 2;
@@ -396,29 +410,41 @@ using LeagueSharp.Common;
                 var to = paths[i + 1];
                 var segments = new List<Intersects>();
 
-                for (var j = 0; j <= this.Polygon.Points.Count - 1; j++)
+                /*if (this.Type == SpellType.Circle)
                 {
-                    var inter = from.Intersection(
-                        to,
-                        this.Polygon.Points[j],
-                        this.Polygon.Points[j == this.Polygon.Points.Count - 1 ? 0 : j + 1]);
-
-                    if (!inter.Intersects)
+                    foreach (var inter in this.Circle.Center.GetIntersectPointsLineCircle(this.Circle.Radius, from, to))
                     {
-                        continue;
+                        var d = inter.Distance(from);
+                        segments.Add(new Intersects(d, (int)(d / speed * 1000), inter, from));
+                    }
+                }
+                else*/
+                {
+                    for (var j = 0; j <= this.Polygon.Points.Count - 1; j++)
+                    {
+                        var inter = from.Intersection(
+                            to,
+                            this.Polygon.Points[j],
+                            this.Polygon.Points[j == this.Polygon.Points.Count - 1 ? 0 : j + 1]);
+
+                        if (!inter.Intersects)
+                        {
+                            continue;
+                        }
+
+                        var d = dist + inter.Point.Distance(from);
+                        segments.Add(new Intersects(d, (int)(d / speed * 1000), inter.Point, from));
                     }
 
-                    var d = dist + inter.Point.Distance(from);
-                    segments.Add(new Intersects(d, (int)(d / speed * 1000), inter.Point, from));
+                    dist += from.Distance(to);
                 }
 
                 intersects.AddRange(segments.OrderBy(a => a.Distance));
-                dist += from.Distance(to);
             }
 
             if (this.Type == SpellType.MissileLine || this.Type == SpellType.MissileCone || this.Type == SpellType.Arc)
             {
-                if (this.IsSafe(Evade.PlayerPosition))
+                if (this.IsSafePoint(Evade.PlayerPosition))
                 {
                     if (intersects.Count == 0)
                     {
@@ -474,44 +500,42 @@ using LeagueSharp.Common;
                 }
             }
 
-            if (this.IsSafe(Evade.PlayerPosition))
+            if (intersects.Count == 0)
             {
-                if (intersects.Count == 0)
-                {
-                    return new SafePath(true, new Intersects());
-                }
-
-                if (this.Data.DontCross)
-                {
-                    return new SafePath(false, intersects[0]);
-                }
+                return new SafePath(this.IsSafePoint(Evade.PlayerPosition), new Intersects());
             }
-            else if (intersects.Count == 0)
+
+            if (this.Data.DontCross && this.IsSafePoint(Evade.PlayerPosition))
             {
-                return new SafePath(false, new Intersects());
+                return new SafePath(false, intersects[0]);
             }
 
             var endT = (this.Data.DontAddExtraDuration ? 0 : this.Data.ExtraDuration) + (this.EndTick - this.StartTick)
                        - (Utils.GameTimeTickCount - this.StartTick);
 
-            return !this.IsSafe(paths.PositionAfter(endT, speed, delay))
+            return !this.IsSafePoint(paths.PositionAfter(endT, speed, delay))
                        ? new SafePath(false, intersects[0])
-                       : new SafePath(this.IsSafe(paths.PositionAfter(endT, speed, time)), intersects[0]);
+                       : new SafePath(this.IsSafePoint(paths.PositionAfter(endT, speed, time)), intersects[0]);
         }
 
-        public bool IsSafeToBlink(Vector2 point, int time, int delay = 0)
+        public bool IsSafePoint(Vector2 pos)
+        {
+            return this.Polygon.IsOutside(pos);
+        }
+
+        public bool IsSafeToBlink(Vector2 point, int time, int delay)
         {
             time /= 2;
 
-            if (this.IsSafe(Evade.PlayerPosition))
+            if (this.IsSafePoint(point))
             {
                 return true;
             }
 
             if (this.Type == SpellType.MissileLine)
             {
-                return this.GetMissilePosition(delay + time).Distance(this.End)
-                       >= Evade.PlayerPosition.ProjectOn(this.Start, this.End).SegmentPoint.Distance(this.End);
+                return point.Distance(this.GetMissilePosition(0), this.GetMissilePosition(delay + time), true)
+                       < this.Radius;
             }
 
             return this.Data.ExtraDuration + (this.EndTick - this.StartTick)
@@ -522,16 +546,15 @@ using LeagueSharp.Common;
         {
             if (this.Data.CollisionObjects != null && this.Data.CollisionObjects.Length > 0)
             {
-                if (Utils.GameTimeTickCount - this.lastCalcColTick > 50
-                    && Configs.Menu.Item("CheckCollision").GetValue<bool>())
+                if (Utils.GameTimeTickCount - this.lastCalcColTick > 50 && Configs.CheckCollision)
                 {
                     this.lastCalcColTick = Utils.GameTimeTickCount;
-                    this.predEnd = Collisions.GetCollision(this);
+                    this.PredEnd = Collisions.GetCollision(this);
                 }
             }
-            else if (this.predEnd.IsValid())
+            else if (this.PredEnd.IsValid())
             {
-                this.predEnd = Vector2.Zero;
+                this.PredEnd = Vector2.Zero;
             }
 
             if (this.Type == SpellType.Line || this.Type == SpellType.MissileLine)
@@ -616,7 +639,6 @@ using LeagueSharp.Common;
                     this.DrawPolygon = this.Line.ToPolygon(
                         0,
                         this.Radius - (!this.Data.AddHitbox ? 0 : ObjectManager.Player.BoundingRadius));
-                    this.EvadePolygon = this.Line.ToPolygon(Configs.ExtraEvadeDistance);
                     this.PathFindingOuterPolygon = this.Line.ToPolygon(Configs.PathFindingOuterDistance);
                     this.PathFindingInnerPolygon = this.Line.ToPolygon(Configs.PathFindingInnerDistance);
                     break;
@@ -624,30 +646,33 @@ using LeagueSharp.Common;
                 case SpellType.MissileCone:
                     this.Polygon = this.Cone.ToPolygon();
                     this.DrawPolygon = this.Polygon;
-                    this.EvadePolygon = this.Cone.ToPolygon(Configs.ExtraEvadeDistance);
                     this.PathFindingOuterPolygon = this.Cone.ToPolygon(Configs.PathFindingOuterDistance);
                     this.PathFindingInnerPolygon = this.Cone.ToPolygon(Configs.PathFindingInnerDistance);
                     break;
                 case SpellType.Circle:
                     this.Polygon = this.Circle.ToPolygon();
-                    this.DrawPolygon = this.Circle.ToPolygon(
-                        0,
-                        this.Radius - (!this.Data.AddHitbox ? 0 : ObjectManager.Player.BoundingRadius));
-                    this.EvadePolygon = this.Circle.ToPolygon(Configs.ExtraEvadeDistance);
+                    if (this.Data.HasStartExplosion || this.Data.HasEndExplosion)
+                    {
+                        this.DrawPolygon = this.Circle.ToPolygon(0, this.Radius - ObjectManager.Player.BoundingRadius);
+                    }
+                    else
+                    {
+                        this.DrawPolygon = this.Circle.ToPolygon(
+                            0,
+                            this.Radius - (!this.Data.AddHitbox ? 0 : ObjectManager.Player.BoundingRadius));
+                    }
                     this.PathFindingOuterPolygon = this.Circle.ToPolygon(Configs.PathFindingOuterDistance);
                     this.PathFindingInnerPolygon = this.Circle.ToPolygon(Configs.PathFindingInnerDistance);
                     break;
                 case SpellType.Ring:
                     this.Polygon = this.Ring.ToPolygon();
                     this.DrawPolygon = this.Polygon;
-                    this.EvadePolygon = this.Ring.ToPolygon(Configs.ExtraEvadeDistance);
                     this.PathFindingOuterPolygon = this.Ring.ToPolygon(Configs.PathFindingOuterDistance);
                     this.PathFindingInnerPolygon = this.Ring.ToPolygon(Configs.PathFindingInnerDistance);
                     break;
                 case SpellType.Arc:
                     this.Polygon = this.Arc.ToPolygon();
                     this.DrawPolygon = this.Polygon;
-                    this.EvadePolygon = this.Arc.ToPolygon(Configs.ExtraEvadeDistance);
                     this.PathFindingOuterPolygon = this.Arc.ToPolygon(Configs.PathFindingOuterDistance);
                     this.PathFindingInnerPolygon = this.Arc.ToPolygon(Configs.PathFindingInnerDistance);
                     break;

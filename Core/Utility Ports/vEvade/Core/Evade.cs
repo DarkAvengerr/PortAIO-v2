@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace vEvade.Core
+namespace vEvade.Core
 {
     #region
 
@@ -33,11 +33,13 @@ using LeagueSharp.Common;
 
         public static readonly Dictionary<string, SpellData> OnTrapSpells = new Dictionary<string, SpellData>();
 
-        public static SpellList<int, SpellInstance> DetectedSpells = new SpellList<int, SpellInstance>();
+        public static Dictionary<int, SpellInstance> DetectedSpells = new Dictionary<int, SpellInstance>();
 
         public static int LastWardJumpTick;
 
         public static Vector2 PlayerPosition;
+
+        public static List<SpellInstance> Spells = new List<SpellInstance>();
 
         private static Vector2 evadePoint1, evadePoint2;
 
@@ -87,65 +89,22 @@ using LeagueSharp.Common;
                 unit = ObjectManager.Player;
             }
 
-            return DetectedSpells.Values.Where(i => i.Enable).Any(i => i.IsAboutToHit(time, unit));
-        }
-
-        public static SafePath IsSafePath(List<Vector2> path, int time, int speed = -1, int delay = 0)
-        {
-            var isSafe = true;
-            var intersects = new List<Intersects>();
-
-            foreach (var spell in DetectedSpells.Values.Where(i => i.Enable))
-            {
-                var checkPath = spell.IsSafePath(path, time, speed, delay);
-                isSafe = isSafe && checkPath.IsSafe;
-
-                if (checkPath.Intersect.Valid)
-                {
-                    intersects.Add(checkPath.Intersect);
-                }
-            }
-
-            if (!isSafe)
-            {
-                var intersect = intersects.MinOrDefault(i => i.Distance);
-
-                return new SafePath(false, intersect.Valid ? intersect : new Intersects());
-            }
-
-            return new SafePath(true, new Intersects());
-        }
-
-        public static SafePoint IsSafePoint(Vector2 pos)
-        {
-            var result = new SafePoint { Spells = new List<SpellInstance>() };
-
-            foreach (var spell in DetectedSpells.Values.Where(i => i.Enable && i.IsDanger(pos)))
-            {
-                result.Spells.Add(spell);
-            }
-
-            result.IsSafe = result.Spells.Count == 0;
-
-            return result;
-        }
-
-        public static bool IsSafeToBlink(Vector2 pos, int time, int delay)
-        {
-            return DetectedSpells.Values.Where(i => i.Enable).All(i => i.IsSafeToBlink(pos, time, delay));
+            return Spells.Any(i => i.IsAboutToHit(time, unit));
         }
 
         public static void OnGameLoad(EventArgs args)
         {
-            DetectedSpells.OnAdd += (sender, eventArgs) => { Evading = false; };
+            Chat.Print("vEvade => Bye bye everyone! Nice to meet you guys <3");
+            Util.CheckVersion();
             Configs.CreateMenu();
+            new SpellDetector();
             Game.OnUpdate += OnUpdate;
             EloBuddy.Player.OnIssueOrder += OnIssueOrder;
             Spellbook.OnCastSpell += OnCastSpell;
             Drawing.OnDraw += OnDraw;
             CustomEvents.Unit.OnDash += OnDash;
             Orbwalking.BeforeAttack += BeforeAttack;
-            Spellbook.OnStopCast += OnStopCast;
+            //Spellbook.OnStopCast += OnStopCast;
             Collisions.Init();
         }
 
@@ -158,33 +117,6 @@ using LeagueSharp.Common;
             if (Evading)
             {
                 args.Process = false;
-            }
-        }
-
-        private static void CheckEndSpell()
-        {
-            foreach (var spell in DetectedSpells.Values)
-            {
-                if (spell.Data.IsDash && Utils.GameTimeTickCount - spell.StartTick > spell.Data.Delay + 100
-                    && !spell.Unit.IsDashing())
-                {
-                    LeagueSharp.Common.Utility.DelayAction.Add(50, () => DetectedSpells.Remove(spell.SpellId));
-                }
-
-                if (spell.TrapObject != null && spell.TrapObject.IsDead)
-                {
-                    LeagueSharp.Common.Utility.DelayAction.Add(1, () => DetectedSpells.Remove(spell.SpellId));
-                }
-
-                if (spell.EndTick + spell.Data.ExtraDuration <= Utils.GameTimeTickCount)
-                {
-                    LeagueSharp.Common.Utility.DelayAction.Add(1, () => DetectedSpells.Remove(spell.SpellId));
-
-                    if (Configs.Debug)
-                    {
-                        Console.WriteLine($"=> D: {spell.SpellId} | {Utils.GameTimeTickCount}");
-                    }
-                }
             }
         }
 
@@ -205,7 +137,7 @@ using LeagueSharp.Common;
                 return;
             }
 
-            var blockLvl = Configs.Menu.Item("CheckBlock").GetValue<StringList>().SelectedIndex;
+            var blockLvl = Configs.CheckBlock;
 
             if (blockLvl == 0)
             {
@@ -214,7 +146,7 @@ using LeagueSharp.Common;
 
             var isDangerous = false;
 
-            foreach (var spell in DetectedSpells.Values.Where(i => i.Enable && i.IsDanger(PlayerPosition)))
+            foreach (var spell in Spells.Where(i => !i.IsSafePoint(PlayerPosition)))
             {
                 isDangerous = spell.GetValue<bool>("IsDangerous");
 
@@ -255,24 +187,20 @@ using LeagueSharp.Common;
                 return;
             }
 
-            if (Configs.Menu.Item("DrawStatus").GetValue<bool>())
+            if (Configs.DrawStatus)
             {
                 var pos = Drawing.WorldToScreen(ObjectManager.Player.Position);
-                var text = "vEvade: " + (Configs.Menu.Item("Enabled").GetValue<KeyBind>().Active ? "On" : "Off");
+                var text = "vEvade: " + (Configs.Enabled ? "On" : "Off");
                 Drawing.DrawText(
                     pos.X - Drawing.GetTextEntent((text), 15).Width / 2f,
                     pos.Y,
                     text.EndsWith("On")
-                        ? (Evading
-                               ? Color.Red
-                               : (Configs.Menu.Item("DodgeDangerous").GetValue<KeyBind>().Active
-                                      ? Color.Yellow
-                                      : Color.White))
+                        ? (Evading ? Color.Red : (Configs.DodgeDangerous ? Color.Yellow : Color.White))
                         : Color.Gray,
                     text);
             }
 
-            if (Configs.Menu.Item("DrawSpells").GetValue<bool>())
+            if (Configs.DrawSpells)
             {
                 foreach (var spell in DetectedSpells.Values)
                 {
@@ -322,15 +250,15 @@ using LeagueSharp.Common;
                 return;
             }
 
-            if (!Configs.Menu.Item("Enabled").GetValue<KeyBind>().Active
-                || !EvadeSpellDatabase.Spells.Any(i => i.MenuName == "Walking" && i.Enabled) || Util.ShieldCheck)
+            if (!Configs.Enabled || !EvadeSpellDatabase.Spells.Any(i => i.MenuName == "Walking" && i.Enabled)
+                || Util.ShieldCheck)
             {
                 return;
             }
 
             var paths = ObjectManager.Player.GetPath(args.TargetPosition).ToList().To2D();
 
-            if (Evading || !IsSafePoint(PlayerPosition).IsSafe)
+            if (Evading || !PlayerPosition.IsPointSafe().IsSafe)
             {
                 if (args.Order == GameObjectOrder.MoveTo)
                 {
@@ -338,19 +266,19 @@ using LeagueSharp.Common;
 
                     if (Evading && Utils.GameTimeTickCount - lastEvadePointChangeTick > Configs.EvadePointChangeTime)
                     {
-                        var points = Evader.GetEvadePoints(-1, 0, false, true);
+                        var point = Evader.GetBestPointBlock(args.TargetPosition.To2D());
 
-                        if (points.Count > 0)
+                        if (point.IsValid())
                         {
-                            evadePoint1 = args.TargetPosition.To2D().Closest(points);
+                            evadePoint1 = point;
                             Evading = true;
                             willMove = true;
                             lastEvadePointChangeTick = Utils.GameTimeTickCount;
                         }
                     }
 
-                    if (IsSafePath(paths, Configs.EvadingRouteChangeTime).IsSafe
-                        && IsSafePoint(paths[paths.Count - 1]).IsSafe)
+                    if (paths.IsPathSafe(Configs.EvadingRouteChangeTime).IsSafe
+                        && paths[paths.Count - 1].IsPointSafe().IsSafe)
                     {
                         evadePoint1 = paths[paths.Count - 1];
                         Evading = true;
@@ -368,7 +296,7 @@ using LeagueSharp.Common;
                 return;
             }
 
-            var checkPath = IsSafePath(paths, Configs.CrossingTime);
+            var checkPath = paths.IsPathSafe(Configs.CrossingTime);
 
             if (checkPath.IsSafe)
             {
@@ -417,7 +345,7 @@ using LeagueSharp.Common;
                 DetectedSpells.Values.Where(
                     i =>
                     i.MissileObject == null && i.ToggleObject == null && i.TrapObject == null
-                    && i.Unit.NetworkId == caster.NetworkId))
+                    && i.Unit.CompareId(caster)))
             {
                 LeagueSharp.Common.Utility.DelayAction.Add(1, () => DetectedSpells.Remove(spell.SpellId));
 
@@ -439,14 +367,9 @@ using LeagueSharp.Common;
             }
 
             prevPos = PlayerPosition;
-            CheckEndSpell();
+            UpdateSpells();
 
-            foreach (var spell in DetectedSpells.Values)
-            {
-                spell.OnUpdate();
-            }
-
-            if (!Configs.Menu.Item("Enabled").GetValue<KeyBind>().Active || Util.CommonCheck)
+            if (!Configs.Enabled || Util.CommonCheck)
             {
                 Evading = false;
                 evadePoint2 = Vector2.Zero;
@@ -467,7 +390,7 @@ using LeagueSharp.Common;
                     !i.IsMe && i.IsValidTarget(1000, false)
                     && Configs.Menu.Item("SA_" + i.ChampionName).GetValue<bool>()))
             {
-                var checkSafe = IsSafePoint(ally.ServerPosition.To2D());
+                var checkSafe = ally.ServerPosition.To2D().IsPointSafe();
 
                 if (checkSafe.IsSafe)
                 {
@@ -488,13 +411,13 @@ using LeagueSharp.Common;
             }
 
             var curPaths = ObjectManager.Player.Path.ToList().To2D();
-            var checkPos = IsSafePoint(PlayerPosition);
-            var checkPath = IsSafePath(curPaths, 100);
+            var checkPos = PlayerPosition.IsPointSafe();
+            var checkPath = curPaths.IsPathSafe(100);
             haveSolution = false;
 
             if (Evading)
             {
-                if (IsSafePoint(evadePoint1).IsSafe)
+                if (evadePoint1.IsPointSafe().IsSafe)
                 {
                     if (checkPos.IsSafe)
                     {
@@ -544,7 +467,7 @@ using LeagueSharp.Common;
 
             var paths = ObjectManager.Player.GetPath(evadePoint2.To3D()).ToList().To2D();
 
-            if (IsSafePath(paths, 100).IsSafe)
+            if (paths.IsPathSafe(100).IsSafe)
             {
                 if (evadePoint2.Distance(PlayerPosition) > 75)
                 {
@@ -560,7 +483,7 @@ using LeagueSharp.Common;
             {
                 if (!checkPath.Intersect.Valid && curPaths.Count <= 1)
                 {
-                    checkPath = IsSafePath(paths, 100);
+                    checkPath = paths.IsPathSafe(100);
                 }
 
                 if (checkPath.Intersect.Valid && checkPath.Intersect.Point.Distance(PlayerPosition) > 75)
@@ -583,19 +506,14 @@ using LeagueSharp.Common;
             {
                 if (evadeSpell.MenuName == "Walking")
                 {
-                    var points = Evader.GetEvadePoints();
+                    var point = Evader.GetBestPoint(to);
 
-                    if (points.Count > 0)
+                    if (point.IsValid())
                     {
-                        evadePoint1 = to.Closest(points);
+                        evadePoint1 = point;
                         var pos = evadePoint1.Extend(PlayerPosition, -100);
 
-                        if (
-                            IsSafePath(
-                                ObjectManager.Player.GetPath(pos.To3D()).ToList().To2D(),
-                                Configs.EvadingSecondTime,
-                                -1,
-                                100).IsSafe)
+                        if (pos.IsPathSafe(Configs.EvadingSecondTime, -1, 100).IsSafe)
                         {
                             evadePoint1 = pos;
                         }
@@ -622,11 +540,11 @@ using LeagueSharp.Common;
 
                     if (evadeSpell.IsMovementSpeedBuff)
                     {
-                        var points = Evader.GetEvadePoints((int)evadeSpell.MoveSpeedTotalAmount(), evadeSpell.Delay);
+                        var point = Evader.GetBestPoint(to, (int)evadeSpell.MoveSpeedTotalAmount(), evadeSpell.Delay);
 
-                        if (points.Count > 0)
+                        if (point.IsValid())
                         {
-                            evadePoint1 = to.Closest(points);
+                            evadePoint1 = point;
                             Evading = true;
                             ObjectManager.Player.Spellbook.CastSpell(evadeSpell.Slot, ObjectManager.Player);
 
@@ -638,7 +556,7 @@ using LeagueSharp.Common;
                     {
                         if (evadeSpell.IsTargetted)
                         {
-                            var targets = Evader.GetEvadeTargets(
+                            /*var targets = Evader.GetEvadeTargets(
                                 evadeSpell.ValidTargets,
                                 evadeSpell.Speed,
                                 evadeSpell.Delay,
@@ -647,6 +565,16 @@ using LeagueSharp.Common;
                             if (targets.Count > 0)
                             {
                                 var target = targets.MinOrDefault(i => i.Distance(to));
+                                evadePoint1 = target.ServerPosition.To2D();
+                                Evading = true;
+                                ObjectManager.Player.Spellbook.CastSpell(evadeSpell.Slot, target);
+
+                                return;
+                            }*/
+                            var target = Evader.GetBestTarget(to, evadeSpell);
+
+                            if (target != null)
+                            {
                                 evadePoint1 = target.ServerPosition.To2D();
                                 Evading = true;
                                 ObjectManager.Player.Spellbook.CastSpell(evadeSpell.Slot, target);
@@ -668,7 +596,7 @@ using LeagueSharp.Common;
 
                                 if (ward != null)
                                 {
-                                    var points = Evader.GetEvadePoints(evadeSpell.Speed, evadeSpell.Delay);
+                                    /*var points = Evader.GetEvadePoints(evadeSpell.Speed, evadeSpell.Delay);
                                     points.RemoveAll(i => i.Distance(PlayerPosition) > 600);
 
                                     if (points.Count > 0)
@@ -692,13 +620,23 @@ using LeagueSharp.Common;
                                         haveSolution = true;
 
                                         return;
+                                    }*/
+                                    var point = Evader.GetBestPointDash(to, evadeSpell.Speed, evadeSpell.Delay, 600);
+
+                                    if (point.IsValid())
+                                    {
+                                        ObjectManager.Player.Spellbook.CastSpell(ward.SpellSlot, point.To3D());
+                                        LastWardJumpTick = Utils.GameTimeTickCount;
+                                        haveSolution = true;
+
+                                        return;
                                     }
                                 }
                             }
                         }
                         else
                         {
-                            var points = Evader.GetEvadePoints(evadeSpell.Speed, evadeSpell.Delay);
+                            /*var points = Evader.GetEvadePoints(evadeSpell.Speed, evadeSpell.Delay);
                             points.RemoveAll(i => i.Distance(PlayerPosition) > evadeSpell.MaxRange);
 
                             if (evadeSpell.FixedRange)
@@ -761,6 +699,44 @@ using LeagueSharp.Common;
                                 }
 
                                 return;
+                            }*/
+                            var point = Evader.GetBestPointDash(
+                                to,
+                                evadeSpell.Speed,
+                                evadeSpell.Delay,
+                                evadeSpell.MaxRange,
+                                evadeSpell.FixedRange);
+
+                            if (point.IsValid())
+                            {
+                                evadePoint1 = point;
+                                Evading = true;
+
+                                if (!evadeSpell.Invert)
+                                {
+                                    if (evadeSpell.RequiresPreMove)
+                                    {
+                                        evadePoint1.Move();
+                                        LeagueSharp.Common.Utility.DelayAction.Add(
+                                            Game.Ping / 2 + 100,
+                                            () =>
+                                            ObjectManager.Player.Spellbook.CastSpell(
+                                                evadeSpell.Slot,
+                                                evadePoint1.To3D()));
+                                    }
+                                    else
+                                    {
+                                        ObjectManager.Player.Spellbook.CastSpell(evadeSpell.Slot, evadePoint1.To3D());
+                                    }
+                                }
+                                else
+                                {
+                                    ObjectManager.Player.Spellbook.CastSpell(
+                                        evadeSpell.Slot,
+                                        (PlayerPosition - (evadePoint1 - PlayerPosition)).To3D());
+                                }
+
+                                return;
                             }
                         }
                     }
@@ -769,7 +745,7 @@ using LeagueSharp.Common;
                     {
                         if (evadeSpell.IsTargetted)
                         {
-                            var targets = Evader.GetEvadeTargets(
+                            /*var targets = Evader.GetEvadeTargets(
                                 evadeSpell.ValidTargets,
                                 0,
                                 evadeSpell.Delay,
@@ -781,6 +757,21 @@ using LeagueSharp.Common;
                                 if (IsAboutToHit(evadeSpell.Delay))
                                 {
                                     var target = targets.MinOrDefault(i => i.Distance(to));
+                                    evadePoint1 = target.ServerPosition.To2D();
+                                    Evading = true;
+                                    ObjectManager.Player.Spellbook.CastSpell(evadeSpell.Slot, target);
+                                }
+
+                                haveSolution = true;
+
+                                return;
+                            }*/
+                            var target = Evader.GetBestTarget(to, evadeSpell);
+
+                            if (target != null)
+                            {
+                                if (IsAboutToHit(evadeSpell.Delay))
+                                {
                                     evadePoint1 = target.ServerPosition.To2D();
                                     Evading = true;
                                     ObjectManager.Player.Spellbook.CastSpell(evadeSpell.Slot, target);
@@ -805,7 +796,7 @@ using LeagueSharp.Common;
 
                                 if (ward != null)
                                 {
-                                    var points = Evader.GetEvadePoints(0, evadeSpell.Delay, true);
+                                    /*var points = Evader.GetEvadePoints(0, evadeSpell.Delay, true);
                                     points.RemoveAll(i => i.Distance(PlayerPosition) > 600);
 
                                     if (points.Count > 0)
@@ -829,13 +820,23 @@ using LeagueSharp.Common;
                                         haveSolution = true;
 
                                         return;
+                                    }*/
+                                    var point = Evader.GetBestPointBlink(to, evadeSpell.Delay, 600);
+
+                                    if (point.IsValid())
+                                    {
+                                        ObjectManager.Player.Spellbook.CastSpell(ward.SpellSlot, point.To3D());
+                                        LastWardJumpTick = Utils.GameTimeTickCount;
+                                        haveSolution = true;
+
+                                        return;
                                     }
                                 }
                             }
                         }
                         else
                         {
-                            var points = Evader.GetEvadePoints(0, evadeSpell.Delay, true);
+                            /*var points = Evader.GetEvadePoints(0, evadeSpell.Delay, true);
                             points.RemoveAll(i => i.Distance(PlayerPosition) > evadeSpell.MaxRange);
 
                             if (points.Count > 0)
@@ -862,6 +863,21 @@ using LeagueSharp.Common;
                                 haveSolution = true;
 
                                 return;
+                            }*/
+                            var point = Evader.GetBestPointBlink(to, evadeSpell.Delay, evadeSpell.MaxRange);
+
+                            if (point.IsValid())
+                            {
+                                if (IsAboutToHit(evadeSpell.Delay))
+                                {
+                                    evadePoint1 = point;
+                                    Evading = true;
+                                    ObjectManager.Player.Spellbook.CastSpell(evadeSpell.Slot, evadePoint1.To3D());
+                                }
+
+                                haveSolution = true;
+
+                                return;
                             }
                         }
                     }
@@ -870,7 +886,7 @@ using LeagueSharp.Common;
                     {
                         if (evadeSpell.IsTargetted)
                         {
-                            var targets = Evader.GetEvadeTargets(
+                            /*var targets = Evader.GetEvadeTargets(
                                 evadeSpell.ValidTargets,
                                 0,
                                 0,
@@ -884,6 +900,21 @@ using LeagueSharp.Common;
                                 if (IsAboutToHit(evadeSpell.Delay))
                                 {
                                     var target = targets.MinOrDefault(i => i.Distance(to));
+                                    evadePoint1 = target.ServerPosition.To2D();
+                                    Evading = true;
+                                    ObjectManager.Player.Spellbook.CastSpell(evadeSpell.Slot, target);
+                                }
+
+                                haveSolution = true;
+
+                                return;
+                            }*/
+                            var target = Evader.GetBestTarget(to, evadeSpell);
+
+                            if (target != null)
+                            {
+                                if (IsAboutToHit(evadeSpell.Delay))
+                                {
                                     evadePoint1 = target.ServerPosition.To2D();
                                     Evading = true;
                                     ObjectManager.Player.Spellbook.CastSpell(evadeSpell.Slot, target);
@@ -940,20 +971,43 @@ using LeagueSharp.Common;
                 }
             }
 
-            //haveSolution = true;
+            haveSolution = true;
+        }
+
+        private static void UpdateSpells()
+        {
+            foreach (var spell in DetectedSpells.Values)
+            {
+                if (spell.Data.IsDash && Utils.GameTimeTickCount - spell.StartTick > spell.Data.Delay + 100
+                    && !spell.Unit.IsDashing())
+                {
+                    LeagueSharp.Common.Utility.DelayAction.Add(50, () => DetectedSpells.Remove(spell.SpellId));
+                }
+
+                if (spell.TrapObject != null && spell.TrapObject.IsDead)
+                {
+                    LeagueSharp.Common.Utility.DelayAction.Add(1, () => DetectedSpells.Remove(spell.SpellId));
+                }
+
+                if (spell.EndTick + spell.Data.ExtraDuration <= Utils.GameTimeTickCount)
+                {
+                    LeagueSharp.Common.Utility.DelayAction.Add(1, () => DetectedSpells.Remove(spell.SpellId));
+
+                    if (Configs.Debug)
+                    {
+                        Console.WriteLine($"=> D: {spell.SpellId} | {Utils.GameTimeTickCount}");
+                    }
+                }
+            }
+
+            foreach (var spell in DetectedSpells.Values)
+            {
+                spell.OnUpdate();
+            }
+
+            Spells = DetectedSpells.Values.Where(i => i.Enable).ToList();
         }
 
         #endregion
-
-        public struct SafePoint
-        {
-            #region Fields
-
-            public bool IsSafe;
-
-            public List<SpellInstance> Spells;
-
-            #endregion
-        }
     }
 }

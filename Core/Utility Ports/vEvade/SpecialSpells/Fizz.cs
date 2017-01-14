@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace vEvade.SpecialSpells
+namespace vEvade.SpecialSpells
 {
     #region
 
@@ -72,7 +72,7 @@ using LeagueSharp.Common;
             }
 
             var dist = missile.StartPosition.Distance(missile.EndPosition);
-            var radius = dist > 910 ? 440 : (dist >= 455 ? 340 : 0);
+            var radius = dist >= 910 ? 450 : (dist >= 455 ? 325 : 0);
 
             if (radius == 0)
             {
@@ -81,13 +81,11 @@ using LeagueSharp.Common;
 
             var spell =
                 Evade.DetectedSpells.Values.FirstOrDefault(
-                    i =>
-                    i.Data.MenuName == data.MenuName && i.Unit.NetworkId == sender.NetworkId
-                    && i.Type == SpellType.Circle);
+                    i => i.Data.MenuName == data.MenuName && i.Unit.CompareId(sender) && i.Type == SpellType.Circle);
 
             if (spell != null)
             {
-                Evade.DetectedSpells[spell.SpellId].Radius = radius;
+                Evade.DetectedSpells[spell.SpellId].Radius = radius + (int)ObjectManager.Player.BoundingRadius;
 
                 return;
             }

@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace vEvade.Helpers
+namespace vEvade.Helpers
 {
     #region
 

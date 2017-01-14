@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace vEvade.SpecialSpells
+namespace vEvade.SpecialSpells
 {
     #region
 
@@ -57,7 +57,7 @@ using LeagueSharp.Common;
             SpellDetector.AddSpell(sender, sender.ServerPosition, args.End, data);
             var spell =
                 Evade.DetectedSpells.Values.FirstOrDefault(
-                    i => i.Data.MenuName == data.MenuName && i.Unit.NetworkId == sender.NetworkId);
+                    i => i.Data.MenuName == data.MenuName && i.Unit.CompareId(sender));
             SpellData eqData;
 
             if (spell != null && Evade.OnProcessSpells.TryGetValue("SyndraEQ", out eqData))
@@ -71,7 +71,7 @@ using LeagueSharp.Common;
                 var orbs =
                     Evade.DetectedSpells.Values.Where(
                         i =>
-                        i.Data.MenuName == "SyndraQ" && i.Unit.NetworkId == spell.Unit.NetworkId
+                        i.Data.MenuName == "SyndraQ" && i.Unit.CompareId(spell.Unit)
                         && Utils.GameTimeTickCount - i.StartTick < 400).Select(i => i.End).ToList();
                 orbs.AddRange(
                     ObjectManager.Get<Obj_AI_Minion>()

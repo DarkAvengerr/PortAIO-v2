@@ -1,12 +1,14 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace vEvade.Helpers
+namespace vEvade.Helpers
 {
     #region
 
     using System;
-    using System.Collections.Generic;
     using System.Linq;
+    using System.Net;
+    using System.Reflection;
+    using System.Text.RegularExpressions;
 
     using LeagueSharp;
     using LeagueSharp.Common;
@@ -14,6 +16,7 @@ using LeagueSharp.Common;
     using SharpDX;
 
     using Color = System.Drawing.Color;
+    using Version = System.Version;
 
     #endregion
 
@@ -105,6 +108,15 @@ using LeagueSharp.Common;
 
         #region Public Methods and Operators
 
+        public static bool CompareId(this GameObject obj1, GameObject obj2)
+        {
+            return obj1.NetworkId == obj2.NetworkId;
+        }
+
+        public static void CheckVersion()
+        {
+        }
+
         public static void DrawLine(Vector2 start, Vector2 end, Color color)
         {
             Drawing.DrawLine(Drawing.WorldToScreen(start.To3D()), Drawing.WorldToScreen(end.To3D()), 1, color);
@@ -113,25 +125,6 @@ using LeagueSharp.Common;
         public static void Move(this Vector2 pos)
         {
             EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, pos.To3D(), false);
-        }
-
-        #endregion
-    }
-
-    public class SpellList<TK, TV> : Dictionary<TK, TV>
-    {
-        #region Public Events
-
-        public event EventHandler OnAdd;
-
-        #endregion
-
-        #region Public Methods and Operators
-
-        public new void Add(TK key, TV value)
-        {
-            this.OnAdd?.Invoke(this, null);
-            base.Add(key, value);
         }
 
         #endregion

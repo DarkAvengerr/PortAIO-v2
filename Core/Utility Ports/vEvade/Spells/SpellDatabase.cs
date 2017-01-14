@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace vEvade.Spells
+namespace vEvade.Spells
 {
     #region
 
@@ -398,7 +398,7 @@ using LeagueSharp.Common;
             Spells.Add(
                 new SpellData
                     {
-                        ChampName = "Caitlyn", MenuName = "CaitlynW", SpellName = "CaitlynW", TrapName = "caitlyntrap",
+                        ChampName = "Caitlyn", MenuName = "CaitlynW", SpellName = "CaitlynTrap", TrapName = "caitlyntrap",
                         Slot = SpellSlot.W, Delay = 0, Radius = 75, Type = SpellType.Circle, IsDangerous = true,
                         ExtraDuration = 90000, DontCross = true
                     });
@@ -732,7 +732,7 @@ using LeagueSharp.Common;
                         ToggleName = "Fizz_.+_R_OrbitFish", DangerValue = 5, Slot = SpellSlot.R, Range = 20000,
                         Radius = 80, MissileSpeed = 1300,
                         CollisionObjects = new[] { CollisionableObjects.Heroes, CollisionableObjects.YasuoWall },
-                        IsDangerous = true, ExtraDuration = 2300, HasEndExplosion = true, RadiusEx = 240
+                        IsDangerous = true, ExtraDuration = 2300, HasEndExplosion = true, RadiusEx = 200
                     });
 
             #endregion Fizz
@@ -1261,15 +1261,15 @@ using LeagueSharp.Common;
                     {
                         ChampName = "Karma", MenuName = "KarmaQMantra", SpellName = "KarmaQMantra",
                         MissileName = "KarmaQMissileMantra", ToggleName = "Karma_.+_Q_impact_R_01", DangerValue = 2,
-                        Range = 950, Delay = 0, Radius = 80, MissileSpeed = 1700,
+                        Range = 950, Radius = 80, MissileSpeed = 1700,
                         CollisionObjects =
                             new[]
                                 {
                                     CollisionableObjects.Heroes, CollisionableObjects.Minions,
                                     CollisionableObjects.YasuoWall
                                 },
-                        FixedRange = true, ExtraDuration = 1500,
-                        HasEndExplosion = true, RadiusEx = 330
+                        FixedRange = true, ExtraDuration = 1650,
+                        HasEndExplosion = true, RadiusEx = 280
                     });
 
             #endregion Karma

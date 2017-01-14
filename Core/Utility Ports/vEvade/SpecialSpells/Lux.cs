@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace vEvade.SpecialSpells
+namespace vEvade.SpecialSpells
 {
     #region
 
@@ -58,8 +58,7 @@ using LeagueSharp.Common;
 
             var startT = Utils.GameTimeTickCount;
             var alreadyAdd =
-                Evade.DetectedSpells.Values.Any(
-                    i => i.Data.MenuName == data.MenuName && i.Unit.NetworkId == hero.NetworkId);
+                Evade.DetectedSpells.Values.Any(i => i.Data.MenuName == data.MenuName && i.Unit.CompareId(hero));
 
             if (alreadyAdd)
             {

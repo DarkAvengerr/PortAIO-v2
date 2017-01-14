@@ -1,10 +1,11 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace vEvade.Helpers
+namespace vEvade.Helpers
 {
     #region
 
     using System;
+    using System.Collections.Generic;
 
     using LeagueSharp.Common;
 
@@ -17,6 +18,59 @@ using LeagueSharp.Common;
         #region Constants
 
         private const int Quality = 22;
+
+        #endregion
+
+        #region Public Methods and Operators
+
+        public static List<Vector2> GetIntersectPointsLine(this Geometry.Polygon poly, Vector2 start, Vector2 end)
+        {
+            var points = new List<Vector2>();
+
+            for (var i = 0; i < poly.Points.Count; i++)
+            {
+                var inter = poly.Points[i].Intersection(poly.Points[i != poly.Points.Count - 1 ? i + 1 : 0], start, end);
+
+                if (inter.Intersects)
+                {
+                    points.Add(inter.Point);
+                }
+            }
+
+            return points;
+        }
+
+        public static Vector2[] GetIntersectPointsLineCircle(this Vector2 pos, float radius, Vector2 start, Vector2 end)
+        {
+            float t;
+            var dx = end.X - start.X;
+            var dy = end.Y - start.Y;
+            var a = dx * dx + dy * dy;
+            var b = 2 * (dx * (start.X - pos.X) + dy * (start.Y - pos.Y));
+            var c = (start.X - pos.X) * (start.X - pos.X) + (start.Y - pos.Y) * (start.Y - pos.Y) - radius * radius;
+            var det = b * b - 4 * a * c;
+
+            if (a <= 0.0000001 || det < 0)
+            {
+                return new Vector2[] { };
+            }
+
+            if (det.Equals(0))
+            {
+                t = -b / (2 * a);
+
+                return new[] { new Vector2(start.X + t * dx, start.Y + t * dy) };
+            }
+
+            t = (float)((-b + Math.Sqrt(det)) / (2 * a));
+            var t2 = (float)((-b - Math.Sqrt(det)) / (2 * a));
+
+            return new[]
+                       {
+                           new Vector2(start.X + t * dx, start.Y + t * dy),
+                           new Vector2(start.X + t2 * dx, start.Y + t2 * dy)
+                       };
+        }
 
         #endregion
 

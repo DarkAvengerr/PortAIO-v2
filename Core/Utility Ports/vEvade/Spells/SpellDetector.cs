@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace vEvade.Spells
+namespace vEvade.Spells
 {
     #region
 
@@ -19,7 +19,7 @@ using LeagueSharp.Common;
 
     #endregion
 
-    public static class SpellDetector
+    public class SpellDetector
     {
         #region Static Fields
 
@@ -31,10 +31,9 @@ using LeagueSharp.Common;
 
         #region Constructors and Destructors
 
-        static SpellDetector()
+        public SpellDetector()
         {
             GameObject.OnCreate += OnCreateTrap;
-            GameObject.OnDelete += OnDeleteTrap;
             GameObject.OnCreate += OnCreateToggle;
             GameObject.OnDelete += OnDeleteToggle;
             GameObject.OnCreate += OnCreateMissile;
@@ -89,7 +88,9 @@ using LeagueSharp.Common;
             bool checkExplosion = true,
             int startT = 0)
         {
-            if (!sender.IsVisible && !Configs.Menu.Item("DodgeFoW").GetValue<bool>())
+            var isFromFoW = !sender.IsVisible && missile != null;
+
+            if (isFromFoW && Configs.DodgeFoW == 0)
             {
                 return;
             }
@@ -199,7 +200,7 @@ using LeagueSharp.Common;
                     foreach (var spell in
                         Evade.DetectedSpells.Values.Where(
                             i =>
-                            i.Data.MenuName == data.MenuName && i.Unit.NetworkId == sender.NetworkId
+                            i.Data.MenuName == data.MenuName && i.Unit.CompareId(sender)
                             && dir.AngleBetween(i.Direction) < 3 && i.Start.Distance(startPos) < 100))
                     {
                         alreadyAdded = spell.MissileObject != null && spell.MissileObject.IsValid;
@@ -216,7 +217,7 @@ using LeagueSharp.Common;
                 foreach (var spell in
                     Evade.DetectedSpells.Values.Where(
                         i =>
-                        i.Data.MenuName == data.MenuName && i.Unit.NetworkId == sender.NetworkId
+                        i.Data.MenuName == data.MenuName && i.Unit.CompareId(sender)
                         && dir.AngleBetween(i.Direction) < 3 && i.Start.Distance(startPos) < 100
                         && i.MissileObject == null))
                 {
@@ -229,7 +230,10 @@ using LeagueSharp.Common;
                         Console.WriteLine($"=> M: {spell.SpellId} | {Utils.GameTimeTickCount}");
                     }
 
-                    break;
+                    if (string.IsNullOrEmpty(spell.Data.ToggleName) || spell.Type != SpellType.Circle)
+                    {
+                        break;
+                    }
                 }
             }
 
@@ -251,12 +255,12 @@ using LeagueSharp.Common;
             }
 
             var newSpell = new SpellInstance(data, startTime, endTime + data.ExtraDelay, startPos, endPos, sender, type)
-                               { SpellId = spellIdCount++, MissileObject = missile };
+                               { SpellId = spellIdCount++, IsFromFoW = isFromFoW, MissileObject = missile };
             Evade.DetectedSpells.Add(newSpell.SpellId, newSpell);
 
             if (Configs.Debug)
             {
-                Console.WriteLine($"=> A: {newSpell.SpellId} | {Utils.GameTimeTickCount}");
+                Console.WriteLine($"=> A: {newSpell.SpellId} | {Utils.GameTimeTickCount} | {type}");
             }
         }
 
@@ -365,8 +369,9 @@ using LeagueSharp.Common;
             foreach (var spell in
                 Evade.DetectedSpells.Values.Where(
                     i =>
-                    !string.IsNullOrEmpty(i.Data.ToggleName) && i.MissileObject != null && i.ToggleObject == null
-                    && new Regex(i.Data.ToggleName).IsMatch(toggle.Name) && i.End.Distance(pos) < 100))
+                    !string.IsNullOrEmpty(i.Data.ToggleName) && i.Type == SpellType.Circle && i.MissileObject != null
+                    && i.ToggleObject == null && new Regex(i.Data.ToggleName).IsMatch(toggle.Name)
+                    && i.End.Distance(pos) < 100))
             {
                 spell.MissileObject = null;
                 spell.ToggleObject = toggle;
@@ -383,12 +388,7 @@ using LeagueSharp.Common;
         {
             var trap = sender as Obj_AI_Minion;
 
-            if (trap == null || !trap.IsValid)
-            {
-                return;
-            }
-
-            if (!trap.IsEnemy && !Configs.Debug)
+            if (trap == null || !trap.IsValid || (!trap.IsEnemy && !Configs.Debug))
             {
                 return;
             }
@@ -409,7 +409,7 @@ using LeagueSharp.Common;
 
         private static void OnCreateTrapDelay(Obj_AI_Minion trap, SpellData data)
         {
-            var pos = trap.ServerPosition.To2D();
+            var pos = trap.Position.To2D();
             var caster =
                 HeroManager.AllHeroes.First(i => i.ChampionName == data.ChampName && (i.IsEnemy || Configs.Debug));
             var spell = new SpellInstance(data, Utils.GameTimeTickCount - Game.Ping / 2, 0, pos, pos, caster, data.Type)
@@ -441,7 +441,8 @@ using LeagueSharp.Common;
             foreach (var spell in
                 Evade.DetectedSpells.Values.Where(
                     i =>
-                    i.Data.CanBeRemoved && i.MissileObject != null && i.MissileObject.NetworkId == missile.NetworkId))
+                    i.Data.CanBeRemoved && i.MissileObject != null && i.MissileObject.IsValid
+                    && i.MissileObject.CompareId(missile)))
             {
                 if (string.IsNullOrEmpty(spell.Data.ToggleName) || spell.Type != SpellType.Circle)
                 {
@@ -455,15 +456,23 @@ using LeagueSharp.Common;
                 else
                 {
                     spell.Data.CollisionObjects = null;
+                    spell.PredEnd = Vector2.Zero;
                     spell.End = missile.Position.To2D();
 
                     LeagueSharp.Common.Utility.DelayAction.Add(
                         100,
                         () =>
                             {
-                                if (spell.ToggleObject == null)
+                                if (spell.ToggleObject != null)
                                 {
-                                    Evade.DetectedSpells.Remove(spell.SpellId);
+                                    return;
+                                }
+
+                                Evade.DetectedSpells.Remove(spell.SpellId);
+
+                                if (Configs.Debug)
+                                {
+                                    Console.WriteLine($"=> D-M: {spell.SpellId} | {Utils.GameTimeTickCount}");
                                 }
                             });
                 }
@@ -483,37 +492,13 @@ using LeagueSharp.Common;
                 Evade.DetectedSpells.Values.Where(
                     i =>
                     !string.IsNullOrEmpty(i.Data.ToggleName) && i.ToggleObject != null
-                    && i.ToggleObject.NetworkId == toggle.NetworkId))
+                    && i.ToggleObject.CompareId(toggle)))
             {
                 LeagueSharp.Common.Utility.DelayAction.Add(1, () => Evade.DetectedSpells.Remove(spell.SpellId));
 
                 if (Configs.Debug)
                 {
                     Console.WriteLine($"=> D-T: {spell.SpellId} | {Utils.GameTimeTickCount}");
-                }
-            }
-        }
-
-        private static void OnDeleteTrap(GameObject sender, EventArgs args)
-        {
-            var trap = sender as Obj_AI_Minion;
-
-            if (trap == null || !trap.IsValid || (!trap.IsEnemy && !Configs.Debug))
-            {
-                return;
-            }
-
-            foreach (var spell in
-                Evade.DetectedSpells.Values.Where(
-                    i =>
-                    !string.IsNullOrEmpty(i.Data.TrapName) && i.TrapObject != null
-                    && i.TrapObject.NetworkId == trap.NetworkId))
-            {
-                LeagueSharp.Common.Utility.DelayAction.Add(1, () => Evade.DetectedSpells.Remove(spell.SpellId));
-
-                if (Configs.Debug)
-                {
-                    Console.WriteLine($"=> D-Tr: {spell.SpellId} | {Utils.GameTimeTickCount}");
                 }
             }
         }

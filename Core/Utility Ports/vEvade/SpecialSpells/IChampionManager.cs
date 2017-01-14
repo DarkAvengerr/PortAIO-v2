@@ -1,6 +1,6 @@
 using EloBuddy; 
 using LeagueSharp.Common; 
- namespace vEvade.SpecialSpells
+namespace vEvade.SpecialSpells
 {
     #region
 
@@ -76,24 +76,13 @@ using LeagueSharp.Common;
                 return;
             }
 
-            var startPos = sender.ServerPosition.To2D();
-            var start = startPos;
-            var endPos = args.End.To2D();
-
-            if (data.InfrontStart > 0)
-            {
-                start = start.Extend(endPos, data.InfrontStart);
-            }
-
-            var dir = (endPos - start).Normalized();
+            var start = sender.ServerPosition.To2D();
+            var end = args.End.To2D();
+            var dir = (end - start).Normalized();
 
             for (var i = -(data.MultipleNumber - 1) / 2; i <= (data.MultipleNumber - 1) / 2; i++)
             {
-                SpellDetector.AddSpell(
-                    sender,
-                    startPos,
-                    start + dir.Rotated(data.MultipleAngle * i) * (data.Range / 2f),
-                    data);
+                SpellDetector.AddSpell(sender, start, start + data.Range * dir.Rotated(data.MultipleAngle * i), data);
             }
 
             spellArgs.NoProcess = true;
