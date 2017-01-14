@@ -21,8 +21,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace MoonDraven
+using LeagueSharp.Common; 
+namespace MoonDraven
 {
     using System;
     using System.Collections.Generic;
@@ -166,7 +166,7 @@ using EloBuddy;
             this.Q = new Spell(SpellSlot.Q, Orbwalking.GetRealAutoAttackRange(this.Player));
             this.W = new Spell(SpellSlot.W);
             this.E = new Spell(SpellSlot.E, 1050);
-            this.R = new Spell(SpellSlot.R, 3000f);
+            this.R = new Spell(SpellSlot.R);
 
             this.E.SetSkillshot(0.25f, 130, 1400, false, SkillshotType.SkillshotLine);
             this.R.SetSkillshot(0.4f, 160, 2000, true, SkillshotType.SkillshotLine);
@@ -236,42 +236,22 @@ using EloBuddy;
                         this.W.Cast();
                     }
 
-                    if (this.Menu.Item("DontCatchUnderTurret").IsActive())
+                    if (this.Menu.Item("DontCatchUnderTurret").IsActive()) // debug this?
                     {
                         // If we're under the turret as well as the axe, catch the axe
                         if (this.Player.UnderTurret(true) && bestReticle.Object.Position.UnderTurret(true))
                         {
-                            if (this.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None)
-                            {
-                                EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, bestReticle.Position);
-                            }
-                            else
-                            {
-                                this.Orbwalker.SetOrbwalkingPoint(bestReticle.Position);
-                            }
+                            this.Orbwalker.SetOrbwalkingPoint(bestReticle.Position);
+                            
                         }
                         else if (!bestReticle.Position.UnderTurret(true))
                         {
-                            if (this.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None)
-                            {
-                                EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, bestReticle.Position);
-                            }
-                            else
-                            {
-                                this.Orbwalker.SetOrbwalkingPoint(bestReticle.Position);
-                            }
+                            this.Orbwalker.SetOrbwalkingPoint(bestReticle.Position);
                         }
                     }
                     else
                     {
-                        if (this.Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.None)
-                        {
-                            EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, bestReticle.Position);
-                        }
-                        else
-                        {
-                            this.Orbwalker.SetOrbwalkingPoint(bestReticle.Position);
-                        }
+                        this.Orbwalker.SetOrbwalkingPoint(bestReticle.Position);
                     }
                 }
                 else
@@ -335,7 +315,12 @@ using EloBuddy;
             }
 
             // Patented Advanced Algorithms D321987
-            var killableTarget = HeroManager.Enemies.Where(x => x.IsValidTarget(2000)).FirstOrDefault(x => R.GetDamage(x) > x.Health);
+            var killableTarget =
+                HeroManager.Enemies.Where(x => x.IsValidTarget(2000))
+                    .FirstOrDefault(
+                        x =>
+                        this.Player.GetSpellDamage(x, SpellSlot.R) * 2 > x.Health
+                        && (!this.Orbwalker.InAutoAttackRange(x) || this.Player.CountEnemiesInRange(this.E.Range) > 2));
 
             if (killableTarget != null)
             {
