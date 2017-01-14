@@ -103,7 +103,7 @@ namespace Activator.Handlers
                             // limit the damage using an interval
                             if (Utils.GameTimeTickCount - troy.Limiter >= entry.Interval * 1000)
                             {
-                                Projections.PredictTheDamage(owner.Player, hero, data, HitType.Troy, "troy.OnUpdate");
+                                Projections.EmulateDamage(owner.Player, hero, data, HitType.Troy, "troy.OnUpdate");
                                 troy.Limiter = Utils.GameTimeTickCount;
                             }
                         }

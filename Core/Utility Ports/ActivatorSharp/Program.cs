@@ -129,7 +129,7 @@ namespace Activator
                             var type = (HitType) Enum.Parse(typeof (HitType),
                                 Origin.Item("testdamagetype").GetValue<StringList>().SelectedValue);
 
-                            Projections.PredictTheDamage(caster, target, new Gamedata { SDataName = "KurisuQtPie" }, type, "debug.Test");
+                            Projections.EmulateDamage(caster, target, new Gamedata { SDataName = "KurisuQtPie" }, type, "debug.Test");
                             eventArgs.Process = false;
                         }
                     };
@@ -474,7 +474,7 @@ namespace Activator
                 var p = new Priority { ItemId = item.Id, Position = item.Priority, Type = item };
 
                 if (!Lists.Priorities.ContainsKey(item.Name))
-                    Lists.Priorities.Add(item.Name, p);
+                     Lists.Priorities.Add(item.Name, p);
             }
 
             foreach (var spell in Lists.Spells)
