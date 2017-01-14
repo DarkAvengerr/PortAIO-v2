@@ -162,9 +162,37 @@ namespace UniversalGankAlerter
         public PreviewCircle()
         {
             Drawing.OnEndScene += Drawing_OnEndScene;
+
+            AppDomain.CurrentDomain.ProcessExit += (sender, args) => this.Unload();
+
+            Drawing.OnPostReset += Drawing_OnPostReset;
+            Drawing.OnPreReset += Drawing_OnPreReset;
+
+            CustomEvents.Game.OnGameEnd += Game_OnGameEnd;
+
             _mapCircle = new Render.Circle(ObjectManager.Player, 0, System.Drawing.Color.Red, 5);
             _mapCircle.Add(0);
             _mapCircle.VisibleCondition = sender => _lastChanged > 0 && Game.Time - _lastChanged < Delay;
+        }
+
+        private void Game_OnGameEnd()
+        {
+            _mapCircle.Dispose();
+        }
+
+        private void Drawing_OnPreReset(EventArgs args)
+        {
+            _mapCircle.OnPreReset();
+        }
+
+        private void Drawing_OnPostReset(EventArgs args)
+        {
+            _mapCircle.OnPostReset();
+        }
+
+        private void Unload()
+        {
+            _mapCircle.Dispose();
         }
 
         private void Drawing_OnEndScene(EventArgs args)
