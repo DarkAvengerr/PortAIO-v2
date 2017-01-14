@@ -1770,6 +1770,9 @@ namespace PortAIO
                         case 9: // Flowers' Karthus
                             Flowers_Karthus.Program.Main();
                             break;
+                        case 10: //AlqoholicKarthus
+                            AlqoholicKarthus.Program.Main();
+                            break;
                     }
                     break;
                 case Champion.Kassadin:

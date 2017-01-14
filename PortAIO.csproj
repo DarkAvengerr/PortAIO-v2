@@ -1598,6 +1598,16 @@
     <Compile Include="Core\Champion Ports\Jhin\Flowers%27 Jhin\Common\YasuoWindWall.cs" />
     <Compile Include="Core\Champion Ports\Jhin\Flowers%27 Jhin\Prediction\xcsoftPrediction.cs" />
     <Compile Include="Core\Champion Ports\Jhin\Flowers%27 Jhin\Program.cs" />
+    <Compile Include="Core\Champion Ports\Karthus\AlqoholicKarthus\DrawingManager.cs" />
+    <Compile Include="Core\Champion Ports\Karthus\AlqoholicKarthus\Menu\AlqoholicMenu.cs" />
+    <Compile Include="Core\Champion Ports\Karthus\AlqoholicKarthus\Program.cs" />
+    <Compile Include="Core\Champion Ports\Karthus\AlqoholicKarthus\Spells\E.cs" />
+    <Compile Include="Core\Champion Ports\Karthus\AlqoholicKarthus\Spells\Q.cs" />
+    <Compile Include="Core\Champion Ports\Karthus\AlqoholicKarthus\Spells\R.cs" />
+    <Compile Include="Core\Champion Ports\Karthus\AlqoholicKarthus\Spells\SpellBase.cs" />
+    <Compile Include="Core\Champion Ports\Karthus\AlqoholicKarthus\Spells\SpellManager.cs" />
+    <Compile Include="Core\Champion Ports\Karthus\AlqoholicKarthus\Spells\Spells.cs" />
+    <Compile Include="Core\Champion Ports\Karthus\AlqoholicKarthus\Spells\W.cs" />
     <Compile Include="Core\Champion Ports\Katarina\e.Motion Katarina\BlockIssueOrder.cs" />
     <Compile Include="Core\Champion Ports\Katarina\e.Motion Katarina\Config.cs" />
     <Compile Include="Core\Champion Ports\Katarina\e.Motion Katarina\Dagger.cs" />
