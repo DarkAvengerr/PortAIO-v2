@@ -1116,37 +1116,39 @@ namespace PortAIO
                         case 18: // Ezreal - The Dream Chaser
                             EzrealDreamCatcher.Program.Main();
                             break;
+                            /*
                         case 19: // IDzEzreal
                             iDZEzreal.Program.Main();
                             break;
-                        case 20: // iEzrealReworked
+                            */
+                        case 19: // iEzrealReworked
                             iEzrealReworked.Program.Main();
                             break;
-                        case 21: // Perplexed Ezreal
+                        case 20: // Perplexed Ezreal
                             PerplexedEzreal.Program.Main();
                             break;
-                        case 22: // myWorldAIO
+                        case 21: // myWorldAIO
                             myWorld.Program.Main();
                             break;
-                        case 23: // TCSDexAIO
+                        case 22: // TCSDexAIO
                             Tc_SDKexAIO.PlaySharp.Main();
                             break;
-                        case 24: // ProjectGeass
+                        case 23: // ProjectGeass
                             _Project_Geass.Program.Main();
                             break;
-                        case 25: // Hikicarry ADC
+                        case 24: // Hikicarry ADC
                             HikiCarry.Program.Main();
                             break;
-                        case 26: // Flowers' ADC Series
+                        case 25: // Flowers' ADC Series
                             Flowers_ADC_Series.Program.Main();
                             break;
-                        case 27: // ReformedAIO
+                        case 26: // ReformedAIO
                             ReformedAIO.Program.Main();
                             break;
-                        case 28: // HandicAPEzreal
+                        case 27: // HandicAPEzreal
                             HandicapEzreal.Program.Main();
                             break;
-                        case 29: //yetAnotherEzreal
+                        case 28: //yetAnotherEzreal
                             yetAnotherEzreal.Program.Main();
                             break;
                     }
@@ -1688,22 +1690,24 @@ namespace PortAIO
                         case 14: // ElKalista
                             ElKalista.Program.Main();
                             break;
+                            /*
                         case 15: // iKalista
                             IKalista.Program.Main();
                             break;
                         case 16: // iKalista:Reborn
                             iKalistaReborn.Program.Main();
                             break;
-                        case 17: // Kalima
+                            */
+                        case 15: // Kalima
                             Kalima.Kalista.Main();
                             break;
-                        case 18: // KAPPALISTAXD
+                        case 16: // KAPPALISTAXD
                             KAPPALISTAXD.Program.Main();
                             break;
-                        case 19: // Hikicarry ADC
+                        case 17: // Hikicarry ADC
                             HikiCarry.Program.Main();
                             break;
-                        case 20: // Flowers' ADC Series
+                        case 18: // Flowers' ADC Series
                             Flowers_ADC_Series.Program.Main();
                             break;
                     }
@@ -2108,55 +2112,57 @@ namespace PortAIO
                         case 3: // HoolaLucian
                             HoolaLucian.Program.OnGameLoad();
                             break;
-                        case 4: // iLucian
-                            iLucian.LucianBootstrap.OnGameLoad();
-                            break;
-                        case 5: // iSeriesReborn
+                        /*
+                    case 4: // iLucian
+                        iLucian.LucianBootstrap.OnGameLoad();
+                        break;
+                        */
+                        case 4: // iSeriesReborn
                             iSeriesReborn.Program.OnGameLoad();
                             break;
-                        case 6: // Korean Lucian
+                        case 5: // Korean Lucian
                             KoreanLucian.Program.Game_OnGameLoad();
                             break;
-                        case 7: // OKTW
+                        case 6: // OKTW
                             OneKeyToWin_AIO_Sebby.Program.GameOnOnGameLoad();
                             break;
-                        case 8: // SAutoCarry
+                        case 7: // SAutoCarry
                             SAutoCarry.Program.Game_OnGameLoad();
                             break;
-                        case 9: // SharpShooter
+                        case 8: // SharpShooter
                             SharpShooter.Program.Game_OnGameLoad();
                             break;
-                        case 10: // xSalice
+                        case 9: // xSalice
                             xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
-                        case 11: // Marksman#
+                        case 10: // Marksman#
                             Marksman.Program.Game_OnGameLoad();
                             break;
-                        case 12: // ChallengerSeries
+                        case 11: // ChallengerSeries
                             Challenger_Series.Program.Main();
                             break;
-                        case 13: // ExorAIO
+                        case 12: // ExorAIO
                             ExorAIO.Program.Main();
                             break;
-                        case 14: // D_Lucian
+                        case 13: // D_Lucian
                             D_Lucian.Program.Main();
                             break;
-                        case 15: // FuckingLucianReborn
+                        case 14: // FuckingLucianReborn
                             FuckingLucianReborn.Program.Main();
                             break;
-                        case 16: // Slutty Lucian
+                        case 15: // Slutty Lucian
                             Slutty_Lucian.Program.Main();
                             break;
-                        case 17: // Hikicarry ADC
+                        case 16: // Hikicarry ADC
                             HikiCarry.Program.Main();
                             break;
-                        case 18: // Flowers' ADC Series
+                        case 17: // Flowers' ADC Series
                             Flowers_ADC_Series.Program.Main();
                             break;
-                        case 19: // ReformedAIO
+                        case 18: // ReformedAIO
                             ReformedAIO.Program.Main();
                             break;
-                        case 20: // Lord's Lucian
+                        case 19: // Lord's Lucian
                             Lord_s_Lucian.Program.Main();
                             break;
                     }
@@ -2933,19 +2939,21 @@ namespace PortAIO
                         case 10: // HeavenStrikeSivir
                             HeavenStrikeSivir.Program.Main();
                             break;
-                        case 11: // iSivir
-                            iSivir.Program.Main();
-                            break;
-                        case 12: // JustSivir
+                        /*
+                    case 11: // iSivir
+                        iSivir.Program.Main();
+                        break;
+                        */
+                        case 11: // JustSivir
                             JustSivir.Program.Main();
                             break;
-                        case 13: // KurisuSivir
+                        case 12: // KurisuSivir
                             KurisuSivir.Program.Main();
                             break;
-                        case 14: // Hikicarry ADC
+                        case 13: // Hikicarry ADC
                             HikiCarry.Program.Main();
                             break;
-                        case 15: // Flowers' ADC Series
+                        case 14: // Flowers' ADC Series
                             Flowers_ADC_Series.Program.Main();
                             break;
                     }
@@ -3413,46 +3421,48 @@ namespace PortAIO
                         case 1: // iSeriesReborn
                             iSeriesReborn.Program.OnGameLoad();
                             break;
-                        case 2: // iTwitch2.0
-                            iTwitch.Program.Main();
-                            break;
-                        case 3: // SAutoCarry
+                        /*
+                    case 2: // iTwitch2.0
+                        iTwitch.Program.Main();
+                        break;
+                        */
+                        case 2: // SAutoCarry
                             SAutoCarry.Program.Game_OnGameLoad();
                             break;
-                        case 4: // SharpShooter
+                        case 3: // SharpShooter
                             SharpShooter.Program.Game_OnGameLoad();
                             break;
-                        case 5: // Marksman#
+                        case 4: // Marksman#
                             Marksman.Program.Game_OnGameLoad();
                             break;
-                        case 6: // ExorAIO
+                        case 5: // ExorAIO
                             ExorAIO.Program.Main();
                             break;
-                        case 7: // Flowers' Series
+                        case 6: // Flowers' Series
                             Flowers_Series.Program.Main();
                             break;
-                        case 8: // InfectedTwitch
+                        case 7: // InfectedTwitch
                             Infected_Twitch.Program.Main();
                             break;
-                        case 9: // Flower's Twitch
+                        case 8: // Flower's Twitch
                             Flowers_Twitch.Program.Main();
                             break;
-                        case 10: // NechritoTwitch
+                        case 9: // NechritoTwitch
                             Nechrito_Twitch.Program.Main();
                             break;
-                        case 11: // SNTwitch
+                        case 10: // SNTwitch
                             SNTwitch.Program.Main();
                             break;
-                        case 12: // theobjops's Twitch
+                        case 11: // theobjops's Twitch
                             Twiitch.Twitch.Main();
                             break;
-                        case 13: // TheTwitch
+                        case 12: // TheTwitch
                             TheTwitch.Program.Main();
                             break;
-                        case 14: // Twitch#
+                        case 13: // Twitch#
                             TwitchSharp.Program.Main();
                             break;
-                        case 15: // Flowers' ADC Series
+                        case 14: // Flowers' ADC Series
                             Flowers_ADC_Series.Program.Main();
                             break;
                     }
@@ -3933,13 +3943,15 @@ namespace PortAIO
                         case 2: // Valvrave#
                             Valvrave_Sharp.Program.Main();
                             break;
-                        case 3: // iDZed
-                            iDZed.Program.Main();
-                            break;
-                        case 4: // Ze-D Is Back
+                        /*
+                    case 3: // iDZed
+                        iDZed.Program.Main();
+                        break;
+                        */
+                        case 3: // Ze-D Is Back
                             zedisback.Program.Main();
                             break;
-                        case 5: // xSalice
+                        case 4: // xSalice
                             xSaliceResurrected_Rework.Program.LoadReligion();
                             break;
                     }
