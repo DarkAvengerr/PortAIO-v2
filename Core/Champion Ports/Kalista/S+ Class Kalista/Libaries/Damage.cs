@@ -97,7 +97,7 @@ namespace S_Plus_Class_Kalista.Libaries
 
                 if (!Champion.E.IsReady()) return 0f;
 
-                return (float)Player.CalcDamage(target, LeagueSharp.Common.Damage.DamageType.Physical, Champion.E.GetDamage(target) - (target.FlatHPRegenMod / 2 + 15) );
+                return (float)Player.CalcDamage(target, LeagueSharp.Common.Damage.DamageType.Physical, Champion.E.GetDamage(target));
             }
 
             public static float GetShield(Obj_AI_Base target)
