@@ -27,7 +27,7 @@ using EloBuddy;
             {
                 foreach (var name in Names)
                 {
-                    if (mob.CharData.BaseSkinName == name && GetBool("usesmiteon" + name, typeof(bool)))
+                    if (mob.BaseSkinName.Equals(name) && GetBool("usesmiteon" + name, typeof(bool)))
                     {
                         if (!mob.IsValidTarget()) return;
 
