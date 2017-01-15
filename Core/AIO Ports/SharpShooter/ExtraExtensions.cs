@@ -85,7 +85,7 @@ namespace SharpShooter
             if (target.HasBuff("FerociousHowl"))
                 calculatedDamage *= 0.3;
 
-            return target.Health + target.HPRegenRate +
+            return target.Health +
                    (damageType == TargetSelector.DamageType.Physical ? target.AttackShield : target.MagicShield) <
                    calculatedDamage - 2;
         }
@@ -204,7 +204,7 @@ namespace SharpShooter
                 ObjectManager.Player.HasBuff("barontarget"))
                 calculatedDamage *= 0.5;
 
-            return target.Health + target.HPRegenRate +
+            return target.Health +
                    (damageType == TargetSelector.DamageType.Physical ? target.AttackShield : target.MagicShield) <
                    calculatedDamage - 2;
         }
