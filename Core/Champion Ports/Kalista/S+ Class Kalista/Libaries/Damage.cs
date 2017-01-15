@@ -136,7 +136,7 @@ namespace S_Plus_Class_Kalista.Libaries
                 if (hero.ChampionName == "Blitzcrank" && !target.HasBuff("BlitzcrankManaBarrierCD") && !target.HasBuff("ManaBarrier"))
                     healthDebuffer += target.Mana / 2;
 
-                return (GetRendDamage(target) * defuffer) - (healthDebuffer + GetShield(target) + target.FlatHPRegenMod + 15);
+                return (GetRendDamage(target) * defuffer) - (healthDebuffer + GetShield(target) + /*target.FlatHPRegenMod +*/ 15);
             }
 
             #endregion Private Functions
