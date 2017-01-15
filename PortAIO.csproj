@@ -6745,7 +6745,6 @@
     <Folder Include="Core\Champion Ports\Tristana\Geass Tristana\GeassLib\Drawing\Champions\" />
     <Folder Include="Core\Champion Ports\Twitch\TheTwitch\Commons\Prediction\" />
     <Folder Include="Core\Champion Ports\Veigar\PlaceboVeigar\ShineCommon\Orbwalking\" />
-    <Folder Include="Core\Removed\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Core\Champion Ports\Brand\TheBrand\Commons\ComboSystem\Combo System thoughts.txt" />
