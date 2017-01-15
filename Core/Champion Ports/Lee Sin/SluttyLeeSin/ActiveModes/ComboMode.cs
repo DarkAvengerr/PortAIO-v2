@@ -76,7 +76,7 @@ using EloBuddy;
             #region Regular combo
 
             var target = TargetSelector.GetTarget(Q.Range, TargetSelector.DamageType.Physical);
-            if (!target.IsValidTarget())
+            if (target == null)
                 return;
 
             var useq = GetBool("useq", typeof (bool));
