@@ -32,13 +32,13 @@ using EloBuddy;
                 _lastWardJumpTime = Game.Time;
                 WardCastPosition = position;
             }
-            var ward =
+            var ward =  
                 ObjectManager.Get<Obj_AI_Base>()
                     .Where(o => o.IsAlly && o.Name.ToLower().Contains("ward") && (o.Distance(position) < 200))
                     .ToList()
                     .FirstOrDefault();
 
-            if (ward != null)
+            if (ward != null && W1())
             {
                 W.Cast(ward);
                 LeeSin.Lastcastedw = Environment.TickCount;
