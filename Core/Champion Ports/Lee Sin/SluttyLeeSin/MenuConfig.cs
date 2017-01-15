@@ -8,15 +8,8 @@ using EloBuddy;
     {
        public static readonly string[] Names =
         {
-            "Krug",
-            "Razorbeak",
-            "Murkwolf",
-            "Gromp",
-            "Crab",
-            "Blue",
-            "Red",
-            "Dragon",
-            "Baron"
+            "SRU_Krug", "SRU_Razorbeak", "SRU_Murkwolf", "SRU_Gromp", "Sru_Crab", "SRU_Blue", "SRU_Red", "SRU_Dragon_Air", "SRU_Dragon_Water", "SRU_Dragon_Fire", "SRU_Dragon_Elder", "SRU_Dragon_Earth", "SRU_Baron", "SRU_RiftHerald"
+
         };
         public static void OnLoad()
         {
