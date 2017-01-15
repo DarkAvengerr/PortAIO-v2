@@ -9,16 +9,16 @@ using Lee_Sin.Misc;
 using SharpDX;
 using Color = System.Drawing.Color;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Lee_Sin
+using EloBuddy;
+using LeagueSharp.Common;
+namespace Lee_Sin
 {
     class EventHandler : LeeSin
     {
 
         public static void OnCreate(GameObject sender, EventArgs args)
         {
-            
+
 
             if (!GetBool("wardinsec", typeof(KeyBind)) && !GetBool("starcombo", typeof(KeyBind)) &&
                 Orbwalker.ActiveMode != Orbwalking.OrbwalkingMode.Combo && Environment.TickCount - Lastcanjump > 2000
@@ -26,7 +26,7 @@ using EloBuddy;
                 return;
 
             if (ProcessW2 || !W.IsReady() || Player.GetSpell(SpellSlot.W).Name != "BlindMonkWOne" ||
-                Player.Spellbook.GetSpell(SpellSlot.Q).Name == "blindmonkwtwo")
+                Player.Spellbook.GetSpell(SpellSlot.Q).Name == "BlindMonkWTwo")
                 return;
             if (sender.Name.ToLower().Contains("ward"))
             {
@@ -39,7 +39,7 @@ using EloBuddy;
 
                 if (target == null) return;
                 var poss = InsecPos.WardJumpInsecPosition.InsecPos(target, GetValue("fixedwardrange"), true);
-                var distancepos = Player.Position.Extend(target.Position, Player.Distance(target) - 150); 
+                var distancepos = Player.Position.Extend(target.Position, Player.Distance(target) - 150);
                 if (sender.Position.Distance(poss.To3D()) < 100)
                 {
                     Lsatcanjump1 = Environment.TickCount;
@@ -51,7 +51,7 @@ using EloBuddy;
             }
             if (sender.Name.ToLower().Contains("ward") && W.IsReady() && sender.IsAlly)
             {
-               
+
                 Lastwcasted = Environment.TickCount;
                 var ward = (Obj_AI_Base)sender;
 
@@ -118,43 +118,6 @@ using EloBuddy;
 
         public static void OnSpellcast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            //if (sender.IsMe)
-            //{
-            //    Chat.Print(args.SData.Name);
-            //}
-            //var en = HeroManager.Enemies.Where(x => x.Distance(Player) < 1200).ToList();
-            //var getresults = BubbaKush.GetPositions(Player, 1125, (byte)GetValue("enemiescount"), en);
-            //if (getresults.Count > 1)
-            //{
-            //    Chat.Print("JUSTDOIT");
-            //    if (R.IsReady() && GetBool("xeflash", typeof(bool)))
-            //    {
-            //        for (int[] i = {0}; i[0] < getresults.Count; i[0]++)
-            //        {
-            //            var order =
-            //                en.Where(a => a.Distance(Player) < R.Range).OrderBy(x => x.Distance(getresults[i[0]]));
-
-            //            if (order.FirstOrDefault() != null)
-            //            R.Cast(order.FirstOrDefault());
-            //        }
-            //    }
-                    
-            //    if (GetBool("xeflash", typeof (bool)))
-            //    {
-            //        if (R.IsReady())
-            //        if (GetBool("wardinsec", typeof (KeyBind)) ||
-            //            Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo)
-            //            return;
-
-            //        var getposition = BubbaKush.SelectBest(getresults, Player);
-            //        if (args.SData.Name == "BlindMonkRKick")
-            //        {
-            //            var poss = getposition;
-
-            //            Player.Spellbook.CastSpell(Player.GetSpellSlot("SummonerFlash"), poss, true);
-            //        }
-            //    }
-            //}
             if (sender.IsMe)
             {
                 if (args.SData.Name.Contains("flash"))
@@ -162,28 +125,28 @@ using EloBuddy;
                 switch (args.SData.Name)
                 {
                     case "BlindMonkQOne":
-                    case "blinkmonkqtwo":
+                    case "BlindMonkQTwo":
                         Junglelastq = Environment.TickCount;
                         break;
 
                     case "BlindMonkWOne":
-                    case "blindmonkwtwo":
+                    case "BlindMonkWTwo":
                         Junglelastw = Environment.TickCount;
                         break;
 
                     case "BlindMonkEOne":
-                    case "blindmonketwo":
+                    case "BlindMonkETwo":
                         Junglelaste = Environment.TickCount;
                         break;
                 }
             }
 
-            if (args.SData.Name.ToLower() == "blindmonkqtwo")
+            if (args.SData.Name.ToLower() == "BlindMonkQTwo")
             {
                 LeeSin.Lastq2Casted = Environment.TickCount;
             }
 
-            if (args.SData.Name== "BlindMonkQOne")
+            if (args.SData.Name == "BlindMonkQOne")
             {
                 LeeSin.Lastq1Casted = Environment.TickCount;
             }
@@ -192,7 +155,7 @@ using EloBuddy;
             {
                 if (Environment.TickCount - Misc.BubbaKush.Lastthingy < 2000 && GetBool("activatebubba", typeof(KeyBind)))
                 {
-                    var getresults = Misc.BubbaKush.GetPositions(Player, 600, (byte) GetValue("enemiescount"),
+                    var getresults = Misc.BubbaKush.GetPositions(Player, 600, (byte)GetValue("enemiescount"),
                         HeroManager.Enemies.Where(x => x.Distance(Player) < 1200).ToList());
                     if (getresults.Count > 1)
                     {
@@ -202,7 +165,7 @@ using EloBuddy;
 
                         Player.Spellbook.CastSpell(Player.GetSpellSlot("SummonerFlash"), poss, true);
                     }
-                }   
+                }
 
                 Lastr = Environment.TickCount;
                 var target = TargetSelector.GetTarget(R.Range, TargetSelector.DamageType.Physical);
@@ -213,15 +176,15 @@ using EloBuddy;
 
                 if (target != null && HasFlash())
                 {
-                   if (Environment.TickCount - LeeSin.Lsatcanjump1 > 3000)
-                    {                    
+                    if (Environment.TickCount - LeeSin.Lsatcanjump1 > 3000)
+                    {
                         if (Steps == LeeSin.steps.Flash ||
                             (Environment.TickCount - Lastflashward < 2000 && Wardjumpedtotarget) ||
                             Environment.TickCount - Lastflashoverprio < 3000 ||
                             Environment.TickCount - Wardjumpedto < 2000
-                            ||  Environment.TickCount - Misc.BubbaKush.Lastthingy < 2000) 
+                            || Environment.TickCount - Misc.BubbaKush.Lastthingy < 2000)
                         {
-                            if (GetBool("wardinsec", typeof (KeyBind)) || GetBool("starcombo", typeof (KeyBind))
+                            if (GetBool("wardinsec", typeof(KeyBind)) || GetBool("starcombo", typeof(KeyBind))
                                 || Environment.TickCount - Misc.BubbaKush.Lastthingy < 2000)
                             {
                                 var pos = InsecPos.FlashInsecPosition.InsecPos(target, 230);
@@ -229,7 +192,7 @@ using EloBuddy;
                                     +target.Position.Distance(Player.Position) + 230);
 
                                 Player.Spellbook.CastSpell(Player.GetSpellSlot("SummonerFlash"),
-                                    !GetBool("wardinsec", typeof (KeyBind)) ? poss : pos, true);
+                                    !GetBool("wardinsec", typeof(KeyBind)) ? poss : pos, true);
                             }
                         }
                     }
@@ -254,7 +217,7 @@ using EloBuddy;
 
         public static void OnSpell(Spellbook sender, SpellbookCastSpellEventArgs args)
         {
-            
+
             if (args.Slot == SpellSlot.W &&
                 (GetBool("wardinsec", typeof(KeyBind)) || Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.Combo ||
                 Orbwalker.ActiveMode == Orbwalking.OrbwalkingMode.LaneClear))
@@ -319,7 +282,7 @@ using EloBuddy;
         {
             if (sender.IsMe)
             {
-                if (args.SData.Name == "blindmonkqtwo" && args.Target.Type == GameObjectType.AIHeroClient)
+                if (args.SData.Name == "BlindMonkQTwo" && args.Target.Type == GameObjectType.AIHeroClient)
                 {
 
                 }

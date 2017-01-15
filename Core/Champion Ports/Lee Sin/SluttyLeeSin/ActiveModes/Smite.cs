@@ -43,7 +43,7 @@ using EloBuddy;
                                 if (Q1())
                                 Q.Cast(mob);
 
-                                if (mob.HasBuff("blindmonkqtwo"))
+                                if (mob.HasBuff("BlindMonkQTwo"))
                                 {
                                     Player.Spellbook.CastSpell(Smite, mob);
                                 }
@@ -51,7 +51,7 @@ using EloBuddy;
                                 Q.Cast();
                             }
 
-                            if (GetFuckingSmiteDamage() + Q.GetDamage(mob) + (mob.MaxHealth - mob.Health) * 0.08 >= mob.Health && Q.IsReady() && Player.GetSpell(SpellSlot.Q).Name == "blindmonkqtwo" && mob.HasBuff("blindmonkqtwo"))
+                            if (GetFuckingSmiteDamage() + Q.GetDamage(mob) + (mob.MaxHealth - mob.Health) * 0.08 >= mob.Health && Q.IsReady() && Player.GetSpell(SpellSlot.Q).Name == "BlindMonkQTwo" && mob.HasBuff("BlindMonkQTwo"))
                             {
                                 Q.Cast();
                                 Player.Spellbook.CastSpell(Smite, mob);

@@ -37,14 +37,6 @@ using EloBuddy;
                         HeroManager.Enemies.Where(x => x.Distance(Player) < 400).OrderBy(x => x.Distance(Player));
                     if (LeeSin.HasFlash() && R.IsReady())
                     {
-                        //if (Player.Distance(getposition) < 400 && Player.Distance(getposition) > R.Range)
-                        //{
-                        //    //  WardJump.WardJumped(getposition, false);
-                        //    var poss = getposition;
-
-                        //    Player.Spellbook.CastSpell(Player.GetSpellSlot("SummonerFlash"), poss, true);
-                        //    lastthingy = Environment.TickCount;
-                        //}
                         if (Player.Distance(getposition) < 400 && Player.Distance(getposition) < R.Range &&
                             heros.FirstOrDefault() != null)
                         {
@@ -60,17 +52,6 @@ using EloBuddy;
             }
 
         }
-
-        //public static int TravelDistance()
-        //{
-        //    var travel = 0;
-        //    if (HasFlash())
-        //    {
-        //        travel += 400;
-        //    }
-        //    var
-        //    if ()
-        //}
 
         /// <summary>
         /// Gets the best possible destination where the max amount of enemies will be hit.

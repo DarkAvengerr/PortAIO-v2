@@ -96,7 +96,7 @@ using EloBuddy;
                         Q.Cast(mins);
                     }
 
-                    if (Q2() && mins.HasBuff("blindmonkqtwo"))
+                    if (Q2() && mins.HasBuff("BlindMonkQTwo"))
                     {
                         Q.Cast();
                     }
@@ -204,7 +204,7 @@ using EloBuddy;
             var wardtotargetpos = Player.Position.Extend(target.Position, Player.Distance(target) - 150);
 
             if (!Canwardflash) return;
-            if (Player.HasBuff("blindmonkqtwodash")) return;
+            if (Player.HasBuff("BlindMonkQTwodash")) return;
 
             if (Player.Distance(target) < 350 || target.Distance(Player) > 900 ||
                 Environment.TickCount - Lastq1Casted < 500

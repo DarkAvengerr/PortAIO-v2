@@ -12,9 +12,9 @@ using Lee_Sin.Misc;
 using Lee_Sin.WardManager;
 using Prediction = SebbyLib.Prediction;
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace Lee_Sin
+using EloBuddy;
+using LeagueSharp.Common;
+namespace Lee_Sin
 {
     class OnUpdate : LeeSin
     {
@@ -26,30 +26,30 @@ using EloBuddy;
             switch (GetStringValue("PredictionMode"))
             {
                 case 0:
-                {
-                    const Prediction.SkillshotType coreType2 = Prediction.SkillshotType.SkillshotLine;
-
-                    var predInput2 = new Prediction.PredictionInput
                     {
-                        Collision = qwer.Collision,
-                        Speed = qwer.Speed,
-                        Delay = qwer.Delay,
-                        Range = qwer.Range,
-                        From = Player.ServerPosition,
-                        Radius = qwer.Width,
-                        Unit = target,
-                        Type = coreType2
-                    };
-                    var poutput2 = Prediction.Prediction.GetPrediction(predInput2);
+                        const Prediction.SkillshotType coreType2 = Prediction.SkillshotType.SkillshotLine;
 
-                    // if (poutput2 == null) return;
-                    if (poutput2.Hitchance >= Prediction.HitChance.High || poutput2.Hitchance == Prediction.HitChance.Immobile ||
-                        poutput2.Hitchance == Prediction.HitChance.Dashing)
-                    {
-                        qwer.Cast(poutput2.CastPosition);
+                        var predInput2 = new Prediction.PredictionInput
+                        {
+                            Collision = qwer.Collision,
+                            Speed = qwer.Speed,
+                            Delay = qwer.Delay,
+                            Range = qwer.Range,
+                            From = Player.ServerPosition,
+                            Radius = qwer.Width,
+                            Unit = target,
+                            Type = coreType2
+                        };
+                        var poutput2 = Prediction.Prediction.GetPrediction(predInput2);
+
+                        // if (poutput2 == null) return;
+                        if (poutput2.Hitchance >= Prediction.HitChance.High || poutput2.Hitchance == Prediction.HitChance.Immobile ||
+                            poutput2.Hitchance == Prediction.HitChance.Dashing)
+                        {
+                            qwer.Cast(poutput2.CastPosition);
+                        }
+                        break;
                     }
-                    break;
-                }
                 case 1:
                     var pred = Q.GetPrediction(target);
                     if (pred.Hitchance >= LeagueSharp.Common.HitChance.High ||
@@ -64,39 +64,26 @@ using EloBuddy;
         }
 
 
-        public static
-            void OnUpdated(EventArgs args)
+        public static void OnUpdated(EventArgs args)
         {
-            //if (Player.HasBuff("blindmonkqtwodash"))
-            //{
-            //    Chat.Print("dash");
-            //}
-          //  Console.WriteLine(Environment.TickCount - LeeSin.lasttotarget);
-           // ProcessHandler.ProcessHandlers();
-           // Misc.BubbaKush.DrawRect();
-          //  BubbaKushPos.ResolveBubbaPosition.GetPosition();
-            //WardSorter.HasPoachers();
-           // WardSorter.Wards();
-          //  Chat.Print(WardSorter.HasPoachers().ToString());
-          //  Chat.Print(ItemReady(3711).ToString());
             if (Player.IsRecalling() || MenuGUI.IsChatOpen) return;
 
-            if (GetBool("smiteenable", typeof (KeyBind)))
+            if (GetBool("smiteenable", typeof(KeyBind)))
             {
                 ActiveModes.Smite.AutoSmite();
             }
-            if (GetBool("wardjump", typeof (KeyBind)))
+            if (GetBool("wardjump", typeof(KeyBind)))
             {
                 EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Game.CursorPos);
                 WardManager.WardJump.WardJumped(Player.Position.Extend(Game.CursorPos, 590), true, true);
             }
 
-            if (GetBool("wardinsec", typeof (KeyBind)))
+            if (GetBool("wardinsec", typeof(KeyBind)))
             {
                 Insec.InsecTo.Insec();
             }
 
-            if (GetBool("starcombo", typeof (KeyBind)))
+            if (GetBool("starcombo", typeof(KeyBind)))
             {
                 ActiveModes.Star.StarCombo();
             }

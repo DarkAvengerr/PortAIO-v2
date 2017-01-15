@@ -178,7 +178,7 @@ using EloBuddy;
 
         public static bool Q2()
         {
-           return Player.Spellbook.GetSpell(SpellSlot.Q).Name == "blindmonkqtwo"; 
+           return Player.Spellbook.GetSpell(SpellSlot.Q).Name == "BlindMonkQTwo"; 
         }
 
         public static bool W1()
@@ -188,7 +188,7 @@ using EloBuddy;
 
         public static bool W2()
         {
-             return Player.Spellbook.GetSpell(SpellSlot.W).Name == "blindmonkwtwo"; 
+             return Player.Spellbook.GetSpell(SpellSlot.W).Name == "BlindMonkWTwo"; 
         }
 
         public static bool E1()
@@ -198,7 +198,7 @@ using EloBuddy;
 
         public static bool E2()
         {
-            return Player.GetSpell(SpellSlot.E).Name == "blindmonketwo"; 
+            return Player.GetSpell(SpellSlot.E).Name == "BlindMonkETwo"; 
         }
 
         public static bool HasFlash()

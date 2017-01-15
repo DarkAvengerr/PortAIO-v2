@@ -27,13 +27,13 @@ using EloBuddy;
                 Q.Cast(qpred.CastPosition);
             }
 
-            if (Player.Spellbook.GetSpell(SpellSlot.Q).Name == "blindmonkqtwo" && target.IsValidTarget(R.Range) && Q.IsReady())
+            if (Player.Spellbook.GetSpell(SpellSlot.Q).Name == "BlindMonkQTwo" && target.IsValidTarget(R.Range) && Q.IsReady())
             {
                 R.Cast(target);
                 Steps = LeeSin.steps.Flash;
             }
 
-            if (Player.Spellbook.GetSpell(SpellSlot.Q).Name.ToLower() == "blindmonkqtwo" && Q.IsReady() && !R.IsReady())
+            if (Player.Spellbook.GetSpell(SpellSlot.Q).Name == "BlindMonkQTwo" && Q.IsReady() && !R.IsReady())
             {
                 LeagueSharp.Common.Utility.DelayAction.Add(300, () => Q.Cast());
             }
@@ -48,7 +48,7 @@ using EloBuddy;
                         Player.Spellbook.CastSpell(slot.SpellSlot, pos);
                         Lastwarr = Environment.TickCount;
                     }
-                    if (Player.GetSpell(SpellSlot.W).Name == "blindmonkwtwo")
+                    if (Player.GetSpell(SpellSlot.W).Name == "BlindMonkWTwo")
                     {
                         Lastwards = Environment.TickCount;
                         //   _lastflashward = Environment.TickCount;
