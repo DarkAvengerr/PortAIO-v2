@@ -26,7 +26,7 @@ using EloBuddy;
             Auto.Initialize();
             Hitchance.Initialize();
             Misc.Initialize();
-            SkinManager.Initialize(Menu);
+            //SkinManager.Initialize(Menu);
             Drawings.Initialize();
         }
 

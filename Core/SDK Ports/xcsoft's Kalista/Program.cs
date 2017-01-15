@@ -39,7 +39,7 @@ using EloBuddy;
             Drawing.OnDraw += Drawing_OnDraw;
             Variables.Orbwalker.OnAction += Orbwalker_OnAction;
 
-            LogManager.GetCurrentClassLogger().Info("Kalista Loaded successfully!");
+            //LogManager.GetCurrentClassLogger().Info("Kalista Loaded successfully!");
 
             Notifications.Add(new Notification("Kalista Loaded!", "Kalista was loaded!", "Good luck, have fun!")
             {
