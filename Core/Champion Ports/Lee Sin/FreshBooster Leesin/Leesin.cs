@@ -155,7 +155,7 @@ using EloBuddy;
                     }
                     Drawing.DrawLine(Drawing.WorldToScreen(InsecST)[0], Drawing.WorldToScreen(InsecST)[1], Drawing.WorldToScreen(InsecED)[0], Drawing.WorldToScreen(InsecED)[1], 2, Color.Green);
                 }
-                if (_Q.IsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Name == "blindmonkqtwo")
+                if (_Q.IsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.Q).Name == "BlindMonkQTwo")
                 {
                     var target = ObjectManager.Get<AIHeroClient>().FirstOrDefault(f => f.IsEnemy && !f.IsZombie && f.Distance(Player.Position) <= _Q.Range && f.HasBuff("BlindMonkQOne"));
                     if (target != null)
@@ -406,7 +406,7 @@ using EloBuddy;
                         InsecText = "Ward";
                         if (InsecType == "Wait" && InsecType != "WF" && InsecType != "WF1" && _W.IsReady())
                         {
-                            if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "blindmonkwtwo") return;
+                            if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "BlindMonkWTwo") return;
                             InsecTime = TickCount(2000);
                             InsecType = "WF";
                             var Ward = Items.GetWardSlot();
@@ -414,7 +414,7 @@ using EloBuddy;
                         }
                         if (InsecType == "WF" && _W.IsReady())
                         {
-                            if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "blindmonkwtwo") return;
+                            if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "BlindMonkWTwo") return;
                             var WardObj = ObjectManager.Get<Obj_AI_Base>()  // 커서근처 와드 유무
                                     .OrderBy(obj => obj.Distance(InsecPOS))
                                     .FirstOrDefault(obj => obj.IsAlly && !obj.IsMe
@@ -448,11 +448,11 @@ using EloBuddy;
                     var Ward = Items.GetWardSlot();
                     EloBuddy.Player.IssueOrder(GameObjectOrder.MoveTo, Cursor);
                     Console.WriteLine(ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name);
-                    if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name.ToLower() == "blindmonkwtwo") return;
+                    if (ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "BlindMonkWTwo") return;
                     if (Player.Distance(Cursor) > 700) Cursor = Game.CursorPos.Extend(Player.Position, +Player.Distance(Game.CursorPos) - 700);
                     //Render.Circle.DrawCircle(Cursor, 50, Color.Black, 2);
                     //Drawing.DrawText(200, 200, Color.White, "WW is: " + WW.ToString());                    
-                    if (_W.IsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name.ToLower() == "blindmonkwone")
+                    if (_W.IsReady() && ObjectManager.Player.Spellbook.GetSpell(SpellSlot.W).Name == "BlindMonkWOne")
                     {
                         var Object = ObjectManager.Get<AIHeroClient>().FirstOrDefault(obj => obj.IsAlly && !obj.IsMe && obj.Distance(Cursor) < 110); // 커서근처 챔프유무
                         var Minion = MinionManager.GetMinions(Cursor, 110, MinionTypes.All, MinionTeam.Ally); // 아군 미니언 유무
