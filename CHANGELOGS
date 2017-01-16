@@ -1,3 +1,11 @@
+[1/16/17]
+- Fixed Slutty Lee Sin smite on Dragon
+- Updated PortAIO's Common Damage Library to 7.1
+- Fixed Kalista E Calc on S+ Class Kalista & SharpShooter
+- Fixed xcsoft's Kalista load-up
+- Removed iJava's scripts
+- Fully Fixed OKTW (Incoming Damage fixed, image loader, utilities are back, activator, tracker, hud)
+
 [1/14/17]
 - Updated :
 	- Flowers' Yasuo
@@ -25,6 +33,7 @@
 - Fixed YasuoPro loading issue
 - Fixed Kalista Damage Calculation
 - [Temp] Fixed L#Common > Damage > CalcDamage method
+- Fixed Slutty Lee Sin Completely back to working order
 
 [1/10/17]
 - Removed Autoplay
