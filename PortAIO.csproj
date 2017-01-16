@@ -5997,6 +5997,12 @@
     <Compile Include="Core\Utility Ports\Avoid\ObjectDetector.cs" />
     <Compile Include="Core\Utility Ports\Avoid\Program.cs" />
     <Compile Include="Core\Utility Ports\Avoid\UpdateChecker.cs" />
+    <Compile Include="Core\Utility Ports\BadaoActionsLimiter\Action.cs" />
+    <Compile Include="Core\Utility Ports\BadaoActionsLimiter\AttackBlock.cs" />
+    <Compile Include="Core\Utility Ports\BadaoActionsLimiter\CameraControling.cs" />
+    <Compile Include="Core\Utility Ports\BadaoActionsLimiter\MovementBlock.cs" />
+    <Compile Include="Core\Utility Ports\BadaoActionsLimiter\Program.cs" />
+    <Compile Include="Core\Utility Ports\BadaoActionsLimiter\SpellBlock.cs" />
     <Compile Include="Core\Utility Ports\BaseUlt3\BaseUlt.cs" />
     <Compile Include="Core\Utility Ports\BaseUlt3\Program.cs" />
     <Compile Include="Core\Utility Ports\BasicChatBlock\Program.cs" />
