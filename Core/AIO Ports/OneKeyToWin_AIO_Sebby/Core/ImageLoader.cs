@@ -11,7 +11,7 @@ using static LeagueSharp.Common.Render;
 
 using EloBuddy;
 using LeagueSharp.Common;
-using PortAIO.Core.AIO_Ports.OneKeyToWin_AIO_Sebby;
+using PortAIO.Properties;
 
 namespace OneKeyToWin_AIO_Sebby.Core
 {
@@ -19,11 +19,11 @@ namespace OneKeyToWin_AIO_Sebby.Core
     {
         public static Sprite CreateSummonerSprite(string name)
         {
-            var srcBitmap = (Bitmap)Resource1.ResourceManager.GetObject(name);
+            var srcBitmap = (Bitmap)Resources.ResourceManager.GetObject(name);
             if (srcBitmap == null)
             {
                 Console.WriteLine("Can't find image: " + name);
-                srcBitmap = (Bitmap)Resource1.ResourceManager.GetObject("Default");
+                srcBitmap = (Bitmap)Resources.ResourceManager.GetObject("Default");
             }
             var img = new Bitmap(srcBitmap.Width + 2, srcBitmap.Width + 2);
             var cropRect = new System.Drawing.Rectangle(0, 0, srcBitmap.Width, srcBitmap.Width);
@@ -49,11 +49,11 @@ namespace OneKeyToWin_AIO_Sebby.Core
 
         public static Sprite CreateMinimapSprite(string name)
         {
-            var srcBitmap = (Bitmap)Resource1.ResourceManager.GetObject(name);
+            var srcBitmap = (Bitmap)Resources.ResourceManager.GetObject(name);
             if (srcBitmap == null)
             {
                 Console.WriteLine("Can't find image: " + name);
-                srcBitmap = (Bitmap)Resource1.ResourceManager.GetObject("Default");
+                srcBitmap = (Bitmap)Resources.ResourceManager.GetObject("Default");
             }
 
             var img = new Bitmap(srcBitmap.Width + 2, srcBitmap.Width + 2);
@@ -86,23 +86,23 @@ namespace OneKeyToWin_AIO_Sebby.Core
         public static Sprite GetSprite(string name)
         {
             Console.WriteLine(name);
-            var sprite = new Sprite((Bitmap)Resource1.ResourceManager.GetObject(name), Vector2.Zero);
+            var sprite = new Sprite((Bitmap)Resources.ResourceManager.GetObject(name), Vector2.Zero);
             Console.WriteLine(name);
             if (sprite == null)
             {
                 Console.WriteLine("Can't find image: " + name);
-                sprite = new Sprite((Bitmap)Resource1.ResourceManager.GetObject("Default"), Vector2.Zero);
+                sprite = new Sprite((Bitmap)Resources.ResourceManager.GetObject("Default"), Vector2.Zero);
             }
             return sprite;
         }
 
         public static Sprite CreateRadrarIcon(string name, System.Drawing.Color color, int opacity = 60)
         {
-            var srcBitmap = (Bitmap)Resource1.ResourceManager.GetObject(name);
+            var srcBitmap = (Bitmap)Resources.ResourceManager.GetObject(name);
             if (srcBitmap == null)
             {
                 Console.WriteLine("Can't find image: " + name);
-                srcBitmap = (Bitmap)Resource1.ResourceManager.GetObject("Default");
+                srcBitmap = (Bitmap)Resources.ResourceManager.GetObject("Default");
             }
             var img = new Bitmap(srcBitmap.Width + 20, srcBitmap.Width + 20);
             var cropRect = new System.Drawing.Rectangle(0, 0, srcBitmap.Width, srcBitmap.Width);

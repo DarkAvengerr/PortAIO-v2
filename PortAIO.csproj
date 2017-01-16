@@ -655,11 +655,6 @@
     <Compile Include="Core\AIO Ports\OneKeyToWin_AIO_Sebby\Core\OKTWtracker.cs" />
     <Compile Include="Core\AIO Ports\OneKeyToWin_AIO_Sebby\Core\OktwTs.cs" />
     <Compile Include="Core\AIO Ports\OneKeyToWin_AIO_Sebby\Core\OKTWward.cs" />
-    <Compile Include="Core\AIO Ports\OneKeyToWin_AIO_Sebby\Resource1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resource1.resx</DependentUpon>
-    </Compile>
     <Compile Include="Core\AIO Ports\ProjectGeass\Data\Champions\Settings.cs" />
     <Compile Include="Core\AIO Ports\ProjectGeass\Data\Champions\SettingsBase.cs" />
     <Compile Include="Core\AIO Ports\ProjectGeass\Data\Items\Defensive.cs" />
@@ -6732,11 +6727,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Core\AIO Ports\OneKeyToWin_AIO_Sebby\Resource1.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <SubType>Designer</SubType>
-      <LastGenOutput>Resource1.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <Content Include="Resources\Zyra_Square_0.png" />
     <Content Include="Resources\Zilean_Square_0.png" />
     <Content Include="Resources\Ziggs_Square_0.png" />

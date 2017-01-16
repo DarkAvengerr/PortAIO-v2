@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 using EloBuddy;
 using LeagueSharp.Common;
-using PortAIO.Core.AIO_Ports.OneKeyToWin_AIO_Sebby;
+using PortAIO.Properties;
 
 namespace OneKeyToWin_AIO_Sebby.Core
 {
@@ -1147,7 +1147,7 @@ namespace OneKeyToWin_AIO_Sebby.Core
         }
         private static System.Drawing.Bitmap LoadImg(string imgName)
         {
-            var bitmap = Resource1.ResourceManager.GetObject(imgName) as System.Drawing.Bitmap;
+            var bitmap = Resources.ResourceManager.GetObject(imgName) as System.Drawing.Bitmap;
             if (bitmap == null)
             {
                 Console.WriteLine(imgName + ".png not found.");
