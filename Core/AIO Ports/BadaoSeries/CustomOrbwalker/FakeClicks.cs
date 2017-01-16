@@ -88,6 +88,7 @@ using EloBuddy;
         /// </param>
         private static void AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
+            return;
             attacking = false;
             var t = target as AIHeroClient;
             if (t != null && unit.IsMe)
@@ -105,6 +106,7 @@ using EloBuddy;
         /// </param>
         private static void BeforeAttackFake(Orbwalking.BeforeAttackEventArgs args)
         {
+            return;
             if (root.Item("Click Mode").GetValue<StringList>().SelectedIndex == 1)
             {
                 ShowClick(RandomizePosition(args.Target.Position), ClickType.Attack);
@@ -123,6 +125,7 @@ using EloBuddy;
         /// </param>
         private static void BeforeSpellCast(Spellbook s, SpellbookCastSpellEventArgs args)
         {
+            return;
             var target = args.Target;
 
             if (target == null)
@@ -148,6 +151,7 @@ using EloBuddy;
         /// </param>
         private static void DrawFake(Obj_AI_Base sender, GameObjectNewPathEventArgs args)
         {
+            return;
             if (sender.IsMe && lastTime + deltaT < Game.Time && args.Path.LastOrDefault() != lastEndpoint &&
                 args.Path.LastOrDefault().Distance(player.ServerPosition) >= 5f &&
                 root.Item("Enable").IsActive() &&
@@ -179,6 +183,7 @@ using EloBuddy;
         /// </param>
         private static void OnIssueOrder(Obj_AI_Base sender, PlayerIssueOrderEventArgs args)
         {
+            return;
             if (sender.IsMe &&
                 (args.Order == GameObjectOrder.MoveTo || args.Order == GameObjectOrder.AttackUnit ||
                  args.Order == GameObjectOrder.AttackTo) &&
@@ -203,11 +208,13 @@ using EloBuddy;
 
         public static void Initiate()
         {
+            return;
             Game_OnGameLoad();
         }
 
         private static void Game_OnGameLoad()
         {
+            return;
             root.AddItem(new MenuItem("Enable", "Enable").SetValue(true));
             root.AddItem(new MenuItem("Click Mode", "Click Mode"))
                 .SetValue(new StringList(new[] { "Evade, No Cursor Position", "Cursor Position, No Evade" }));
@@ -225,6 +232,7 @@ using EloBuddy;
 
         private static void ShowClick(Vector3 position, ClickType type)
         {
+            return;
             if (!Enabled)
             {
                 return;
