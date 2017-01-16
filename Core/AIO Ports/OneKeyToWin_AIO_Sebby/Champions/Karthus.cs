@@ -171,7 +171,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
                     }
                     else if(!target.IsVisible)
                     {
-                        var ChampionInfoOne = Core.OKTWtracker.ChampionInfoList.Find(x => x.NetworkId == target.NetworkId);
+                        var ChampionInfoOne = Core.OKTWtracker.ChampionInfoList.Find(x => x.Hero.NetworkId == target.NetworkId);
                         if (ChampionInfoOne != null )
                         {
                             var timeInvisible = Game.Time - ChampionInfoOne.LastVisableTime;

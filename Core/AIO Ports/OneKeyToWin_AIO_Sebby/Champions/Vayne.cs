@@ -105,7 +105,7 @@ namespace OneKeyToWin_AIO_Sebby.Champions
             {
                 if (E.IsReady() && Config.Item("Eks", true).GetValue<bool>())
                 {
-                    var incomingDMG = OktwCommon.GetIncomingDamage(t, 0.3f, false);
+                    var incomingDMG = OktwCommon.GetIncomingDamage2(t, 0.3f, false);
                     if (incomingDMG > t.Health)
                         return;
 

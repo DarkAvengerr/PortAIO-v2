@@ -8,8 +8,8 @@ using SebbyLib;
 using SharpDX.Direct3D9;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace OneKeyToWin_AIO_Sebby.Core
+using LeagueSharp.Common; 
+namespace OneKeyToWin_AIO_Sebby.Core
 {
     class ChampionStuff
     {

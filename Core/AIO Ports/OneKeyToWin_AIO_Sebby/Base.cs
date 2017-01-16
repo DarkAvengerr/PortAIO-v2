@@ -8,13 +8,13 @@ using SebbyLib;
 using SharpDX.Direct3D9;
 
 
-using EloBuddy; 
- using LeagueSharp.Common; 
- namespace OneKeyToWin_AIO_Sebby
+using EloBuddy;
+using LeagueSharp.Common;
+namespace OneKeyToWin_AIO_Sebby
 {
     class Base : Program
     {
-        
+
         public static float QMANA = 0, WMANA = 0, EMANA = 0, RMANA = 0;
         private static Font TextBold;
         private static float spellFarmTimer = 0;
@@ -28,7 +28,7 @@ using EloBuddy;
             }
         }
 
-        public static int FarmMinions {get { return Config.Item("LCminions", true).GetValue<Slider>().Value;}}
+        public static int FarmMinions { get { return Config.Item("LCminions", true).GetValue<Slider>().Value; } }
 
         static Base()
         {
@@ -38,7 +38,7 @@ using EloBuddy;
             Config.SubMenu("Extra settings OKTW©").AddItem(new MenuItem("supportMode", "Support Mode", true).SetValue(false));
             Config.SubMenu("Extra settings OKTW©").AddItem(new MenuItem("comboDisableMode", "Disable auto-attack in combo mode", true).SetValue(false));
             Config.SubMenu("Extra settings OKTW©").AddItem(new MenuItem("manaDisable", "Disable mana manager in combo", true).SetValue(false));
-            Config.SubMenu("Extra settings OKTW©").AddItem(new MenuItem("collAA", "Disable auto-attack if Yasuo wall collision", true).SetValue(true));           
+            Config.SubMenu("Extra settings OKTW©").AddItem(new MenuItem("collAA", "Disable auto-attack if Yasuo wall collision", true).SetValue(true));
             Config.SubMenu("Extra settings OKTW©").AddItem(new MenuItem("harassMixed", "Spell-harass only in mixed mode").SetValue(false));
             Config.Item("supportMode", true).SetValue(false);
 
@@ -71,6 +71,10 @@ using EloBuddy;
 
         private static void OnDraw(EventArgs args)
         {
+
+            if (AioModeSet != AioMode.UtilityOnly && Config.Item("debugOrb").GetValue<bool>())
+                DrawFontTextScreen(TextBold, "mode: " + Orbwalker.ActiveMode.ToString().ToUpper(), Drawing.Width * 0.1f, Drawing.Height * 0.1f, Color.White);
+
             if (Game.Time - DrawSpellTime < 0.5 && Config.Item("debugPred").GetValue<bool>() && (Config.Item("Qpred", true).GetValue<StringList>().SelectedIndex == 1 || Config.Item("Wpred", true).GetValue<StringList>().SelectedIndex == 1
                 || Config.Item("Epred", true).GetValue<StringList>().SelectedIndex == 1 || Config.Item("Rpred", true).GetValue<StringList>().SelectedIndex == 1))
             {
@@ -82,7 +86,7 @@ using EloBuddy;
                 drawText("Aiming " + DrawSpellPos.Hitchance, Player.Position.Extend(DrawSpellPos.CastPosition, 400), System.Drawing.Color.Gray);
             }
 
-            if (Program.AIOmode != 2 && spellFarmTimer + 1 > Game.Time && Config.Item("showNot").GetValue<bool>() && Config.Item("spellFarm") != null)
+            if (AioModeSet != AioMode.UtilityOnly && spellFarmTimer + 1 > Game.Time && Config.Item("showNot").GetValue<bool>() && Config.Item("spellFarm") != null)
             {
                 if (Config.Item("spellFarm").GetValue<bool>())
                     DrawFontTextScreen(TextBold, "SPELLS FARM ON", Drawing.Width * 0.5f, Drawing.Height * 0.4f, Color.GreenYellow);
@@ -94,10 +98,10 @@ using EloBuddy;
         private static void Game_OnWndProc(WndEventArgs args)
         {
 
-            if (Program.AIOmode == 2)
+            if (AioModeSet == AioMode.UtilityOnly)
                 return;
 
-            if (args.Msg == 0x20a && Config.Item("spellFarmMode").GetValue<StringList>().SelectedIndex == 0 )
+            if (args.Msg == 0x20a && Config.Item("spellFarmMode").GetValue<StringList>().SelectedIndex == 0)
             {
                 Config.Item("spellFarm").SetValue(!Config.Item("spellFarm").GetValue<bool>());
                 spellFarmTimer = Game.Time;
@@ -111,9 +115,10 @@ using EloBuddy;
 
         private static void Orbwalking_BeforeAttack(Orbwalking.BeforeAttackEventArgs args)
         {
-            if (Combo && Config.Item("comboDisableMode", true).GetValue<bool>())
+            var t = args.Target as AIHeroClient;
+            if (t != null && Combo && Config.Item("comboDisableMode", true).GetValue<bool>())
             {
-                var t = (AIHeroClient)args.Target;
+
                 if (4 * Player.GetAutoAttackDamage(t) < t.Health - OktwCommon.GetIncomingDamage(t) && !t.HasBuff("luxilluminatingfraulein") && !Player.HasBuff("sheen") && !Player.HasBuff("Mastery6261"))
                     args.Process = false;
             }

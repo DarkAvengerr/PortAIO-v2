@@ -404,7 +404,7 @@ namespace SurvivorRyze
 
         private static void SeraphUsage()
         {
-            var incomingdmg = OktwCommon.GetIncomingDamage(Player, 1);
+            var incomingdmg = OktwCommon.GetIncomingDamage2(Player, 1);
             if (Seraph.IsReady() && _menu.Item("UseSeraph").GetValue<bool>())
             {
                 var shieldint = Player.Mana*0.2 + 150;

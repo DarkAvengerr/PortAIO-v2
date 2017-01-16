@@ -203,7 +203,7 @@ using LeagueSharp.Common;
             {
                 foreach (var ally in HeroManager.Allies.Where(ally => ally.IsValid && Player.Distance(ally.ServerPosition) < W.Range && Config.Item("Eon" + ally.ChampionName).GetValue<bool>()))
                 {
-                    if (OktwCommon.CanHitSkillShot(ally, args.Start, args.End, args.SData) || OktwCommon.GetIncomingDamage(ally,1) > ally.Health * Config.Item("Edmg", true).GetValue<Slider>().Value * 0.01)
+                    if (OktwCommon.CanHitSkillShot(ally, args.Start, args.End, args.SData) || OktwCommon.GetIncomingDamage2(ally,1) > ally.Health * Config.Item("Edmg", true).GetValue<Slider>().Value * 0.01)
                     {
                         if (E.IsReady())
                             LeagueSharp.Common.Utility.DelayAction.Add(200, () => E.Cast(sender.Position));

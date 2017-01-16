@@ -71,7 +71,7 @@ using EloBuddy;
         /// </summary>
         public void SeraphUsage()
         {
-            var incomingdmg = OktwCommon.GetIncomingDamage(ObjectManager.Player, 1);
+            var incomingdmg = OktwCommon.GetIncomingDamage2(ObjectManager.Player, 1);
             if (Seraph.IsReady() && Config.UseSeraph.GetValue<bool>())
             {
                 var shieldint = ObjectManager.Player.Mana*0.2 + 150;

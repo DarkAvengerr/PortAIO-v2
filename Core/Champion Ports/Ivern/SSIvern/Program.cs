@@ -337,7 +337,7 @@ namespace SSIvern
                             {
                                 case 0:
                                     {
-                                        if (OktwCommon.GetIncomingDamage(hero, 2, true) > 0)
+                                        if (OktwCommon.GetIncomingDamage2(hero, 2, true) > 0)
                                         {
                                             E.CastOnUnit(hero);
                                             if (Config.Item("NotifyProtectedAlly").GetValue<bool>())
@@ -350,7 +350,7 @@ namespace SSIvern
                                     break;
                                 case 1:
                                     {
-                                        var damage = OktwCommon.GetIncomingDamage(hero, 2, true);
+                                        var damage = OktwCommon.GetIncomingDamage2(hero, 2, true);
                                         //if damage is atleast 5 percent health of ally OR damage is less than our sheild + ally health
                                         if ((damage > hero.MaxHealth * 0.05f) ||
                                             ((damage > hero.Health) &&

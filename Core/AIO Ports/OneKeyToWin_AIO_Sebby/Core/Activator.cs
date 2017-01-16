@@ -5,8 +5,8 @@ using LeagueSharp;
 using SebbyLib;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace OneKeyToWin_AIO_Sebby
+using LeagueSharp.Common; 
+namespace OneKeyToWin_AIO_Sebby
 {
 
     class Activator
@@ -47,7 +47,8 @@ using EloBuddy;
             GLP800= new Items.Item(3030, 800f),
 
             //def
-        FaceOfTheMountain = new Items.Item(3401, 600f),
+            FaceOfTheMountain = new Items.Item(3401, 600f),
+            Redemption = new Items.Item(3107, 5500),
             Zhonya = new Items.Item(3157, 0),
             Seraph = new Items.Item(3040, 0),
             Solari = new Items.Item(3190, 600f),
@@ -97,7 +98,7 @@ using EloBuddy;
             if (heal != SpellSlot.Unknown)
             {
                 Config.SubMenu("Activator OKTW©").SubMenu("Summoners").SubMenu("Heal").AddItem(new MenuItem("Heal", "Heal").SetValue(true));
-                Config.SubMenu("Activator OKTW©").SubMenu("Summoners").SubMenu("Heal").AddItem(new MenuItem("AllyHeal", "AllyHeal").SetValue(true));
+                Config.SubMenu("Activator OKTW©").SubMenu("Summoners").SubMenu("Heal").AddItem(new MenuItem("AllyHeal", "Ally Heal").SetValue(true));
             }
             if (barrier != SpellSlot.Unknown)
             {
@@ -113,7 +114,7 @@ using EloBuddy;
                 Config.SubMenu("Activator OKTW©").SubMenu("Summoners").AddItem(new MenuItem("Cleanse", "Cleanse").SetValue(true));
             }
 
-            Config.SubMenu("Activator OKTW©").AddItem(new MenuItem("pots", "Potion, ManaPotion, Flask, Biscuit").SetValue(true));
+            Config.SubMenu("Activator OKTW©").AddItem(new MenuItem("pots", "Potion, Flask, Biscuit").SetValue(true));
 
             Config.SubMenu("Activator OKTW©").SubMenu("Offensives").SubMenu("Botrk").AddItem(new MenuItem("Botrk", "Botrk").SetValue(true));
             Config.SubMenu("Activator OKTW©").SubMenu("Offensives").SubMenu("Botrk").AddItem(new MenuItem("BotrkKS", "Botrk KS").SetValue(true));
@@ -159,8 +160,10 @@ using EloBuddy;
 
             Config.SubMenu("Activator OKTW©").SubMenu("Defensives").AddItem(new MenuItem("Seraph", "Seraph").SetValue(true));
             Config.SubMenu("Activator OKTW©").SubMenu("Defensives").AddItem(new MenuItem("Solari", "Solari").SetValue(true));
-            // CLEANSERS 
+            Config.SubMenu("Activator OKTW©").SubMenu("Defensives").AddItem(new MenuItem("Redemption", "Redemption").SetValue(true));
             
+            // CLEANSERS 
+
             Config.SubMenu("Activator OKTW©").SubMenu("Cleansers").AddItem(new MenuItem("Clean", "Quicksilver, Mikaels, Mercurial, Dervish").SetValue(true));
 
             foreach (var ally in HeroManager.Allies)
@@ -179,25 +182,23 @@ using EloBuddy;
             Game.OnUpdate += Game_OnGameUpdate;
             Orbwalking.AfterAttack += Orbwalking_AfterAttack;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
-            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             //Drawing.OnDraw += Drawing_OnDraw;
         }
 
         private void Orbwalking_AfterAttack(AttackableUnit unit, AttackableUnit target)
         {
-            if (Config.Item("HydraTitanic").GetValue<bool>() && Program.Combo && HydraTitanic.IsReady() && target.IsValid<AIHeroClient>())
+            if (target is AIHeroClient && Config.Item("HydraTitanic").GetValue<bool>() && HydraTitanic.IsReady() && target.IsValid<AIHeroClient>())
             {
                 HydraTitanic.Cast();
-                Orbwalking.ResetAutoAttackTimer();
             }
         }
 
         private void Obj_AI_Base_OnProcessSpellCast(Obj_AI_Base sender, GameObjectProcessSpellCastEventArgs args)
         {
-            if (!sender.IsEnemy || sender.Type != GameObjectType.AIHeroClient)
+            if (!(sender is AIHeroClient) || !sender.IsEnemy)
                 return;
 
-            
             if (sender.Distance(Player.Position) > 1600)
                 return;
 
@@ -205,14 +206,15 @@ using EloBuddy;
             {
                 if (Config.Item("spellZ" + args.SData.Name) != null && Config.Item("spellZ" + args.SData.Name).GetValue<bool>())
                 {
-                    if (args.Target != null && args.Target.NetworkId == Player.NetworkId)
+                    if (args.Target != null)
                     {
-                        ZhonyaTryCast();
+                        if (args.Target.NetworkId == Player.NetworkId)
+                            ZhonyaTryCast();
                     }
                     else
                     {
-                        var castArea = Player.Distance(args.End) * (args.End - Player.ServerPosition).Normalized() + Player.ServerPosition;
-                        if (castArea.Distance(Player.ServerPosition) < Player.BoundingRadius / 2)
+                        
+                        if (OktwCommon.CanHitSkillShot(Player, args.Start, args.End, args.SData))
                             ZhonyaTryCast();
                     }
                 }
@@ -223,28 +225,28 @@ using EloBuddy;
                 foreach (var ally in HeroManager.Allies.Where(ally => ally.IsValid && !ally.IsDead && ally.HealthPercent < 51 && Player.Distance(ally.ServerPosition) < 700))
                 {
                     double dmg = 0;
-                    if (args.Target != null && args.Target.NetworkId == ally.NetworkId)
+                    if (args.Target != null)
                     {
-                        dmg = dmg + sender.GetSpellDamage(ally, args.SData.Name);
+                        if (args.Target.NetworkId == ally.NetworkId)
+                            dmg = dmg + sender.GetSpellDamage(ally, args.SData.Name);
                     }
                     else
                     {
-                        var castArea = ally.Distance(args.End) * (args.End - ally.ServerPosition).Normalized() + ally.ServerPosition;
-                        if (castArea.Distance(ally.ServerPosition) < ally.BoundingRadius / 2)
+                        if (OktwCommon.CanHitSkillShot(ally, args.Start, args.End, args.SData))
                             dmg = dmg + sender.GetSpellDamage(ally, args.SData.Name);
                         else
                             continue;
                     }
 
                     if (ally.Health - dmg < ally.CountEnemiesInRange(700) * ally.Level * 40)
-                        Player.Spellbook.CastSpell(exhaust, sender);
+                        ObjectManager.Player.Spellbook.CastSpell(exhaust, sender);
                 }
             }
         }
 
         private void ZhonyaTryCast()
         {
-            if (Player.HasBuffOfType(BuffType.PhysicalImmunity) || Player.HasBuffOfType(BuffType.SpellImmunity)  || (!Player.Spellbook.Spells[3].IsReady() && Player.ChampionName == "Kayle")
+            if (Player.HasBuffOfType(BuffType.PhysicalImmunity) || Player.HasBuffOfType(BuffType.SpellImmunity)  || (!ObjectManager.Player.Spellbook.Spells[3].IsReady() && Player.ChampionName == "Kayle")
                || Player.IsZombie || Player.IsInvulnerable || Player.HasBuffOfType(BuffType.Invulnerability) || Player.HasBuff("kindredrnodeathbuff")
                || Player.HasBuffOfType(BuffType.SpellShield) || Player.AllShield > OktwCommon.GetIncomingDamage(Player))
             {
@@ -258,9 +260,40 @@ using EloBuddy;
 
         private void Survival()
         {
+            if (Redemption.IsReady() && Config.Item("Redemption").GetValue<bool>())
+            {
+                var target = HeroManager.Enemies.FirstOrDefault(x => x.IsValidTarget(5000) && x.Position.CountAlliesInRange(600) > 0);
+                if (target != null)
+                {
+                    var ally = HeroManager.Allies.FirstOrDefault(x => x.IsValid && !x.IsDead && x.Position.Distance(target.Position) <400);
+                    if (ally != null && ally.Health - OktwCommon.GetIncomingDamage(ally) < ally.MaxHealth * 0.5)
+                    {
+                        
+                        if (target.CountAlliesInRange(600) > 1 || ally.CountEnemiesInRange(600) > 1)
+                        {
+                            var predInput = new SebbyLib.Prediction.PredictionInput
+                            {
+                                Aoe = true,
+                                Collision = false,
+                                Speed = float.MaxValue,
+                                Delay = 0.5f,
+                                Range = 5500,
+                                From = Player.ServerPosition,
+                                Radius = 500,
+                                Unit = target,
+                                Type = SebbyLib.Prediction.SkillshotType.SkillshotCircle
+                            };
+                            var pos = SebbyLib.Prediction.Prediction.GetPrediction(predInput);
+                            Redemption.Cast(pos.CastPosition);
+                        }
+                    }
+                }
+            }
+
+
             if (Player.HealthPercent < 60 && (Seraph.IsReady() || Zhonya.IsReady()  || CanUse(barrier)))
             {
-                double dmg = OktwCommon.GetIncomingDamage(Player, 1);
+                double dmg = OktwCommon.GetIncomingDamage(Player);
                 var enemys = Player.CountEnemiesInRange(800);
                 if(dmg > 0 || enemys > 0)
                 { 
@@ -268,12 +301,12 @@ using EloBuddy;
                         {
                             var value = 95 + Player.Level * 20;
                             if (dmg > value && Player.HealthPercent < 50)
-                                Player.Spellbook.CastSpell(barrier, Player);
+                                ObjectManager.Player.Spellbook.CastSpell(barrier, Player);
                             else if (Player.Health - dmg < enemys * Player.Level * 20)
-                                Player.Spellbook.CastSpell(barrier, Player);
+                                ObjectManager.Player.Spellbook.CastSpell(barrier, Player);
                             else if (Player.Health - dmg < Player.Level * 10)
-                                Seraph.Cast();
-                        }
+                                ObjectManager.Player.Spellbook.CastSpell(barrier, Player);
+                    }
 
                         if (Seraph.IsReady() && Config.Item("Seraph").GetValue<bool>())
                         {
@@ -312,9 +345,9 @@ using EloBuddy;
 
             foreach (var ally in HeroManager.Allies.Where(ally => ally.IsValid && !ally.IsDead && ally.HealthPercent < 50 && Player.Distance(ally.ServerPosition) < 700))
             {
-                double dmg = OktwCommon.GetIncomingDamage(ally, 1);
-                var enemys = ally.CountEnemiesInRange(700);
-                if (dmg == 0 && enemys == 0)
+                double dmg = OktwCommon.GetIncomingDamage(ally);
+
+                if (dmg == 0)
                     continue;
 
                 if (CanUse(heal) && Config.Item("Heal").GetValue<bool>())
@@ -322,10 +355,10 @@ using EloBuddy;
                     if (!Config.Item("AllyHeal").GetValue<bool>() && !ally.IsMe)
                         return;
 
-                    if (ally.Health - dmg < enemys * ally.Level * 15)
-                        Player.Spellbook.CastSpell(heal, ally);
+                    if (ally.Health - dmg < ally.Level * 10)
+                        ObjectManager.Player.Spellbook.CastSpell(heal, ally);
                     else if (ally.Health - dmg < ally.Level * 10)
-                       Player.Spellbook.CastSpell(heal, ally);
+                       ObjectManager.Player.Spellbook.CastSpell(heal, ally);
                 }
 
                 if (Config.Item("Solari").GetValue<bool>() && Solari.IsReady() && Player.Distance(ally.ServerPosition) < Solari.Range)
@@ -333,7 +366,7 @@ using EloBuddy;
                     var value = 75 + (15 * Player.Level);
                     if (dmg > value && Player.HealthPercent < 50)
                         Solari.Cast();
-                    else if (ally.Health - dmg < enemys * ally.Level * 15)
+                    else if (ally.Health - dmg < ally.Level * 10)
                         Solari.Cast();
                     else if (ally.Health - dmg < ally.Level * 10)
                         Solari.Cast();
@@ -344,7 +377,7 @@ using EloBuddy;
                     var value = 0.1 * Player.MaxHealth;
                     if (dmg > value && Player.HealthPercent < 50)
                         FaceOfTheMountain.Cast(ally);
-                    else if (ally.Health - dmg < enemys * ally.Level * 15)
+                    else if (ally.Health - dmg < ally.Level * 10)
                         FaceOfTheMountain.Cast(ally);
                     else if (ally.Health - dmg < ally.Level * 10)
                         FaceOfTheMountain.Cast(ally);
@@ -392,27 +425,6 @@ using EloBuddy;
             ZhonyaCast();
         }
 
-        private void Teleport()
-        {
-            if (CanUse(teleport) && !Player.HasBuff("teleport"))
-            {
-                foreach (var ally in HeroManager.Allies.Where(ally => ally.IsValid && !ally.IsDead  && ally.CountEnemiesInRange(1000) > 0 ))
-                {
-                    foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValid && !enemy.IsDead))
-                    {
-                        var distanceEA = enemy.Distance(ally);
-                        if (distanceEA < 1000)
-                        {
-                            foreach (var obj in ObjectManager.Get<Obj_AI_Minion>().Where(obj => obj.IsAlly &&  distanceEA < obj.Position.Distance(ally.Position)))
-                            {
-                                Player.Spellbook.CastSpell(teleport, obj);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
         private void Smite()
         {
             if (CanUse(smite) )
@@ -424,12 +436,12 @@ using EloBuddy;
                     if (enemy.IsValidTarget())
                     {
                         if(enemy.HealthPercent < 50 && Config.Item("SmiteEnemy").GetValue<bool>())
-                            Player.Spellbook.CastSpell(smite, enemy);
+                            ObjectManager.Player.Spellbook.CastSpell(smite, enemy);
                         
                         var smiteDmg = Player.GetSummonerSpellDamage(enemy, Damage.SummonerSpell.Smite);
                         
                         if ( Config.Item("SmiteEnemyKS").GetValue<bool>() && enemy.Health - OktwCommon.GetIncomingDamage(enemy) < smiteDmg)
-                            Player.Spellbook.CastSpell(smite, enemy);
+                            ObjectManager.Player.Spellbook.CastSpell(smite, enemy);
                     }
                 }
                 if (mobs.Count > 0 && Config.Item("Smite").GetValue<KeyBind>().Active)
@@ -445,7 +457,7 @@ using EloBuddy;
                             && mob.Health <= Player.GetSummonerSpellDamage(mob, Damage.SummonerSpell.Smite))
                         {
   
-                            Player.Spellbook.CastSpell(smite, mob);
+                            ObjectManager.Player.Spellbook.CastSpell(smite, mob);
                         }
                     }
                 }
@@ -460,7 +472,7 @@ using EloBuddy;
                 {
                     foreach (var enemy in HeroManager.Enemies.Where(enemy => enemy.IsValidTarget(650) && enemy.IsChannelingImportantSpell()))
                     {
-                        Player.Spellbook.CastSpell(exhaust, enemy);
+                        ObjectManager.Player.Spellbook.CastSpell(exhaust, enemy);
                     }
                 }
 
@@ -469,7 +481,7 @@ using EloBuddy;
                     var t = TargetSelector.GetTarget(650, TargetSelector.DamageType.Physical);
                     if (t.IsValidTarget())
                     {
-                        Player.Spellbook.CastSpell(exhaust, t);
+                        ObjectManager.Player.Spellbook.CastSpell(exhaust, t);
                     }
                 }
             }
@@ -492,17 +504,17 @@ using EloBuddy;
                         {
                             var enemyPred = Prediction.GetPrediction(enemy, 0.1f).CastPosition;
                             if (Player.ServerPosition.Distance(enemyPred) > 500 || NavMesh.IsWallOfGrass(enemyPred, 0))
-                                Player.Spellbook.CastSpell(ignite, enemy);
+                                ObjectManager.Player.Spellbook.CastSpell(ignite, enemy);
                         }
 
                         if (enemy.PercentLifeStealMod > 10)
-                            Player.Spellbook.CastSpell(ignite, enemy);
+                            ObjectManager.Player.Spellbook.CastSpell(ignite, enemy);
 
                         if (enemy.HasBuff("RegenerationPotion") || enemy.HasBuff("ItemMiniRegenPotion") || enemy.HasBuff("ItemCrystalFlask"))
-                            Player.Spellbook.CastSpell(ignite, enemy);
+                            ObjectManager.Player.Spellbook.CastSpell(ignite, enemy);
 
                         if (enemy.Health > Player.Health)
-                            Player.Spellbook.CastSpell(ignite, enemy);
+                            ObjectManager.Player.Spellbook.CastSpell(ignite, enemy);
                     }
                 }
             }
@@ -600,7 +612,7 @@ using EloBuddy;
             else if (Dervish.IsReady())
                 LeagueSharp.Common.Utility.DelayAction.Add(Config.Item("CSSdelay").GetValue<Slider>().Value, () => Dervish.Cast());
             else if(cleanse != SpellSlot.Unknown && cleanse.IsReady() && Config.Item("Cleanse").GetValue<bool>())
-                LeagueSharp.Common.Utility.DelayAction.Add(Config.Item("CSSdelay").GetValue<Slider>().Value, () => Player.Spellbook.CastSpell(cleanse, Player));
+                LeagueSharp.Common.Utility.DelayAction.Add(Config.Item("CSSdelay").GetValue<Slider>().Value, () => ObjectManager.Player.Spellbook.CastSpell(cleanse, Player));
         }
 
         private void Defensive()
@@ -710,7 +722,7 @@ using EloBuddy;
 
         private void PotionManagement()
         {
-            if (Player.Health + 250 > Player.MaxHealth)
+            if (Player.Health - OktwCommon.GetIncomingDamage(Player) + 250 > Player.MaxHealth )
                 return;
 
             if(Player.HealthPercent > 50 && Player.CountEnemiesInRange(700) == 0)
@@ -733,7 +745,7 @@ using EloBuddy;
 
         private bool CanUse(SpellSlot sum)
         {
-            if (sum != SpellSlot.Unknown && Player.Spellbook.CanUseSpell(sum) == SpellState.Ready)
+            if (sum != SpellSlot.Unknown && ObjectManager.Player.Spellbook.CanUseSpell(sum) == SpellState.Ready)
                 return true;
             else
                 return false;

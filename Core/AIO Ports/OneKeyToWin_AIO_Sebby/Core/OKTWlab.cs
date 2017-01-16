@@ -8,8 +8,8 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace OneKeyToWin_AIO_Sebby.Core
+using LeagueSharp.Common; 
+namespace OneKeyToWin_AIO_Sebby.Core
 {
     class OKTWlab
     {
@@ -23,7 +23,7 @@ using EloBuddy;
         {
             Obj_AI_Base.OnDelete += Obj_AI_Base_OnDelete;
             Obj_AI_Base.OnCreate += Obj_AI_Base_OnCreate;
-            Obj_AI_Base.OnSpellCast += Obj_AI_Base_OnProcessSpellCast;
+            Obj_AI_Base.OnProcessSpellCast += Obj_AI_Base_OnProcessSpellCast;
             Drawing.OnDraw += Drawing_OnDraw;
             Spellbook.OnCastSpell += Spellbook_OnCastSpell;
             Game.OnUpdate += Game_OnGameUpdate;
@@ -69,13 +69,24 @@ using EloBuddy;
 
         private void Obj_AI_Base_OnBuffAdd(Obj_AI_Base sender, Obj_AI_BaseBuffGainEventArgs args)
         {
-           return;
-            if (!sender.IsMe)
-                Program.debug(args.Buff.Name);
+
+            if (sender.IsEnemy)
+                Program.debug(args.Buff.Name + " " + args.Buff.Type + " " + args.Buff.SourceName);
         }
 
         private void Game_OnGameUpdate(EventArgs args)
         {
+            if(ObjectManager.Player.Spellbook.IsAutoAttacking || !ObjectManager.Player.CanMove || ObjectManager.Player.IsRooted)
+                Console.WriteLine(ObjectManager.Player.Spellbook.IsAutoAttacking + " " + ObjectManager.Player.CanMove  + " " + ObjectManager.Player.IsRooted);
+
+
+            foreach (var enemy in HeroManager.Enemies.Where(x=> x.IsValidTarget(400)))
+            {
+                if(!SebbyLib.OktwCommon.CanMove(enemy))
+                {
+                    Console.WriteLine("cant move");
+                }
+            }
             return;
             foreach (var mast in ObjectManager.Player.Masteries)
             {
@@ -118,6 +129,16 @@ using EloBuddy;
 
         private void Drawing_OnDraw(EventArgs args)
         {
+
+
+            var obj = ObjectManager.Get<Obj_AI_Base>().FirstOrDefault(x => x.Distance(Game.CursorPos) < 100);
+            if (obj != null)
+            {
+                var wts = Drawing.WorldToScreen(Game.CursorPos);
+                Drawing.DrawText(wts[0], wts[1], System.Drawing.Color.Aqua, obj.Name);
+            }
+
+
             return;
             GetConeTarget(endPosG.To2D());
             Render.Circle.DrawCircle(endPosG, 50, System.Drawing.Color.Red, 1);
@@ -176,6 +197,11 @@ using EloBuddy;
 
         private void Obj_AI_Base_OnCreate(GameObject sender, EventArgs args)
         {
+            return;
+            var minion = sender as Obj_AI_Minion;
+
+            if (minion != null )
+                Program.debug(" render: " + minion.IsHPBarRendered+" " + minion.Name +  " type "  + minion.Team + " mana " + minion.MaxMana + " hp "+ minion.Health + " attack "+ minion.IsMinion + minion.AttackSpeedMod  );
             return;
             if (sender.IsValid && sender.IsAlly )
             {

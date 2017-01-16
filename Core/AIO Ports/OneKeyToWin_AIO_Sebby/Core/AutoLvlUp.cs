@@ -8,13 +8,12 @@ using LeagueSharp.Common;
 using SharpDX;
 
 using EloBuddy; 
- using LeagueSharp.Common; 
- namespace OneKeyToWin_AIO_Sebby.Core
+using LeagueSharp.Common; 
+namespace OneKeyToWin_AIO_Sebby.Core
 {
 
-    class AutoLvlUp
+    class AutoLvlUp : Program
     {
-        private Menu Config = Program.Config;
         int lvl1, lvl2, lvl3, lvl4;
         public void LoadOKTW()
         {
