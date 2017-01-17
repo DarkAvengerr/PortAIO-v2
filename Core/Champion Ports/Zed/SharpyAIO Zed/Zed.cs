@@ -588,7 +588,7 @@ using EloBuddy;
 
                             if (Menu.Item("HW2").GetValue<bool>())
                             {
-                                if (Player.HasBuff("zedwhandler"))
+                                if (Player.HasBuff("ZedWHandler"))
                                 {
                                     if (W.IsReadyPerfectly() && wReady == wCheck.Second)
                                     {

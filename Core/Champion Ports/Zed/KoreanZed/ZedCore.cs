@@ -112,7 +112,7 @@ using EloBuddy; namespace KoreanZed
 
             shadows.Combo();
 
-            if (w.UseOnCombo && shadows.CanCast && player.HasBuff("zedr2"))
+            if (w.UseOnCombo && shadows.CanCast && player.HasBuff("ZedR2"))
             {
                 AIHeroClient target = TargetSelector.GetTarget(w.Range + e.Range, TargetSelector.DamageType.Physical);
 

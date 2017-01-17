@@ -28,10 +28,10 @@ using EloBuddy; namespace KoreanZed
             get
             {
                 int currentShadows = GetShadows().Count();
-                return ((!ObjectManager.Player.HasBuff("zedwhandler") && w.IsReady() && Game.Time > lastTimeCast + 0.3F
+                return ((!ObjectManager.Player.HasBuff("ZedWHandler") && w.IsReady() && Game.Time > lastTimeCast + 0.3F
                          && Game.Time > buffTime + 1F) && w.IsReady() && w.Instance.ToggleState == 0
-                        && !ObjectManager.Player.HasBuff("zedwhandler")
-                        && ((ObjectManager.Player.HasBuff("zedr2") && currentShadows == 1) || currentShadows == 0));
+                        && !ObjectManager.Player.HasBuff("ZedWHandler")
+                        && ((ObjectManager.Player.HasBuff("ZedR2") && currentShadows == 1) || currentShadows == 0));
             }
         }
 
@@ -78,7 +78,7 @@ using EloBuddy; namespace KoreanZed
 
         private void Game_OnUpdate(EventArgs args)
         {
-            if (ObjectManager.Player.HasBuff("zedwhandler"))
+            if (ObjectManager.Player.HasBuff("ZedWHandler"))
             {
                 buffTime = Game.Time;
             }
