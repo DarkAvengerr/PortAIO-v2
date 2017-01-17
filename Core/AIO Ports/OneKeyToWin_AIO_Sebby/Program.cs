@@ -250,13 +250,15 @@ namespace OneKeyToWin_AIO_Sebby
 
             if (AioModeSet != AioMode.ChampionOnly)
             {
+                /*
                 new Activator().LoadOKTW();
                 new Core.OKTWward().LoadOKTW();
                 new Core.AutoLvlUp().LoadOKTW();
                 new Core.OKTWdraws().LoadOKTW();
+                */
             }
 
-            new Core.OKTWtracker().LoadOKTW();
+            //new Core.OKTWtracker().LoadOKTW();
 
             Config.AddItem(new MenuItem("aiomodes", "!!! PRESS F5 TO RELOAD MODE !!!"));
             Config.Item("aiomodes").Show(false);
